@@ -1,3 +1,5 @@
+-- New Features:
+
 cm:set_saved_value("sm0_abandon", true);
 local abandonButton = nil --:BUTTON
 local abandonFrame = nil --:FRAME
