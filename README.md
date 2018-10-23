@@ -1,1 +1,1 @@
-# WH2-sm0
+# Total War Warhammer scripts
