@@ -1,5 +1,3 @@
--- New Features:
-
 cm:set_saved_value("sm0_abandon", true);
 local abandonButton = nil --:BUTTON
 local abandonFrame = nil --:FRAME
@@ -80,13 +78,14 @@ function createAbandonFrame(abandonRegionStr)
         confirmButton.uic:SetTooltipText(confirmButtonTooltipDisabled);
     end
     local renameButton = find_uicomponent(core:get_ui_root(), "settlement_panel", "button_holder", "button_rename");
+    --Changed this to campaignUI trigger
     confirmButton:RegisterForClick( 
         function(context)
+            local regionToSend = regionStr;
+            local moneyToSend = calcCost(cm:get_region(regionToSend));
+            CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend)
             abandonFrame:Delete();
             abandonFrame = nil;
-            cm:set_region_abandoned(abandonRegionStr);
-            cm:treasury_mod(playerFactionStr, money);
-            cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", playerFactionStr, 5);
             abandonButton:SetDisabled(true);
         end 
     );
@@ -107,7 +106,7 @@ function createAbandonButton()
         abandonButton:SetState("active");	
         abandonButton:RegisterForClick(
             function(context)
-                local abandonRegionStr = regionStr;
+                abandonRegionStr = regionStr;
                 createAbandonFrame(abandonRegionStr);
             end 
         )		
@@ -176,3 +175,24 @@ core:add_listener(
     end,
     true
 )
+
+--Multiplayer listener
+core:add_listener(
+    "AbandonMultiplayerCompatible",
+    "UITriggerScriptEvent",
+    function(context)
+        return context:trigger():starts_with("burnitdown|")
+    end,
+    function(context)
+        local str = context:trigger() --:string
+        local info = string.gsub(str, "burnitdown|", "")
+        local faction = cm:model():faction_for_command_queue_index(context:faction_cqi()):name()
+        local regionNameEnd = string.find(info, "<")
+        local regionName = string.sub(info, 1, regionNameEnd - 1);
+        local regionToAbandon = cm:get_region(regionName)
+        local cash = tonumber(string.sub(info, regionNameEnd + 1))
+        cm:set_region_abandoned(regionName);
+        cm:treasury_mod(faction, cash);
+        cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5);
+    end,
+    true)
