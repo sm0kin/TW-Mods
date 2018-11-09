@@ -77,7 +77,6 @@ function createAbandonFrame(abandonRegionStr)
         confirmButton:SetDisabled(true);
         confirmButton.uic:SetTooltipText(confirmButtonTooltipDisabled);
     end
-    local renameButton = find_uicomponent(core:get_ui_root(), "settlement_panel", "button_holder", "button_rename");
     --Changed this to campaignUI trigger
     confirmButton:RegisterForClick( 
         function(context)
@@ -97,13 +96,13 @@ end
 --v function()
 function createAbandonButton()
     if not abandonButton then
-        abandonButton = Button.new("abandonButton", find_uicomponent(core:get_ui_root(), "settlement_panel", "button_holder"), "SQUARE", iconPath);
-        local renameButton = find_uicomponent(core:get_ui_root(), "settlement_panel", "button_holder", "button_rename");
+        abandonButton = Button.new("abandonButton", find_uicomponent(core:get_ui_root(), "settlement_panel"), "SQUARE", iconPath);
+        local renameButton = find_uicomponent(core:get_ui_root(), "settlement_panel", "button_rename");
         abandonButton:Resize(renameButton:Width(), renameButton:Height());
         abandonButton:PositionRelativeTo(renameButton, renameButton:Width() + 1, 0);
         abandonButton:SetState("hover");
         abandonButton.uic:SetTooltipText(abandonButtonTooltip);
-        abandonButton:SetState("active");	
+        abandonButton:SetState("active");
         abandonButton:RegisterForClick(
             function(context)
                 abandonRegionStr = regionStr;
@@ -164,11 +163,13 @@ core:add_listener(
                     abandonFrame:Delete();
                     abandonFrame = nil;
                 end
-                if currentFactionStr ~= playerFactionStr then
-                    abandonButton:SetDisabled(true);
-                    abandonButton.uic:SetTooltipText(abandonButtonTooltip);
-                else
-                    abandonButton:SetDisabled(false);
+                if abandonButton then
+                    if currentFactionStr ~= playerFactionStr then
+                        abandonButton:SetDisabled(true);
+                        abandonButton.uic:SetTooltipText(abandonButtonTooltip);
+                    else
+                        abandonButton:SetDisabled(false);
+                    end
                 end
             end, 0, "waitForUI"
         );
