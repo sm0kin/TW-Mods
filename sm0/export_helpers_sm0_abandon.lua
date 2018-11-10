@@ -132,6 +132,7 @@ core:add_listener(
     end,
     function(context)
         createAbandonButton();
+        out("sm0/PanelOpenedCampaign");
     end,
     true
 )
@@ -157,6 +158,7 @@ core:add_listener(
         regionStr = context:garrison_residence():region():name();
         local currentFactionStr = context:garrison_residence():faction():name();
         local currentGarrison = context:garrison_residence();
+        out("sm0/SettlementSelected");
         cm:callback(
             function(context)
                 if abandonFrame then
@@ -164,6 +166,8 @@ core:add_listener(
                     abandonFrame = nil;
                 end
                 if abandonButton then
+                    local renameButton = find_uicomponent(core:get_ui_root(), "settlement_panel", "button_rename");
+                    abandonButton:PositionRelativeTo(renameButton, renameButton:Width() + 1, 0);
                     if currentFactionStr ~= playerFactionStr then
                         abandonButton:SetDisabled(true);
                         abandonButton.uic:SetTooltipText(abandonButtonTooltip);
