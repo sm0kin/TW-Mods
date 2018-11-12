@@ -80,7 +80,7 @@ function setupRankListener(quests, subtype)
 	end;
 end;
 
-events.FirstTickAfterWorldCreated[#events.FirstTickAfterWorldCreated+1] = 
+cm.first_tick_callbacks[#cm.first_tick_callbacks+1] = 
 function(context) 
 	setupListener();
 	return true;
