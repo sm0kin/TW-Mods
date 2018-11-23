@@ -675,6 +675,7 @@
 --# assume CA_PENDING_BATTLE.contested_garrison: method() --> CA_GARRISON_RESIDENCE
 --# assume CA_UIC.RegisterTopMost: method()
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
+--# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
 -- --# assume CA_SLOT.type: method() --> string
 
 -- Custom

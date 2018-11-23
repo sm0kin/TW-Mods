@@ -1,9 +1,3 @@
-cm.first_tick_callbacks[#cm.first_tick_callbacks+1] = 
-function(context)
-	testSpawn();
-	return true;
-end
-
 function testSpawn()
 	local TKunitstring = {"wh2_dlc09_tmb_inf_tomb_guard_1",
 						"wh2_dlc09_tmb_inf_tomb_guard_1",
@@ -113,4 +107,10 @@ function testSpawn()
 			end
 		end
 	end
+end
+
+cm.first_tick_callbacks[#cm.first_tick_callbacks+1] = 
+function(context)
+	testSpawn();
+	return true;
 end

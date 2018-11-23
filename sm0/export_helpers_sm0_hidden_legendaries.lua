@@ -7,21 +7,21 @@ local malekith_subtype = "wh2_main_def_malekith";
 local morathi_subtype = "wh2_main_def_morathi";
 
 local tyrion_extra_items = {
-	{"mission", "wh2_main_anc_enchanted_item_heart_of_avelorn", "wh2_main_vortex_narrative_hef_the_phoenix_gate", 14}
+	{"mission", "wh2_main_anc_enchanted_item_heart_of_avelorn", "sm0_tyrion_heart_of_avelorn", 14}
 };
 
 local teclis_extra_items = {
-	{"mission", "wh2_main_anc_arcane_item_moon_staff_of_lileath", "wh2_main_vortex_narrative_hef_the_lies_of_the_druchii", 14},
-	{"mission", "wh2_main_anc_arcane_item_scroll_of_hoeth", "wh2_main_vortex_narrative_hef_the_vermin_of_hruddithi", 18}
+	{"mission", "wh2_main_anc_arcane_item_moon_staff_of_lileath", "sm0_teclis_moon_staff_of_lileath", 14},
+	{"mission", "wh2_main_anc_arcane_item_scroll_of_hoeth", "sm0_teclis_scroll_of_hoeth", 18}
 };
 
 local malekith_extra_items = {
-	{"mission", "wh2_main_anc_armour_armour_of_midnight", "wh2_main_vortex_narrative_def_hoteks_levy", 18}
+	{"mission", "wh2_main_anc_armour_armour_of_midnight", "sm0_malekith_armour_of_midnight", 18}
 };
 
 local morathi_extra_items = {
-	{"mission", "wh2_main_anc_arcane_item_wand_of_the_kharaidon", "wh2_main_vortex_narrative_def_a_torturer_has_many_tools", 10},
-	{"mission", "wh2_main_anc_talisman_amber_amulet", "wh2_main_vortex_narrative_def_an_age_of_blood", 14}
+	{"mission", "wh2_main_anc_arcane_item_wand_of_the_kharaidon", "sm0_morathi_wand_of_the_kharaidon", 10},
+	{"mission", "wh2_main_anc_talisman_amber_amulet", "sm0_morathi_talisman_amber_amulet", 14}
 };
 
 local louen_extra_items = {
@@ -30,7 +30,7 @@ local louen_extra_items = {
 };
 
 local alith_anar_extra_items = {
-	{"mission", "wh2_dlc10_anc_enchanted_item_the_shadow_crown", "sm0__alith_anar_the_shadow_crown", 9},
+	{"mission", "wh2_dlc10_anc_enchanted_item_the_shadow_crown", "sm0_alith_anar_the_shadow_crown", 9},
 };
 
 function setupListener()
@@ -56,7 +56,7 @@ function setupRankListener(quests, subtype)
 				
 		-- establish listeners for this character rank-up event if the quest chain has not already been started
 		if cm:get_saved_value(current_saved_name) then
-			out("")
+			out("already started")
 		else			
 			-- listen for the character ranking up
 			core:add_listener(
