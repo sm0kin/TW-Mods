@@ -14,10 +14,7 @@ local OccupationOptionID = {["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupatio
 							["1913039140"] = "wh2_sm0_sc_tmb_tomb_kings_occupation_decision_confederate"} --: map<string, string>
 
 ---------------------------------------------------------------------------------------------------------------------------------------
-local mcm = _G.mcm
---set some default values: these will help you avoid writing script twice!
-cm:set_saved_value("mcm_tweaker_tkconfed_restrictTKconfed", true);
---if MCM is installed, register our mod!
+local mcm = _G.mcm;
 if not not mcm then
     local tkconfed = mcm:register_mod("tkconfed", "Force Confederation", "Force Confederation - Tomb Kings")
     local restrictTKconfed = tkconfed:add_tweaker("restrictTKconfed", "Force Confederation - Rules", "An example setting!")

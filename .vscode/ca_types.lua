@@ -207,8 +207,7 @@
 --#     region_key: string,
 --#     xPos: number,
 --#     yPos: number,
---#     un1: boolean,
---#     un2: boolean,
+--#     exclude_named_chars: boolean,
 --#     callback: (function(CA_CQI))?
 --# )
 --# assume CM.spawn_character_to_pool: method(
@@ -529,6 +528,7 @@
 --# assume CORE.add_ui_created_callback: method(function())
 --# assume CORE.get_screen_resolution: method() --> (number, number)
 --# assume CORE.trigger_event: method(event_name: string, any...)
+--# assume CORE.add_static_object: method(name: string, value: any, override: boolean?)
 
 -- POOLED RESOURCE
 --# assume CA_POOLED.value: method() --> number
@@ -668,20 +668,6 @@
 --# assume INVASION.add_character_experience: method(quanity: number)
 --# assume INVASION.add_unit_experience: method(quantity: number)
 --# assume INVASION.start_invasion: method(callback: function?, declare_war: boolean?, invite_attacker_allies: boolean?, invite_defender_allies: boolean?)
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- sm0kin
---# assume CM.is_local_players_turn: method() --> boolean
---# assume CA_PENDING_BATTLE.has_contested_garrison: method() --> boolean
---# assume CA_PENDING_BATTLE.contested_garrison: method() --> CA_GARRISON_RESIDENCE
---# assume CA_UIC.RegisterTopMost: method()
---# assume CA_FACTION.has_technology: method(technology: string) --> boolean
---# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
--- --# assume CA_SLOT.type: method() --> string
-
--- Custom
--- --# assume global table.save method(tbl: table, filename: string) --> string
--- --# assume global table.load method(sfile: string) --> string
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- GLOBAL VARIABLES
 --leave at the bottom of this file
@@ -697,3 +683,18 @@
 --# assume global invasion_manager: INVASION_MANAGER
 
 --string extensions
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- sm0kin
+--# assume CM.is_local_players_turn: method() --> boolean
+--# assume CA_PENDING_BATTLE.has_contested_garrison: method() --> boolean
+--# assume CA_PENDING_BATTLE.contested_garrison: method() --> CA_GARRISON_RESIDENCE
+--# assume CA_UIC.RegisterTopMost: method()
+--# assume CA_FACTION.has_technology: method(technology: string) --> boolean
+--# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
+--# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
+
+--# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
+-- Custom
+-- --# assume global table.save method(tbl: table, filename: string) --> string
+-- --# assume global table.load method(sfile: string) --> string
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
