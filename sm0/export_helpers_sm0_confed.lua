@@ -1,5 +1,3 @@
-cm:set_saved_value("sm0_confed", true);
-local restrictTKconfed = true;
 local playerFaction = cm:get_faction(cm:get_local_faction(true));
 local OccupationOptionID = {["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupation_decision_confederate",
 							["1913039131"] = "wh2_sm0_sc_lzd_lizardmen_occupation_decision_confederate",
@@ -13,24 +11,32 @@ local OccupationOptionID = {["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupatio
 							["1913039139"] = "wh2_sm0_sc_vmp_vampire_counts_occupation_decision_confederate",
 							["1913039140"] = "wh2_sm0_sc_tmb_tomb_kings_occupation_decision_confederate"} --: map<string, string>
 
+local restrictTKconfed --:bool
+local restriction = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value");
+if restriction == "unrestricted" then
+	restrictTKconfed = false;
+else
+	restrictTKconfed = true;
+end
 ---------------------------------------------------------------------------------------------------------------------------------------
 local mcm = _G.mcm;
 if not not mcm then
-    local tkconfed = mcm:register_mod("tkconfed", "Force Confederation", "Force Confederation - Tomb Kings")
-    local restrictTKconfed = tkconfed:add_tweaker("restrictTKconfed", "Force Confederation - Rules", "An example setting!")
-    restrictTKconfed:add_option(true, "My default option", "The one they don't have to click")
-	restrictTKconfed:add_option(false, "My other option", "An option they do have to click")
+    local confed = mcm:register_mod("force_confederation", "Force Confederation", "Adds Force Confederation as occupation option.");
+    local restriction = confed:add_tweaker("restriction", "Tomb Kings - Restrictions", "Set your prefered rules for Tomb Kings Force Confederation!");
+    restriction:add_option("restricted", "Lorefriendly", "Lore based limitations, e.g. Settra can confederate any Tomb Kings faction aside from The Followers of Nagash and The Sentinels.");
+	restriction:add_option("unrestricted", "No restrictions", "Completely unrestricted!");
 	mcm:add_post_process_callback(
 		function()
-			--mcm_variable_<mod_key>_<variable_key>_value
-			restrictTKconfed = cm:get_saved_value("mcm_variable_tkconfed_restrictTKconfed")
+			restriction = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value");
+			if restriction == "restricted" then
+				restrictTKconfed = true;
+			elseif restriction == "unrestricted" then
+				restrictTKconfed = false;
+			end
 		end
 	)
-else
-	restrictTKconfed = true;
-end	
+end
 ---------------------------------------------------------------------------------------------------------------------------------------
-
 --v function()
 function addTkImmortalityTrait()
 	local factionList = cm:model():world():faction_list();
@@ -54,7 +60,6 @@ function addTkImmortalityTrait()
 					function(context)
 						cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_traits", "");
 						cm:force_add_trait("character_cqi:"..tostring(leaderChar:command_queue_index()), "wh2_sm0_trait_immortality", true);
-						core:remove_listener(TraitListenerStr);
 						cm:callback(
 							function(context)
 								cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_traits", "");

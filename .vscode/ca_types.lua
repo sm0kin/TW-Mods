@@ -691,9 +691,9 @@
 --# assume CA_UIC.RegisterTopMost: method()
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
 --# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
---# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
+-- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
 
---# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
+-- --# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
 -- Custom
 -- --# assume global table.save method(tbl: table, filename: string) --> string
 -- --# assume global table.load method(sfile: string) --> string
