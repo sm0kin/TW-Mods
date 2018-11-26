@@ -53,6 +53,7 @@
 
 --object creation functions
 --# assume BUTTON.new: function(name: string, parent: WHATEVER, form: BUTTON_TYPE, imagePath: string) --> BUTTON
+--# assume TEXT_BUTTON.new: function(name: string, parent: WHATEVER, form: TEXT_BUTTON_TYPE, buttonText: string) --> TEXT_BUTTON
 --# assume FRAME.new: function(name: string) --> FRAME
 --# assume IMAGE.new: function(name: string, parent: WHATEVER, imagepath: string) --> IMAGE
 --# assume TEXT.new: function(name: string, parent: WHATEVER, form: TEXT_TYPE, text: string) --> TEXT
@@ -89,6 +90,27 @@
 --# assume BUTTON.RegisterForClick: method(callback: function(context: WHATEVER?))
 --# assume BUTTON.SetImage: method(path: string)
 --# assume BUTTON.SetDisabled: method(disabled: boolean)
+
+--textbutton
+--# assume TEXT_BUTTON.MoveTo: method(xPos: number, yPos: number)
+--# assume TEXT_BUTTON.Move: method(XMove: number, yMove: number)
+--# assume TEXT_BUTTON.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
+--# assume TEXT_BUTTON.Scale: method(factor:number)
+--# assume TEXT_BUTTON.Resize: method(width: number, height: number)
+--# assume TEXT_BUTTON.SetVisible: method(visible: boolean)
+--# assume TEXT_BUTTON.Visible: method() --> boolean
+--# assume TEXT_BUTTON.Position: method() --> (number, number)
+--# assume TEXT_BUTTON.Bounds: method() --> (number, number)
+--# assume TEXT_BUTTON.GetContentComponent: method() --> CA_UIC
+--# assume TEXT_BUTTON.GetPositioningComponent: method() --> CA_UIC
+--# assume TEXT_BUTTON.Delete: method()
+--# assume TEXT_BUTTON.ClearSound: method()
+--# assume TEXT_BUTTON.SetState: method(state: string)
+--# assume TEXT_BUTTON.CurrentState: method() --> string
+--# assume TEXT_BUTTON.IsSelected: method() --> boolean
+--# assume TEXT_BUTTON.RegisterForClick: method(callback: function(context: WHATEVER?))
+--# assume TEXT_BUTTON.SetDisabled: method(disabled: boolean)
+
 
 --frame
 --# assume FRAME.MoveTo: method(xPos: number, yPos: number)

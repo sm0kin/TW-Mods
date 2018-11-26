@@ -87,8 +87,9 @@ local loreSkills = {"wh2_sm0_mazda_skill_lorelight",
 					"wh2_sm0_mazda_skill_loremetal",
 					"wh2_sm0_mazda_skill_loreshadows",
 					"wh2_sm0_mazda_skill_loredeath",
-					"wh2_sm0_mazda_skill_lore_attributes"};					
-					
+					"wh2_sm0_mazda_skill_lore_attributes"};	
+
+--v function() --> CA_CHAR					
 function getSelectedCharacter()
 	local selectedCharacter = cm:get_campaign_ui_manager():get_char_selected();
 	if selectedCharacter == '' then
@@ -99,6 +100,7 @@ function getSelectedCharacter()
 	end
 end
 
+--v function() --> CA_CHAR					
 function getMazdaCharacterByFaction()
 	local localFaction = cm:get_faction(cm:get_local_faction(true));
 	if localFaction then
@@ -111,7 +113,7 @@ function getMazdaCharacterByFaction()
 		end
 	end
 end
-
+--[[
 function removeLoreTrait(char)
 	cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_traits", "");
 	local charCqi = char:cqi();
@@ -126,7 +128,27 @@ function removeLoreTrait(char)
 		end, 1, "enableEventFeed"
 	);
 end
-
+]]--
+--v function(buttonName: string, char: CA_CHAR)					
+function replaceSpellEffect(buttonName, char) -- test
+	local charCqi = char:cqi();
+	local loreEffectBundles = {"wh2_sm0_effect_bundle_test"};
+	for _, loreEffectBundle in ipairs(loreEffectBundles) do 
+		if char:military_force():has_effect_bundle(loreEffectBundle) then
+			cm:remove_effect_bundle_from_characters_force(loreEffectBundle, charCqi);
+			out("sm0/replaceLoreEffect/remove: "..loreEffectBundle);
+		end
+	end
+	buttonName = "loreButtonTest"; --test
+	buttonName = string.lower(buttonName);
+	local effectBundle = string.gsub(buttonName, "lorebutton", "wh2_sm0_effect_bundle_");
+	out("sm0/replaceLoreEffect/effectBundle: "..effectBundle);
+	--test
+	effectBundle = "wh2_sm0_effect_bundle_test";
+	cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false);
+	out("sm0/replaceLoreEffect/apply: end");
+end
+--[[
 function replaceLoreTrait(name, char)
 	removeLoreTrait(char);
 	cm:callback(
@@ -150,8 +172,11 @@ function replaceLoreTrait(name, char)
 	end
 	cm:force_add_trait(charStr, loreTrait, false);
 end
+]]--
 
-function characterHasSkill(char)
+-- Check which skills a character has and fill a table accordingly with bolean
+--v function(char: CA_CHAR) --> table
+function getCharacterSkills(char)
 	local loreEnable = {};
 	if char:has_skill("wh2_sm0_mazda_skill_lorelight") then
 		loreEnable["loreLightEnabled"] = true;
@@ -183,68 +208,68 @@ function characterHasSkill(char)
 	return loreEnable;
 end
 
-function createSpellText(buttonName, char)
-	if Util.getComponentWithName("loreSpellText") == nil then
-		loreSpellText = Text.new("loreSpellText", loreFrame, "NORMAL", "test1");
-		loreSpellText:Resize(225, 200);
-
-		Util.centreComponentOnComponent(loreSpellText, loreFrame);
-		local loreSpellTextX, loreSpellTextY = loreSpellText:Position();
-		loreSpellText:MoveTo(loreSpellTextX, loreSpellTextY + 75);
-		loreFrame:AddComponent(loreSpellText);
-	end
-	if Util.getComponentWithName("loreAttributeText") == nil then
-		loreAttributeText = Text.new("loreAttributeText", loreFrame, "NORMAL", "");
-		loreAttributeText:Resize(225, 50);
-
-		Util.centreComponentOnComponent(loreAttributeText, loreFrame);
-		loreAttributeText:PositionRelativeTo(loreSpellText, 0, 120);
-		loreFrame:AddComponent(loreAttributeText);
-	end
-	local loreEnable = {};
-	loreEnable = characterHasSkill(char)
-	if buttonName == "loreButtonLight" then
-		loreSpellText:SetText(loreLightString);
-		if loreEnable["loreAttributeEnabled"] then
-			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_hex.png]][[/img]]Exorcism");
-		end
-	elseif buttonName == "loreButtonLife" then
-		loreSpellText:SetText(loreLifeString);
-		if loreEnable["loreAttributeEnabled"] then
-			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_area_of_regeneration.png]][[/img]]Life Bloom");
-		end
-	elseif buttonName == "loreButtonBeasts" then
-		loreSpellText:SetText(loreBeastsString);
-		if loreEnable["loreAttributeEnabled"] then
-			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_augment_of_the_winds.png]][[/img]]Wild Heart");
-		end
-	elseif buttonName == "loreButtonFire" then
-		loreSpellText:SetText(loreFireString);
-		if loreEnable["loreAttributeEnabled"] then
-			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_hex.png]][[/img]]Kindleflame");
-		end
-	elseif buttonName == "loreButtonHeavens" then
-		loreSpellText:SetText(loreHeavensString);
-		if loreEnable["loreAttributeEnabled"] then
-			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_hex.png]][[/img]]Roiling Skies");
-		end
-	elseif buttonName == "loreButtonMetal" then
-		loreSpellText:SetText(loreMetalString);
-		if loreEnable["loreAttributeEnabled"] then
-			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_area_of_augments.png]][[/img]]Metalshifting");
-		end
-	elseif buttonName == "loreButtonShadows" then
-		loreSpellText:SetText(loreDeathString);
-		if loreEnable["loreAttributeEnabled"] then
-			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_area_of_augments.png]][[/img]]Smoke & Mirrors");
-		end
-	elseif buttonName == "loreButtonDeath" then
-		loreSpellText:SetText(loreShadowsString);
-		if loreEnable["loreAttributeEnabled"] then
-			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_augment_of_the_winds.png]][[/img]]Life Leaching");
-		end
-	end
-end
+--function createSpellText(buttonName, char)
+--	if Util.getComponentWithName("loreSpellText") == nil then
+--		loreSpellText = Text.new("loreSpellText", loreFrame, "NORMAL", "test1");
+--		loreSpellText:Resize(225, 200);
+--
+--		Util.centreComponentOnComponent(loreSpellText, loreFrame);
+--		local loreSpellTextX, loreSpellTextY = loreSpellText:Position();
+--		loreSpellText:MoveTo(loreSpellTextX, loreSpellTextY + 75);
+--		loreFrame:AddComponent(loreSpellText);
+--	end
+--	if Util.getComponentWithName("loreAttributeText") == nil then
+--		loreAttributeText = Text.new("loreAttributeText", loreFrame, "NORMAL", "");
+--		loreAttributeText:Resize(225, 50);
+--
+--		Util.centreComponentOnComponent(loreAttributeText, loreFrame);
+--		loreAttributeText:PositionRelativeTo(loreSpellText, 0, 120);
+--		loreFrame:AddComponent(loreAttributeText);
+--	end
+--	local loreEnable = {};
+--	loreEnable = characterHasSkill(char)
+--	if buttonName == "loreButtonLight" then
+--		loreSpellText:SetText(loreLightString);
+--		if loreEnable["loreAttributeEnabled"] then
+--			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_hex.png]][[/img]]Exorcism");
+--		end
+--	elseif buttonName == "loreButtonLife" then
+--		loreSpellText:SetText(loreLifeString);
+--		if loreEnable["loreAttributeEnabled"] then
+--			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_area_of_regeneration.png]][[/img]]Life Bloom");
+--		end
+--	elseif buttonName == "loreButtonBeasts" then
+--		loreSpellText:SetText(loreBeastsString);
+--		if loreEnable["loreAttributeEnabled"] then
+--			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_augment_of_the_winds.png]][[/img]]Wild Heart");
+--		end
+--	elseif buttonName == "loreButtonFire" then
+--		loreSpellText:SetText(loreFireString);
+--		if loreEnable["loreAttributeEnabled"] then
+--			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_hex.png]][[/img]]Kindleflame");
+--		end
+--	elseif buttonName == "loreButtonHeavens" then
+--		loreSpellText:SetText(loreHeavensString);
+--		if loreEnable["loreAttributeEnabled"] then
+--			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_hex.png]][[/img]]Roiling Skies");
+--		end
+--	elseif buttonName == "loreButtonMetal" then
+--		loreSpellText:SetText(loreMetalString);
+--		if loreEnable["loreAttributeEnabled"] then
+--			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_area_of_augments.png]][[/img]]Metalshifting");
+--		end
+--	elseif buttonName == "loreButtonShadows" then
+--		loreSpellText:SetText(loreDeathString);
+--		if loreEnable["loreAttributeEnabled"] then
+--			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_area_of_augments.png]][[/img]]Smoke & Mirrors");
+--		end
+--	elseif buttonName == "loreButtonDeath" then
+--		loreSpellText:SetText(loreShadowsString);
+--		if loreEnable["loreAttributeEnabled"] then
+--			loreAttributeText:SetText("[[img:ui/battle ui/ability_icons/icon_spell_augment_of_the_winds.png]][[/img]]Life Leaching");
+--		end
+--	end
+--end
 
 function setupSingleSelectedButtonGroup(buttons, char)
     for _, button in ipairs(buttons) do
@@ -256,8 +281,8 @@ function setupSingleSelectedButtonGroup(buttons, char)
                         otherButton:SetState("selected_hover");
 						local buttonTooltip = string.gsub(otherButton.name, "loreButton", "Selected: Lore of ");
 						otherButton.uic:SetTooltipText(buttonTooltip);
-						replaceLoreTrait(otherButton.name, char);
-						createSpellText(otherButton.name, char);
+						--replaceLoreTrait(otherButton.name, char);
+						--createSpellText(otherButton.name, char);
                     else
                         otherButton:SetState("active");
                     end
@@ -266,7 +291,7 @@ function setupSingleSelectedButtonGroup(buttons, char)
         );
     end
 end
-
+--[[
 function lastSelectedButton(char)
 	if char:has_trait("wh2_sm0_trait_dummy") then
 		return;
@@ -320,9 +345,13 @@ function lastSelectedButton(char)
 		createSpellText(loreButtonShadows.name, char);
 	end
 end
+]]--
 
-function createLoreButtonContainer(char)
-    local loreButtonContainer = Container.new(FlowLayout.HORIZONTAL);
+function createSpellSlotButtonContainer(char)
+	local spellSlotContainer = Container.new(FlowLayout.HORIZONTAL);
+	
+
+
 	local loreButtons = {};
 	local loreEnable = {};
 	loreEnable = characterHasSkill(char);
@@ -414,6 +443,104 @@ function createLoreButtonContainer(char)
 	for _, lorebutton in ipairs(loreButtons) do
 		loreButtonContainer:AddComponent(lorebutton);
 		loreButtonContainer:AddGap(buttonSize / 8);
+	end
+	
+    return loreButtonContainer;
+end
+
+function createLoreButtonContainer(char)
+    local loreButtonContainer = Container.new(FlowLayout.VERTICAL);
+	local loreButtons = {};
+	local loreEnable = {};
+	--loreEnable = characterHasSkill(char);
+	
+	local loreButtonLight = TextButton.new("loreButtonLight", loreFrame, "TEXT_TOGGLE", "Lore of Light");
+	table.insert(loreButtons, loreButtonLight);
+	--if loreEnable["loreLightEnabled"] then
+		loreButtonLight:SetState("hover");
+		loreButtonLight.uic:SetTooltipText("Lore of Light");	
+	--else
+		--loreButtonLight:SetDisabled(true);
+		--loreButtonLight.uic:SetTooltipText("Required Skill: Lore of Light");
+	--end	
+	
+	local loreButtonLife = TextButton.new("loreButtonLife", loreFrame, "TEXT_TOGGLE", "Lore of Life");
+	table.insert(loreButtons, loreButtonLife);
+	--if loreEnable["loreLifeEnabled"] then
+		loreButtonLife:SetState("hover");	
+		loreButtonLife.uic:SetTooltipText("Lore of Life");	
+	--else
+		--loreButtonLife:SetDisabled(true);
+		--loreButtonLife.uic:SetTooltipText("Required Skill: Lore of Life");
+	-end		
+	
+	local loreButtonBeasts = TextButton.new("loreButtonBeasts", loreFrame, "TEXT_TOGGLE", "Lore of Beasts");
+	table.insert(loreButtons, loreButtonBeasts);
+	--if loreEnable["loreBeastsEnabled"] then
+		loreButtonBeasts:SetState("hover");
+		loreButtonBeasts.uic:SetTooltipText("Lore of Beasts");	
+	--else
+	--	loreButtonBeasts:SetDisabled(true);
+	--	loreButtonBeasts.uic:SetTooltipText("Required Skill: Lore of Beasts");
+	--end		
+		
+	local loreButtonFire = TextButton.new("loreButtonFire", loreFrame, "TEXT_TOGGLE", "Lore of Fire");
+	table.insert(loreButtons, loreButtonFire);
+	--if loreEnable["loreFireEnabled"] then
+		loreButtonFire:SetState("hover");
+		loreButtonFire.uic:SetTooltipText("Lore of Fire");	
+	--else
+	--	loreButtonFire:SetDisabled(true);
+	--	loreButtonFire.uic:SetTooltipText("Required Skill: Lore of Fire");
+	--end		
+		
+	local loreButtonHeavens = TextButton.new("loreButtonHeavens", loreFrame, "TEXT_TOGGLE", "Lore of Heavens");
+	table.insert(loreButtons, loreButtonHeavens);
+	--if loreEnable["loreHeavensEnabled"] then
+		loreButtonHeavens:SetState("hover");
+		loreButtonHeavens.uic:SetTooltipText("Lore of Heavens");	
+	--else
+	--	loreButtonHeavens:SetDisabled(true);
+	--	loreButtonHeavens.uic:SetTooltipText("Required Skill: Lore of Heavens");
+	--end		
+		
+	local loreButtonMetal = TextButton.new("loreButtonMetal", loreFrame, "TEXT_TOGGLE", "Lore of Metal");
+	table.insert(loreButtons, loreButtonMetal);
+	--if loreEnable["loreMetalEnabled"] then
+		loreButtonMetal:SetState("hover");
+		loreButtonMetal.uic:SetTooltipText("Lore of Metal");	
+	--else
+	--	loreButtonMetal:SetDisabled(true);
+	--	loreButtonMetal.uic:SetTooltipText("Required Skill: Lore of Metal");
+	--end	
+		
+	local loreButtonDeath = TextButton.new("loreButtonDeath", loreFrame, "TEXT_TOGGLE", "Lore of Death");
+	table.insert(loreButtons, loreButtonDeath);
+	--if loreEnable["loreDeathEnabled"] then
+		loreButtonDeath:SetState("hover");
+		loreButtonDeath.uic:SetTooltipText("Lore of Death");
+	--else
+	--	loreButtonDeath:SetDisabled(true);
+	--	loreButtonDeath.uic:SetTooltipText("Required Skill: Lore of Death");
+	--end	
+		
+	local loreButtonShadows = TextButton.new("loreButtonShadows", loreFrame, "TEXT_TOGGLE", "Lore of Shadows");
+	table.insert(loreButtons, loreButtonShadows);
+	--if loreEnable["loreShadowsEnabled"] then
+		loreButtonShadows:SetState("hover");
+		loreButtonShadows.uic:SetTooltipText("Lore of Shadows");
+	--else
+	--	loreButtonShadows:SetDisabled(true);
+	--	loreButtonShadows.uic:SetTooltipText("Required Skill: Lore of Shadows");
+	--end		
+		
+	setupSingleSelectedButtonGroup(loreButtons, char);
+	
+	--local buttonSize = loreButtonLight:Width(); --56
+	
+	for _, lorebutton in ipairs(loreButtons) do
+		loreButtonContainer:AddComponent(lorebutton);
+		--loreButtonContainer:AddGap(buttonSize / 8);
 	end
 	
     return loreButtonContainer;
@@ -1030,7 +1157,7 @@ function aiLoreListener()
 		true
 	);
 end
-
+--[[
 function aiConfederationListener()
 	core:add_listener(
 		"aiConfederationListener",
@@ -1044,7 +1171,8 @@ function aiConfederationListener()
 		true
 	);
 end
-
+]]--
+--[[
 if cm:get_saved_value("wec_ll_revival") then
 	core:add_listener(
 		"llrConfederationListener",
@@ -1062,14 +1190,16 @@ if cm:get_saved_value("wec_ll_revival") then
 		true
 	);
 end
-
+]]--
 if cm:is_new_game() then
+	--[[
 	local hexoatl = cm:model():world():faction_by_key("wh2_main_lzd_hexoatl");			
 	local hexoatl_faction_leader = hexoatl:faction_leader():command_queue_index();	
 	local char = cm:get_character_by_cqi(hexoatl_faction_leader);
 	if not char:has_trait("wh2_sm0_trait_dummy") then
 		cm:force_add_trait(cm:char_lookup_str(hexoatl_faction_leader), "wh2_sm0_trait_dummy", false);
 	end
+	]]--
 else
 	out("sm0 <<<init>>> savegame");
 end
@@ -1078,5 +1208,5 @@ local playerFaction = cm:get_faction(cm:get_local_faction(true));
 if playerFaction:culture() == "wh2_main_lzd_lizardmen" then
 	playerLoreListener();
 elseif playerFaction:name() ~= "wh2_main_lzd_hexoatl" then
-	aiLoreListener();
+	--aiLoreListener();
 end
