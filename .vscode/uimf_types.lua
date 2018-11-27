@@ -165,3 +165,12 @@
 --# assume LIST_VIEW.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
 --# assume LIST_VIEW.MoveTo: method(x: number, y:number)
 --# assume LIST_VIEW.Position: method() --> (number, number)
+
+
+--# assume FRAME.uic: method() --> CA_UIC
+--# assume TEXT.uic: method() --> CA_UIC
+--# assume IMAGE.uic: method() --> CA_UIC
+--# assume BUTTON.uic: method() --> CA_UIC
+--# assume TEXT_BUTTON.uic: method() --> CA_UIC
+--# assume LIST_VIEW.uic: method() --> CA_UIC
+--# assume COMPONENTS.uic: method() --> CA_UIC

@@ -62,3 +62,5 @@
 --GLOBAL ACCESS
 --# assume mcm:MCM
 _G.mcm = mcm
+
+--# assume _G.mcm: method() --> MCM

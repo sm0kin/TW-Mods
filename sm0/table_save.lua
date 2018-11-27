@@ -34,7 +34,7 @@ function exportstring( s )
 end
 
 --// The Save Function
---v function(tbl: table, filename: string) --> string
+--v [NO_CHECK] function(tbl: table, filename: string) --> string
 function table.save(  tbl,filename )
     local charS,charE = "   ","\n"
     local file,err = io.open( filename, "wb" )
@@ -105,7 +105,7 @@ function table.save(  tbl,filename )
 end
 
 --// The Load Function
---v function(sfile: string) --> string
+--v [NO_CHECK] function(sfile: string) --> string
 function table.load( sfile )
     local ftables,err = loadfile( sfile )
     if err then return _,err end
