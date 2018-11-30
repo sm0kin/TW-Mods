@@ -481,6 +481,7 @@
 --# assume CA_FACTION.is_vassal_of: method(faction: CA_FACTION) --> boolean
 --# assume CA_FACTION.is_vassal: method() --> boolean
 --# assume CA_FACTION.is_ally_vassal_or_client_state_of: method(faction: string) --> boolean
+--# assume CA_FACTION.diplomatic_standing_with: method(faction: string ) --> number 
 --# assume CA_FACTION.allied_with: method(faction: CA_FACTION)
 --# assume CA_FACTION.at_war_with: method(faction: CA_FACTION) --> boolean
 --# assume CA_FACTION.region_list: method() --> CA_REGION_LIST
@@ -700,7 +701,4 @@
 --# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
 -- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
 -- --# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
--- Custom
--- --# assume global table.save method(tbl: table, filename: string) --> string
--- --# assume global table.load method(sfile: string) --> string
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
