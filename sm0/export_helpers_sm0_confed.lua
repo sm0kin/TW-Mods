@@ -101,7 +101,7 @@ core:add_listener(
 		local subculture = faction:subculture();
 		local culture = faction:culture();
 		local confed_option = cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value");
-		local option = {}; --offer: boolean, accept: boolean, enable_payments:boolean
+		local option = {};
 		if confed_option == "enabled" or confed_option == "player_only" then
 			option.offer = true;
 			option.accept = true;
