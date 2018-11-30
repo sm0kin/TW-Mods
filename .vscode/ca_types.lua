@@ -223,6 +223,9 @@
 --# assume CM.save_named_value: method(name: string, value: any, context: WHATEVER?)
 --# assume CM.load_named_value: method(name: string, default: any, context: WHATEVER?) --> WHATEVER
 --# assume CM.disable_saving_game: method(opt: boolean)
+--serialisation
+--# assume CM.load_values_from_string: method(datastring: string) --> table
+--# assume CM.process_table_save: method(savetable: table, prev_string: string?) --> string
 --effect bundle commands
 --# assume CM.apply_effect_bundle_to_region: method(bundle: string, region: string, turns: number)
 --# assume CM.remove_effect_bundle_from_region: method(bundle: string, region: string)
@@ -686,13 +689,16 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- sm0kin
 --# assume CM.is_local_players_turn: method() --> boolean
+--# type global BATTLE_TYPE = "ambush" | "campaign_battle" | "capture_point" | "classic" | "coastal_battle" | "free_for_all" | "historic" | "limes" | "napoleon_historic" | "naval" | "naval_siege" | "river_crossing_battle" |
+--# "siege" | "Tutorial" | "underground_intercept" | "unfortified_port" | "unfortified_settlement"
 --# assume CA_PENDING_BATTLE.has_contested_garrison: method() --> boolean
 --# assume CA_PENDING_BATTLE.contested_garrison: method() --> CA_GARRISON_RESIDENCE
+--# assume CA_PENDING_BATTLE.battle_type: method() --> BATTLE_TYPE
+--# assume CA_PENDING_BATTLE.is_active: method() --> boolean
 --# assume CA_UIC.RegisterTopMost: method()
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
 --# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
 -- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
-
 -- --# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
 -- Custom
 -- --# assume global table.save method(tbl: table, filename: string) --> string

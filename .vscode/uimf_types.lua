@@ -174,3 +174,9 @@
 --# assume TEXT_BUTTON.uic: method() --> CA_UIC
 --# assume LIST_VIEW.uic: method() --> CA_UIC
 --# assume COMPONENTS.uic: method() --> CA_UIC
+
+--# assume FRAME.name: method() --> string
+--# assume TEXT.name: method() --> string
+--# assume IMAGE.name: method() --> string
+--# assume BUTTON.name: method() --> string
+--# assume TEXT_BUTTON.name: method() --> string

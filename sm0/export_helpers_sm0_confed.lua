@@ -1,4 +1,5 @@
 local playerFaction = cm:get_faction(cm:get_local_faction(true));
+local restrictTKconfed --:bool
 local OccupationOptionID = {["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupation_decision_confederate",
 							["1913039131"] = "wh2_sm0_sc_lzd_lizardmen_occupation_decision_confederate",
 							["1913039132"] = "wh2_sm0_sc_skv_skaven_occupation_decision_confederate",
@@ -11,14 +12,7 @@ local OccupationOptionID = {["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupatio
 							["1913039139"] = "wh2_sm0_sc_vmp_vampire_counts_occupation_decision_confederate",
 							["1913039140"] = "wh2_sm0_sc_tmb_tomb_kings_occupation_decision_confederate"} --: map<string, string>
 
-local restrictTKconfed --:bool
-local restriction = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value");
-if restriction == "unrestricted" then
-	restrictTKconfed = false;
-else
-	restrictTKconfed = true;
-end
----------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local mcm = _G.mcm;
 if not not mcm then
     local confed = mcm:register_mod("force_confederation", "Force Confederation", "Adds Force Confederation as occupation option.");
@@ -36,7 +30,19 @@ if not not mcm then
 		end
 	)
 end
----------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+local restriction_value = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value");
+if restriction_value == "unrestricted" then
+	restrictTKconfed = false;
+else
+	restrictTKconfed = true;
+end
+local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_tmb_value");
+if not confed_option_tmb then
+	cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false);
+end
+
 --v function()
 function addTkImmortalityTrait()
 	local factionList = cm:model():world():faction_list();
@@ -78,30 +84,56 @@ function addTkImmortalityTrait()
 	);
 end
 
+addTkImmortalityTrait();
+
+
+core:add_listener(
+	"force_confederation_expired",
+	"ScriptEventConfederationExpired",
+	function(context)
+		local faction_name = context.string;
+		local faction = cm:get_faction(faction_name);
+		return faction:is_human();
+	end,
+	function(context)
+		local faction_name = context.string;
+		local faction = cm:get_faction(faction_name);
+		local subculture = faction:subculture();
+		local culture = faction:culture();
+		local confed_option = cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value");
+		local option = {}; --offer: boolean, accept: boolean, enable_payments:boolean
+		if confed_option == "enabled" or confed_option == "player_only" then
+			option.offer = true;
+			option.accept = true;
+			option.enable_payment = true;
+		elseif confed_option == "disabled" then
+			option.offer = false;
+			option.accept = false;
+			option.enable_payment = false;				
+		elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh2_dlc09_sc_tmb_tomb_kings" then
+			option.offer = false;
+			option.accept = false;
+			option.enable_payment = false;	
+		elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh_dlc05_sc_wef_wood_elves" then
+			option.accept = false;
+			option.enable_payment = false;	
+			oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages");
+			if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") then
+				option.offer = true;
+			else
+				option.offer = false;
+			end
+		end
+		cm:callback(
+			function(context)
+				cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option.offer, option.accept, option.enable_payment);
+			end, 1, "changeDiplomacyOptions"
+		);
+	end,
+	true
+);
+
 if playerFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
-	cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false);
-	addTkImmortalityTrait();
-
-	core:add_listener(
-		"TKconfederationExpired",
-		"ScriptEventConfederationExpired",
-		function(context)
-			local factionName = context.string;
-			local faction = cm:get_faction(factionName);			
-			local subculture = faction:subculture();
-			return subculture == "wh2_dlc09_sc_tmb_tomb_kings";
-		end,
-		function(context)
-			local factionName = context.string;
-			cm:callback(
-				function(context)
-					cm:force_diplomacy("faction:" .. factionName, "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false);
-				end, 1, "changeDiplomacyOptions"
-			);	
-		end,
-		true
-	);
-
 	core:add_listener(
 		"TKgarrisonAttackedEvent",
 		"GarrisonAttackedEvent",
