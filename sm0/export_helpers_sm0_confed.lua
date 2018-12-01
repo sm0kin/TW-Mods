@@ -123,6 +123,10 @@ core:add_listener(
 			else
 				option.offer = false;
 			end
+		elseif (confed_option == "yield" or confed_option == nil) and subculture ~= "wh_dlc05_sc_wef_wood_elves" and subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" then
+			option.offer = true;
+			option.accept = true;
+			option.enable_payment = false;
 		end
 		cm:callback(
 			function(context)
