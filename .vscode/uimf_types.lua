@@ -188,3 +188,8 @@
 --# assume IMAGE.name: method() --> string
 --# assume BUTTON.name: method() --> string
 --# assume TEXT_BUTTON.name: method() --> string
+
+--# assume UTIL.delete: function(uic: WHATEVER)
+--# assume UTIL.unregisterComponent: function(component: string)
+--# assume CONTAINER.Clear: method()
+--# assume CONTAINER.SetVisible: method(visible: boolean)

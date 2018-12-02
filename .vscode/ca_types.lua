@@ -699,6 +699,7 @@
 --# assume CA_UIC.RegisterTopMost: method()
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
 --# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
+--# assume CM.force_add_ancillary: method(character: string, ancillary_key: string)
 -- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
 -- --# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

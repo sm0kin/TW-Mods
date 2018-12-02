@@ -1,12 +1,18 @@
 cm:set_saved_value("sm0_mazdamundi", true);
 
-local loreBookButton1 = nil;
-local loreBookButton2 = nil;
-local loreBookButton3 = nil;
-local loreBookButton4 = nil;
-local loreFrame = nil;
-local loreSpellText = nil;
-local loreAttributeText = nil;
+local loreBookButton1 = nil --:BUTTON
+local loreBookButton2 = nil --:BUTTON
+local loreBookButton3 = nil --:BUTTON
+local loreBookButton4 = nil --:BUTTON
+local loreFrame = nil --:FRAME
+local loreSpellText = nil --:TEXT
+local loreAttributeText = nil --:TEXT
+local iconPath = "ui/icon_lorebook2.png";
+local pX --:number
+local pY --:number
+local dummyButton = TextButton.new("dummyButton", core:get_ui_root(), "TEXT", "dummy");
+local dummyButtonX, dummyButtonY = dummyButton:Bounds();
+dummyButton:Delete();
 
 local charSubMazdamundi = "wh2_main_lzd_lord_mazdamundi";
 
@@ -24,13 +30,11 @@ end
 --v function() --> CA_CHAR					
 function getMazdaCharacterByFaction()
 	local localFaction = cm:get_faction(cm:get_local_faction(true));
-	if localFaction then
-		local characterList = localFaction:character_list();
-		for i = 0, characterList:num_items() - 1 do
-			local currentChar = characterList:item_at(i)	
-			if currentChar:character_subtype(charSubMazdamundi) then
-				return currentChar;
-			end
+	local characterList = localFaction:character_list();
+	for i = 0, characterList:num_items() - 1 do
+		local currentChar = characterList:item_at(i)	
+		if currentChar:character_subtype(charSubMazdamundi) then
+			return currentChar;
 		end
 	end
 end
@@ -76,20 +80,26 @@ function setupSingleSelectedButtonGroup(buttons, char)
         );
     end
 end
---v function(char: CA_CHAR) --> CONTAINER
-function createSpellSlotButtonContainer(char)
-	local spellSlotButtonContainer = Container.new(FlowLayout.HORIZONTAL);
-	
-	
 
-	local spellSlotButtons = {} --:vector<TEXT_BUTTON>
+--v function(char: CA_CHAR) --> CONTAINER
+function createSpellButtonContainer(char)
+	local spellButtonList = ListView.new("SpellButtonList", loreFrame, "VERTICAL");
+	spellButtonList:Resize(pX/2 + 9, pY - dummyButtonY/2); --(pX/2 - 13, pY - 40);
+
+	local spellButtonContainer = Container.new(FlowLayout.VERTICAL);	
+	local spellButtons = {} --:vector<TEXT_BUTTON>
 	--local loreEnable = {};
 	--loreEnable = characterHasSkill(char);
-	for i = 0, 5 do
-		local spellSlotButton = TextButton.new("spellSlotButton_"..i, loreFrame, "TEXT_TOGGLE", "Spell Slot -"..i.."-");
-		table.insert(spellSlotButtons, spellSlotButton);
-		spellSlotButtonContainer:AddComponent(spellSlotButton);
-		spellSlotButtonContainer:AddGap(spellSlotButton:Width() + 2);
+	for i = 1, 6 do
+		local spellButton = TextButton.new("spellButton_"..i, loreFrame, "TEXT", "Spell "..i);
+		table.insert(spellButtons, spellButton);
+		spellButton:RegisterForClick(
+			function(context)
+				--
+			end
+		)
+		spellButtonList:AddComponent(spellButton);
+		--spellSlotButtonContainer:AddGap(2); --spellSlotButton:Height() + 
 		--if loreEnable["loreLightEnabled"] then
 		--	loreButtonLight:SetState("hover");
 		--	loreButtonLight.uic:SetTooltipText("Lore of Light");	
@@ -98,22 +108,30 @@ function createSpellSlotButtonContainer(char)
 		--	loreButtonLight.uic:SetTooltipText("Required Skill: Lore of Light");
 		--end
 	end
-
+	spellButtonContainer:AddComponent(spellButtonList);
 		
-	setupSingleSelectedButtonGroup(spellSlotButtons, char);
-	
-	
-	for _, spellSlotButton in ipairs(spellSlotButtons) do
-		spellSlotButtonContainer:AddComponent(spellSlotButton);
-		spellSlotButtonContainer:AddGap(4);
-	end
-	
-    return spellSlotButtonContainer;
+	--setupSingleSelectedButtonGroup(spellSlotButtons, char);
+	--for _, spellSlotButton in ipairs(spellSlotButtons) do
+	--	spellSlotButtonContainer:AddComponent(spellSlotButton);
+	--	spellSlotButtonContainer:AddGap(4);
+	--end
+	spellButtonContainer:PositionRelativeTo(loreFrame, pX/2 + 2*22, dummyButtonY/4);
+	return spellButtonContainer;
 end
 
+--v function(char: CA_CHAR) --> CONTAINER
 function createLoreButtonContainer(char)
-    local loreButtonContainer = Container.new(FlowLayout.VERTICAL);
-	local loreButtons = {};
+	local loreButtonList = ListView.new("LoreButtonList", loreFrame, "VERTICAL");
+	loreButtonList:Resize(pX/2 - 9, pY - dummyButtonY/2); -- width vslider 18
+	--for i, lore in ipairs(loreList) do
+	--    local regionButton = createRegionButton(region);
+	--    regionList:AddComponent(regionButton);
+	--    table.insert(regionButtons, regionButton);
+	--end
+	--setUpSingleButtonSelectedGroup(regionButtons);
+
+	local loreButtonContainer = Container.new(FlowLayout.VERTICAL);
+	local loreButtons = {} --:vector<TEXT_BUTTON>
 	local loreEnable = {};
 	--loreEnable = characterHasSkill(char);
 	
@@ -202,11 +220,75 @@ function createLoreButtonContainer(char)
 	--local buttonSize = loreButtonLight:Width(); --56
 	
 	for _, lorebutton in ipairs(loreButtons) do
-		loreButtonContainer:AddComponent(lorebutton);
+		loreButtonList:AddComponent(lorebutton);
+		--loreButtonList:AddGap(2);
 		--loreButtonContainer:AddGap(buttonSize / 8);
+		lorebutton:RegisterForClick(
+			function(context)
+				local spellButtonContainer = Util.getComponentWithName("spellButtonContainer");
+				if spellButtonContainer then
+					spellButtonContainer:Clear();
+				end
+				createSpellButtonContainer(char)
+			end
+		)
 	end
+
+
+	loreButtonContainer:AddComponent(loreButtonList);
+	--loreButtonContainer:Reposition();
+	--Util.centreComponentOnComponent(loreButtonContainer, loreFrame);
+	loreButtonContainer:PositionRelativeTo(loreFrame, 22, dummyButtonY/4);
+	--loreButtonContainer:Reposition();
+
 	
-    return loreButtonContainer;
+	return loreButtonContainer;
+end
+
+--v function(char: CA_CHAR) --> CONTAINER
+function createSpellSlotButtonContainer(char)
+	local spellSlotButtonList = ListView.new("SpellSlotButtonList", loreFrame, "VERTICAL");
+	spellSlotButtonList:Resize(dummyButtonX, pY - dummyButtonY/2); --(pX/2 - 13, pY - 40);
+
+
+	local spellSlotButtonContainer = Container.new(FlowLayout.VERTICAL);
+	
+	
+
+	local spellSlotButtons = {} --:vector<TEXT_BUTTON>
+	--local loreEnable = {};
+	--loreEnable = characterHasSkill(char);
+	for i = 1, 6 do
+		local spellSlotButton = TextButton.new("spellSlotButton_"..i, loreFrame, "TEXT", "Spell Slot -"..i.."-");
+		table.insert(spellSlotButtons, spellSlotButton);
+		spellSlotButton:RegisterForClick(
+			function(context)
+				createLoreButtonContainer(char);
+				spellSlotButtonContainer:SetVisible(false);
+			end
+		)
+
+		spellSlotButtonList:AddComponent(spellSlotButton);
+		--spellSlotButtonContainer:AddGap(2); --spellSlotButton:Height() + 
+		--if loreEnable["loreLightEnabled"] then
+		--	loreButtonLight:SetState("hover");
+		--	loreButtonLight.uic:SetTooltipText("Lore of Light");	
+		--else
+		--	loreButtonLight:SetDisabled(true);
+		--	loreButtonLight.uic:SetTooltipText("Required Skill: Lore of Light");
+		--end
+	end
+	spellSlotButtonContainer:AddComponent(spellSlotButtonList);
+
+		
+	--setupSingleSelectedButtonGroup(spellSlotButtons, char);
+	
+	
+	--for _, spellSlotButton in ipairs(spellSlotButtons) do
+	--	spellSlotButtonContainer:AddComponent(spellSlotButton);
+	--	spellSlotButtonContainer:AddGap(4);
+	--end
+    return spellSlotButtonContainer;
 end
 
 --v function() --> CA_CHAR
@@ -246,37 +328,43 @@ function getMazdaCharacter()
 end
 
 --v function()
-function createLoreUI()
-	if loreFrame then
-		return;
-	end
-	loreFrame = Frame.new("Lore of Magic");
-	loreFrame.uic:PropagatePriority(100);
-	loreFrame:AddCloseButton(
-		function()
-			loreFrame = nil;
+	function createLoreUI()
+		if loreFrame then
+			return;
 		end
-	);
-
-	Util.centreComponentOnScreen(loreFrame);
-	local char = getMazdaCharacter();
-	local spellSlotButtonContainer = createSpellSlotButtonContainer(char);
-	--local loreButtonContainer = createLoreButtonContainer(char);
-	--Util.centreComponentOnComponent(loreButtonContainer, loreFrame);
-	--local loreButtonContainerX, loreButtonContainerY = loreButtonContainer:Position();
-	--loreButtonContainer:MoveTo(loreButtonContainerX, loreButtonContainerY - 75);
-	--loreFrame:AddComponent(loreButtonContainer);
-	
-	--loreFrame.uic:SetMoveable(true);
-	--lastSelectedButton(char);
-	loreFrame.uic:RegisterTopMost();
-end
+		loreFrame = Frame.new("Lore of Magic");
+		loreFrame.uic:PropagatePriority(100);
+		loreFrame:AddCloseButton(
+			function()
+				loreFrame = nil;
+			end
+		);
+		local parchment = find_uicomponent(core:get_ui_root(), "Lore of Magic", "parchment");
+		pX, pY = parchment:Bounds();
+		Util.centreComponentOnScreen(loreFrame);
+		--local char = getMazdaCharacter();
+		local char = getMazdaCharacterByFaction();
+		local spellSlotButtonContainer = createSpellSlotButtonContainer(char);
+		Util.centreComponentOnComponent(spellSlotButtonContainer, loreFrame);
+		--local spellSlotButtonContainerX, spellSlotButtonContainerY = spellSlotButtonContainer:Position();
+		--spellSlotButtonContainer:MoveTo(spellSlotButtonContainerX, spellSlotButtonContainerY - 75);
+		loreFrame:AddComponent(spellSlotButtonContainer);
+		--local loreButtonContainer = createLoreButtonListView(char);
+		--Util.centreComponentOnComponent(loreButtonContainer, loreFrame);
+		--local loreButtonContainerX, loreButtonContainerY = loreButtonContainer:Position();
+		--loreButtonContainer:MoveTo(loreButtonContainerX, loreButtonContainerY - 75);
+		--loreFrame:AddComponent(loreButtonContainer);
+		
+		--loreFrame.uic:SetMoveable(true);
+		--lastSelectedButton(char);
+		loreFrame.uic:RegisterTopMost();
+	end
 
 function createLoreButton1() -- character_panel
 	cm:callback(
 		function(context)
 			if loreBookButton1 == nil then
-				loreBookButton1 = Button.new("loreBookButton1", find_uicomponent(core:get_ui_root(), "character_details_panel", "background", "bottom_buttons"), "SQUARE", "ui/icon_lorebook.png");
+				loreBookButton1 = Button.new("loreBookButton1", find_uicomponent(core:get_ui_root(), "character_details_panel", "background", "bottom_buttons"), "SQUARE", iconPath);
 				local characterdetailspanel = find_uicomponent(core:get_ui_root(), "character_details_panel");
 				local referenceButton = find_uicomponent(characterdetailspanel, "button_replace_general");
 				loreBookButton1:Resize(referenceButton:Width(), referenceButton:Height());
@@ -302,7 +390,7 @@ function createLoreButton1() -- character_panel
 end
 
 function createLoreButton2() --
-	loreBookButton2 = Button.new("loreBookButton2", find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "button_group_unit"), "SQUARE", "ui/icon_lorebook.png"); 
+	loreBookButton2 = Button.new("loreBookButton2", find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "button_group_unit"), "SQUARE", iconPath); 
 	cm:callback(
 		function(context)
 			local buttonGroupUnit = find_uicomponent(core:get_ui_root(), "button_group_unit");
@@ -331,7 +419,7 @@ function createLoreButton3() -- pre_battle
 			local referenceButton = find_uicomponent(preBattlePanel, "button_info");
 			local posReferenceButtonX, posReferenceButtonY = referenceButton:Position();
 			loreBookButton3:MoveTo(posReferenceButtonX - 500, posReferenceButtonY);
-			loreBookButton3:SetImage("ui/icon_lorebook.png");
+			loreBookButton3:SetImage(iconPath);
 			loreBookButton3:SetState("hover");
 			loreBookButton3:SetTooltipText("Choose Lore of Magic");
 			loreBookButton3.uic:PropagatePriority(100);
@@ -346,7 +434,7 @@ function createLoreButton3() -- pre_battle
 end
 
 function createLoreButton4() -- main_units_panel
-	loreBookButton4 = Button.new("loreBookButton4", find_uicomponent(core:get_ui_root(), "layout", "hud_center_docker", "hud_center", "small_bar", "button_group_army"), "SQUARE", "ui/icon_lorebook.png");
+	loreBookButton4 = Button.new("loreBookButton4", find_uicomponent(core:get_ui_root(), "layout", "hud_center_docker", "hud_center", "small_bar", "button_group_army"), "SQUARE", iconPath);
 	cm:callback(
 		function(context)
 			local unitsPanel = find_uicomponent(core:get_ui_root(), "button_group_army");
@@ -366,7 +454,7 @@ function createLoreButton4() -- main_units_panel
 end
 
 function closeLoreUI1() -- character_panel
-	loreBookButton1 = Util.getComponentWithName("loreBookButton1");
+	--loreBookButton1 = Util.getComponentWithName("loreBookButton1");
 	if loreBookButton1 then
 		loreBookButton1:Delete();
 		loreBookButton1 = nil;
@@ -378,7 +466,7 @@ function closeLoreUI1() -- character_panel
 end
 
 function closeLoreUI2() -- 
-	loreBookButton2 = Util.getComponentWithName("loreBookButton2");
+	--loreBookButton2 = Util.getComponentWithName("loreBookButton2");
 	if loreBookButton2 then
 		loreBookButton2:Delete();
 		loreBookButton2 = nil;
@@ -390,7 +478,7 @@ function closeLoreUI2() --
 end
 
 function closeLoreUI3() -- pre_battle
-	loreBookButton3 = Util.getComponentWithName("loreBookButton3");
+	--loreBookButton3 = Util.getComponentWithName("loreBookButton3");
 	if loreBookButton3 then
 		Util.delete(loreBookButton3);
 		Util.unregisterComponent("loreBookButton3");
@@ -404,7 +492,7 @@ function closeLoreUI3() -- pre_battle
 end
 
 function closeLoreUI4() -- main_units_panel
-	loreBookButton4 = Util.getComponentWithName("loreBookButton4");
+	--loreBookButton4 = Util.getComponentWithName("loreBookButton4");
 	if loreBookButton4 then
 		loreBookButton4:Delete();
 		loreBookButton4 = nil;

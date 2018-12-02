@@ -20,25 +20,32 @@ if string.find(playerFactionStr, "wh2_") then
     iconPath = "ui/icon_raze2.png";
 end
 
+--v [NO_CHECK] function(slot: CA_SLOT) --> string
+function getSlotType(slot)
+    return slot:type();
+end
+
 --v function(region: CA_REGION) --> number
 function calcCost(region)
+    local money = 0 --:number
     local slotList = region:settlement():slot_list();
     for i = 0, slotList:num_items() - 1 do
         local currentSlot = slotList:item_at(i);
-        if currentSlot:type() == "primary" then
-            if currentSlot:has_building() then
+        if getSlotType(currentSlot) == "primary" then
+                if currentSlot:has_building() then
                 local building = currentSlot:building();
                 local buildingName = building:name();
                 for k, cost in ipairs(buildingCost) do
                     if string.match(buildingName, "ruin") then
-                        return 0.6 * 400; 
+                        money = 0.6 * 400; 
                     elseif string.match(buildingName, "_"..k) then
-                        return 0.6 * cost;
+                        money = 0.6 * cost;
                     end
                 end
             end
         end
     end
+    return money;
 end
 
 --v function(abandonRegionStr: string)

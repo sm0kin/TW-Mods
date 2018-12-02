@@ -7,41 +7,33 @@ local malekith_subtype = "wh2_main_def_malekith";
 local morathi_subtype = "wh2_main_def_morathi";
 
 local tyrion_extra_items = {
-	{"mission", "wh2_main_anc_enchanted_item_heart_of_avelorn", "sm0_tyrion_heart_of_avelorn", 14}
+	{"mission", "wh2_main_anc_enchanted_item_heart_of_avelorn", "sm0_tyrion_heart_of_avelorn", "14"}
 };
 
 local teclis_extra_items = {
-	{"mission", "wh2_main_anc_arcane_item_moon_staff_of_lileath", "sm0_teclis_moon_staff_of_lileath", 14},
-	{"mission", "wh2_main_anc_arcane_item_scroll_of_hoeth", "sm0_teclis_scroll_of_hoeth", 18}
+	{"mission", "wh2_main_anc_arcane_item_moon_staff_of_lileath", "sm0_teclis_moon_staff_of_lileath", "14"},
+	{"mission", "wh2_main_anc_arcane_item_scroll_of_hoeth", "sm0_teclis_scroll_of_hoeth", "18"}
 };
 
 local malekith_extra_items = {
-	{"mission", "wh2_main_anc_armour_armour_of_midnight", "sm0_malekith_armour_of_midnight", 18}
+	{"mission", "wh2_main_anc_armour_armour_of_midnight", "sm0_malekith_armour_of_midnight", "18"}
 };
 
 local morathi_extra_items = {
-	{"mission", "wh2_main_anc_arcane_item_wand_of_the_kharaidon", "sm0_morathi_wand_of_the_kharaidon", 10},
-	{"mission", "wh2_main_anc_talisman_amber_amulet", "sm0_morathi_talisman_amber_amulet", 14}
+	{"mission", "wh2_main_anc_arcane_item_wand_of_the_kharaidon", "sm0_morathi_wand_of_the_kharaidon", "10"},
+	{"mission", "wh2_main_anc_talisman_amber_amulet", "sm0_morathi_talisman_amber_amulet", "14"}
 };
 
 local louen_extra_items = {
-	{"mission", "wh_main_anc_armour_the_lions_shield", "sm0_louen_lions_shield", 13},
-	{"mission", "wh_main_anc_enchanted_item_the_crown_of_bretonnia", "sm0_louen_crown_of_bretonnia", 17}
+	{"mission", "wh_main_anc_armour_the_lions_shield", "sm0_louen_lions_shield", "13"},
+	{"mission", "wh_main_anc_enchanted_item_the_crown_of_bretonnia", "sm0_louen_crown_of_bretonnia", "17"}
 };
 
 local alith_anar_extra_items = {
-	{"mission", "wh2_dlc10_anc_enchanted_item_the_shadow_crown", "sm0_alith_anar_the_shadow_crown", 9},
+	{"mission", "wh2_dlc10_anc_enchanted_item_the_shadow_crown", "sm0_alith_anar_the_shadow_crown", "9"},
 };
 
-function setupListener()
-	setupRankListener(tyrion_extra_items, tyrion_subtype);
-	setupRankListener(teclis_extra_items, teclis_subtype);
-	setupRankListener(malekith_extra_items, malekith_subtype);
-	setupRankListener(morathi_extra_items, morathi_subtype);
-	setupRankListener(louen_extra_items, louen_subtype);	
-	setupRankListener(alith_anar_extra_items, alith_anar_subtype);
-end
-
+--v function(quests: vector<vector<string>>, subtype: string)
 function setupRankListener(quests, subtype)
 	for i = 1, #quests do
 		-- grab some local data for this quest record
@@ -50,7 +42,7 @@ function setupRankListener(quests, subtype)
 		local current_type = current_quest_record[1];
 		local current_ancillary_key = current_quest_record[2];
 		local current_mission_key = current_quest_record[3];
-		local current_rank_req = current_quest_record[4];
+		local current_rank_req = tonumber(current_quest_record[4]);
 		local current_intervention_name = "in_" .. current_mission_key;
 		local current_saved_name = current_mission_key .. "_sm0_issued";
 				
@@ -76,12 +68,16 @@ function setupRankListener(quests, subtype)
 				end,
 				false
 			);
-		end;
-	end;
-end;
+		end
+	end
+end
 
 cm.first_tick_callbacks[#cm.first_tick_callbacks+1] = 
 function(context) 
-	setupListener();
-	return true;
-end;
+	setupRankListener(tyrion_extra_items, tyrion_subtype);
+	setupRankListener(teclis_extra_items, teclis_subtype);
+	setupRankListener(malekith_extra_items, malekith_subtype);
+	setupRankListener(morathi_extra_items, morathi_subtype);
+	setupRankListener(louen_extra_items, louen_subtype);	
+	setupRankListener(alith_anar_extra_items, alith_anar_subtype);
+end
