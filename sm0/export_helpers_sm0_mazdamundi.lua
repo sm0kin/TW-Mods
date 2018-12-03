@@ -31,12 +31,14 @@ end
 function getMazdaCharacterByFaction()
 	local localFaction = cm:get_faction(cm:get_local_faction(true));
 	local characterList = localFaction:character_list();
+	local mazdaChar;
 	for i = 0, characterList:num_items() - 1 do
 		local currentChar = characterList:item_at(i)	
 		if currentChar:character_subtype(charSubMazdamundi) then
-			return currentChar;
+			mazdaChar = currentChar;
 		end
 	end
+	return mazdaChar;
 end
 
 --v function(buttonName: string, char: CA_CHAR)					
@@ -84,7 +86,7 @@ end
 --v function(char: CA_CHAR) --> CONTAINER
 function createSpellButtonContainer(char)
 	local spellButtonList = ListView.new("SpellButtonList", loreFrame, "VERTICAL");
-	spellButtonList:Resize(pX/2 + 9, pY - dummyButtonY/2); --(pX/2 - 13, pY - 40);
+	spellButtonList:Resize(pX/2 - 18, pY - dummyButtonY/2); --(pX/2 - 13, pY - 40);
 
 	local spellButtonContainer = Container.new(FlowLayout.VERTICAL);	
 	local spellButtons = {} --:vector<TEXT_BUTTON>
@@ -115,7 +117,7 @@ function createSpellButtonContainer(char)
 	--	spellSlotButtonContainer:AddComponent(spellSlotButton);
 	--	spellSlotButtonContainer:AddGap(4);
 	--end
-	spellButtonContainer:PositionRelativeTo(loreFrame, pX/2 + 2*22, dummyButtonY/4);
+	spellButtonContainer:PositionRelativeTo(loreFrame, pX/2 + 35, dummyButtonY/4);
 	return spellButtonContainer;
 end
 

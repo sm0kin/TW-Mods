@@ -5,6 +5,6 @@ require("sm0/export_helpers_sm0_mazdamundi")
 require("sm0/export_helpers_sm0_abandon")
 require("sm0/export_helpers_sm0_save_cam")
 require("sm0/table_save")
---require("sm0/test_exp")
+--require("sm0/temp")
 require("sm0/export_helpers_sm0_hidden_legendaries")
 
