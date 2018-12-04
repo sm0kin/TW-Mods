@@ -105,7 +105,7 @@ function table.save(  tbl,filename )
 end
 
 --// The Load Function
---v [NO_CHECK] function(sfile: string) --> string
+--v [NO_CHECK] function(sfile: string) --> (table, string)
 function table.load( sfile )
     local ftables,err = loadfile( sfile )
     if err then return _,err end
