@@ -1,4 +1,3 @@
-
 -- CLASS DECLARATION
 --# assume global class CM
 --# assume global class CUIM
@@ -701,6 +700,12 @@
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
 --# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
 --# assume CM.force_add_ancillary: method(character: string, ancillary_key: string)
+--# assume CA_PENDING_BATTLE.secondary_attackers: method() --> CA_CHAR_LIST
+--# assume CA_PENDING_BATTLE.secondary_defenders: method() --> CA_CHAR_LIST
+--# assume CUIM.get_char_selected_cqi: method() --> CA_CQI
+
 -- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
 -- --# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
+
+-- load_values_from_string = USELESS
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

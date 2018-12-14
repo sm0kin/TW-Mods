@@ -185,13 +185,21 @@
 --# assume LIST_VIEW.uic: CA_UIC
 --# assume COMPONENTS.uic: CA_UIC
 
---# assume FRAME.name: method() --> string
---# assume TEXT.name: method() --> string
---# assume IMAGE.name: method() --> string
---# assume BUTTON.name: method() --> string
---# assume TEXT_BUTTON.name: method() --> string
+--# assume FRAME.name: string
+--# assume TEXT.name: string
+--# assume IMAGE.name: string
+--# assume BUTTON.name: string
+--# assume TEXT_BUTTON.name: string
 
 --# assume UTIL.delete: function(uic: WHATEVER)
---# assume UTIL.unregisterComponent: function(component: string)
+--# assume UTIL.registerComponent: function(component_name: string, component: WHATEVER)
+--# assume UTIL.unregisterComponent: function(component: WHATEVER)
 --# assume CONTAINER.Clear: method()
 --# assume CONTAINER.SetVisible: method(visible: boolean)
+--# assume UTIL.createComponent: function(component: string, parent: WHATEVER, template_path: string) --> CA_UIC
+--# assume UTIL.registerForClick: function(component: WHATEVER, listener_name: string, callback: function(context: WHATEVER?))
+
+
+ --# assume BUTTON.SetTooltipText: method(tooltip: string)
+ --# assume TEXT_BUTTON.SetTooltipText: method(tooltip: string)
+

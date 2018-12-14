@@ -95,7 +95,6 @@ end
 
 --v function(Table: map<string, map<string, string>>)
 function applySettingsFromTable(Table)
-    --local Table --:map<string, map<string, string>>
     local lastCategory;
     for i, _ in pairs(Table) do
         local camCategory = find_uicomponent(core:get_ui_root(), "layout", "settings_panel", "camera_settings", "buttons_list", i);

@@ -207,4 +207,5 @@ core:add_listener(
         cm:treasury_mod(faction, cash);
         cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5);
     end,
-    true)
+    true
+)
