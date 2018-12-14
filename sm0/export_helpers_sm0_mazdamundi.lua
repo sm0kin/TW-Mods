@@ -106,7 +106,7 @@ end
 function updateSaveTable(spellName)
 	local spellSlots = loadstring(cm:get_saved_value("sm0_mazdamundi"))();
 	for i, spellSlot in ipairs(spellSlots) do
-		if spellSlot == spellSlotSelected then
+		if "Spell Slot - "..i.." -" == spellSlotSelected then
 			spellSlots[i] = spellName;
 			local saveString = "return {"..cm:process_table_save(spellSlots).."}";
 			cm:set_saved_value("sm0_mazdamundi", saveString);
@@ -141,13 +141,13 @@ function createSpellButtonContainer(lore, char)
 	local spellSlots = loadstring(cm:get_saved_value("sm0_mazdamundi"))();
 	for _, spell in ipairs(lore) do
 		local spellButton = TextButton.new(spell, loreFrame, "TEXT", spell);
-		--for _, spellSlot in ipairs(spellSlots) do
-		--	if spellSlot == spell then
-		--		spellButton:SetDisabled(true);
-		--	--else
-		--	--	spellButton:SetDisabled(false);
-		--	end
-		--end
+		for _, spellSlot in ipairs(spellSlots) do
+			if spellSlot == spell then
+				spellButton:SetDisabled(true);
+			--else
+			--	spellButton:SetDisabled(false);
+			end
+		end
 		table.insert(spellButtons, spellButton);
 		spellButton:RegisterForClick(
 			function(context)
