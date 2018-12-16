@@ -1,21 +1,25 @@
-local loreBookButton1 = nil --:BUTTON
-local loreBookButton2 = nil --:BUTTON
-local loreBookButton3 = nil --:CA_UIC
-local loreBookButton4 = nil --:BUTTON
+local loreButton_charPanel = nil --:BUTTON
+local loreButton_preBattle = nil --:CA_UIC
+local loreButton_unitsPanel = nil --:BUTTON
+local spellBrowserButton = nil --:CA_UIC
+local optionButton = nil --:CA_UIC
 local loreFrame = nil --:FRAME
 local spellButtonContainer = nil --:CONTAINER
 local loreButtonContainer = nil --:CONTAINER
 local spellSlotButtonContainer = nil --:CONTAINER
-local spellSlotSelected = nil --:string
 local spellSlotButtons = {} --:vector<TEXT_BUTTON>
 local loreSpellText = nil --:TEXT
 local loreAttributeText = nil --:TEXT
-local iconPath = "ui/icon_lorebook2.png";
 local pX --:number
 local pY --:number
 local dummyButton = TextButton.new("dummyButton", core:get_ui_root(), "TEXT", "dummy");
 local dummyButtonX, dummyButtonY = dummyButton:Bounds();
 dummyButton:Delete();
+local spellSlotSelected = nil --:string
+local bookIconPath = "ui/icon_lorebook2.png";
+local browserIconPath = "ui/icon_spell_browser2.png";
+local optionsIconPath = "ui/icon_options2.png";
+local charSubMazdamundi = "wh2_main_lzd_lord_mazdamundi";
 local loreTable = 	{	["Lore of High Magic"] = {"Apotheosis", "Arcane Unforging", "Fiery Convocation", "Hand of Glory", "Soul Quench", "Tempest"},
 						["Lore of Light"] = {"Pha's Protection", "Shem's Burning Gaze", "Light of Battle", "Net of Amyntok", "Birona's Timewarp", "Banishment"},
  						["Lore of Life"] = {"Earth Blood", "Awakening of the Wood", "Flesh to Stone", "Shield of Thorns", "Regrowth", "The Dwellers Below"},
@@ -26,7 +30,9 @@ local loreTable = 	{	["Lore of High Magic"] = {"Apotheosis", "Arcane Unforging",
 	  					["Lore of Death"] = {"Aspect of the Dreadknight", "Spirit Leech", "Doom and Darkness", "Soulblight", "The Purple Sun of Xereus", "The Fate of Bjuna"},
 						["Lore of Shadows"] = {"Melkoth's Mystifying Miasma", "The Enfeebling Foe", "The Withering", "The Penumbral Pendulum", "Okkam's Mindrazor",	"Pit of Shades"}	
 					} --: map<string, vector<string>>
-local charSubMazdamundi = "wh2_main_lzd_lord_mazdamundi";
+local skillTable = {}
+local enableTable = {}
+local createSpellSlotButtonContainer --:function(char: CA_CHAR, spellSlots: vector<string>)
 
 local tableString = cm:get_saved_value("sm0_mazdamundi");
 if not tableString then
@@ -35,16 +41,10 @@ if not tableString then
 	cm:set_saved_value("sm0_mazdamundi", saveString);
 end
 
-local createSpellSlotButtonContainer --:function(char: CA_CHAR, spellSlots: vector<string>)
-
 --v function() --> CA_CHAR					
 function getSelectedCharacter()
 	local selectedCharacterCqi = cm:get_campaign_ui_manager():get_char_selected_cqi();
-	if selectedCharacterCqi == '' then
-		return nil;
-	else
-		return cm:get_character_by_cqi(selectedCharacterCqi);
-	end
+	return cm:get_character_by_cqi(selectedCharacterCqi);
 end
 
 --v function(charSubtype: string, faction: CA_FACTION) --> CA_CHAR					
@@ -80,203 +80,114 @@ function replaceSpellEffect(buttonName, char) -- test
 	out("sm0/replaceLoreEffect/apply: end");
 end
 
---v function(buttons: vector<TEXT_BUTTON>, char: CA_CHAR)
-function setupSingleSelectedButtonGroup(buttons, char)
-    for _, button in ipairs(buttons) do
-		button:SetState("active");
-        button:RegisterForClick(
-            function(context)
-                for _, otherButton in ipairs(buttons) do
-                    if button.name == otherButton.name then
-                        otherButton:SetState("selected_hover");
-						--local buttonTooltip = string.gsub(otherButton.name, "loreButton", "Selected: Lore of ");
-						otherButton.uic:SetTooltipText("Select your prefered spell for Spell Slot -1-.");
-						--replaceLoreTrait(otherButton.name, char);
-						--createSpellText(otherButton.name, char);
-                    else
-                        otherButton:SetState("active");
-                    end
-                end
-            end
-        );
-    end
-end
-
---v function(spellName: string) --> vector<string>
+--v [NO_CHECK] function(spellName: any) --> vector<string>
 function updateSaveTable(spellName)
 	local spellSlots = loadstring(cm:get_saved_value("sm0_mazdamundi"))();
-	for i, spellSlot in ipairs(spellSlots) do
-		if "Spell Slot - "..i.." -" == spellSlotSelected then
-			spellSlots[i] = spellName;
-			local saveString = "return {"..cm:process_table_save(spellSlots).."}";
-			cm:set_saved_value("sm0_mazdamundi", saveString);
+	if spellName then
+		for i, spellSlot in ipairs(spellSlots) do
+			if "Spell Slot - "..i.." -" == spellSlotSelected then
+				spellSlots[i] = spellName;
+				local saveString = "return {"..cm:process_table_save(spellSlots).."}";
+				cm:set_saved_value("sm0_mazdamundi", saveString);
+			end
 		end
 	end
 	return spellSlots;
 end
 
-----v function(spellName: string)
---function updateSpellSlotContainer(spellName)
---	for _, spellSlotButton in ipairs(spellSlotButtons) do
---		if spellSlotButton.name == spellSlotSelected then
---			updateSaveTable(spellName);
---			--spellSlotButton:SetButtonText(spellName);
---		end
---	end
---end
-
---v function(lore: vector<string>, char: CA_CHAR)
+--v [NO_CHECK] function(lore: vector<string>, char: CA_CHAR)
 function createSpellButtonContainer(lore, char)
-	--if spellButtonContainer then
-	--	spellButtonContainer:SetVisible(true);
-	--	return;
-	--end
 	local spellButtonList = ListView.new("SpellButtonList", loreFrame, "VERTICAL");
-	spellButtonList:Resize(pX/2 - 18, pY - dummyButtonY/2); --(pX/2 - 13, pY - 40);
-
+	spellButtonList:Resize(pX/2 - 18, pY - dummyButtonY/2);
 	spellButtonContainer = Container.new(FlowLayout.VERTICAL);	
 	local spellButtons = {} --:vector<TEXT_BUTTON>
-	--local loreEnable = {};
-	--loreEnable = characterHasSkill(char);
-	local spellSlots = loadstring(cm:get_saved_value("sm0_mazdamundi"))();
+	local spellSlots = updateSaveTable(nil);
 	for _, spell in ipairs(lore) do
 		local spellButton = TextButton.new(spell, loreFrame, "TEXT", spell);
+		spellButton:SetState("hover");
+		spellButton.uic:SetTooltipText("Select "..spell.." to replace "..spellSlots[tonumber(string.match(spellSlotSelected, "%d"))]);	
+		spellButton:SetState("active");
 		for _, spellSlot in ipairs(spellSlots) do
 			if spellSlot == spell then
 				spellButton:SetDisabled(true);
-			--else
-			--	spellButton:SetDisabled(false);
+				spellButton.uic:SetTooltipText("This spell is already selected");	
 			end
 		end
 		table.insert(spellButtons, spellButton);
 		spellButton:RegisterForClick(
 			function(context)
 				local spellSlots = updateSaveTable(spellButton.name);
-				loreButtonContainer:Clear();
-				spellButtonContainer:Clear();
 				createSpellSlotButtonContainer(nil, spellSlots);
 			end
 		)
 		spellButtonList:AddComponent(spellButton);
-		--spellSlotButtonContainer:AddGap(2); --spellSlotButton:Height() + 
-		--if loreEnable["loreLightEnabled"] then
-		--	loreButtonLight:SetState("hover");
-		--	loreButtonLight.uic:SetTooltipText("Lore of Light");	
-		--else
-		--	loreButtonLight:SetDisabled(true);
-		--	loreButtonLight.uic:SetTooltipText("Required Skill: Lore of Light");
-		--end
 	end
 	spellButtonContainer:AddComponent(spellButtonList);
-		
-	--setupSingleSelectedButtonGroup(spellSlotButtons, char);
-	--for _, spellSlotButton in ipairs(spellSlotButtons) do
-	--	spellSlotButtonContainer:AddComponent(spellSlotButton);
-	--	spellSlotButtonContainer:AddGap(4);
-	--end
 	spellButtonContainer:PositionRelativeTo(loreFrame, pX/2 + 35, dummyButtonY/4);
+end
+
+--v function(buttons: vector<TEXT_BUTTON>, char: CA_CHAR)
+function setupSingleSelectedButtonGroup(buttons, char)
+	for _, button in ipairs(buttons) do
+		button:SetState("active");
+		button:RegisterForClick(
+			function(context)
+				for _, otherButton in ipairs(buttons) do
+					if button.name == otherButton.name then
+						otherButton:SetState("selected_hover");
+						otherButton.uic:SetTooltipText("Select your prefered spell of the "..button.name);
+					else
+						otherButton:SetState("hover");
+						otherButton.uic:SetTooltipText("Select the Lore of Magic you want to pick a spell from");
+						otherButton:SetState("active");
+					end
+				end
+				if spellButtonContainer then
+					spellButtonContainer:Clear();
+				end
+				createSpellButtonContainer(loreTable[button.name], char);
+			end
+		);
+	end
 end
 
 --v function(char: CA_CHAR)
 function createLoreButtonContainer(char)
-	--if loreButtonContainer then
-	--	loreButtonContainer:SetVisible(true);
-	--	return;
-	--end
+	spellSlotButtonContainer:Clear();
 	local loreButtonList = ListView.new("LoreButtonList", loreFrame, "VERTICAL");
 	loreButtonList:Resize(pX/2 - 9, pY - dummyButtonY/2); -- width vslider 18
-	--for i, lore in ipairs(loreList) do
-	--    local regionButton = createRegionButton(region);
-	--    regionList:AddComponent(regionButton);
-	--    table.insert(regionButtons, regionButton);
-	--end
-	--setUpSingleButtonSelectedGroup(regionButtons);
-
 	loreButtonContainer = Container.new(FlowLayout.VERTICAL);
 	local loreButtons = {} --:vector<TEXT_BUTTON>
 	local loreEnable = {};
-	--loreEnable = characterHasSkill(char);
 	for lore, _ in pairs(loreTable) do
 		local loreButton = TextButton.new(lore, loreFrame, "TEXT_TOGGLE", lore);
 		table.insert(loreButtons, loreButton);
-		--if loreEnable["loreLightEnabled"] then
-			loreButton:SetState("hover");
-			loreButton.uic:SetTooltipText(lore);	
-		--else
-			--loreButtonLight:SetDisabled(true);
-			--loreButtonLight.uic:SetTooltipText("Required Skill: Lore of Light");
-		--end
-	end	
-	
-	setupSingleSelectedButtonGroup(loreButtons, char);
-	
-	--local buttonSize = loreButtonLight:Width(); --56
-	
-	for _, loreButton in ipairs(loreButtons) do
 		loreButtonList:AddComponent(loreButton);
-		--loreButtonList:AddGap(2);
-		--loreButtonContainer:AddGap(buttonSize / 8);
-		loreButton:RegisterForClick(
-			function(context)
-				if spellButtonContainer then
-					spellButtonContainer:Clear();
-				end
-				createSpellButtonContainer(loreTable[loreButton.name], char);
-			end
-		)
-	end
-
-
+	end	
+	setupSingleSelectedButtonGroup(loreButtons, char);
 	loreButtonContainer:AddComponent(loreButtonList);
-	--loreButtonContainer:Reposition();
-	--Util.centreComponentOnComponent(loreButtonContainer, loreFrame);
 	loreButtonContainer:PositionRelativeTo(loreFrame, 22, dummyButtonY/4);
-	--loreButtonContainer:Reposition();
 end
 
 createSpellSlotButtonContainer = function(char, spellSlots)
+	if loreButtonContainer then loreButtonContainer:Clear(); end
+	if spellButtonContainer then spellButtonContainer:Clear(); end
 	local spellSlotButtonList = ListView.new("SpellSlotButtonList", loreFrame, "VERTICAL");
 	spellSlotButtonList:Resize(dummyButtonX, pY - dummyButtonY/2); --(pX/2 - 13, pY - 40);
-
-
 	spellSlotButtonContainer = Container.new(FlowLayout.VERTICAL);
-	
-	
-
-	--local loreEnable = {};
-	--loreEnable = characterHasSkill(char);
 	for i, spellSlot in ipairs(spellSlots) do
 		local spellSlotButton = TextButton.new("Spell Slot - "..i.." -", loreFrame, "TEXT", spellSlot);
 		table.insert(spellSlotButtons, spellSlotButton);
 		spellSlotButton:RegisterForClick(
 			function(context)
 				spellSlotSelected = spellSlotButton.name;
-				spellSlotButtonContainer:Clear();
 				createLoreButtonContainer(char);
 			end
 		)
-
 		spellSlotButtonList:AddComponent(spellSlotButton);
-		--spellSlotButtonContainer:AddGap(2); --spellSlotButton:Height() + 
-		--if loreEnable["loreLightEnabled"] then
-		--	loreButtonLight:SetState("hover");
-		--	loreButtonLight.uic:SetTooltipText("Lore of Light");	
-		--else
-		--	loreButtonLight:SetDisabled(true);
-		--	loreButtonLight.uic:SetTooltipText("Required Skill: Lore of Light");
-		--end
 	end
 	spellSlotButtonContainer:AddComponent(spellSlotButtonList);
-
 	Util.centreComponentOnComponent(spellSlotButtonContainer, loreFrame);
-	
-	--setupSingleSelectedButtonGroup(spellSlotButtons, char);
-	
-	
-	--for _, spellSlotButton in ipairs(spellSlotButtons) do
-	--	spellSlotButtonContainer:AddComponent(spellSlotButton);
-	--	spellSlotButtonContainer:AddGap(4);
-	--end
 end
 
 --v function() --> CA_CHAR
@@ -284,7 +195,7 @@ function getMazdaCharacter()
 	local char = nil --:CA_CHAR
 	if not cm:model():pending_battle():is_active() then
 		char = getSelectedCharacter();
-		if char == nil then
+		if not char then
 			local focusButton = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "header", "button_focus", "dy_txt"); 
 			local focusButtonText = focusButton:GetStateText();
 			if string.find(focusButtonText,"Mazdamundi") then
@@ -316,6 +227,62 @@ function getMazdaCharacter()
 end
 
 --v function()
+function closeUI()
+	if loreButtonContainer then loreButtonContainer:Clear(); end
+	if spellButtonContainer then spellButtonContainer:Clear(); end
+	if spellSlotButtonContainer then spellSlotButtonContainer:Clear(); end
+	loreButtonContainer = nil;
+	spellButtonContainer = nil;
+	spellSlotButtonContainer = nil;
+	spellSlotSelected = nil;
+	spellSlotButtons = {};
+	loreFrame = nil;
+end
+
+--v function()
+function createSpellBrowserButton()
+	local parent = find_uicomponent(core:get_ui_root(), "Lore of Magic");
+	spellBrowserButton = Util.createComponent("spellBrowserButton", parent, "ui/templates/round_small_button");
+	Util.registerComponent("spellBrowserButton", spellBrowserButton);
+	spellBrowserButton:Resize(28, 28);
+	local posFrameX, posFrameY = loreFrame:Position();
+	local offsetX, offsetY = 10, 10;
+	spellBrowserButton:MoveTo(posFrameX + offsetX, posFrameY + offsetY);
+	spellBrowserButton:SetImage(browserIconPath);
+	spellBrowserButton:SetState("hover");
+	spellBrowserButton:SetTooltipText("Spell Browser");
+	spellBrowserButton:PropagatePriority(100);
+	spellBrowserButton:SetState("active");
+	Util.registerForClick(spellBrowserButton, "spellBrowserButtonListener",
+		function(context)
+			--
+		end
+	)
+end
+
+--v function()
+function createOptionButton()
+	local parent = find_uicomponent(core:get_ui_root(), "Lore of Magic");
+	optionButton = Util.createComponent("optionButton", parent, "ui/templates/round_small_button");
+	Util.registerComponent("optionButton", optionButton);
+	optionButton:Resize(28, 28);
+	local posFrameX, posFrameY = loreFrame:Position();
+	local sizeFrameX, sizeFrameY = loreFrame:Bounds(); 
+	local offsetX, offsetY = 10, 10;
+	optionButton:MoveTo(posFrameX + sizeFrameX - (offsetX + optionButton:Width()), posFrameY + offsetY);
+	optionButton:SetImage(optionsIconPath);
+	optionButton:SetState("hover");
+	optionButton:SetTooltipText("Options");
+	optionButton:PropagatePriority(100);
+	optionButton:SetState("active");
+	Util.registerForClick(optionButton, "optionButtonListener",
+		function(context)
+			--
+		end
+	)
+end
+
+--v function()
 function createLoreUI()
 	if loreFrame then
 		return;
@@ -324,16 +291,21 @@ function createLoreUI()
 	loreFrame.uic:PropagatePriority(100);
 	loreFrame:AddCloseButton(
 		function()
-			loreFrame = nil;
+			closeUI()
 		end
 	);
 	local parchment = find_uicomponent(core:get_ui_root(), "Lore of Magic", "parchment");
 	pX, pY = parchment:Bounds();
 	Util.centreComponentOnScreen(loreFrame);
-	--local char = getMazdaCharacter();
-	local char = getCAChar(charSubMazdamundi, cm:get_faction(cm:get_local_faction(true)));
-	local spellSlots = loadstring(cm:get_saved_value("sm0_mazdamundi"))();
+	createSpellBrowserButton();
+	createOptionButton();
+	loreFrame:AddComponent(spellBrowserButton);
+	loreFrame:AddComponent(optionButton);
+	local char = getMazdaCharacter();
+	--local char = getCAChar(charSubMazdamundi, cm:get_faction(cm:get_local_faction(true)));
+	local spellSlots = updateSaveTable(false);
 	createSpellSlotButtonContainer(char, spellSlots);
+	--root > menu_bar > buttongroup > button_spell_browser
 	--local spellSlotButtonContainerX, spellSlotButtonContainerY = spellSlotButtonContainer:Position();
 	--spellSlotButtonContainer:MoveTo(spellSlotButtonContainerX, spellSlotButtonContainerY - 75);
 	--loreFrame:AddComponent(spellSlotButtonContainer);
@@ -348,19 +320,20 @@ function createLoreUI()
 	loreFrame.uic:RegisterTopMost();
 end
 
-function createLoreButton1() -- character_panel
+--v function()
+function createloreButton_charPanel() -- character_panel
 	cm:callback(
 		function(context)
-			if loreBookButton1 == nil then
-				loreBookButton1 = Button.new("loreBookButton1", find_uicomponent(core:get_ui_root(), "character_details_panel", "background", "bottom_buttons"), "SQUARE", iconPath);
+			if loreButton_charPanel == nil then
+				loreButton_charPanel = Button.new("loreButton_charPanel", find_uicomponent(core:get_ui_root(), "character_details_panel", "background", "bottom_buttons"), "SQUARE", bookIconPath);
 				local characterdetailspanel = find_uicomponent(core:get_ui_root(), "character_details_panel");
 				local referenceButton = find_uicomponent(characterdetailspanel, "button_replace_general");
-				loreBookButton1:Resize(referenceButton:Width(), referenceButton:Height());
-				loreBookButton1:PositionRelativeTo(referenceButton, -loreBookButton1:Width() - 1, 0);
-				loreBookButton1:SetState("hover");
-				loreBookButton1.uic:SetTooltipText("Choose Lore of Magic");			
-				loreBookButton1:SetState("active");
-				loreBookButton1:RegisterForClick(
+				loreButton_charPanel:Resize(referenceButton:Width(), referenceButton:Height());
+				loreButton_charPanel:PositionRelativeTo(referenceButton, -loreButton_charPanel:Width() - 1, 0);
+				loreButton_charPanel:SetState("hover");
+				loreButton_charPanel.uic:SetTooltipText("Lore of Magic");			
+				loreButton_charPanel:SetState("active");
+				loreButton_charPanel:RegisterForClick(
 					function(context)
 						createLoreUI();
 					end
@@ -369,136 +342,96 @@ function createLoreButton1() -- character_panel
 			local namePanel = find_uicomponent(core:get_ui_root(), "character_details_panel", "character_name");
 			local namePanelText = namePanel:GetStateText();
 			if string.find(namePanelText, "Mazdamundi") then
-				loreBookButton1:SetVisible(true);
+				loreButton_charPanel:SetVisible(true);
 			else
-				loreBookButton1:SetVisible(false);
+				loreButton_charPanel:SetVisible(false);
 			end				
-		end, 0, "createLoreBookButton1"
+		end, 0, "createloreButton_charPanel"
 	);
 end
 
-function createLoreButton2() --
-	loreBookButton2 = Button.new("loreBookButton2", find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "button_group_unit"), "SQUARE", iconPath); 
-	cm:callback(
-		function(context)
-			local buttonGroupUnit = find_uicomponent(core:get_ui_root(), "button_group_unit");
-			local referenceButton = find_uicomponent(buttonGroupUnit, "button_replace_general");
-			loreBookButton2:Resize(referenceButton:Width(), referenceButton:Height());
-			loreBookButton2:PositionRelativeTo(referenceButton, 0, 0);
-			loreBookButton2:SetState("hover");
-			loreBookButton2.uic:SetTooltipText("Choose Lore of Magic");			
-			loreBookButton2:SetState("active");
-		end, 0, "positionLoreBookButton2"
-	);
-	loreBookButton2:RegisterForClick(
-		function(context)
-			createLoreUI();
-		end
-	)
-end
-
-function createLoreButton3() -- pre_battle
+--v function(battle_type: BATTLE_TYPE)
+function createloreButton_preBattle(battle_type) -- pre_battle
 	local buttonParent = find_uicomponent(core:get_ui_root(), "popup_pre_battle", "mid", "battle_deployment", "regular_deployment", "list");
-	loreBookButton3 = Util.createComponent("loreBookButton3", buttonParent, "ui/templates/round_small_button");
-	Util.registerComponent("loreBookButton3", loreBookButton3);
+	loreButton_preBattle = Util.createComponent("loreButton_preBattle", buttonParent, "ui/templates/round_small_button");
+	Util.registerComponent("loreButton_preBattle", loreButton_preBattle);
 	cm:callback(
 		function(context)
-			local preBattlePanel = find_uicomponent(core:get_ui_root(), "popup_pre_battle", "mid", "battle_deployment", "regular_deployment", "list", "battle_information_panel", "button_holder");
-			local referenceButton = find_uicomponent(preBattlePanel, "button_info");
+			local posFrameX, posFrameY = buttonParent:Position();
+			local sizeFrameX, sizeFrameY = buttonParent:Bounds(); 
+			local referenceButton = find_uicomponent(buttonParent, "battle_information_panel", "button_holder", "button_info");
+			if battle_type == "settlement_standard" or battle_type == "settlement_unfortified"then 
+				referenceButton = find_uicomponent(buttonParent, "siege_information_panel", "button_holder", "button_info"); 
+			end
 			local posReferenceButtonX, posReferenceButtonY = referenceButton:Position();
-			loreBookButton3:MoveTo(posReferenceButtonX - 500, posReferenceButtonY);
-			loreBookButton3:SetImage(iconPath);
-			loreBookButton3:SetState("hover");
-			loreBookButton3:SetTooltipText("Choose Lore of Magic");
-			--loreBookButton3.uic:PropagatePriority(100);
-			loreBookButton3:PropagatePriority(100);
-			loreBookButton3:SetState("active");
-			end, 0, "positionLoreBookButton3"
+			local offsetX = (posFrameX + sizeFrameX) - (posReferenceButtonX + referenceButton:Width())
+			loreButton_preBattle:MoveTo(posFrameX + offsetX, posReferenceButtonY);
+			loreButton_preBattle:SetImage(bookIconPath);
+			loreButton_preBattle:SetState("hover");
+			loreButton_preBattle:SetTooltipText("Lore of Magic");
+			loreButton_preBattle:PropagatePriority(100);
+			loreButton_preBattle:SetState("active");
+			end, 0, "positionloreButton_preBattle"
 	);
-	Util.registerForClick(loreBookButton3, "specialButtonListener",
+	Util.registerForClick(loreButton_preBattle, "loreButton_preBattle_Listener",
 		function(context)
 			createLoreUI();
 		end
 	)
 end
 
-function createLoreButton4() -- main_units_panel
-	loreBookButton4 = Button.new("loreBookButton4", find_uicomponent(core:get_ui_root(), "layout", "hud_center_docker", "hud_center", "small_bar", "button_group_army"), "SQUARE", iconPath);
+--v function()
+function createloreButton_unitsPanel() -- main_units_panel
+	loreButton_unitsPanel = Button.new("loreButton_unitsPanel", find_uicomponent(core:get_ui_root(), "layout", "hud_center_docker", "hud_center", "small_bar", "button_group_army"), "SQUARE", bookIconPath);
 	cm:callback(
 		function(context)
 			local unitsPanel = find_uicomponent(core:get_ui_root(), "button_group_army");
-			local referenceButton = find_uicomponent(unitsPanel, "button_renown");
-			loreBookButton4:Resize(referenceButton:Width(), referenceButton:Height());
-			loreBookButton4:PositionRelativeTo(referenceButton, loreBookButton4:Width() + 4, 0);
-			loreBookButton4:SetState("hover");
-			loreBookButton4.uic:SetTooltipText("Choose Lore of Magic");
-			loreBookButton4:SetState("active");
-		end, 0, "positionLoreBookButton4"
+			local renownButton = find_uicomponent(unitsPanel, "button_renown"); 
+			local recruitButton = find_uicomponent(unitsPanel, "button_recruitment");
+			loreButton_unitsPanel:Resize(renownButton:Width(), renownButton:Height());
+			if renownButton:Visible() then
+				loreButton_unitsPanel:PositionRelativeTo(renownButton, loreButton_unitsPanel:Width() + 4, 0);
+			else
+				loreButton_unitsPanel:PositionRelativeTo(recruitButton, loreButton_unitsPanel:Width() + 4, 0);
+			end
+			loreButton_unitsPanel:SetState("hover");
+			loreButton_unitsPanel.uic:SetTooltipText("Lore of Magic");
+			loreButton_unitsPanel:SetState("active");
+		end, 0, "positionloreButton_unitsPanel"
 	);
-	loreBookButton4:RegisterForClick(
+	loreButton_unitsPanel:RegisterForClick(
 		function(context)
 			createLoreUI();
 		end
 	)
 end
 
-function closeLoreUI1() -- character_panel
-	--loreBookButton1 = Util.getComponentWithName("loreBookButton1");
-	if loreBookButton1 then
-		loreBookButton1:Delete();
-		loreBookButton1 = nil;
-	end
+--v function()
+function deleteLoreFrame()
 	if loreFrame then
 		loreFrame:Delete();
 		loreFrame = nil;
 	end
 end
 
-function closeLoreUI2() -- 
-	--loreBookButton2 = Util.getComponentWithName("loreBookButton2");
-	if loreBookButton2 then
-		loreBookButton2:Delete();
-		loreBookButton2 = nil;
-	end
-	if loreFrame then
-		loreFrame:Delete();
-		loreFrame = nil;
-	end
-end
-
-function closeLoreUI3() -- pre_battle
-	--loreBookButton3 = Util.getComponentWithName("loreBookButton3");
-	if loreBookButton3 then
-		Util.delete(loreBookButton3);
-		Util.unregisterComponent("loreBookButton3");
-		core:remove_listener("specialButtonListener");
-		loreBookButton3 = nil;
-	end
-	if loreFrame then
-		loreFrame:Delete();
-		loreFrame = nil;
+--v function()
+function updateButtonVisibility()
+	local namePanel = find_uicomponent(core:get_ui_root(), "character_details_panel", "character_name");
+	local namePanelText = namePanel:GetStateText();
+	if string.find(namePanelText, "Mazdamundi") then
+		loreButton_charPanel:SetVisible(true);
+	else
+		loreButton_charPanel:SetVisible(false);
 	end
 end
 
-function closeLoreUI4() -- main_units_panel
-	--loreBookButton4 = Util.getComponentWithName("loreBookButton4");
-	if loreBookButton4 then
-		loreBookButton4:Delete();
-		loreBookButton4 = nil;
-	end
-	if loreFrame then
-		loreFrame:Delete();
-		loreFrame = nil;
-	end
-end
-
+--v function()
 function playerLoreListener()
-	local buttonLocation1 = true;	-- "character_details_panel" root > character_details_panel > background > skills_subpanel > listview
-	local buttonLocation2 = false;	-- "units_panel", "main_units_panel", "button_group_unit"
-	local buttonLocation3 = true;	-- "popup_pre_battle"
-	local buttonLocation4 = true;	-- "main_units_panel"
+	local buttonLocation_charPanel = true;	-- "character_details_panel" root > character_details_panel > background > skills_subpanel > listview
+	local buttonLocation_preBattle = true;	-- "popup_pre_battle"
+	local buttonLocation_unitsPanel = true;	-- "main_units_panel"
 
-	if buttonLocation1 then
+	if buttonLocation_charPanel then
 		core:add_listener(
 			"loreCharacterPanelOpened1",
 			"PanelOpenedCampaign",
@@ -506,7 +439,7 @@ function playerLoreListener()
 				return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
 			end,
 			function(context)
-				createLoreButton1(); 						
+				createloreButton_charPanel(); 						
 			end,
 			true
 		);
@@ -518,7 +451,11 @@ function playerLoreListener()
 				return context.string == "character_details_panel"  and not cm:model():pending_battle():is_active(); 
 			end,
 			function(context)
-				closeLoreUI1();
+				if loreButton_charPanel then
+					loreButton_charPanel:Delete();
+					loreButton_charPanel = nil;
+				end
+				deleteLoreFrame();
 			end,
 			true
 		);
@@ -533,13 +470,7 @@ function playerLoreListener()
 			function(context)
 				cm:callback(
 					function(context)
-						local namePanel = find_uicomponent(core:get_ui_root(), "character_details_panel", "character_name");
-						local namePanelText = namePanel:GetStateText();
-						if string.find(namePanelText, "Mazdamundi") then
-							loreBookButton1:SetVisible(true);
-						else
-							loreBookButton1:SetVisible(false);
-						end
+						updateButtonVisibility();
 					end, 0, "checkNamePanelText"
 				);		
 			end,
@@ -556,13 +487,7 @@ function playerLoreListener()
 			function(context)
 				cm:callback(
 					function(context)
-						local namePanel = find_uicomponent(core:get_ui_root(), "character_details_panel", "character_name");
-						local namePanelText = namePanel:GetStateText();
-						if string.find(namePanelText, "Mazdamundi") then
-							loreBookButton1:SetVisible(true);
-						else
-							loreBookButton1:SetVisible(false);
-						end
+						updateButtonVisibility();
 					end, 0, "checkNamePanelText"
 				);	
 			end,
@@ -579,13 +504,7 @@ function playerLoreListener()
 			function(context)
 				cm:callback(
 					function(context)
-						local namePanel = find_uicomponent(core:get_ui_root(), "character_details_panel", "character_name");
-						local namePanelText = namePanel:GetStateText();
-						if string.find(namePanelText, "Mazdamundi") then
-							loreBookButton1:SetVisible(true);
-						else
-							loreBookButton1:SetVisible(false);
-						end
+						updateButtonVisibility();
 					end, 0, "checkNamePanelText"
 				);	
 			end,
@@ -602,13 +521,7 @@ function playerLoreListener()
 			function(context)
 				cm:callback(
 					function(context)
-						local namePanel = find_uicomponent(core:get_ui_root(), "character_details_panel", "character_name");
-						local namePanelText = namePanel:GetStateText();
-						if string.find(namePanelText, "Mazdamundi") then
-							loreBookButton1:SetVisible(true);
-						else
-							loreBookButton1:SetVisible(false);
-						end
+						updateButtonVisibility();
 					end, 0, "checkNamePanelText"
 				);	
 			end,
@@ -656,48 +569,18 @@ function playerLoreListener()
 		]]--
 	end
 	
-	if buttonLocation2 then
-		core:add_listener(
-			"loreLandUnitComponentLClickUp2",
-			"ComponentLClickUp",
-			function(context)		
-				return context.string == "LandUnit 0" and loreBookButton2 == nil; 
-			end,
-			function(context)
-				local selectedCharacter = getSelectedCharacter();
-				--local lordUnitPanel = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "units", "LandUnit 0");
-				if selectedCharacter:character_subtype(charSubMazdamundi) then --and lordUnitPanel:CurrentState() == "selected_hover"
-					createLoreButton2();	
-				end			
-			end,
-			true
-		);
-
-		core:add_listener(
-			"loreButtonGroupUnitClosed2",
-			"PanelClosedCampaign",
-			function(context) 
-				return context.string == "button_group_unit"; 
-			end,
-			function(context)
-				closeLoreUI2();
-			end,
-			true
-		);
-	end
-	
-	if buttonLocation3 then		
+	if buttonLocation_preBattle then		
 		core:add_listener(
 			"lorePopupPreBattlePanelOpened3",
 			"PanelOpenedCampaign", 
 			function(context) 
-				return context.string == "popup_pre_battle" and loreBookButton3 == nil; 
+				return context.string == "popup_pre_battle" and loreButton_preBattle == nil; 
 			end,
 			function(context)
 				local selectedCharacter = getMazdaCharacter();
 				local pb = cm:model():pending_battle();
 				if pb:battle_type() ~= "ambush" and selectedCharacter:character_subtype(charSubMazdamundi) then
-					createLoreButton3();
+					createloreButton_preBattle(pb:battle_type());
 				end
 			end,
 			true
@@ -710,8 +593,7 @@ function playerLoreListener()
 				return context.string == "character_details_panel" and cm:model():pending_battle():is_active();
 			end,
 			function(context)
-				loreFrame:Delete();
-				loreFrame = nil;
+				deleteLoreFrame();
 			end,
 			true
 		);
@@ -723,23 +605,29 @@ function playerLoreListener()
 				return context.string == "popup_pre_battle"; 
 			end,
 			function(context)
-				closeLoreUI3();
+				if loreButton_preBattle then
+					Util.delete(loreButton_preBattle);
+					Util.unregisterComponent("loreButton_preBattle");
+					core:remove_listener("specialButtonListener");
+					loreButton_preBattle = nil;
+				end
+				deleteLoreFrame();
 			end,
 			true
 		);
 	end
 	
-	if buttonLocation4 then
+	if buttonLocation_unitsPanel then
 		core:add_listener(
 			"loreUnitPanelOpened4",
 			"PanelOpenedCampaign",
 			function(context)		
-				return context.string == "units_panel" and loreBookButton4 == nil; 
+				return context.string == "units_panel" and loreButton_unitsPanel == nil; 
 			end,
 			function(context)
 				local selectedCharacter = getMazdaCharacter();
 				if selectedCharacter:character_subtype(charSubMazdamundi) then
-					createLoreButton4();	
+					createloreButton_unitsPanel();	
 				end
 			end,
 			true
@@ -752,7 +640,11 @@ function playerLoreListener()
 				return context.string == "units_panel"; 
 			end,
 			function(context)
-				closeLoreUI4();
+				if loreButton_unitsPanel then
+					loreButton_unitsPanel:Delete();
+					loreButton_unitsPanel = nil;
+				end
+				deleteLoreFrame();
 			end,
 			true
 		);
@@ -765,10 +657,14 @@ function playerLoreListener()
 				return is_uicomponent(panel);
 			end,
 			function(context)
-				if context:character():character_subtype(charSubMazdamundi) and loreBookButton4 == nil then
-					createLoreButton4();
-				elseif context:character():character_subtype(charSubMazdamundi) ~= true and loreBookButton4 ~=nil then
-					closeLoreUI4();
+				if context:character():character_subtype(charSubMazdamundi) and loreButton_unitsPanel == nil then
+					createloreButton_unitsPanel();
+				elseif context:character():character_subtype(charSubMazdamundi) ~= true and loreButton_unitsPanel ~=nil then
+					if loreButton_unitsPanel then
+						loreButton_unitsPanel:Delete();
+						loreButton_unitsPanel = nil;
+					end
+					deleteLoreFrame();
 				end
 			end,
 			true
@@ -784,7 +680,7 @@ function tableLength(table)
 	return count;
 end
 
---v function(table: map<WHATEVER,WHATEVER>, key: WHATEVER) --> string
+--v function(table: map<WHATEVER, WHATEVER>, key: WHATEVER) --> string
 function tableRemove(table, key)
     local item = table[key];
     table[key] = nil;

@@ -56,12 +56,6 @@ function createAbandonFrame(abandonRegionStr)
     abandonFrame = Frame.new(frameName);
     abandonFrame:Resize(720, 340);
 	abandonFrame.uic:PropagatePriority(100);
-	abandonFrame:AddCloseButton(
-        function()
-			abandonFrame = nil;
-        end,
-        true
-    );
     Util.centreComponentOnScreen(abandonFrame);
     abandonFrame.uic:RegisterTopMost();
     local regionOnscreenName = effect.get_localised_string("regions_onscreen_" .. abandonRegionStr); 
@@ -72,7 +66,13 @@ function createAbandonFrame(abandonRegionStr)
     abandonText:Resize(640, 225);
     abandonText:SetText(abandonText1 .. "\n\n\n" ..abandonText2.. " " ..regionOnscreenName.. " " ..abandonText3);
     Util.centreComponentOnComponent(abandonText, abandonFrame);
-
+	abandonFrame:AddCloseButton(
+        function()
+            abandonText:Delete();
+			abandonFrame = nil;
+        end,
+        true
+    );
     local confirmButton = TextButton.new("confirmButton", abandonFrame, "TEXT", confirmButtonText.. " " .. regionOnscreenName);
     confirmButton.uic:PropagatePriority(100);
     abandonFrame:AddComponent(confirmButton);

@@ -691,7 +691,8 @@
 -- sm0kin
 --# assume CM.is_local_players_turn: method() --> boolean
 --# type global BATTLE_TYPE = "ambush" | "campaign_battle" | "capture_point" | "classic" | "coastal_battle" | "free_for_all" | "historic" | "limes" | "napoleon_historic" | "naval" | "naval_siege" | "river_crossing_battle" |
---# "siege" | "Tutorial" | "underground_intercept" | "unfortified_port" | "unfortified_settlement"
+--# "siege" | "Tutorial" | "underground_intercept" | "unfortified_port" | "unfortified_settlement" |
+--# "land_ambush" | "land_bridge" | "land_normal" | "naval_blockade" | "naval_breakout" | "naval_normal" | "port_assault" | "settlement_relief" | "settlement_sally" | "settlement_standard" | "settlement_unfortified"
 --# assume CA_PENDING_BATTLE.has_contested_garrison: method() --> boolean
 --# assume CA_PENDING_BATTLE.contested_garrison: method() --> CA_GARRISON_RESIDENCE
 --# assume CA_PENDING_BATTLE.battle_type: method() --> BATTLE_TYPE
