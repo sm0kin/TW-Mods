@@ -128,7 +128,7 @@
 --# assume FRAME.GetContentComponent: method() --> CA_UIC
 --# assume FRAME.GetPositioningComponent: method() --> CA_UIC
 --# assume FRAME.Delete: method()
---# assume FRAME.AddComponent: method(component: CA_UIC | COMPONENT_TYPE)
+--# assume FRAME.AddComponent: method(component: CA_UIC | COMPONENT_TYPE | CONTAINER)
 --# assume FRAME.SetTitle: method(title: string)
 --# assume FRAME.AddCloseButton: method(callback: function, cross: WHATEVER?)
 --# assume FRAME.GetContentPanel: method() --> CA_UIC
@@ -191,13 +191,13 @@
 --# assume BUTTON.name: string
 --# assume TEXT_BUTTON.name: string
 
---# assume UTIL.delete: function(uic: WHATEVER)
---# assume UTIL.registerComponent: function(component_name: string, component: WHATEVER)
---# assume UTIL.unregisterComponent: function(component: WHATEVER)
+--# assume UTIL.delete: function(uic: COMPONENT_TYPE | CA_UIC)
+--# assume UTIL.registerComponent: function(component_name: string, component: COMPONENT_TYPE | CA_UIC)
+--# assume UTIL.unregisterComponent: function(component_name: string)
 --# assume CONTAINER.Clear: method()
 --# assume CONTAINER.SetVisible: method(visible: boolean)
---# assume UTIL.createComponent: function(component: string, parent: WHATEVER, template_path: string) --> CA_UIC
---# assume UTIL.registerForClick: function(component: WHATEVER, listener_name: string, callback: function(context: WHATEVER?))
+--# assume UTIL.createComponent: function(component: string, parent: COMPONENT_TYPE | CA_UIC, template_path: string) --> CA_UIC
+--# assume UTIL.registerForClick: function(component: COMPONENT_TYPE | CA_UIC, listener_name: string, callback: function(context: WHATEVER?))
 
 
  --# assume BUTTON.SetTooltipText: method(tooltip: string)

@@ -704,7 +704,11 @@
 --# assume CA_PENDING_BATTLE.secondary_attackers: method() --> CA_CHAR_LIST
 --# assume CA_PENDING_BATTLE.secondary_defenders: method() --> CA_CHAR_LIST
 --# assume CUIM.get_char_selected_cqi: method() --> CA_CQI
-
+--# assume CUIM.lock_ui: method()
+--# assume CUIM.unlock_ui: method()
+--# assume global force_require: function(file: string)
+--# assume global highlight_component: function(value: bool, is_square: bool, string...)
+--# assume global pulse_uicomponent: function(uic: CA_UIC, should_pulse: bool, brightness_modifier: number, propagate: bool?, state_name: BUTTON_STATE?) --buttons: brightness_modifier = 10, frames: brightness_modifier = 5
 -- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
 -- --# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
 

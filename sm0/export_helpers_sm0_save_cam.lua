@@ -1,6 +1,6 @@
 cm:set_saved_value("sm0_save_cam", true);
 --# assume table:TABLE
-require("table_save");
+force_require("table_save");
 local loadButton = nil --:BUTTON
 local saveButton = nil --:BUTTON
 local resetButton = nil --:BUTTON
