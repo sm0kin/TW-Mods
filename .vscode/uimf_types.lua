@@ -52,28 +52,28 @@
 --# assume LOG.write: function(str: string)
 
 --object creation functions
---# assume BUTTON.new: function(name: string, parent: WHATEVER, form: BUTTON_TYPE, imagePath: string) --> BUTTON
---# assume TEXT_BUTTON.new: function(name: string, parent: WHATEVER, form: TEXT_BUTTON_TYPE, text: string) --> TEXT_BUTTON
+--# assume BUTTON.new: function(name: string, parent: CA_UIC | COMPONENT_TYPE, form: BUTTON_TYPE, imagePath: string) --> BUTTON
+--# assume TEXT_BUTTON.new: function(name: string, parent: CA_UIC | COMPONENT_TYPE, form: TEXT_BUTTON_TYPE, text: string) --> TEXT_BUTTON
 --# assume FRAME.new: function(name: string) --> FRAME
---# assume IMAGE.new: function(name: string, parent: WHATEVER, imagepath: string) --> IMAGE
---# assume TEXT.new: function(name: string, parent: WHATEVER, form: TEXT_TYPE, text: string) --> TEXT
---# assume LIST_VIEW.new: function(name: string, parent: WHATEVER, scroll:LIST_SCROLL_DIRECTION) --> LIST_VIEW
+--# assume IMAGE.new: function(name: string, parent: CA_UIC | COMPONENT_TYPE, imagepath: string) --> IMAGE
+--# assume TEXT.new: function(name: string, parent: CA_UIC | COMPONENT_TYPE, form: TEXT_TYPE, text: string) --> TEXT
+--# assume LIST_VIEW.new: function(name: string, parent: CA_UIC | COMPONENT_TYPE, scroll:LIST_SCROLL_DIRECTION) --> LIST_VIEW
 --# assume FLOW_LAYOUT.VERTICAL: FLOW_LAYOUT
 --# assume FLOW_LAYOUT.HORIZONTAL: FLOW_LAYOUT
 --# assume CONTAINER.new: function(layout: LAYOUT) --> CONTAINER
 
 --utility
 --# assume UTIL.getComponentWithName: function(name: string) --> COMPONENT_TYPE
---# assume UTIL.centreComponentOnScreen: function(component: WHATEVER)
---# assume UTIL.centreComponentOnComponent: function(component: WHATEVER, other_component: WHATEVER)    
---# assume UTIL.recurseThroughChildrenApplyingFunction: function(parent: WHATEVER, callback:function(child: WHATEVER))
+--# assume UTIL.centreComponentOnScreen: function(component: CA_UIC | COMPONENT_TYPE | CONTAINER)
+--# assume UTIL.centreComponentOnComponent: function(component: CA_UIC | COMPONENT_TYPE | CONTAINER, other_component: CA_UIC | COMPONENT_TYPE | CONTAINER)    
+--# assume UTIL.recurseThroughChildrenApplyingFunction: function(parent: CA_UIC, callback:function(child: CA_UIC))
 
 
 
 --button
 --# assume BUTTON.MoveTo: method(xPos: number, yPos: number)
 --# assume BUTTON.Move: method(XMove: number, yMove: number)
---# assume BUTTON.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
+--# assume BUTTON.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
 --# assume BUTTON.Scale: method(factor:number)
 --# assume BUTTON.Resize: method(width: number, height: number)
 --# assume BUTTON.SetVisible: method(visible: boolean)
@@ -89,20 +89,20 @@
 --# assume BUTTON.SetState: method(state: BUTTON_STATE)
 --# assume BUTTON.CurrentState: method() --> string
 --# assume BUTTON.IsSelected: method() --> boolean
---# assume BUTTON.RegisterForClick: method(callback: function(context: WHATEVER?))
+--# assume BUTTON.RegisterForClick: method(callback: function(context: CA_UIContext?))
 --# assume BUTTON.SetImage: method(path: string)
 --# assume BUTTON.SetDisabled: method(disabled: boolean)
 --text button
 --# assume TEXT_BUTTON.MoveTo: method(xPos: number, yPos: number)
 --# assume TEXT_BUTTON.Move: method(XMove: number, yMove: number)
---# assume TEXT_BUTTON.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
+--# assume TEXT_BUTTON.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
 --# assume TEXT_BUTTON.Scale: method(factor:number)
 --# assume TEXT_BUTTON.Resize: method(width: number, height: number)
 --# assume TEXT_BUTTON.SetVisible: method(visible: boolean)
 --# assume TEXT_BUTTON.Visible: method() --> boolean
 --# assume TEXT_BUTTON.Position: method() --> (number, number)
 --# assume TEXT_BUTTON.Bounds: method() --> (number, number)
---# assume TEXT_BUTTON.RegisterForClick: method(callback: function(context: WHATEVER?))
+--# assume TEXT_BUTTON.RegisterForClick: method(callback: function(context: CA_UIContext?))
 --# assume TEXT_BUTTON.SetDisabled: method(disabled: boolean)
 --# assume TEXT_BUTTON.GetContentComponent: method() --> CA_UIC
 --# assume TEXT_BUTTON.SetState: method(state: BUTTON_STATE)
@@ -114,7 +114,7 @@
 --frame
 --# assume FRAME.MoveTo: method(xPos: number, yPos: number)
 --# assume FRAME.Move: method(xMove: number, yMove: number)
---# assume FRAME.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
+--# assume FRAME.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
 --# assume FRAME.Scale: method(factor: number)
 --# assume FRAME.Position: method() --> (number, number)
 --# assume FRAME.Resize: method(number, number)
@@ -130,13 +130,13 @@
 --# assume FRAME.Delete: method()
 --# assume FRAME.AddComponent: method(component: CA_UIC | COMPONENT_TYPE | CONTAINER)
 --# assume FRAME.SetTitle: method(title: string)
---# assume FRAME.AddCloseButton: method(callback: function, cross: WHATEVER?)
+--# assume FRAME.AddCloseButton: method(callback: function, cross: bool?)
 --# assume FRAME.GetContentPanel: method() --> CA_UIC
 --# assume FRAME.uic: CA_UIC
 
 --image
 --# assume IMAGE.Resize: method(width: number, height: number)
---# assume IMAGE.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
+--# assume IMAGE.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
 --# assume IMAGE.Scale: method(factor: number)
 --# assume IMAGE.Move: method(xMove: number, yMove: number)
 --# assume IMAGE.SetImage: method(path: string)
@@ -144,7 +144,7 @@
 --# assume IMAGE.SetVisible: method(boolean)
 --# assume IMAGE.Delete: method()
 --text
---# assume TEXT.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
+--# assume TEXT.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
 --# assume TEXT.GetContentComponent: method() --> CA_UIC
 --# assume TEXT.SetText: method(str: string)
 --# assume TEXT.Bounds: method() --> (number, number)
@@ -157,23 +157,23 @@
 --# assume TEXT.Height: method() --> number
 
 --container
---# assume CONTAINER.AddComponent: method(component: WHATEVER)
+--# assume CONTAINER.AddComponent: method(component: CA_UIC | COMPONENT_TYPE | CONTAINER)
 --# assume CONTAINER.GetContentComponent: method() --> CA_UIC
 --# assume CONTAINER.AddGap: method(num: number)
---# assume CONTAINER.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
+--# assume CONTAINER.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
 --# assume CONTAINER.MoveTo: method(x: number, y: number)
 --# assume CONTAINER.Bounds: method() --> (number, number)
---# assume CONTAINER.RecursiveRetrieveAllComponents: method() --> vector<WHATEVER>
+--# assume CONTAINER.RecursiveRetrieveAllComponents: method() --> vector<CA_UIC | COMPONENT_TYPE>
 --# assume CONTAINER.Reposition: method()
 
 --listview
---# assume LIST_VIEW.AddComponent: method(component: WHATEVER)
+--# assume LIST_VIEW.AddComponent: method(component: CA_UIC | COMPONENT_TYPE | CONTAINER)
 --# assume LIST_VIEW.AddContainer: method(container: CONTAINER)
 --# assume LIST_VIEW.Bounds: method() --> (number, number)
 --# assume LIST_VIEW.Scale: method(factor: number)
 --# assume LIST_VIEW.Resize: method(x: number, y: number)
 --# assume LIST_VIEW.Delete: method()
---# assume LIST_VIEW.PositionRelativeTo: method(component: WHATEVER, xDiff: number, yDiff: number)
+--# assume LIST_VIEW.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
 --# assume LIST_VIEW.MoveTo: method(x: number, y:number)
 --# assume LIST_VIEW.Position: method() --> (number, number)
 
@@ -191,15 +191,14 @@
 --# assume BUTTON.name: string
 --# assume TEXT_BUTTON.name: string
 
---# assume UTIL.delete: function(uic: COMPONENT_TYPE | CA_UIC)
---# assume UTIL.registerComponent: function(component_name: string, component: COMPONENT_TYPE | CA_UIC)
+--# assume UTIL.delete: function(uic: CA_UIC)
+--# assume UTIL.registerComponent: function(component_name: string, component: COMPONENT_TYPE)
 --# assume UTIL.unregisterComponent: function(component_name: string)
 --# assume CONTAINER.Clear: method()
 --# assume CONTAINER.SetVisible: method(visible: boolean)
---# assume UTIL.createComponent: function(component: string, parent: COMPONENT_TYPE | CA_UIC, template_path: string) --> CA_UIC
---# assume UTIL.registerForClick: function(component: COMPONENT_TYPE | CA_UIC, listener_name: string, callback: function(context: WHATEVER?))
+--# assume UTIL.createComponent: function(component: string, parent: CA_UIC, template_path: string) --> CA_UIC
+--# assume UTIL.registerForClick: function(component: CA_UIC, listener_name: string, callback: function(context: CA_UIContext?))
 
 
  --# assume BUTTON.SetTooltipText: method(tooltip: string)
  --# assume TEXT_BUTTON.SetTooltipText: method(tooltip: string)
-

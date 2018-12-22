@@ -4,6 +4,8 @@ local loreButton_unitsPanel = nil --:BUTTON
 local spellBrowserButton = nil --:CA_UIC
 local optionButton = nil --:CA_UIC
 local resetButton = nil --:CA_UIC
+local frameButtonContainer = nil --:CONTAINER
+local returnButton = nil --:BUTTON
 local loreFrame = nil --:FRAME
 local spellButtonContainer = nil --:CONTAINER
 local loreButtonContainer = nil --:CONTAINER
@@ -22,222 +24,248 @@ local browserIconPath = "ui/icon_spell_browser2.png";
 local optionsIconPath = "ui/icon_options2.png";
 local resetIconPath = "ui/icon_stats_reset_small2.png";
 local charSubMazdamundi = "wh2_main_lzd_lord_mazdamundi";
-local loreTable = 	{	["Lore of High Magic"] = {	["sm0_mazda_wh2_main_skill_magic_high_apotheosis"] = "Apotheosis", 
-													["sm0_mazda_wh2_main_skill_magic_high_arcane_unforging"] = "Arcane Unforging", 
-													["sm0_mazda_wh2_main_skill_magic_high_fiery_convocation"] = "Fiery Convocation", 
-													["sm0_mazda_wh2_main_skill_magic_high_hand_of_glory"] = "Hand of Glory", 
-													["sm0_mazda_wh2_main_skill_magic_high_soul_quench"] = "Soul Quench", 
-													["sm0_mazda_wh2_main_skill_magic_high_tempest"] = "Tempest"},
-						["Lore of Light"] = {		["sm0_mazda_wh2_main_skill_magic_light_banishment"] = "Banishment",
-													["sm0_mazda_wh2_main_skill_magic_light_bironas_timewarp"] = "Birona's Timewarp",
-													["sm0_mazda_wh2_main_skill_magic_light_light_of_battle"] = "Light of Battle",
-													["sm0_mazda_wh2_main_skill_magic_light_net_of_amyntok"] = "Net of Amyntok",
-													["sm0_mazda_wh2_main_skill_magic_light_phas_protection"] = "Pha's Protection",
-													["sm0_mazda_wh2_main_skill_magic_light_shems_burning_gaze"] = "Shem's Burning Gaze"},
-						["Lore of Life"] = {		["sm0_mazda_wh2_main_skill_magic_life_awakening_of_the_wood"] = "Awakening of the Wood",
-													["sm0_mazda_wh2_main_skill_magic_life_earth_blood"] = "Earth Blood",
-													["sm0_mazda_wh2_main_skill_magic_life_flesh_to_stone"] = "Flesh to Stone",
-													["sm0_mazda_wh2_main_skill_magic_life_regrowth"] = "Regrowth",
-													["sm0_mazda_wh2_main_skill_magic_life_shield_of_thorns"] = "Shield of Thorns",
-													["sm0_mazda_wh2_main_skill_magic_life_the_dwellers_below"] = "The Dwellers Below"},
-						["Lore of Beasts"] = {		["sm0_mazda_wh2_main_skill_magic_beasts_flock_of_doom"] = "Flock of Doom",
-													["sm0_mazda_wh2_main_skill_magic_beasts_panns_impenetrable_pelt"] = "Pann's Impenetrable Pelt",
-													["sm0_mazda_wh2_main_skill_magic_beasts_the_amber_spear"] = "The Amber Spear",
-													["sm0_mazda_wh2_main_skill_magic_beasts_the_curse_of_anraheir"] = "The Curse of Anraheir",
-													["sm0_mazda_wh2_main_skill_magic_beasts_transformation_of_kadon"] = "Transformation of Kadon",
-													["sm0_mazda_wh2_main_skill_magic_beasts_wyssans_wildform"] = "Wyssan's Wildform"},
-						["Lore of Fire"] = {		["sm0_mazda_wh2_main_skill_magic_fire_cascading_fire-cloak"] = "Cascading Fire Cloak",
-													["sm0_mazda_wh2_main_skill_magic_fire_fireball"] = "Fireball",
-													["sm0_mazda_wh2_main_skill_magic_fire_flame_storm"] = "Flame Storm",
-													["sm0_mazda_wh2_main_skill_magic_fire_flaming_sword_of_rhuin"] = "Flaming Sword of Rhuin",
-													["sm0_mazda_wh2_main_skill_magic_fire_piercing_bolts_of_burning"] = "Piercing Bolts of Burning",
-													["sm0_mazda_wh2_main_skill_magic_fire_the_burning_head"] = "The Burning Head"},
-						["Lore of Heavens"] = {		["sm0_mazda_wh2_main_skill_magic_heavens_chain_lightning"] = "Chain Lightning",
-													["sm0_mazda_wh2_main_skill_magic_heavens_comet_of_casandora"] = "Comet of Casandora",
-													["sm0_mazda_wh2_main_skill_magic_heavens_curse_of_the_midnight_wind"] = "Curse of the Midnight Wind",
-													["sm0_mazda_wh2_main_skill_magic_heavens_harmonic_convergence"] = "Harmonic Convergence",
-													["sm0_mazda_wh2_main_skill_magic_heavens_urannons_thunderbolt"] = "Urannon's Thunderbolt",
-													["sm0_mazda_wh2_main_skill_magic_heavens_wind_blast"] = "Wind Blast"},
-						["Lore of Metal"] = {		["sm0_mazda_wh2_main_skill_magic_metal_final_transmutation"] = "Final Transmutation",
-													["sm0_mazda_wh2_main_skill_magic_metal_gehennas_golden_hounds"] = "Gehenna's Golden Hounds",
-													["sm0_mazda_wh2_main_skill_magic_metal_glittering_robe"] = "Glittering Robe",
-													["sm0_mazda_wh2_main_skill_magic_metal_plague_of_rust"] = "Plague of Rust",
-													["sm0_mazda_wh2_main_skill_magic_metal_searing_doom"] = "Searing Doom",
-													["sm0_mazda_wh2_main_skill_magic_metal_transmutation_of_lead"] = "Transmutation of Lead"},
-						["Lore of Death"] = {		["sm0_mazda_wh2_main_skill_magic_death_aspect_of_the_dreadknight"] = "Aspect of the Dreadknight",
-													["sm0_mazda_wh2_main_skill_magic_death_doom_and_darkness"] = "Doom and Darkness",
-													["sm0_mazda_wh2_main_skill_magic_death_soulblight"] = "Soulblight",
-													["sm0_mazda_wh2_main_skill_magic_death_spirit_leech"] = "Spirit Leech",
-													["sm0_mazda_wh2_main_skill_magic_death_the_fate_of_bjuna"] = "The Fate of Bjuna",
-													["sm0_mazda_wh2_main_skill_magic_death_the_purple_sun_of_xereus"] = "The Purple Sun of Xereus"},
-						["Lore of Shadows"] = {		["sm0_mazda_wh2_main_skill_magic_shadow_mystifying_miasma"] = "Melkoth's Mystifying Miasma",
-													["sm0_mazda_wh2_main_skill_magic_shadow_okkams_mindrazor"] = "Okkam's Mindrazor",
-													["sm0_mazda_wh2_main_skill_magic_shadow_pit_of_shades"] = "Pit of Shades",
-													["sm0_mazda_wh2_main_skill_magic_shadow_enfeebling_foe"] = "The Enfeebling Foe",
-													["sm0_mazda_wh2_main_skill_magic_shadow_penumbral_pendulum"] = "The Penumbral Pendulum",
-													["sm0_mazda_wh2_main_skill_magic_shadow_the_withering"] = "The Withering"}	} --: map<string, map<string, string>>
-local skillTable = {["sm0_mazda_wh2_main_skill_magic_high_apotheosis"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_high_arcane_unforging"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_high_fiery_convocation"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_high_hand_of_glory"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_high_soul_quench"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_high_tempest"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_light_banishment"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_light_bironas_timewarp"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_light_light_of_battle"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_light_net_of_amyntok"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_light_phas_protection"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_light_shems_burning_gaze"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_life_awakening_of_the_wood"]= false, 
-					["sm0_mazda_wh2_main_skill_magic_life_earth_blood"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_life_flesh_to_stone"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_life_regrowth"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_life_shield_of_thorns"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_life_the_dwellers_below"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_beasts_flock_of_doom"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_beasts_panns_impenetrable_pelt"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_beasts_the_amber_spear"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_beasts_the_curse_of_anraheir"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_beasts_transformation_of_kadon"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_beasts_wyssans_wildform"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_fire_cascading_fire-cloak"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_fire_fireball"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_fire_flame_storm"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_fire_flaming_sword_of_rhuin"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_fire_piercing_bolts_of_burning"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_fire_the_burning_head"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_heavens_chain_lightning"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_heavens_comet_of_casandora"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_heavens_curse_of_the_midnight_wind"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_heavens_harmonic_convergence"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_heavens_urannons_thunderbolt"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_heavens_wind_blast"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_metal_final_transmutation"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_metal_gehennas_golden_hounds"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_metal_glittering_robe"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_metal_plague_of_rust"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_metal_searing_doom"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_metal_transmutation_of_lead"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_death_aspect_of_the_dreadknight"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_death_doom_and_darkness"]= false, 
-					["sm0_mazda_wh2_main_skill_magic_death_soulblight"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_death_spirit_leech"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_death_the_fate_of_bjuna"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_death_the_purple_sun_of_xereus"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_shadow_mystifying_miasma"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_shadow_okkams_mindrazor"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_shadow_pit_of_shades"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_shadow_enfeebling_foe"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_shadow_penumbral_pendulum"] = false, 
-					["sm0_mazda_wh2_main_skill_magic_shadow_the_withering"] = false} --:map<string, bool>
-local effectBundleTable = {	["Apotheosis"] = "sm0_mazda_wh2_main_effect_bundle_enable_high_magic_apotheosis",
-							["Arcane Unforging"] = "sm0_mazda_wh2_main_effect_bundle_enable_high_magic_arcane_unforging",
-							["Fiery Convocation"] = "sm0_mazda_wh2_main_effect_bundle_enable_high_magic_fiery_convocation",
-							["Hand of Glory"] = "sm0_mazda_wh2_main_effect_bundle_enable_high_magic_hand_of_glory",
-							["Soul Quench"] = "sm0_mazda_wh2_main_effect_bundle_enable_high_magic_soul_quench",
-							["Tempest"] = "sm0_mazda_wh2_main_effect_bundle_enable_high_magic_tempest",
-							["Flock of Doom"] = "sm0_mazda_wh2_main_effect_bundle_enable_beasts_flock_of_doom",
-							["Pann's Impenetrable Pelt"] = "sm0_mazda_wh2_main_effect_bundle_enable_beasts_panns_impenetrable_pelt",
-							["The Amber Spear"] = "sm0_mazda_wh2_main_effect_bundle_enable_beasts_the_amber_spear",
-							["The Curse of Anraheir"] = "sm0_mazda_wh2_main_effect_bundle_enable_beasts_the_curse_of_anraheir",
-							["Transformation of Kadon"] = "sm0_mazda_wh2_main_effect_bundle_enable_beasts_transformation_of_kadon",
-							["Wyssan's Wildform"] = "sm0_mazda_wh2_main_effect_bundle_enable_beasts_wyssans_wildform",
-							["Awakening of the Wood"] = "sm0_mazda_wh2_main_effect_bundle_enable_life_awakening_of_the_wood",
-							["Earth Blood"] = "sm0_mazda_wh2_main_effect_bundle_enable_life_earth_blood",
-							["Flesh to Stone"] = "sm0_mazda_wh2_main_effect_bundle_enable_life_flesh_to_stone",
-							["Regrowth"] = "sm0_mazda_wh2_main_effect_bundle_enable_life_regrowth",
-							["Shield of Thorns"] = "sm0_mazda_wh2_main_effect_bundle_enable_life_shield_of_thorns",
-							["The Dwellers Below"] = "sm0_mazda_wh2_main_effect_bundle_enable_life_the_dwellers_below",
-							["Melkoth's Mystifying Miasma"] = "sm0_mazda_wh2_main_effect_bundle_enable_shadow_melkoths_mystifying_miasma",
-							["Okkam's Mindrazor"] = "sm0_mazda_wh2_main_effect_bundle_enable_shadow_okkams_mindrazor",
-							["Pit of Shades"] = "sm0_mazda_wh2_main_effect_bundle_enable_shadow_pit_of_shades",
-							["The Enfeebling Foe"] = "sm0_mazda_wh2_main_effect_bundle_enable_shadow_the_enfeebling_foe",
-							["The Penumbral Pendulum"] = "sm0_mazda_wh2_main_effect_bundle_enable_shadow_the_penumbral_pendulum",
-							["The Withering"] = "sm0_mazda_wh2_main_effect_bundle_enable_shadow_the_withering",
-							["Aspect of the Dreadknight"] = "sm0_mazda_wh2_main_effect_bundle_enable_death_aspect_of_the_dreadknight",
-							["Doom and Darkness"] = "sm0_mazda_wh2_main_effect_bundle_enable_death_doom_and_darkness",
-							["Soulblight"] = "sm0_mazda_wh2_main_effect_bundle_enable_death_soulblight",
-							["Spirit Leech"] = "sm0_mazda_wh2_main_effect_bundle_enable_death_spirit_leech",
-							["The Fate of Bjuna"] = "sm0_mazda_wh2_main_effect_bundle_enable_death_the_fate_of_bjuna",
-							["The Purple Sun of Xereus"] = "sm0_mazda_wh2_main_effect_bundle_enable_death_the_purple_sun_of_xereus",
-							["Cascading Fire Cloak"] = "sm0_mazda_wh2_main_effect_bundle_enable_fire_cascading_fire_cloak",
-							["Fireball"] = "sm0_mazda_wh2_main_effect_bundle_enable_fire_fireball",
-							["Flame Storm"] = "sm0_mazda_wh2_main_effect_bundle_enable_fire_flame_storm",
-							["Flaming Sword of Rhuin"] = "sm0_mazda_wh2_main_effect_bundle_enable_fire_flaming_sword_of_rhuin",
-							["Piercing Bolts of Burning"] = "sm0_mazda_wh2_main_effect_bundle_enable_fire_piercing_bolts_of_burning",
-							["The Burning Head"] = "sm0_mazda_wh2_main_effect_bundle_enable_fire_the_burning_head",
-							["Chain Lightning"] = "sm0_mazda_wh2_main_effect_bundle_enable_heavens_chain_lightning",
-							["Comet of Casandora"] = "sm0_mazda_wh2_main_effect_bundle_enable_heavens_comet_of_casandora",
-							["Curse of the Midnight Wind"] = "sm0_mazda_wh2_main_effect_bundle_enable_heavens_curse_of_the_midnight_wind",
-							["Harmonic Convergence"] = "sm0_mazda_wh2_main_effect_bundle_enable_heavens_harmonic_convergence",
-							["Urannon's Thunderbolt"] = "sm0_mazda_wh2_main_effect_bundle_enable_heavens_urannons_thunderbolt",
-							["Wind Blast"] = "sm0_mazda_wh2_main_effect_bundle_enable_heavens_wind_blast",
-							["Banishment"] = "sm0_mazda_wh2_main_effect_bundle_enable_light_banishment",
-							["Birona's Timewarp"] = "sm0_mazda_wh2_main_effect_bundle_enable_light_bironas_timewarp",
-							["Light of Battle"] = "sm0_mazda_wh2_main_effect_bundle_enable_light_light_of_battle",
-							["Net of Amyntok"] = "sm0_mazda_wh2_main_effect_bundle_enable_light_net_of_amyntok",
-							["Pha's Protection"] = "sm0_mazda_wh2_main_effect_bundle_enable_light_phas_protection",
-							["Shem's Burning Gaze"] = "sm0_mazda_wh2_main_effect_bundle_enable_light_shems_burning_gaze",
-							["Final Transmutation"] = "sm0_mazda_wh2_main_effect_bundle_enable_metal_final_transmutation",
-							["Gehenna's Golden Hounds"] = "sm0_mazda_wh2_main_effect_bundle_enable_metal_gehennas_golden_hounds",
-							["Glittering Robe"] = "sm0_mazda_wh2_main_effect_bundle_enable_metal_glittering_robe",
-							["Plague of Rust"] = "sm0_mazda_wh2_main_effect_bundle_enable_metal_searing_doom",
-							["Searing Doom"] = "sm0_mazda_wh2_main_effect_bundle_enable_metal_transmutation_of_lead",
-							["Transmutation of Lead"] = "sm0_mazda_wh2_main_effect_bundle_enable_metal_plague_of_rust"} --:map<string,string>
-local spellTable = {	["Apotheosis"]  = "sm0_mazda_wh2_main_spell_high_magic_apotheosis",
-						["Arcane Unforging"]  = "sm0_mazda_wh2_main_spell_high_magic_arcane_unforging",
-						["Fiery Convocation"]  = "sm0_mazda_wh2_main_spell_high_magic_fiery_convocation",
-						["Hand of Glory"]  = "sm0_mazda_wh2_main_spell_high_magic_hand_of_glory",
-						["Soul Quench"]  = "sm0_mazda_wh2_main_spell_high_magic_soul_quench",
-						["Tempest"]  = "sm0_mazda_wh2_main_spell_high_magic_tempest",
-						["Flock of Doom"]  = "sm0_mazda_wh2_main_spell_beasts_flock_of_doom",
-						["Pann's Impenetrable Pelt"]  = "sm0_mazda_wh2_main_spell_beasts_panns_impenetrable_pelt",
-						["The Amber Spear"]  = "sm0_mazda_wh2_main_spell_beasts_the_amber_spear",
-						["The Curse of Anraheir"]  = "sm0_mazda_wh2_main_spell_beasts_the_curse_of_anraheir",
-						["Transformation of Kadon"]  = "sm0_mazda_wh2_main_spell_beasts_transformation_of_kadon",
-						["Wyssan's Wildform"]  = "sm0_mazda_wh2_main_spell_beasts_wyssans_wildform",
-						["Awakening of the Wood"]  = "sm0_mazda_wh2_main_spell_life_awakening_of_the_wood",
-						["Earth Blood"]  = "sm0_mazda_wh2_main_spell_life_earth_blood",
-						["Flesh to Stone"]  = "sm0_mazda_wh2_main_spell_life_flesh_to_stone",
-						["Regrowth"]  = "sm0_mazda_wh2_main_spell_life_regrowth",
-						["Shield of Thorns"]  = "sm0_mazda_wh2_main_spell_life_shield_of_thorns",
-						["The Dwellers Below"]  = "sm0_mazda_wh2_main_spell_life_the_dwellers_below",
-						["Melkoth's Mystifying Miasma"]  = "sm0_mazda_wh2_main_spell_shadow_melkoths_mystifying_miasma",
-						["Okkam's Mindrazor"]  = "sm0_mazda_wh2_main_spell_shadow_okkams_mindrazor",
-						["Pit of Shades"]  = "sm0_mazda_wh2_main_spell_shadow_pit_of_shades",
-						["The Enfeebling Foe"]  = "sm0_mazda_wh2_main_spell_shadow_the_enfeebling_foe",
-						["The Penumbral Pendulum"]  = "sm0_mazda_wh2_main_spell_shadow_the_penumbral_pendulum",
-						["The Withering"]  = "sm0_mazda_wh2_main_spell_shadow_the_withering",
-						["Aspect of the Dreadknight"]  = "sm0_mazda_wh2_main_spell_death_aspect_of_the_dreadknight",
-						["Doom and Darkness"]  = "sm0_mazda_wh2_main_spell_death_doom_and_darkness",
-						["Soulblight"]  = "sm0_mazda_wh2_main_spell_death_soulblight",
-						["Spirit Leech"]  = "sm0_mazda_wh2_main_spell_death_spirit_leech",
-						["The Fate of Bjuna"]  = "sm0_mazda_wh2_main_spell_death_the_fate_of_bjuna",
-						["The Purple Sun of Xereus"]  = "sm0_mazda_wh2_main_spell_death_the_purple_sun_of_xereus",
-						["Cascading Fire Cloak"]  = "sm0_mazda_wh2_main_spell_fire_cascading_fire_cloak",
-						["Fireball"]  = "sm0_mazda_wh2_main_spell_fire_fireball",
-						["Flame Storm"]  = "sm0_mazda_wh2_main_spell_fire_flame_storm",
-						["Flaming Sword of Rhuin"]  = "sm0_mazda_wh2_main_spell_fire_flaming_sword_of_rhuin",
-						["Piercing Bolts of Burning"]  = "sm0_mazda_wh2_main_spell_fire_piercing_bolts_of_burning",
-						["The Burning Head"]  = "sm0_mazda_wh2_main_spell_fire_the_burning_head",
-						["Chain Lightning"]  = "sm0_mazda_wh2_main_spell_heavens_chain_lightning",
-						["Comet of Casandora"]  = "sm0_mazda_wh2_main_spell_heavens_comet_of_casandora",
-						["Curse of the Midnight Wind"]  = "sm0_mazda_wh2_main_spell_heavens_curse_of_the_midnight_wind",
-						["Harmonic Convergence"]  = "sm0_mazda_wh2_main_spell_heavens_harmonic_convergence",
-						["Urannon's Thunderbolt"]  = "sm0_mazda_wh2_main_spell_heavens_urannons_thunderbolt",
-						["Wind Blast"]  = "sm0_mazda_wh2_main_spell_heavens_wind_blast",
-						["Banishment"]  = "sm0_mazda_wh2_main_spell_light_banishment",
-						["Birona's Timewarp"]  = "sm0_mazda_wh2_main_spell_light_bironas_timewarp",
-						["Light of Battle"]  = "sm0_mazda_wh2_main_spell_light_light_of_battle",
-						["Net of Amyntok"]  = "sm0_mazda_wh2_main_spell_light_net_of_amyntok",
-						["Pha's Protection"]  = "sm0_mazda_wh2_main_spell_light_phas_protection",
-						["Shem's Burning Gaze"]  = "sm0_mazda_wh2_main_spell_light_shems_burning_gaze",
-						["Final Transmutation"]  = "sm0_mazda_wh2_main_spell_metal_final_transmutation",
-						["Gehenna's Golden Hounds"]  = "sm0_mazda_wh2_main_spell_metal_gehennas_golden_hounds",
-						["Glittering Robe"]  = "sm0_mazda_wh2_main_spell_metal_glittering_robe",
-						["Plague of Rust"]  = "sm0_mazda_wh2_main_spell_metal_plague_of_rust",
-						["Searing Doom"]  = "sm0_mazda_wh2_main_spell_metal_searing_doom",
-						["Transmutation of Lead"]  = "sm0_mazda_wh2_main_spell_metal_transmutation_of_lead"} --:map<string, string>
+local loreTable = {
+	["Lore of High Magic"] = {
+		["wh2_sm0_mazda_skill_magic_high_apotheosis"] = "Apotheosis",
+		["wh2_sm0_mazda_skill_magic_high_arcane_unforging"] = "Arcane Unforging",
+		["wh2_sm0_mazda_skill_magic_high_fiery_convocation"] = "Fiery Convocation",
+		["wh2_sm0_mazda_skill_magic_high_hand_of_glory"] = "Hand of Glory",
+		["wh2_sm0_mazda_skill_magic_high_soul_quench"] = "Soul Quench",
+		["wh2_sm0_mazda_skill_magic_high_tempest"] = "Tempest"
+	},
+	["Lore of Light"] = {		
+		["wh2_sm0_mazda_skill_magic_light_banishment"] = "Banishment",
+		["wh2_sm0_mazda_skill_magic_light_bironas_timewarp"] = "Birona's Timewarp",
+		["wh2_sm0_mazda_skill_magic_light_light_of_battle"] = "Light of Battle",
+		["wh2_sm0_mazda_skill_magic_light_net_of_amyntok"] = "Net of Amyntok",
+		["wh2_sm0_mazda_skill_magic_light_phas_protection"] = "Pha's Protection",
+		["wh2_sm0_mazda_skill_magic_light_shems_burning_gaze"] = "Shem's Burning Gaze"
+	},
+	["Lore of Life"] = {	
+		["wh2_sm0_mazda_skill_magic_life_awakening_of_the_wood"] = "Awakening of the Wood",
+		["wh2_sm0_mazda_skill_magic_life_earth_blood"] = "Earth Blood",
+		["wh2_sm0_mazda_skill_magic_life_flesh_to_stone"] = "Flesh to Stone",
+		["wh2_sm0_mazda_skill_magic_life_regrowth"] = "Regrowth",
+		["wh2_sm0_mazda_skill_magic_life_shield_of_thorns"] = "Shield of Thorns",
+		["wh2_sm0_mazda_skill_magic_life_the_dwellers_below"] = "The Dwellers Below",
+	},
+	["Lore of Beasts"] = {	
+		["wh2_sm0_mazda_skill_magic_beasts_flock_of_doom"] = "Flock of Doom",
+		["wh2_sm0_mazda_skill_magic_beasts_panns_impenetrable_pelt"] = "Pann's Impenetrable Pelt",
+		["wh2_sm0_mazda_skill_magic_beasts_the_amber_spear"] = "The Amber Spear",
+		["wh2_sm0_mazda_skill_magic_beasts_the_curse_of_anraheir"] = "The Curse of Anraheir",
+		["wh2_sm0_mazda_skill_magic_beasts_transformation_of_kadon"] = "Transformation of Kadon",
+		["wh2_sm0_mazda_skill_magic_beasts_wyssans_wildform"] = "Wyssan's Wildform"
+	},
+	["Lore of Fire"] = {	
+		["wh2_sm0_mazda_skill_magic_fire_cascading_fire_cloak"] = "Cascading Fire-Cloak",
+		["wh2_sm0_mazda_skill_magic_fire_fireball"] = "Fireball",
+		["wh2_sm0_mazda_skill_magic_fire_flame_storm"] = "Flame Storm",
+		["wh2_sm0_mazda_skill_magic_fire_flaming_sword_of_rhuin"] = "Flaming Sword of Rhuin",
+		["wh2_sm0_mazda_skill_magic_fire_piercing_bolts_of_burning"] = "Piercing Bolts of Burning",
+		["wh2_sm0_mazda_skill_magic_fire_the_burning_head"] = "The Burning Head"
+	},
+	["Lore of Heavens"] = {	
+		["wh2_sm0_mazda_skill_magic_heavens_chain_lightning"] = "Chain Lightning",
+		["wh2_sm0_mazda_skill_magic_heavens_comet_of_casandora"] = "Comet of Casandora",
+		["wh2_sm0_mazda_skill_magic_heavens_curse_of_the_midnight_wind"] = "Curse of the Midnight Wind",
+		["wh2_sm0_mazda_skill_magic_heavens_harmonic_convergence"] = "Harmonic Convergence",
+		["wh2_sm0_mazda_skill_magic_heavens_urannons_thunderbolt"] = "Urannon's Thunderbolt",
+		["wh2_sm0_mazda_skill_magic_heavens_wind_blast"] = "Wind Blast"
+	},
+	["Lore of Metal"] = {	
+		["wh2_sm0_mazda_skill_magic_metal_final_transmutation"] = "Final Transmutation",
+		["wh2_sm0_mazda_skill_magic_metal_gehennas_golden_hounds"] = "Gehenna's Golden Hounds",
+		["wh2_sm0_mazda_skill_magic_metal_glittering_robe"] = "Glittering Robe",
+		["wh2_sm0_mazda_skill_magic_metal_plague_of_rust"] = "Plague of Rust",
+		["wh2_sm0_mazda_skill_magic_metal_searing_doom"] = "Searing Doom",
+		["wh2_sm0_mazda_skill_magic_metal_transmutation_of_lead"] = "Transmutation of Lead",
+	},
+	["Lore of Death"] = {	
+		["wh2_sm0_mazda_skill_magic_death_aspect_of_the_dreadknight"] = "Aspect of the Dread Knight",
+		["wh2_sm0_mazda_skill_magic_death_doom_and_darkness"] = "Doom & Darkness",
+		["wh2_sm0_mazda_skill_magic_death_soulblight"] = "Soulblight",
+		["wh2_sm0_mazda_skill_magic_death_spirit_leech"] = "Spirit Leech",
+		["wh2_sm0_mazda_skill_magic_death_the_fate_of_bjuna"] = "The Fate of Bjuna",
+		["wh2_sm0_mazda_skill_magic_death_the_purple_sun_of_xereus"] = "The Purple Sun of Xereus"
+	},
+	["Lore of Shadows"] = {	
+		["wh2_sm0_mazda_skill_magic_shadows_mystifying_miasma"] = "Melkoth's Mystifying Miasma",
+		["wh2_sm0_mazda_skill_magic_shadows_okkams_mindrazor"] = "Okkam's Mindrazor",
+		["wh2_sm0_mazda_skill_magic_shadows_pit_of_shades"] = "Pit of Shades",
+		["wh2_sm0_mazda_skill_magic_shadows_the_enfeebling_foe"] = "The Enfeebling Foe",
+		["wh2_sm0_mazda_skill_magic_shadows_the_penumbral_pendulum"] = "The Penumbral Pendulum",
+		["wh2_sm0_mazda_skill_magic_shadows_the_withering"] = "The Withering"
+	}	
+} --: map<string, map<string, string>>
+local skillTable = {
+	["wh2_sm0_mazda_skill_magic_beasts_flock_of_doom"] = false,
+	["wh2_sm0_mazda_skill_magic_beasts_panns_impenetrable_pelt"] = false,
+	["wh2_sm0_mazda_skill_magic_beasts_the_amber_spear"] = false,
+	["wh2_sm0_mazda_skill_magic_beasts_the_curse_of_anraheir"] = false,
+	["wh2_sm0_mazda_skill_magic_beasts_transformation_of_kadon"] = false,
+	["wh2_sm0_mazda_skill_magic_beasts_wyssans_wildform"] = false,
+	["wh2_sm0_mazda_skill_magic_death_aspect_of_the_dreadknight"] = false,
+	["wh2_sm0_mazda_skill_magic_death_doom_and_darkness"] = false,
+	["wh2_sm0_mazda_skill_magic_death_soulblight"] = false,
+	["wh2_sm0_mazda_skill_magic_death_spirit_leech"] = false,
+	["wh2_sm0_mazda_skill_magic_death_the_fate_of_bjuna"] = false,
+	["wh2_sm0_mazda_skill_magic_death_the_purple_sun_of_xereus"] = false,
+	["wh2_sm0_mazda_skill_magic_fire_cascading_fire_cloak"] = false,
+	["wh2_sm0_mazda_skill_magic_fire_fireball"] = false,
+	["wh2_sm0_mazda_skill_magic_fire_flame_storm"] = false,
+	["wh2_sm0_mazda_skill_magic_fire_flaming_sword_of_rhuin"] = false,
+	["wh2_sm0_mazda_skill_magic_fire_piercing_bolts_of_burning"] = false,
+	["wh2_sm0_mazda_skill_magic_fire_the_burning_head"] = false,
+	["wh2_sm0_mazda_skill_magic_heavens_chain_lightning"] = false,
+	["wh2_sm0_mazda_skill_magic_heavens_comet_of_casandora"] = false,
+	["wh2_sm0_mazda_skill_magic_heavens_curse_of_the_midnight_wind"] = false,
+	["wh2_sm0_mazda_skill_magic_heavens_harmonic_convergence"] = false,
+	["wh2_sm0_mazda_skill_magic_heavens_urannons_thunderbolt"] = false,
+	["wh2_sm0_mazda_skill_magic_heavens_wind_blast"] = false,
+	["wh2_sm0_mazda_skill_magic_high_apotheosis"] = false,
+	["wh2_sm0_mazda_skill_magic_high_arcane_unforging"] = false,
+	["wh2_sm0_mazda_skill_magic_high_fiery_convocation"] = false,
+	["wh2_sm0_mazda_skill_magic_high_hand_of_glory"] = false,
+	["wh2_sm0_mazda_skill_magic_high_soul_quench"] = false,
+	["wh2_sm0_mazda_skill_magic_high_tempest"] = false,
+	["wh2_sm0_mazda_skill_magic_life_awakening_of_the_wood"] = false,
+	["wh2_sm0_mazda_skill_magic_life_earth_blood"] = false,
+	["wh2_sm0_mazda_skill_magic_life_flesh_to_stone"] = false,
+	["wh2_sm0_mazda_skill_magic_life_regrowth"] = false,
+	["wh2_sm0_mazda_skill_magic_life_shield_of_thorns"] = false,
+	["wh2_sm0_mazda_skill_magic_life_the_dwellers_below"] = false,
+	["wh2_sm0_mazda_skill_magic_light_banishment"] = false,
+	["wh2_sm0_mazda_skill_magic_light_bironas_timewarp"] = false,
+	["wh2_sm0_mazda_skill_magic_light_light_of_battle"] = false,
+	["wh2_sm0_mazda_skill_magic_light_net_of_amyntok"] = false,
+	["wh2_sm0_mazda_skill_magic_light_phas_protection"] = false,
+	["wh2_sm0_mazda_skill_magic_light_shems_burning_gaze"] = false,
+	["wh2_sm0_mazda_skill_magic_metal_final_transmutation"] = false,
+	["wh2_sm0_mazda_skill_magic_metal_gehennas_golden_hounds"] = false,
+	["wh2_sm0_mazda_skill_magic_metal_glittering_robe"] = false,
+	["wh2_sm0_mazda_skill_magic_metal_plague_of_rust"] = false,
+	["wh2_sm0_mazda_skill_magic_metal_searing_doom"] = false,
+	["wh2_sm0_mazda_skill_magic_metal_transmutation_of_lead"] = false,
+	["wh2_sm0_mazda_skill_magic_shadows_mystifying_miasma"] = false,
+	["wh2_sm0_mazda_skill_magic_shadows_okkams_mindrazor"] = false,
+	["wh2_sm0_mazda_skill_magic_shadows_pit_of_shades"] = false,
+	["wh2_sm0_mazda_skill_magic_shadows_the_enfeebling_foe"] = false,
+	["wh2_sm0_mazda_skill_magic_shadows_the_penumbral_pendulum"] = false,
+	["wh2_sm0_mazda_skill_magic_shadows_the_withering"] = false
+} --:map<string, bool>
+local effectBundleTable = {	
+	["Flock of Doom"] = "wh2_sm0_mazda_effect_bundle_enable_beasts_flock_of_doom",
+	["Pann's Impenetrable Pelt"] = "wh2_sm0_mazda_effect_bundle_enable_beasts_panns_impenetrable_pelt",
+	["The Amber Spear"] = "wh2_sm0_mazda_effect_bundle_enable_beasts_the_amber_spear",
+	["The Curse of Anraheir"] = "wh2_sm0_mazda_effect_bundle_enable_beasts_the_curse_of_anraheir",
+	["Transformation of Kadon"] = "wh2_sm0_mazda_effect_bundle_enable_beasts_transformation_of_kadon",
+	["Wyssan's Wildform"] = "wh2_sm0_mazda_effect_bundle_enable_beasts_wyssans_wildform",
+	["Aspect of the Dread Knight"] = "wh2_sm0_mazda_effect_bundle_enable_death_aspect_of_the_dreadknight",
+	["Doom & Darkness"] = "wh2_sm0_mazda_effect_bundle_enable_death_doom_and_darkness",
+	["Soulblight"] = "wh2_sm0_mazda_effect_bundle_enable_death_soulblight",
+	["Spirit Leech"] = "wh2_sm0_mazda_effect_bundle_enable_death_spirit_leech",
+	["The Fate of Bjuna"] = "wh2_sm0_mazda_effect_bundle_enable_death_the_fate_of_bjuna",
+	["The Purple Sun of Xereus"] = "wh2_sm0_mazda_effect_bundle_enable_death_the_purple_sun_of_xereus",
+	["Cascading Fire-Cloak"] = "wh2_sm0_mazda_effect_bundle_enable_fire_cascading_fire_cloak",
+	["Fireball"] = "wh2_sm0_mazda_effect_bundle_enable_fire_fireball",
+	["Flame Storm"] = "wh2_sm0_mazda_effect_bundle_enable_fire_flame_storm",
+	["Flaming Sword of Rhuin"] = "wh2_sm0_mazda_effect_bundle_enable_fire_flaming_sword_of_rhuin",
+	["Piercing Bolts of Burning"] = "wh2_sm0_mazda_effect_bundle_enable_fire_piercing_bolts_of_burning",
+	["The Burning Head"] = "wh2_sm0_mazda_effect_bundle_enable_fire_the_burning_head",
+	["Chain Lightning"] = "wh2_sm0_mazda_effect_bundle_enable_heavens_chain_lightning",
+	["Comet of Casandora"] = "wh2_sm0_mazda_effect_bundle_enable_heavens_comet_of_casandora",
+	["Curse of the Midnight Wind"] = "wh2_sm0_mazda_effect_bundle_enable_heavens_curse_of_the_midnight_wind",
+	["Harmonic Convergence"] = "wh2_sm0_mazda_effect_bundle_enable_heavens_harmonic_convergence",
+	["Urannon's Thunderbolt"] = "wh2_sm0_mazda_effect_bundle_enable_heavens_urannons_thunderbolt",
+	["Wind Blast"] = "wh2_sm0_mazda_effect_bundle_enable_heavens_wind_blast",
+	["Apotheosis"] = "wh2_sm0_mazda_effect_bundle_enable_high_magic_apotheosis",
+	["Arcane Unforging"] = "wh2_sm0_mazda_effect_bundle_enable_high_magic_arcane_unforging",
+	["Fiery Convocation"] = "wh2_sm0_mazda_effect_bundle_enable_high_magic_fiery_convocation",
+	["Hand of Glory"] = "wh2_sm0_mazda_effect_bundle_enable_high_magic_hand_of_glory",
+	["Soul Quench"] = "wh2_sm0_mazda_effect_bundle_enable_high_magic_soul_quench",
+	["Tempest"] = "wh2_sm0_mazda_effect_bundle_enable_high_magic_tempest",
+	["Awakening of the Wood"] = "wh2_sm0_mazda_effect_bundle_enable_life_awakening_of_the_wood",
+	["Earth Blood"] = "wh2_sm0_mazda_effect_bundle_enable_life_earth_blood",
+	["Flesh to Stone"] = "wh2_sm0_mazda_effect_bundle_enable_life_flesh_to_stone",
+	["Regrowth"] = "wh2_sm0_mazda_effect_bundle_enable_life_regrowth",
+	["Shield of Thorns"] = "wh2_sm0_mazda_effect_bundle_enable_life_shield_of_thorns",
+	["The Dwellers Below"] = "wh2_sm0_mazda_effect_bundle_enable_life_the_dwellers_below",
+	["Banishment"] = "wh2_sm0_mazda_effect_bundle_enable_light_banishment",
+	["Birona's Timewarp"] = "wh2_sm0_mazda_effect_bundle_enable_light_bironas_timewarp",
+	["Light of Battle"] = "wh2_sm0_mazda_effect_bundle_enable_light_light_of_battle",
+	["Net of Amyntok"] = "wh2_sm0_mazda_effect_bundle_enable_light_net_of_amyntok",
+	["Pha's Protection"] = "wh2_sm0_mazda_effect_bundle_enable_light_phas_protection",
+	["Shem's Burning Gaze"] = "wh2_sm0_mazda_effect_bundle_enable_light_shems_burning_gaze",
+	["Final Transmutation"] = "wh2_sm0_mazda_effect_bundle_enable_metal_final_transmutation",
+	["Gehenna's Golden Hounds"] = "wh2_sm0_mazda_effect_bundle_enable_metal_gehennas_golden_hounds",
+	["Glittering Robe"] = "wh2_sm0_mazda_effect_bundle_enable_metal_glittering_robe",
+	["Plague of Rust"] = "wh2_sm0_mazda_effect_bundle_enable_metal_plague_of_rust",
+	["Searing Doom"] = "wh2_sm0_mazda_effect_bundle_enable_metal_searing_doom",
+	["Transmutation of Lead"] = "wh2_sm0_mazda_effect_bundle_enable_metal_transmutation_of_lead",
+	["Melkoth's Mystifying Miasma"] = "wh2_sm0_mazda_effect_bundle_enable_shadows_melkoths_mystifying_miasma",
+	["Okkam's Mindrazor"] = "wh2_sm0_mazda_effect_bundle_enable_shadows_okkams_mindrazor",
+	["Pit of Shades"] = "wh2_sm0_mazda_effect_bundle_enable_shadows_pit_of_shades",
+	["The Enfeebling Foe"] = "wh2_sm0_mazda_effect_bundle_enable_shadows_the_enfeebling_foe",
+	["The Penumbral Pendulum"] = "wh2_sm0_mazda_effect_bundle_enable_shadows_the_penumbral_pendulum",
+	["The Withering"] = "wh2_sm0_mazda_effect_bundle_enable_shadows_the_withering"
+} --:map<string,string>
+local spellTable = {
+	["Flock of Doom"] = "wh2_sm0_mazda_spell_beasts_flock_of_doom",
+	["Pann's Impenetrable Pelt"] = "wh2_sm0_mazda_spell_beasts_panns_impenetrable_pelt",
+	["The Amber Spear"] = "wh2_sm0_mazda_spell_beasts_the_amber_spear",
+	["The Curse of Anraheir"] = "wh2_sm0_mazda_spell_beasts_the_curse_of_anraheir",
+	["Transformation of Kadon"] = "wh2_sm0_mazda_spell_beasts_transformation_of_kadon",
+	["Wyssan's Wildform"] = "wh2_sm0_mazda_spell_beasts_wyssans_wildform",
+	["Aspect of the Dread Knight"] = "wh2_sm0_mazda_spell_death_aspect_of_the_dreadknight",
+	["Doom & Darkness"] = "wh2_sm0_mazda_spell_death_doom_and_darkness",
+	["Soulblight"] = "wh2_sm0_mazda_spell_death_soulblight",
+	["Spirit Leech"] = "wh2_sm0_mazda_spell_death_spirit_leech",
+	["The Fate of Bjuna"] = "wh2_sm0_mazda_spell_death_the_fate_of_bjuna",
+	["The Purple Sun of Xereus"] = "wh2_sm0_mazda_spell_death_the_purple_sun_of_xereus",
+	["Cascading Fire-Cloak"] = "wh2_sm0_mazda_spell_fire_cascading_fire_cloak",
+	["Fireball"] = "wh2_sm0_mazda_spell_fire_fireball",
+	["Flame Storm"] = "wh2_sm0_mazda_spell_fire_flame_storm",
+	["Flaming Sword of Rhuin"] = "wh2_sm0_mazda_spell_fire_flaming_sword_of_rhuin",
+	["Piercing Bolts of Burning"] = "wh2_sm0_mazda_spell_fire_piercing_bolts_of_burning",
+	["The Burning Head"] = "wh2_sm0_mazda_spell_fire_the_burning_head",
+	["Chain Lightning"] = "wh2_sm0_mazda_spell_heavens_chain_lightning",
+	["Comet of Casandora"] = "wh2_sm0_mazda_spell_heavens_comet_of_casandora",
+	["Curse of the Midnight Wind"] = "wh2_sm0_mazda_spell_heavens_curse_of_the_midnight_wind",
+	["Harmonic Convergence"] = "wh2_sm0_mazda_spell_heavens_harmonic_convergence",
+	["Urannon's Thunderbolt"] = "wh2_sm0_mazda_spell_heavens_urannons_thunderbolt",
+	["Wind Blast"] = "wh2_sm0_mazda_spell_heavens_wind_blast",
+	["Apotheosis"] = "wh2_sm0_mazda_spell_high_magic_apotheosis",
+	["Arcane Unforging"] = "wh2_sm0_mazda_spell_high_magic_arcane_unforging",
+	["Fiery Convocation"] = "wh2_sm0_mazda_spell_high_magic_fiery_convocation",
+	["Hand of Glory"] = "wh2_sm0_mazda_spell_high_magic_hand_of_glory",
+	["Soul Quench"] = "wh2_sm0_mazda_spell_high_magic_soul_quench",
+	["Tempest"] = "wh2_sm0_mazda_spell_high_magic_tempest",
+	["Awakening of the Wood"] = "wh2_sm0_mazda_spell_life_awakening_of_the_wood",
+	["Earth Blood"] = "wh2_sm0_mazda_spell_life_earth_blood",
+	["Flesh to Stone"] = "wh2_sm0_mazda_spell_life_flesh_to_stone",
+	["Regrowth"] = "wh2_sm0_mazda_spell_life_regrowth",
+	["Shield of Thorns"] = "wh2_sm0_mazda_spell_life_shield_of_thorns",
+	["The Dwellers Below"] = "wh2_sm0_mazda_spell_life_the_dwellers_below",
+	["Banishment"] = "wh2_sm0_mazda_spell_light_banishment",
+	["Birona's Timewarp"] = "wh2_sm0_mazda_spell_light_bironas_timewarp",
+	["Light of Battle"] = "wh2_sm0_mazda_spell_light_light_of_battle",
+	["Net of Amyntok"] = "wh2_sm0_mazda_spell_light_net_of_amyntok",
+	["Pha's Protection"] = "wh2_sm0_mazda_spell_light_phas_protection",
+	["Shem's Burning Gaze"] = "wh2_sm0_mazda_spell_light_shems_burning_gaze",
+	["Final Transmutation"] = "wh2_sm0_mazda_spell_metal_final_transmutation",
+	["Gehenna's Golden Hounds"] = "wh2_sm0_mazda_spell_metal_gehennas_golden_hounds",
+	["Glittering Robe"] = "wh2_sm0_mazda_spell_metal_glittering_robe",
+	["Plague of Rust"] = "wh2_sm0_mazda_spell_metal_plague_of_rust",
+	["Searing Doom"] = "wh2_sm0_mazda_spell_metal_searing_doom",
+	["Transmutation of Lead"] = "wh2_sm0_mazda_spell_metal_transmutation_of_lead",
+	["Melkoth's Mystifying Miasma"] = "wh2_sm0_mazda_spell_shadows_melkoths_mystifying_miasma",
+	["Okkam's Mindrazor"] = "wh2_sm0_mazda_spell_shadows_okkams_mindrazor",
+	["Pit of Shades"] = "wh2_sm0_mazda_spell_shadows_pit_of_shades",
+	["The Enfeebling Foe"] = "wh2_sm0_mazda_spell_shadows_the_enfeebling_foe",
+	["The Penumbral Pendulum"] = "wh2_sm0_mazda_spell_shadows_the_penumbral_pendulum",
+	["The Withering"] = "wh2_sm0_mazda_spell_shadows_the_withering"
+} --:map<string, string>
 
 local createSpellSlotButtonContainer --:function(char: CA_CHAR, spellSlots: vector<string>)
 
@@ -270,6 +298,56 @@ function getCAChar(charSubtype, faction)
 		end
 	end
 	return char;
+end
+
+--v function() --> CA_CHAR
+function getMazdaCharacter()
+	local char = nil --:CA_CHAR
+	local pb = cm:model():pending_battle();
+	if not pb:is_active() then
+		char = getSelectedCharacter();
+		if not char then
+			local focusButton = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "header", "button_focus", "dy_txt"); 
+			local focusButtonText = focusButton:GetStateText();
+			if string.find(focusButtonText,"Mazdamundi") then
+				char = getCAChar(charSubMazdamundi, cm:get_faction(cm:get_local_faction(true)));
+			end
+		end
+	elseif pb:attacker():faction():is_human() then
+		char = pb:attacker();
+		if not char:character_subtype(charSubMazdamundi) and pb:secondary_attackers():num_items() >= 1 then
+			local attackers = pb:secondary_attackers();
+			for i = 0, attackers:num_items() - 1 do
+				if attackers:item_at(i):character_subtype(charSubMazdamundi) then
+					char = attackers:item_at(i);
+				end
+			end
+		end
+	elseif pb:defender():faction():is_human() then
+		char = pb:defender();
+		if not char:character_subtype(charSubMazdamundi) and pb:secondary_defenders():num_items() >= 1 then
+			local defenders = pb:secondary_defenders();
+			for i = 0, defenders:num_items() - 1 do
+				if defenders:item_at(i):character_subtype(charSubMazdamundi) then
+					char = defenders:item_at(i);
+				end
+			end
+		end
+	end
+	return char;
+end
+
+--v function()
+function re_init()
+	--loreButtonContainer = nil;
+	--spellButtonContainer = nil;
+	--spellSlotButtonContainer = nil;
+	spellSlotSelected = nil;
+	--optionButton = nil;
+	--spellBrowserButton = nil;
+	--resetButton = nil;
+	returnButton = nil;
+	loreFrame = nil;
 end
 
 --v function(char: CA_CHAR)
@@ -405,7 +483,35 @@ function createLoreButtonContainer(char)
 	loreFrame:AddComponent(loreButtonContainer);
 end
 
+--v function()
+function createReturnButton()
+	returnButton = Button.new("returnButton", loreFrame, "CIRCULAR", "ui/skins/warhammer2/icon_check.png");
+	local closeButton = find_uicomponent(core:get_ui_root(), "Lore of MagicCloseButton");
+	local closeButtonX, closeButtonY = closeButton:Position();
+	closeButton:MoveTo(closeButtonX + closeButton:Width()/2, closeButtonY);
+	returnButton:PositionRelativeTo(closeButton, - closeButton:Width(), 0);
+	returnButton:SetState("hover");
+	returnButton.uic:SetTooltipText("Return to Spell Slot List");			
+	returnButton:SetState("active");
+	returnButton:RegisterForClick(
+		function(context)
+			if spellButtonContainer then spellButtonContainer:Clear(); end
+			if loreButtonContainer then loreButtonContainer:Clear(); end
+			if spellSlotButtonContainer then spellSlotButtonContainer:Clear(); end
+			createSpellSlotButtonContainer(getMazdaCharacter(), updateSaveTable(false));
+		end
+	)
+	frameButtonContainer:AddComponent(returnButton);
+end	
+
 createSpellSlotButtonContainer = function(char, spellSlots)
+	if returnButton then
+		frameButtonContainer:Clear();
+		returnButton = nil;
+		local closeButton = find_uicomponent(core:get_ui_root(), "Lore of MagicCloseButton");
+		local closeButtonX, closeButtonY = closeButton:Position();
+		closeButton:MoveTo(closeButtonX - closeButton:Width()/2, closeButtonY)
+	end
 	if loreButtonContainer then loreButtonContainer:Clear(); end
 	if spellButtonContainer then spellButtonContainer:Clear(); end
 	local spellSlotButtonList = ListView.new("SpellSlotButtonList", loreFrame, "VERTICAL");
@@ -418,6 +524,7 @@ createSpellSlotButtonContainer = function(char, spellSlots)
 			function(context)
 				spellSlotSelected = spellSlotButton.name;
 				createLoreButtonContainer(char);
+				createReturnButton();
 			end
 		)
 		spellSlotButtonList:AddComponent(spellSlotButton);
@@ -426,56 +533,6 @@ createSpellSlotButtonContainer = function(char, spellSlots)
 	Util.centreComponentOnComponent(spellSlotButtonContainer, loreFrame);
 	loreFrame:AddComponent(spellSlotButtonContainer);
 end
-
---v function() --> CA_CHAR
-function getMazdaCharacter()
-	local char = nil --:CA_CHAR
-	if not cm:model():pending_battle():is_active() then
-		char = getSelectedCharacter();
-		if not char then
-			local focusButton = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "header", "button_focus", "dy_txt"); 
-			local focusButtonText = focusButton:GetStateText();
-			if string.find(focusButtonText,"Mazdamundi") then
-				 char = getCAChar(charSubMazdamundi, cm:get_faction(cm:get_local_faction(true)));
-			end
-		end
-	elseif cm:model():pending_battle():attacker():faction():is_human() then
-		char = cm:model():pending_battle():attacker();
-		if not char:character_subtype(charSubMazdamundi) and cm:model():pending_battle():secondary_attackers():num_items() >= 1 then
-			local attackers = cm:model():pending_battle():secondary_attackers();
-			for i = 0, attackers:num_items() - 1 do
-				if attackers:item_at(i):character_subtype(charSubMazdamundi) then
-					char = attackers:item_at(i);
-				end
-			end
-		end
-	elseif cm:model():pending_battle():defender():faction():is_human() then
-		char = cm:model():pending_battle():defender();
-		if not char:character_subtype(charSubMazdamundi) and cm:model():pending_battle():secondary_defenders():num_items() >= 1 then
-			local defenders = cm:model():pending_battle():secondary_defenders();
-			for i = 0, defenders:num_items() - 1 do
-				if defenders:item_at(i):character_subtype(charSubMazdamundi) then
-					char = defenders:item_at(i);
-				end
-			end
-		end
-	end
-	return char;
-end
-
---v function()
-function re_init()
-	loreButtonContainer = nil;
-	spellButtonContainer = nil;
-	spellSlotButtonContainer = nil;
-	spellSlotSelected = nil;
-	optionButton = nil;
-	spellBrowserButton = nil;
-	resetButton = nil
-	loreFrame = nil;
-end
-
-local setupListener --:function()
 
 --v function()
 function editSpellBrowserUI()
@@ -496,9 +553,7 @@ end
 
 --v function()
 function createSpellBrowserButton()
-	local parent = find_uicomponent(core:get_ui_root(), "Lore of Magic");
-	spellBrowserButton = Util.createComponent("spellBrowserButton", parent, "ui/templates/round_small_button");
-	Util.registerComponent("spellBrowserButton", spellBrowserButton);
+	spellBrowserButton = Util.createComponent("spellBrowserButton", loreFrame.uic, "ui/templates/round_small_button");
 	spellBrowserButton:Resize(28, 28);
 	local posFrameX, posFrameY = loreFrame:Position();
 	local offsetX, offsetY = 10, 10;
@@ -517,18 +572,6 @@ function createSpellBrowserButton()
 	Util.registerForClick(spellBrowserButton, "sm0_spellBrowserButtonListener",
 		function(context)
 			button_spell_browser:SimulateLClick();
-			--editSpellBrowserUI();
-			--root > spell_browser > composite_lore_parent > composite_spell_list
-			--local spell_browser = find_uicomponent(core:get_ui_root(), "spell_browser");
-			--spell_browser:Adopt(loreFrame.uic:Address());
-			--loreFrame.uic:SetDisabled(false);
-			--loreFrame.uic:SetInteractive(true);
-			--intervention_manager:lock_ui(false, false);
-			--cm:get_intervention_manager():lock_ui(false, false);
-			--local loreFrame = find_uicomponent(core:get_ui_root(), "Lore of Magic");
-			--cm:get_intervention_manager():override("Lore of Magic"):unlock();
-			--core:get_or_create_component("Lore of Magic", "ui/campaign ui/objectives_screen", spell_browser);
-			--setupListener();
 		end
 	)
 	loreFrame:AddComponent(spellBrowserButton);
@@ -536,9 +579,7 @@ end
 
 --v function()
 function createOptionButton()
-	local parent = find_uicomponent(core:get_ui_root(), "Lore of Magic");
-	optionButton = Util.createComponent("optionButton", parent, "ui/templates/round_small_button");
-	Util.registerComponent("optionButton", optionButton);
+	optionButton = Util.createComponent("optionButton", loreFrame.uic, "ui/templates/round_small_button");
 	optionButton:Resize(28, 28);
 	local posFrameX, posFrameY = loreFrame:Position();
 	local sizeFrameX, sizeFrameY = loreFrame:Bounds(); 
@@ -559,9 +600,7 @@ end
 
 --v function()
 function createResetButton()
-	local parent = find_uicomponent(core:get_ui_root(), "Lore of Magic");
-	resetButton = Util.createComponent("resetButton", parent, "ui/templates/round_small_button");
-	Util.registerComponent("resetButton", resetButton);
+	resetButton = Util.createComponent("resetButton", loreFrame.uic, "ui/templates/round_small_button");
 	resetButton:Resize(28, 28);
 	local posFrameX, posFrameY = loreFrame:Position();
 	local sizeFrameX, sizeFrameY = loreFrame:Bounds(); 
@@ -613,15 +652,21 @@ function createLoreUI()
 	loreFrame.uic:PropagatePriority(100);
 	loreFrame:AddCloseButton(
 		function()
-			Util.unregisterComponent("optionButton");
-			Util.unregisterComponent("spellBrowserButton");
-			Util.unregisterComponent("resetButton");
+			--Util.unregisterComponent("optionButton");
+			--Util.unregisterComponent("spellBrowserButton");
+			--Util.unregisterComponent("resetButton");
 			core:remove_listener("sm0_optionButtonListener");
 			core:remove_listener("sm0_spellBrowserButtonListener");
 			core:remove_listener("sm0_resetButtonListener");
 			re_init();
-		end
+		end, true
 	);
+	local closeButton = find_uicomponent(core:get_ui_root(), "Lore of MagicCloseButton");
+	closeButton:SetState("hover");
+	closeButton:SetTooltipText("Close Lore of Magic");			
+	closeButton:SetState("active");
+	frameButtonContainer = Container.new(FlowLayout.HORIZONTAL);
+	loreFrame:AddComponent(frameButtonContainer);
 	local parchment = find_uicomponent(core:get_ui_root(), "Lore of Magic", "parchment");
 	pX, pY = parchment:Bounds();
 	Util.centreComponentOnScreen(loreFrame);
@@ -640,7 +685,7 @@ function createLoreUI()
 end
 
 --v function()
-function createloreButton_charPanel() -- character_panel
+function createloreButton_charPanel()
 	cm:callback(
 		function(context)
 			if loreButton_charPanel == nil then
@@ -655,6 +700,9 @@ function createloreButton_charPanel() -- character_panel
 				loreButton_charPanel:RegisterForClick(
 					function(context)
 						createLoreUI();
+						spellBrowserButton:SetDisabled(true);
+						spellBrowserButton:SetOpacity(50);
+						--spellBrowserButton:SetTooltipText("Locked by c++");	
 					end
 				)
 			end
@@ -670,10 +718,9 @@ function createloreButton_charPanel() -- character_panel
 end
 
 --v function(battle_type: BATTLE_TYPE)
-function createloreButton_preBattle(battle_type) -- pre_battle
+function createloreButton_preBattle(battle_type)
 	local buttonParent = find_uicomponent(core:get_ui_root(), "popup_pre_battle", "mid", "battle_deployment", "regular_deployment", "list");
 	loreButton_preBattle = Util.createComponent("loreButton_preBattle", buttonParent, "ui/templates/round_small_button");
-	Util.registerComponent("loreButton_preBattle", loreButton_preBattle);
 	cm:callback(
 		function(context)
 			local posFrameX, posFrameY = buttonParent:Position();
@@ -695,12 +742,15 @@ function createloreButton_preBattle(battle_type) -- pre_battle
 	Util.registerForClick(loreButton_preBattle, "loreButton_preBattle_Listener",
 		function(context)
 			createLoreUI();
+			spellBrowserButton:SetDisabled(true);
+			spellBrowserButton:SetOpacity(50);
+			--spellBrowserButton:SetTooltipText("Locked by c++");	
 		end
 	)
 end
 
 --v function()
-function createloreButton_unitsPanel() -- main_units_panel
+function createloreButton_unitsPanel()
 	loreButton_unitsPanel = Button.new("loreButton_unitsPanel", find_uicomponent(core:get_ui_root(), "layout", "hud_center_docker", "hud_center", "small_bar", "button_group_army"), "SQUARE", bookIconPath);
 	cm:callback(
 		function(context)
@@ -736,23 +786,6 @@ function deleteLoreFrame()
 	re_init();
 end
 
-setupListener = function()
-	deleteLoreFrame();
-	--createLoreUI();	
-	--core:add_listener(
-	--	"spellBrowserPanelOpened",
-	--	"PanelOpenedCampaign",
-	--	function(context)		
-	--		return context.string == "spell_browser"; 
-	--	end,
-	--	function(context)
-	--		deleteLoreFrame();
-	--		createLoreUI();						
-	--	end,
-	--	false
-	--);
-end
-
 --v function()
 function updateButtonVisibility()
 	local namePanel = find_uicomponent(core:get_ui_root(), "character_details_panel", "character_name");
@@ -766,9 +799,9 @@ end
 
 --v function()
 function playerLoreListener()
-	local buttonLocation_charPanel = true;	-- "character_details_panel" root > character_details_panel > background > skills_subpanel > listview
-	local buttonLocation_preBattle = true;	-- "popup_pre_battle"
-	local buttonLocation_unitsPanel = true;	-- "main_units_panel"
+	local buttonLocation_charPanel = true;	
+	local buttonLocation_preBattle = true;	
+	local buttonLocation_unitsPanel = true;	
 
 	if buttonLocation_charPanel then
 		core:add_listener(
@@ -778,7 +811,11 @@ function playerLoreListener()
 				return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
 			end,
 			function(context)
-				createloreButton_charPanel(); 						
+				createloreButton_charPanel(); 
+				if loreFrame then
+					spellBrowserButton:SetDisabled(true);
+					spellBrowserButton:SetOpacity(50);	
+				end			
 			end,
 			true
 		);
@@ -787,7 +824,7 @@ function playerLoreListener()
 			"loreCharacterPanelClosed1",
 			"PanelClosedCampaign",
 			function(context) 
-				return context.string == "character_details_panel"  and not cm:model():pending_battle():is_active(); 
+				return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
 			end,
 			function(context)
 				if loreButton_charPanel then

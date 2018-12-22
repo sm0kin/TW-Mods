@@ -1,16 +1,18 @@
 local playerFaction = cm:get_faction(cm:get_local_faction(true));
 local restrictTKconfed --:bool
-local OccupationOptionID = {["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupation_decision_confederate",
-							["1913039131"] = "wh2_sm0_sc_lzd_lizardmen_occupation_decision_confederate",
-							["1913039132"] = "wh2_sm0_sc_skv_skaven_occupation_decision_confederate",
-							["1913039133"] = "wh2_sm0_sc_def_dark_elves_occupation_decision_confederate",
-							["1913039134"] = "wh2_sm0_sc_dwf_dwarfs_occupation_decision_confederate",
-							["1913039135"] = "wh2_sm0_sc_emp_empire_occupation_decision_confederate",
-							["1913039136"] = "wh2_sm0_sc_grn_greenskins_occupation_decision_confederate",
-							["1913039137"] = "wh2_sm0_sc_hef_high_elves_occupation_decision_confederate",
-							["1913039138"] = "wh2_sm0_sc_wef_wood_elves_occupation_decision_confederate",
-							["1913039139"] = "wh2_sm0_sc_vmp_vampire_counts_occupation_decision_confederate",
-							["1913039140"] = "wh2_sm0_sc_tmb_tomb_kings_occupation_decision_confederate"} --: map<string, string>
+local OccupationOptionID = {
+	["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupation_decision_confederate",
+	["1913039131"] = "wh2_sm0_sc_lzd_lizardmen_occupation_decision_confederate",
+	["1913039132"] = "wh2_sm0_sc_skv_skaven_occupation_decision_confederate",
+	["1913039133"] = "wh2_sm0_sc_def_dark_elves_occupation_decision_confederate",
+	["1913039134"] = "wh2_sm0_sc_dwf_dwarfs_occupation_decision_confederate",
+	["1913039135"] = "wh2_sm0_sc_emp_empire_occupation_decision_confederate",
+	["1913039136"] = "wh2_sm0_sc_grn_greenskins_occupation_decision_confederate",
+	["1913039137"] = "wh2_sm0_sc_hef_high_elves_occupation_decision_confederate",
+	["1913039138"] = "wh2_sm0_sc_wef_wood_elves_occupation_decision_confederate",
+	["1913039139"] = "wh2_sm0_sc_vmp_vampire_counts_occupation_decision_confederate",
+	["1913039140"] = "wh2_sm0_sc_tmb_tomb_kings_occupation_decision_confederate"
+} --: map<string, string>
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local mcm = _G.mcm;

@@ -24,10 +24,19 @@ function tableFind(table, value)
     return index;
 end
 
-
 local parchment = find_uicomponent(frame.uic, "parchment")
 local fX, fY = frame.uic:Position()
 local fW, fH = frame.uic:Bounds()
 local pX, pY = parchment:Bounds()
 local gapX, gapY = fW - pX, fH - pY
 parchment:MoveTo(fX + gapX/2, fY + gapY/2)
+
+--local button_spell_browser = find_uicomponent(core:get_ui_root(), "menu_bar", "buttongroup", "button_spell_browser");
+--button_spell_browser:SetDisabled(false);
+--button_spell_browser:SetInteractive(true);
+--cm:get_intervention_manager():lock_ui(false, false);
+--cm:get_campaign_ui_manager():unlock_ui();
+--cm:get_campaign_ui_manager():override("spell_browser"):set_allowed(true);
+--cm:get_campaign_ui_manager():override("spell_browser"):unlock(true, false);
+--cm:get_intervention_manager():override("spell_browser"):set_allowed(true);
+--cm:get_intervention_manager():override("spell_browser"):unlock();	

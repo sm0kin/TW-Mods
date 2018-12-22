@@ -14,39 +14,59 @@ if string.find(playerFactionStr, "wh2_") then
     saveIconPath = "ui/icon_quick_save2.png";
     loadIconPath = "ui/icon_load2.png";
 end
-local camTableReset = { ["apply_player"] = {    ["dropdown_armies_camera"] = "option0",
-                                                ["dropdown_armies_speed"] = "option0",
-                                                ["dropdown_heroes_camera"] = "option0",
-                                                ["dropdown_heroes_speed"] = "option0"},
-                        ["apply_allies"] = {    ["dropdown_armies_camera"] = "option3",
-                                                ["dropdown_armies_speed"] = "option0",
-                                                ["dropdown_heroes_camera"] = "option3",
-                                                ["dropdown_heroes_speed"] = "option0"},
-                        ["apply_enemies"] = {   ["dropdown_armies_camera"] = "option3",
-                                                ["dropdown_armies_speed"] = "option0",
-                                                ["dropdown_heroes_camera"] = "option3",
-                                                ["dropdown_heroes_speed"] = "option0"},
-                        ["apply_neutrals"] = {  ["dropdown_armies_camera"] = "option3",
-                                                ["dropdown_armies_speed"] = "option0",
-                                                ["dropdown_heroes_camera"] = "option3",
-                                                ["dropdown_heroes_speed"] = "option0"}} --: map<string, map<string, string>>
+local camTableReset = {
+    ["apply_player"] = {    
+        ["dropdown_armies_camera"] = "option0",
+        ["dropdown_armies_speed"] = "option0",
+        ["dropdown_heroes_camera"] = "option0",
+        ["dropdown_heroes_speed"] = "option0"
+    },
+    ["apply_allies"] = {    
+        ["dropdown_armies_camera"] = "option3",
+        ["dropdown_armies_speed"] = "option0",
+        ["dropdown_heroes_camera"] = "option3",
+        ["dropdown_heroes_speed"] = "option0"
+    },
+    ["apply_enemies"] = {   
+        ["dropdown_armies_camera"] = "option3",
+        ["dropdown_armies_speed"] = "option0",
+        ["dropdown_heroes_camera"] = "option3",
+        ["dropdown_heroes_speed"] = "option0"
+    },
+    ["apply_neutrals"] = {  
+        ["dropdown_armies_camera"] = "option3",
+        ["dropdown_armies_speed"] = "option0",
+        ["dropdown_heroes_camera"] = "option3",
+        ["dropdown_heroes_speed"] = "option0"
+    }   
+} --: map<string, map<string, string>>
 
-local camTable = {      ["apply_player"] = {    ["dropdown_armies_camera"] = "option0",
-                                                ["dropdown_armies_speed"] = "option0",
-                                                ["dropdown_heroes_camera"] = "option0",
-                                                ["dropdown_heroes_speed"] = "option0"},
-                        ["apply_allies"] = {    ["dropdown_armies_camera"] = "option3",
-                                                ["dropdown_armies_speed"] = "option0",
-                                                ["dropdown_heroes_camera"] = "option3",
-                                                ["dropdown_heroes_speed"] = "option0"},
-                        ["apply_enemies"] = {   ["dropdown_armies_camera"] = "option3",
-                                                ["dropdown_armies_speed"] = "option0",
-                                                ["dropdown_heroes_camera"] = "option3",
-                                                ["dropdown_heroes_speed"] = "option0"},
-                        ["apply_neutrals"] = {  ["dropdown_armies_camera"] = "option3",
-                                                ["dropdown_armies_speed"] = "option0",
-                                                ["dropdown_heroes_camera"] = "option3",
-                                                ["dropdown_heroes_speed"] = "option0"}} --: map<string, map<string, string>>
+local camTable = {      
+    ["apply_player"] = {    
+        ["dropdown_armies_camera"] = "option0",
+        ["dropdown_armies_speed"] = "option0",
+        ["dropdown_heroes_camera"] = "option0",
+        ["dropdown_heroes_speed"] = "option0"
+    },
+    ["apply_allies"] = {    
+        ["dropdown_armies_camera"] = "option3",
+        ["dropdown_armies_speed"] = "option0",
+        ["dropdown_heroes_camera"] = "option3",
+        ["dropdown_heroes_speed"] = "option0"
+    },
+    ["apply_enemies"] = {   
+        ["dropdown_armies_camera"] = "option3",
+        ["dropdown_armies_speed"] = "option0",
+        ["dropdown_heroes_camera"] = "option3",
+        ["dropdown_heroes_speed"] = "option0"
+    },
+    ["apply_neutrals"] = {  
+        ["dropdown_armies_camera"] = "option3",
+        ["dropdown_armies_speed"] = "option0",
+        ["dropdown_heroes_camera"] = "option3",
+        ["dropdown_heroes_speed"] = "option0"
+    }  
+} --: map<string, map<string, string>>
 
 --v function()
 function saveSettingsToTable()
