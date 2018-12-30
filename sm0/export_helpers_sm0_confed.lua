@@ -32,8 +32,6 @@ if not not mcm then
 		end
 	)
 end
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 local restriction_value = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value");
 if restriction_value == "unrestricted" then
 	restrictTKconfed = false;
@@ -44,6 +42,7 @@ local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_tmb_valu
 if not confed_option_tmb then
 	cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false);
 end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --v function()
 function addTkImmortalityTrait()

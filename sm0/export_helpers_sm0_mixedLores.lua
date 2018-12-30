@@ -1,4 +1,3 @@
-local ml_tables --:ml_tables
 local loreButton_charPanel = nil --:BUTTON
 local loreButton_preBattle = nil --:CA_UIC
 local loreButton_unitsPanel = nil --:BUTTON
@@ -11,6 +10,19 @@ local loreFrame = nil --:FRAME
 local spellButtonContainer = nil --:CONTAINER
 local loreButtonContainer = nil --:CONTAINER
 local spellSlotButtonContainer = nil --:CONTAINER
+local homeIconPath = "ui/icon_home_small2.png";
+local bookIconPath = "ui/icon_lorebook2.png";
+local browserIconPath = "ui/icon_spell_browser2.png";
+local optionsIconPath = "ui/icon_options2.png";
+local resetIconPath = "ui/icon_stats_reset_small2.png";
+local playerFaction = cm:get_faction(cm:get_local_faction(true));
+if string.find(playerFaction:name(), "wh_") then
+	bookIconPath = "ui/icon_lorebook.png";
+	browserIconPath = "ui/icon_spell_browser.png";
+	optionsIconPath = "ui/icon_options.png";
+	resetIconPath = "ui/icon_stats_reset_small.png";
+end
+local ml_tables --:ml_tables
 local spellSlotButtons = {} --:vector<TEXT_BUTTON>
 local spellSlotSelected = nil --:string
 local pX --:number
@@ -18,20 +30,7 @@ local pY --:number
 local dummyButton = TextButton.new("dummyButton", core:get_ui_root(), "TEXT", "dummy");
 local dummyButtonX, dummyButtonY = dummyButton:Bounds();
 dummyButton:Delete();
-local playerFaction = cm:get_faction(cm:get_local_faction(true));
-local homeIconPath = "ui/icon_home_small2.png";
-local bookIconPath = "ui/icon_lorebook2.png";
-local browserIconPath = "ui/icon_spell_browser2.png";
-local optionsIconPath = "ui/icon_options2.png";
-local resetIconPath = "ui/icon_stats_reset_small2.png";
-if string.find(playerFaction:name(), "wh_") then
-	bookIconPath = "ui/icon_lorebook.png";
-	browserIconPath = "ui/icon_spell_browser.png";
-	optionsIconPath = "ui/icon_options.png";
-	resetIconPath = "ui/icon_stats_reset_small.png";
-end
 local file_str = cm:get_game_interface():filesystem_lookup("/script/ml_tables", "ml*")
-
 local createSpellSlotButtonContainer --:function(char: CA_CHAR, spellSlots: vector<string>)
 
 --v function(char: CA_CHAR)
@@ -148,16 +147,22 @@ function tableContains(table, element)
 end
 
 --v function(char: CA_CHAR, spellSlots: vector<string>)					
-function applySpellEnableEffect(char, spellSlots)
+function applySpellDisableEffect(char, spellSlots)
+	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."option")
 	local charCqi = char:cqi();
+	if savedOption == "Spells for free" and not char:military_force():has_effect_bundle("wh2_sm0_mazda_effect_bundle_enable_all") then
+		cm:apply_effect_bundle_to_characters_force("wh2_sm0_effect_bundle_enable_all", charCqi, -1, false);
+	elseif savedOption ~= "Spells for free" and char:military_force():has_effect_bundle("wh2_sm0_mazda_effect_bundle_enable_all") then
+		cm:remove_effect_bundle_from_characters_force("wh2_sm0_effect_bundle_enable_all", charCqi);
+	end
 	for _, effectBundle in pairs(ml_tables.effectBundles) do
-		if char:military_force():has_effect_bundle(effectBundle) then
-			cm:remove_effect_bundle_from_characters_force(effectBundle, charCqi);
+		if not char:military_force():has_effect_bundle(effectBundle) then
+			cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false);
 		end
 	end
 	for _, spell in ipairs(spellSlots) do 
-		if ml_tables.effectBundles[spell] then
-			cm:apply_effect_bundle_to_characters_force(ml_tables.effectBundles[spell], charCqi, -1, false);
+		if ml_tables.effectBundles[spell] and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
+			cm:remove_effect_bundle_from_characters_force(ml_tables.effectBundles[spell], charCqi);
 		end
 	end
 end
@@ -183,6 +188,7 @@ end
 
 --v [NO_CHECK] function(lore: map<string, string>, char: CA_CHAR)
 function createSpellButtonContainer(lore, char)
+	updateSkillTable(char);
 	local spellButtonList = ListView.new("SpellButtonList", loreFrame, "VERTICAL");
 	spellButtonList:Resize(pX/2 - 18, pY - dummyButtonY/2);
 	spellButtonContainer = Container.new(FlowLayout.VERTICAL);	
@@ -210,7 +216,7 @@ function createSpellButtonContainer(lore, char)
 			function(context)
 				local spellSlots = updateSaveTable(spellButton.name, char);
 				createSpellSlotButtonContainer(char, spellSlots);
-				applySpellEnableEffect(char, spellSlots)
+				applySpellDisableEffect(char, spellSlots)
 			end
 		)
 		spellButtonList:AddComponent(spellButton);
@@ -264,9 +270,9 @@ function createLoreButtonContainer(char)
 	loreFrame:AddComponent(loreButtonContainer);
 end
 
---v function()
-function createReturnButton()
-	returnButton = Button.new("returnButton", loreFrame, "CIRCULAR", homeIconPath); --"ui/skins/warhammer2/icon_check.png"
+--v function(char: CA_CHAR)
+function createReturnButton(char)
+	returnButton = Button.new("returnButton", loreFrame, "CIRCULAR", homeIconPath); 
 	local closeButton = find_uicomponent(core:get_ui_root(), "Lore of MagicCloseButton");
 	local closeButtonX, closeButtonY = closeButton:Position();
 	closeButton:MoveTo(closeButtonX + closeButton:Width()/2, closeButtonY);
@@ -279,7 +285,6 @@ function createReturnButton()
 			if spellButtonContainer then spellButtonContainer:Clear(); end
 			if loreButtonContainer then loreButtonContainer:Clear(); end
 			if spellSlotButtonContainer then spellSlotButtonContainer:Clear(); end
-			local char = getmlChar();
 			createSpellSlotButtonContainer(char, updateSaveTable(false, char));
 		end
 	)
@@ -306,7 +311,7 @@ createSpellSlotButtonContainer = function(char, spellSlots)
 			function(context)
 				spellSlotSelected = spellSlotButton.name;
 				createLoreButtonContainer(char);
-				createReturnButton();
+				createReturnButton(char);
 			end
 		)
 		spellSlotButtonList:AddComponent(spellSlotButton);
@@ -323,6 +328,7 @@ function editSpellBrowserUI()
 		loreFrame:PositionRelativeTo(spell_browser, spell_browser:Width(), spell_browser:Height() - loreFrame:Height() + 53);
 	end
 	local char = getmlChar();
+	ml_tables = force_require("ml_tables/ml_"..char:character_subtype_key());
 	if char then
 		local spellSlots = updateSaveTable(false, char);
 		for spellName, button in pairs(ml_tables.spells) do
@@ -369,24 +375,19 @@ function createOptionsFrame(char)
 	end
 	optionFrame = Frame.new("Options - Rules");
 	optionFrame.uic:PropagatePriority(100);
+	loreFrame.uic:Adopt(optionFrame.uic:Address());
 	optionFrame:AddCloseButton(
 		function()
-			local char = getmlChar();
 			resetSaveTable(char);
 			local slotTable = updateSaveTable(false, char);
-			applySpellEnableEffect(char, slotTable);
+			applySpellDisableEffect(char, slotTable);
 			if spellButtonContainer then spellButtonContainer:Clear(); end
 			if loreButtonContainer then loreButtonContainer:Clear(); end
 			if spellSlotButtonContainer then spellSlotButtonContainer:Clear(); end
-			createSpellSlotButtonContainer(char, slotTable);
-			--
+			if loreFrame then createSpellSlotButtonContainer(char, slotTable); end
 		end
 	);
 	local optionButtons = {} --:vector<TEXT_BUTTON>
-	--local closeButton = find_uicomponent(core:get_ui_root(), "Lore of MagicCloseButton");
-	--closeButton:SetState("hover");
-	--closeButton:SetTooltipText("Close Lore of Magic");			
-	--closeButton:SetState("active");
 	local optionFrameButtonContainer = Container.new(FlowLayout.VERTICAL);
 	optionFrame:AddComponent(optionFrameButtonContainer);
 	local optionButtonList = ListView.new("optionButtonList", optionFrame, "VERTICAL");
@@ -424,7 +425,6 @@ function createOptionsFrame(char)
 		);
 	end
 	savedButton:SetState("selected");
-
 	Util.centreComponentOnScreen(optionFrame);
 	local spell_browser = find_uicomponent(core:get_ui_root(), "spell_browser");
 	if spell_browser then
@@ -455,8 +455,8 @@ function createOptionButton(char)
 	loreFrame:AddComponent(optionButton);
 end
 
---v function()
-function createResetButton()
+--v function(char: CA_CHAR)
+function createResetButton(char)
 	resetButton = Util.createComponent("resetButton", loreFrame.uic, "ui/templates/round_small_button");
 	resetButton:Resize(28, 28);
 	local posFrameX, posFrameY = loreFrame:Position();
@@ -470,10 +470,9 @@ function createResetButton()
 	resetButton:SetState("active");
 	Util.registerForClick(resetButton, "ml_resetButtonListener",
 		function(context)
-			local char = getmlChar();
 			resetSaveTable(char);
 			local slotTable = updateSaveTable(false, char);
-			applySpellEnableEffect(char, slotTable);
+			applySpellDisableEffect(char, slotTable);
 			if spellButtonContainer then spellButtonContainer:Clear(); end
 			if loreButtonContainer then loreButtonContainer:Clear(); end
 			if spellSlotButtonContainer then spellSlotButtonContainer:Clear(); end
@@ -518,7 +517,7 @@ function createLoreUI()
 	local spellSlots = updateSaveTable(false, char);
 	createSpellBrowserButton();
 	createOptionButton(char);
-	createResetButton();
+	createResetButton(char);
 	createSpellSlotButtonContainer(char, spellSlots);
 	--loreFrame.uic:SetMoveable(true);
 	loreFrame.uic:RegisterTopMost();
@@ -535,8 +534,8 @@ end
 
 --v function()
 function createloreButton_charPanel()
-	cm:callback(
-		function(context)
+	--cm:callback(
+	--	function(context)
 			if loreButton_charPanel == nil then
 				loreButton_charPanel = Button.new("loreButton_charPanel", find_uicomponent(core:get_ui_root(), "character_details_panel", "background", "bottom_buttons"), "SQUARE", bookIconPath);
 				local characterdetailspanel = find_uicomponent(core:get_ui_root(), "character_details_panel");
@@ -556,16 +555,16 @@ function createloreButton_charPanel()
 				)
 			end
 			updateButtonVisibility_charPanel();			
-		end, 0, "createloreButton_charPanel"
-	);
+	--	end, 0, "createloreButton_charPanel"
+	--);
 end
 
 --v function(battle_type: BATTLE_TYPE)
 function createloreButton_preBattle(battle_type)
 	local buttonParent = find_uicomponent(core:get_ui_root(), "popup_pre_battle", "mid", "battle_deployment", "regular_deployment", "list");
 	loreButton_preBattle = Util.createComponent("loreButton_preBattle", buttonParent, "ui/templates/round_small_button");
-	cm:callback(
-		function(context)
+	--cm:callback(
+	--	function(context)
 			local posFrameX, posFrameY = buttonParent:Position();
 			local sizeFrameX, sizeFrameY = buttonParent:Bounds(); 
 			local referenceButton = find_uicomponent(buttonParent, "battle_information_panel", "button_holder", "button_info");
@@ -580,8 +579,8 @@ function createloreButton_preBattle(battle_type)
 			loreButton_preBattle:SetTooltipText("Lore of Magic");
 			loreButton_preBattle:PropagatePriority(100);
 			loreButton_preBattle:SetState("active");
-			end, 0, "positionloreButton_preBattle"
-	);
+	--		end, 0, "positionloreButton_preBattle"
+	--);
 	Util.registerForClick(loreButton_preBattle, "loreButton_preBattle_Listener",
 		function(context)
 			createLoreUI();
@@ -595,8 +594,8 @@ end
 --v function()
 function createloreButton_unitsPanel()
 	loreButton_unitsPanel = Button.new("loreButton_unitsPanel", find_uicomponent(core:get_ui_root(), "layout", "hud_center_docker", "hud_center", "small_bar", "button_group_army"), "SQUARE", bookIconPath);
-	cm:callback(
-		function(context)
+	--cm:callback(
+	--	function(context)
 			local unitsPanel = find_uicomponent(core:get_ui_root(), "button_group_army");
 			local renownButton = find_uicomponent(unitsPanel, "button_renown"); 
 			local recruitButton = find_uicomponent(unitsPanel, "button_recruitment");
@@ -609,8 +608,8 @@ function createloreButton_unitsPanel()
 			loreButton_unitsPanel:SetState("hover");
 			loreButton_unitsPanel.uic:SetTooltipText("Lore of Magic");
 			loreButton_unitsPanel:SetState("active");
-		end, 0, "positionloreButton_unitsPanel"
-	);
+	--	end, 0, "positionloreButton_unitsPanel"
+	--);
 	loreButton_unitsPanel:RegisterForClick(
 		function(context)
 			createLoreUI();
@@ -622,12 +621,29 @@ end
 function deleteLoreFrame()
 	if loreFrame then
 		loreFrame:Delete();
+		core:remove_listener("ml_optionButtonListener");
+		core:remove_listener("ml_spellBrowserButtonListener");
+		core:remove_listener("ml_resetButtonListener");
 	end
-	core:remove_listener("ml_optionButtonListener");
-	core:remove_listener("ml_spellBrowserButtonListener");
-	core:remove_listener("ml_resetButtonListener");
 	re_init();
 end
+
+--v [NO_CHECK] function(char: CA_CHAR)
+function aiRandomSpells(char)
+	updateSkillTable(char);
+	local spellSlots = updateSaveTable(false, char);
+	local skillPool = {};
+	ml_tables = force_require("ml_tables/ml_"..char:character_subtype_key());
+	for skill, has_skill in pairs(ml_tables.has_skills) do
+		if has_skill then
+			table.insert(skillPool, skill);
+		end
+	end
+	for i, spell in ipairs(spellSlots) do
+		spellSlots[i] = skillPool[cm:random_number(table.getn(skillPool))];
+	end
+	applySpellDisableEffect(char, spellSlots);
+end	
 
 --v function(char: CA_CHAR)
 function setupInnateSpells(char)
@@ -647,7 +663,7 @@ function setupInnateSpells(char)
 				if string.find(spellSlot, "Spell Slot") then
 					spellSlotSelected = spellSlot;
 					spellSlots = updateSaveTable(innateSpell, char);
-					applySpellEnableEffect(char, spellSlots)
+					applySpellDisableEffect(char, spellSlots)
 					spellSlotSelected = nil;
 					break;
 				end
@@ -682,17 +698,17 @@ function playerLoreListener()
 			return context.string == "button_stats_reset" and is_uicomponent(panel);
 		end,
 		function(context)
-			cm:callback(
-				function(context)
+			--cm:callback(
+			--	function(context)
 					local char = getmlChar();
 					if char then
 						deleteLoreFrame();
 						resetSaveTable(char);
-						applySpellEnableEffect(getmlChar(), updateSaveTable(false, char));
+						applySpellDisableEffect(getmlChar(), updateSaveTable(false, char));
 						pulse_uicomponent(loreButton_charPanel.uic, false, 10, false, "active");		
 					end
-				end, 0.1, "resetSkills"
-			);
+			--	end, 0.1, "resetSkills"
+			--);
 		end,
 		true
 	);
@@ -704,7 +720,8 @@ function playerLoreListener()
 			return is_mlChar(context:character());
 		end,
 		function(context)
-			if context:character():faction():is_human() then
+			ml_tables = force_require("ml_tables/ml_"..context:character():character_subtype_key());
+			if context:character():faction():is_human() and ml_tables.skillnames[context:skill_point_spent_on()] then
 				local savedOption = cm:get_saved_value("ml_"..context:character():get_forename().." "..context:character():get_surname().."option")
 				if savedOption ~= "Spells for free" then
 					updateSkillTable(context:character());
@@ -716,13 +733,13 @@ function playerLoreListener()
 						end
 					end
 					spellSlots = updateSaveTable(ml_tables.skillnames[context:skill_point_spent_on()], context:character());
-					applySpellEnableEffect(context:character(), spellSlots)
+					applySpellDisableEffect(context:character(), spellSlots)
 					spellSlotSelected = nil;
 					if loreButton_charPanel then
 						pulse_uicomponent(loreButton_charPanel.uic, true, 10, false, "active");
 					end
 					core:add_listener(
-						"ssddaa",
+						"ml_disablePulse",
 						"ComponentLClickUp",
 						function(context)
 							return context.string == "loreButton_charPanel"
@@ -733,13 +750,71 @@ function playerLoreListener()
 						false
 					);
 				end
-			else
-				-- give ai spell effect bundle
 			end
 		end,
 		true
 	);
 	
+	core:add_listener(
+		"ml_spellBrowserPanelOpened",
+		"PanelOpenedCampaign",
+		function(context)		
+			return context.string == "spell_browser"; 
+		end,
+		function(context)
+			editSpellBrowserUI();
+		end,
+		true
+	);
+
+	core:add_listener(
+		"ml_spellBrowserPanelclosed",
+		"PanelClosedCampaign",
+		function(context)		
+			return context.string == "spell_browser"; 
+		end,
+		function(context)
+			if loreFrame then
+				Util.centreComponentOnScreen(loreFrame);
+				spellBrowserButton:SetState("active");
+			end
+			--deleteLoreFrame();
+		end,
+		true
+	);
+
+	core:add_listener(
+		"ml_aiPendingBattle",
+		"PendingBattle", 
+		function()
+			local panel = find_uicomponent(core:get_ui_root(), "popup_pre_battle");
+			return is_uicomponent(panel);
+		end,
+		function(context)
+			local pb = context:pending_battle();
+			local attackers = pb:secondary_attackers();
+			local defenders = pb:secondary_defenders();
+			if not pb:attacker():is_human() and is_mlChar(pb:attacker()) then
+				aiRandomSpells(pb:attacker());
+			elseif not pb:defender():is_human() and is_mlChar(pb:defender()) then
+				aiRandomSpells(pb:defender());
+			elseif attackers:num_items() > 0 then
+				for i = 0, attackers:num_items() - 1 do
+					if is_mlChar(attackers:item_at(i)) then
+						aiRandomSpells(attackers:item_at(i));
+					end
+				end
+			elseif defenders:num_items() > 0 then
+				for i = 0, defenders:num_items() - 1 do
+					if is_mlChar(defenders:item_at(i)) then
+						aiRandomSpells(defenders:item_at(i));
+					end
+				end
+			end
+		end,
+		true
+	);
+
 	core:add_listener(
 		"ml_ConfederationListener",
 		"FactionJoinsConfederation", 
@@ -748,42 +823,49 @@ function playerLoreListener()
 			if context:confederation():is_human() then
 				local characterList = context:confederation():character_list();
 				for i = 0, characterList:num_items() - 1 do
-					local currentChar = characterList:item_at(i);	
+					local currentChar = characterList:item_at(i);
+					ml_tables = force_require("ml_tables/ml_"..currentChar:character_subtype_key());	
 					if is_mlChar(currentChar) then
 						setupSavedOptions(currentChar);
 						setupInnateSpells(currentChar);
 					end
 				end
-			else
-				--aiStuff()
 			end
 		end,
 		true
 	);
---[[
+
 	core:add_listener(
-		"ml_UnitCreated",
-		"UnitCreated", --UniqueAgentSpawned --ScriptedAgentCreated
-		function()
-			return true;
+		"ml_agentCreatedListener",
+		"CharacterCreated", 
+		true,
+		function(context)
+			if context:character():faction():is_human() then
+				ml_tables = force_require("ml_tables/ml_"..context:character():character_subtype_key());
+				if is_mlChar(context:character()) then
+					setupSavedOptions(context:character());
+					setupInnateSpells(context:character());
+				end
+			end
+		end,
+		true
+	);
+
+	core:add_listener(
+		"ml loreCharacterPanelOpened",
+		"PanelOpenedCampaign",
+		function(context)		
+			return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
 		end,
 		function(context)
-			if context:confederation():is_human() then
-				local characterList = context:confederation():character_list();
-				for i = 0, characterList:num_items() - 1 do
-					local currentChar = characterList:item_at(i);	
-					if string.find(file_str, currentChar:character_subtype_key()) then
-						setupSavedOption(currentChar);
-						setupInnateSpells(currentChar);
-					end
-				end
-			else
-				--aiStuff()
-			end
+			createloreButton_charPanel(); 
+			if loreFrame then
+				spellBrowserButton:SetDisabled(true);
+				spellBrowserButton:SetOpacity(50);	
+			end			
 		end,
 		true
 	);
---]]
 	
 	if buttonLocation_charPanel then
 		core:add_listener(
@@ -829,6 +911,7 @@ function playerLoreListener()
 				cm:callback(
 					function(context)
 						updateButtonVisibility_charPanel();
+						deleteLoreFrame();
 					end, 0, "checkNamePanelText"
 				);		
 			end,
@@ -846,6 +929,7 @@ function playerLoreListener()
 				cm:callback(
 					function(context)
 						updateButtonVisibility_charPanel();
+						deleteLoreFrame();
 					end, 0, "checkNamePanelText"
 				);	
 			end,
@@ -863,6 +947,7 @@ function playerLoreListener()
 				cm:callback(
 					function(context)
 						updateButtonVisibility_charPanel();
+						deleteLoreFrame();
 					end, 0, "checkNamePanelText"
 				);	
 			end,
@@ -880,6 +965,7 @@ function playerLoreListener()
 				cm:callback(
 					function(context)
 						updateButtonVisibility_charPanel();
+						deleteLoreFrame();
 					end, 0, "checkNamePanelText"
 				);	
 			end,
@@ -892,7 +978,7 @@ function playerLoreListener()
 			"ml_preBattlePanelOpened",
 			"PanelOpenedCampaign", 
 			function(context) 
-				return context.string == "popup_pre_battle" and loreButton_preBattle == nil; 
+				return context.string == "popup_pre_battle" and not loreButton_preBattle; 
 			end,
 			function(context)
 				local pb = cm:model():pending_battle();
@@ -924,8 +1010,7 @@ function playerLoreListener()
 			function(context)
 				if loreButton_preBattle then
 					Util.delete(loreButton_preBattle);
-					Util.unregisterComponent("loreButton_preBattle");
-					core:remove_listener("specialButtonListener");
+					core:remove_listener("loreButton_preBattle_Listener");
 					loreButton_preBattle = nil;
 				end
 				deleteLoreFrame();
@@ -986,167 +1071,10 @@ function playerLoreListener()
 			true
 		);
 	end
-	
-	core:add_listener(
-		"ml_spellBrowserPanelOpened",
-		"PanelOpenedCampaign",
-		function(context)		
-			return context.string == "spell_browser"; 
-		end,
-		function(context)
-			editSpellBrowserUI();
-		end,
-		true
-	);
-
-	core:add_listener(
-		"ml_spellBrowserPanelclosed",
-		"PanelClosedCampaign",
-		function(context)		
-			return context.string == "spell_browser"; 
-		end,
-		function(context)
-			if loreFrame then
-				Util.centreComponentOnScreen(loreFrame);
-			end
-			--deleteLoreFrame();
-		end,
-		true
-	);
 end
 
---[[
-function aiLoreListener()
-	core:add_listener(
-		"aiLorePendingBattle",
-		"PendingBattle",
-		function(context)
-			local pb = context:pending_battle();
-			return pb:attacker():character_subtype(charSubMazdamundi) and not pb:attacker():faction():is_human() or pb:defender():character_subtype(charSubMazdamundi) and not pb:attacker():faction():is_human();
-		end,
-		function(context)
-			local charMazda = nil --:CA_CHAR
-			local enemyFaction = nil --:CA_FACTION
-			if context:pending_battle():attacker():character_subtype(charSubMazdamundi) then
-				charMazda = context:pending_battle():attacker();
-				enemyFaction = context:pending_battle():defender():faction();
-			else
-				charMazda = context:pending_battle():defender();
-				enemyFaction = context:pending_battle():attacker():faction();
-			end
-			
-			local charList = charMazda:military_force():character_list();
-			local availableLores = {};
-			local revLores = {};
-			availableLores = characterHasSkill(charMazda);			
-			if availableLores["loreAttributeEnabled"] then
-				tableRemove(availableLores, "loreAttributeEnabled");
-			end		
-			local tableSize = tableLength(availableLores);
-			local j = 1;
-			for i,v in pairs(availableLores) do
-				revLores[j] = i;
-				j = j+1;
-			end		
-			for i = 0, charList:num_items() - 1 do
-				if charList:item_at(i):character_subtype("wh2_main_lzd_skink_priest_beasts") then
-					if table.getn(revLores) >= 2 then
-						local index = tableFind(revLores, "loreBeastsEnabled");
-						table.remove(revLores, index);
-					end
-				elseif charList:item_at(i):character_subtype("wh2_main_lzd_skink_priest_heavens") then
-					if table.getn(revLores) >= 2 then
-						local index = tableFind(revLores, "loreHeavensEnabled");
-						table.remove(revLores, index);
-					end
-				end
-			end		
-			local tableSize = nil;
-			local roll = 0;
-			local enableLoadedDice = false;
-			if cm:random_number(1) == 1 and enableLoadedDice then
-				if enemyFaction:culture() == "wh_dlc03_bst_beastmen" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh_dlc05_wef_wood_elves" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh_dlc08_nor_norsca" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh_main_brt_bretonnia" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh_main_chs_chaos" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh_main_dwf_dwarfs" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh_main_emp_empire" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh_main_grn_greenskins" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh_main_vmp_vampire_counts" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh2_dlc09_tmb_tomb_kings" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh2_main_def_dark_elves" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh2_main_hef_high_elves" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh2_main_lzd_lizardmen" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				elseif enemyFaction:culture() == "wh2_main_skv_skaven" then
-				-- prefer lore of...
-				--replaceLoreTrait(..., charMazda);
-				end
-			else
-				tableSize = table.getn(revLores);
-				roll = cm:random_number(tableSize);
-			end
-
-			local loreString = string.gsub(revLores[roll], "lore", "");
-			loreString = string.gsub(loreString, "Enabled", "");
-			replaceLoreTrait(loreString, charMazda);		
-		end,
-		true
-	);
-end
-]]--
-
--------------------------------------------------------------------
-------------------------	TEST	-------------------------------
-if playerFaction:culture() == "wh2_main_lzd_lizardmen" then
-	playerLoreListener();
-	local characterList = playerFaction:character_list();
-	local charSubMazdamundi = "wh2_main_lzd_lord_mazdamundi";
-	for i = 0, characterList:num_items() - 1 do
-		local currentChar = characterList:item_at(i);	
-		if currentChar:character_subtype(charSubMazdamundi) then	
-			--cm:remove_all_units_from_general(currentChar);
-			--out("sm0/test bestanden")
-			local cqi = currentChar:cqi();
-			cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);
-			--for k, v in pairs(TKunitstring) do 
-				cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_main_lzd_cha_skink_priest_beasts_0");
-			--end
-		end
-	end
-elseif playerFaction:name() ~= "wh2_main_lzd_hexoatl" then
-	--aiLoreListener();
-end
--------------------------------------------------------------------
--------------------------------------------------------------------
-
-if cm:is_new_game() then
+--v function()
+function ml_setup()
 	local characterList = playerFaction:character_list();
 	for i = 0, characterList:num_items() - 1 do
 		local currentChar = characterList:item_at(i);	
@@ -1154,6 +1082,18 @@ if cm:is_new_game() then
 			ml_tables = force_require("ml_tables/ml_"..currentChar:character_subtype_key());
 			setupSavedOptions(currentChar);
 			setupInnateSpells(currentChar);
+			--[[	TEST	
+			local cqi = currentChar:cqi();
+			cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);
+			cm:spawn_character_to_pool(cm:get_local_faction(), "", "", "", "", 18, true, "general", "wh2_main_lzd_slann_mage_priest", false, "wh2_main_art_set_lzd_slann_mage_priest_01");
+			--cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_main_lzd_cha_skink_priest_beasts_0");
+			--]]
 		end
 	end
+end
+
+cm.first_tick_callbacks[#cm.first_tick_callbacks+1] = 
+function(context)
+	playerLoreListener();
+	if cm:is_new_game() then ml_setup(); end
 end

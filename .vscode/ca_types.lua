@@ -698,6 +698,7 @@
 --# assume CA_PENDING_BATTLE.battle_type: method() --> BATTLE_TYPE
 --# assume CA_PENDING_BATTLE.is_active: method() --> boolean
 --# assume CA_UIC.RegisterTopMost: method()
+--# assume CA_UIC.RemoveTopMost: method()
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
 --# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
 --# assume CM.force_add_ancillary: method(character: string, ancillary_key: string)
@@ -708,7 +709,7 @@
 --# assume CUIM_OVERRIDE.unlock_ui: method(force: bool, silent: bool)
 --# assume global force_require: function(file: string)
 --# assume global highlight_component: function(value: bool, is_square: bool, string...)
---# assume global pulse_uicomponent: function(uic: CA_UIC, should_pulse: bool, brightness_modifier: number, propagate: bool?, state_name: BUTTON_STATE?) --buttons: brightness_modifier = 10, frames: brightness_modifier = 5
+--# assume global pulse_uicomponent: function(uic: CA_UIC, should_pulse: bool, brightness_modifier: number?, propagate: bool?, state_name: BUTTON_STATE?) --buttons: brightness_modifier = 10, frames: brightness_modifier = 5
 --# assume global class IM
 --# assume CM.get_intervention_manager: method() --> IM
 --# assume IM.lock_ui: method(bool, bool)

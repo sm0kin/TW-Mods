@@ -24,6 +24,16 @@ function tableFind(table, value)
     return index;
 end
 
+--v function(table: table, element: any) --> bool
+function tableContains(table, element)
+    for _, value in pairs(table) do
+        if value == element then
+        return true
+        end
+    end
+    return false
+end
+
 local parchment = find_uicomponent(frame.uic, "parchment")
 local fX, fY = frame.uic:Position()
 local fW, fH = frame.uic:Bounds()
@@ -40,3 +50,16 @@ parchment:MoveTo(fX + gapX/2, fY + gapY/2)
 --cm:get_campaign_ui_manager():override("spell_browser"):unlock(true, false);
 --cm:get_intervention_manager():override("spell_browser"):set_allowed(true);
 --cm:get_intervention_manager():override("spell_browser"):unlock();	
+
+--v function(charSubtype: string, faction: CA_FACTION) --> CA_CHAR					
+function getCharByFaction(charSubtype, faction)
+    local characterList = faction:character_list();
+    local char = nil --:CA_CHAR
+    for i = 0, characterList:num_items() - 1 do
+        local currentChar = characterList:item_at(i)	
+        if currentChar:character_subtype(charSubtype) then
+            char = currentChar;
+        end
+    end
+    return char;
+end

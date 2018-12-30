@@ -14,11 +14,37 @@ local confirmButtonTooltipHover1 = effect.get_localised_string("sm0_confirm_butt
 local confirmButtonTooltipHover2 = effect.get_localised_string("sm0_confirm_button_tooltip_hover2"); --"nets you"
 local confirmButtonTooltipDisabled = effect.get_localised_string("sm0_confirm_button_tooltip_disabled"); --"Besieged Settlements can't be abandoned!"
 local abandonButtonTooltip = effect.get_localised_string("sm0_abandom_button_tooltip_hover"); --"Abandon selected settlement"
-                    
+local penaltyEnable = true --:bool                    
 local iconPath = "ui/icon_raze.png";
 if string.find(playerFactionStr, "wh2_") then
     iconPath = "ui/icon_raze2.png";
 end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local mcm = _G.mcm;
+if not not mcm then
+    local abandon = mcm:register_mod("abandon_region", "Abandon Region", "Adds the possibility to abandon a settlement.");
+    local restriction = abandon:add_tweaker("penalty", "Public Order - Penalty", "Enable/Disable the public order penalty for abandoning one of your regions.");
+    restriction:add_option("penalty", "Public Order  - Penalty", "If you choose to enact a scorched earth policy you have to suffer the consequences.");
+	restriction:add_option("nopenalty", "No Penalty", "Abandoning Regions has no consequences!");
+	mcm:add_post_process_callback(
+		function()
+			penalty = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value");
+			if penalty == "penalty" then
+				penaltyEnable = true;
+			elseif penalty == "nopenalty" then
+				penaltyEnable = false;
+			end
+		end
+	)
+end
+local penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value");
+if penalty_value == "nopenalty" then
+	penaltyEnable = false;
+else
+	penaltyEnable = true;
+end
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --v [NO_CHECK] function(slot: CA_SLOT) --> string
 function getSlotType(slot)
@@ -89,7 +115,7 @@ function createAbandonFrame(abandonRegionStr)
         function(context)
             local regionToSend = regionStr;
             local moneyToSend = calcCost(cm:get_region(regionToSend));
-            CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend)
+            CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable));
             abandonFrame:Delete();
             abandonFrame = nil;
             abandonButton:SetDisabled(true);
@@ -193,19 +219,21 @@ core:add_listener(
     "AbandonMultiplayerCompatible",
     "UITriggerScriptEvent",
     function(context)
-        return context:trigger():starts_with("burnitdown|")
+        return context:trigger():starts_with("burnitdown|");
     end,
     function(context)
         local str = context:trigger() --:string
-        local info = string.gsub(str, "burnitdown|", "")
-        local faction = cm:model():faction_for_command_queue_index(context:faction_cqi()):name()
+        local info = string.gsub(str, "burnitdown|", "");
+        local faction = cm:model():faction_for_command_queue_index(context:faction_cqi()):name();
         local regionNameEnd = string.find(info, "<")
         local regionName = string.sub(info, 1, regionNameEnd - 1);
-        local regionToAbandon = cm:get_region(regionName)
-        local cash = tonumber(string.sub(info, regionNameEnd + 1))
+        local regionToAbandon = cm:get_region(regionName);
+        local cashEnd = string.find(info, ">")
+        local cash = tonumber(string.sub(info, regionNameEnd + 1, cashEnd - 1));
+        local penalty = string.sub(info, cashEnd + 1)
         cm:set_region_abandoned(regionName);
         cm:treasury_mod(faction, cash);
-        cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5);
+        if penalty == "true" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5); end
     end,
     true
 )

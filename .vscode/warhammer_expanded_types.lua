@@ -2,3 +2,16 @@
 --# assume global class TABLE
 --# assume TABLE.save: function(tbl: table, filename: string) --> string
 --# assume TABLE.load: function(sfile: string) --> (map<string, map<string, string>>, string)
+-- Mixed Lores
+----# assume global loreTable: map<string, map<string, string>>
+----# assume global skillTable: map<string, bool>
+----# assume global effectBundleTable: map<string,string>
+----# assume global spellTable: map<string, string>
+--# assume global class ml_tables
+--# assume ml_tables.default_rule: string
+--# assume ml_tables.default_option: string
+--# assume ml_tables.lores: map<string, map<string, string>>
+--# assume ml_tables.has_skills: map<string, bool>
+--# assume ml_tables.skillnames: map<string, string>
+--# assume ml_tables.effectBundles: map<string,string>
+--# assume ml_tables.spells: map<string, string>
