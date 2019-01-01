@@ -1,4 +1,3 @@
---# assume global class ml_tables
 local ml_tables = {}
 
 --# assume ml_tables.default_rule: string

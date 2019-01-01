@@ -643,6 +643,23 @@ function aiRandomSpells(char)
 		spellSlots[i] = skillPool[cm:random_number(table.getn(skillPool))];
 	end
 	applySpellDisableEffect(char, spellSlots);
+	core:add_listener(
+		"ml_CharacterCompletedBattle"..char:get_forename()..char:get_surname(),
+		"CharacterCompletedBattle",
+		function(context)		
+			return context:character():get_forename() == char:get_forename() and context:character():get_surname() == char:get_surname(); 
+		end,
+		function(context)
+			ml_tables = force_require("ml_tables/ml_"..context:character():character_subtype_key());
+			local charCqi = context:character():cqi();
+			for _, effectBundle in pairs(ml_tables.effectBundles) do
+				if context:character():military_force():has_effect_bundle(effectBundle) then
+					cm:remove_effect_bundle_from_characters_force(effectBundle, charCqi);
+				end
+			end	
+		end,
+		false
+	);
 end	
 
 --v function(char: CA_CHAR)
@@ -852,7 +869,7 @@ function playerLoreListener()
 	);
 
 	core:add_listener(
-		"ml loreCharacterPanelOpened",
+		"ml_loreCharacterPanelOpened",
 		"PanelOpenedCampaign",
 		function(context)		
 			return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
@@ -869,7 +886,7 @@ function playerLoreListener()
 	
 	if buttonLocation_charPanel then
 		core:add_listener(
-			"ml loreCharacterPanelOpened",
+			"ml_loreCharacterPanelOpened",
 			"PanelOpenedCampaign",
 			function(context)		
 				return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
