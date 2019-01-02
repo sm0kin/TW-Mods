@@ -63,3 +63,9 @@ function getCharByFaction(charSubtype, faction)
     end
     return char;
 end
+
+			--TEST
+			--local cqi = currentChar:cqi();
+			--cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);
+			--cm:spawn_character_to_pool(cm:get_local_faction(), "", "", "", "", 18, true, "general", "wh2_main_lzd_slann_mage_priest", false, "wh2_main_art_set_lzd_slann_mage_priest_01");
+			--cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_main_lzd_cha_skink_priest_beasts_0");

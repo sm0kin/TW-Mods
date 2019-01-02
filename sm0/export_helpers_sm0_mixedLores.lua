@@ -1,3 +1,173 @@
+--Drunk Flamingo's log script
+--All credits to Drunk Flamingo
+--v function()
+function mlLOG_reset()
+	if not __write_output_to_logfile then
+		return;
+	end
+	
+	local logTimeStamp = os.date("%d, %m %Y %X")
+	--# assume logTimeStamp: string
+	
+	local popLog = io.open("ml_log.txt","w+")
+	popLog :write("NEW LOG ["..logTimeStamp.."] \n")
+	popLog :flush()
+	popLog :close()
+end
+
+--v function(text: string | number | boolean | CA_CQI)
+function mlLOG(text)
+	if not __write_output_to_logfile then
+		return;
+	end
+
+	local logText = tostring(text)
+	local logTimeStamp = os.date("%d, %m %Y %X")
+	local popLog = io.open("ml_log.txt","a")
+	--# assume logTimeStamp: string
+	popLog :write("ERR:  [".. logTimeStamp .. "]:  "..logText .. "  \n")
+	popLog :flush()
+	popLog :close()
+end
+
+--v function()
+function mlDEBUG()
+	--Vanish's PCaller
+	--All credits to vanish
+	--v function(func: function) --> any
+	function safeCall(func)
+		--out("safeCall start");
+		local status, result = pcall(func)
+		if not status then
+			mlLOG("ERROR")
+			mlLOG(tostring(result))
+			mlLOG(debug.traceback());
+		end
+		--out("safeCall end");
+		return result;
+	end
+
+	--local oldTriggerEvent = core.trigger_event;
+
+	--v [NO_CHECK] function(...: any)
+	function pack2(...) return {n=select('#', ...), ...} end
+	--v [NO_CHECK] function(t: vector<WHATEVER>) --> vector<WHATEVER>
+	function unpack2(t) return unpack(t, 1, t.n) end
+
+	--v [NO_CHECK] function(f: function(), argProcessor: function()) --> function()
+	function wrapFunction(f, argProcessor)
+		return function(...)
+			--out("start wrap ");
+			local someArguments = pack2(...);
+			if argProcessor then
+				safeCall(function() argProcessor(someArguments) end)
+			end
+			local result = pack2(safeCall(function() return f(unpack2( someArguments )) end));
+			--for k, v in pairs(result) do
+			--    out("Result: " .. tostring(k) .. " value: " .. tostring(v));
+			--end
+			--out("end wrap ");
+			return unpack2(result);
+			end
+	end
+
+	-- function myTriggerEvent(event, ...)
+	--     local someArguments = { ... }
+	--     safeCall(function() oldTriggerEvent(event, unpack( someArguments )) end);
+	-- end
+
+	--v [NO_CHECK] function(fileName: string)
+	function tryRequire(fileName)
+		local loaded_file = loadfile(fileName);
+		if not loaded_file then
+			out("Failed to find mod file with name " .. fileName)
+		else
+			out("Found mod file with name " .. fileName)
+			out("Load start")
+			local local_env = getfenv(1);
+			setfenv(loaded_file, local_env);
+			loaded_file();
+			out("Load end")
+		end
+	end
+
+	--v [NO_CHECK] function(f: function(), name: string)
+	function logFunctionCall(f, name)
+		return function(...)
+			out("function called: " .. name);
+			return f(...);
+		end
+	end
+
+	--v [NO_CHECK] function(object: any)
+	function logAllObjectCalls(object)
+		local metatable = getmetatable(object);
+		for name,f in pairs(getmetatable(object)) do
+			if is_function(f) then
+				out("Found " .. name);
+				if name == "Id" or name == "Parent" or name == "Find" or name == "Position" or name == "CurrentState"  or name == "Visible"  or name == "Priority" or "Bounds" then
+					--Skip
+				else
+					metatable[name] = logFunctionCall(f, name);
+				end
+			end
+			if name == "__index" and not is_function(f) then
+				for indexname,indexf in pairs(f) do
+					out("Found in index " .. indexname);
+					if is_function(indexf) then
+						f[indexname] = logFunctionCall(indexf, indexname);
+					end
+				end
+				out("Index end");
+			end
+		end
+	end
+
+	-- logAllObjectCalls(core);
+	-- logAllObjectCalls(cm);
+	-- logAllObjectCalls(game_interface);
+
+	core.trigger_event = wrapFunction(
+		core.trigger_event,
+		function(ab)
+			--out("trigger_event")
+			--for i, v in pairs(ab) do
+			--    out("i: " .. tostring(i) .. " v: " .. tostring(v))
+			--end
+			--out("Trigger event: " .. ab[1])
+		end
+	);
+
+	cm.check_callbacks = wrapFunction(
+		cm.check_callbacks,
+		function(ab)
+			--out("check_callbacks")
+			--for i, v in pairs(ab) do
+			--    out("i: " .. tostring(i) .. " v: " .. tostring(v))
+			--end
+		end
+	)
+
+	local currentAddListener = core.add_listener;
+	--v [NO_CHECK] function(core: any, listenerName: any, eventName: any, conditionFunc: (function(context: WHATEVER?) --> boolean) | boolean, listenerFunc: function(context: WHATEVER?), persistent: any)
+	function myAddListener(core, listenerName, eventName, conditionFunc, listenerFunc, persistent)
+		local wrappedCondition = nil;
+		if is_function(conditionFunc) then
+			--wrappedCondition =  wrapFunction(conditionFunc, function(arg) out("Callback condition called: " .. listenerName .. ", for event: " .. eventName); end);
+			wrappedCondition =  wrapFunction(conditionFunc);
+		else
+			wrappedCondition = conditionFunc;
+		end
+		currentAddListener(
+			core, listenerName, eventName, wrappedCondition, wrapFunction(listenerFunc), persistent
+			--core, listenerName, eventName, wrappedCondition, wrapFunction(listenerFunc, function(arg) out("Callback called: " .. listenerName .. ", for event: " .. eventName); end), persistent
+		)
+	end
+	core.add_listener = myAddListener;
+end
+
+mlDEBUG();
+
 local loreButton_charPanel = nil --:BUTTON
 local loreButton_preBattle = nil --:CA_UIC
 local loreButton_unitsPanel = nil --:BUTTON
@@ -33,18 +203,31 @@ dummyButton:Delete();
 local file_str = cm:get_game_interface():filesystem_lookup("/script/ml_tables", "ml*")
 local createSpellSlotButtonContainer --:function(char: CA_CHAR, spellSlots: vector<string>)
 
+--v function(char: CA_CHAR) --> bool
+function is_mlChar(char)
+	if not char:is_null_interface() and string.find(file_str, char:character_subtype_key()) then
+		return true;
+	else
+		return false;
+	end
+end
+
+--v function(char: CA_CHAR) --> WHATEVER
+function ml_force_require(char)
+	if is_mlChar(char) then
+		local file = "ml_tables/ml_"..char:character_subtype_key();
+		package.loaded[file] = nil;
+		return require(file);
+	else
+		return nil;
+	end
+end
+
 --v function(char: CA_CHAR)
 function resetSaveTable(char)
 	local spellSlots = {"Spell Slot - 1 -", "Spell Slot - 2 -", "Spell Slot - 3 -", "Spell Slot - 4 -", "Spell Slot - 5 -", "Spell Slot - 6 -"} --:vector<string>
 	local saveString = "return {"..cm:process_table_save(spellSlots).."}";
-	cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname(), saveString);
-end
-
---v function(char: CA_CHAR) --> bool
-function is_mlChar(char)
-	if string.find(file_str, char:character_subtype_key()) then
-		return true;
-	end
+	cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()), saveString);
 end
 
 --v function() --> CA_CHAR					
@@ -55,17 +238,36 @@ end
 
 --v function(textObj: CA_UIC) --> CA_CHAR
 function getCharByStateText(textObj)
-	local text = textObj:GetStateText();
-	local characterList = playerFaction:character_list();
 	local char = nil --:CA_CHAR
-	for i = 0, characterList:num_items() - 1 do
-		local currentChar = characterList:item_at(i);
-		charStr = currentChar:get_forename().." "..currentChar:get_surname();
-		if text == charStr then	
-			char = currentChar;
+	if textObj then
+		local text = textObj:GetStateText();
+		local characterList = playerFaction:character_list();
+		for i = 0, characterList:num_items() - 1 do
+			local currentChar = characterList:item_at(i);
+			charStr = effect.get_localised_string(currentChar:get_forename()).." "..effect.get_localised_string(currentChar:get_surname());
+			if text == charStr then	
+				char = currentChar;
+			end
 		end
 	end
 	return char;
+end
+
+--v function(char: CA_CHAR) --> bool
+function is_agentSelected(char)
+	local units = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "units");
+	--local character_list = char:military_force():character_list();
+	local is_selected = false;
+	for i = 0, units:ChildCount() - 1 do
+		local unit = UIComponent(units:Find(i));
+		if string.find(unit:Id(), "Agent") and unit:CurrentState() == "Selected" then
+			is_selected = true;
+			--for i = 0, character_list:num_items() - 1 do
+				--
+			--end
+		end
+	end
+	return is_selected;
 end
 
 --v function() --> CA_CHAR
@@ -84,11 +286,11 @@ function getmlChar()
 			local charByCharPanel = getCharByStateText(namePanel);
 			if charByUnitPanel and is_mlChar(charByUnitPanel) then
 				char = charByUnitPanel;
-			elseif charByCharPanel and is_mlChar(charByCharPanel) then
+			elseif not char and charByCharPanel and is_mlChar(charByCharPanel) then
 				char = charByCharPanel;
 			end
 		end
-	elseif not char and pb:attacker():faction():is_human() then
+	elseif not char and is_mlChar(pb:attacker()) and pb:attacker():faction():is_human() then
 		char = pb:attacker();
 		if not is_mlChar(char) and pb:secondary_attackers():num_items() >= 1 then 
 			local attackers = pb:secondary_attackers();
@@ -98,7 +300,7 @@ function getmlChar()
 				end
 			end
 		end
-	elseif not char and pb:defender():faction():is_human() then
+	elseif not char and is_mlChar(pb:defender()) and pb:defender():faction():is_human() then
 		char = pb:defender();
 		if not is_mlChar(char) and pb:secondary_defenders():num_items() >= 1 then
 			local defenders = pb:secondary_defenders();
@@ -127,11 +329,13 @@ end
 
 --v function(char: CA_CHAR)
 function updateSkillTable(char)
-	for skill, _ in pairs(ml_tables.has_skills) do
-		if char:has_skill(skill) then
-			ml_tables.has_skills[skill] = true;
-		else
-			ml_tables.has_skills[skill] = false;
+	if ml_tables then
+		for skill, _ in pairs(ml_tables.has_skills) do
+			if char:has_skill(skill) then
+				ml_tables.has_skills[skill] = true;
+			else
+				ml_tables.has_skills[skill] = false;
+			end
 		end
 	end
 end
@@ -139,16 +343,16 @@ end
 --v function(table: table, element: any) --> bool
 function tableContains(table, element)
 	for _, value in pairs(table) do
-	  if value == element then
+		if value == element then
 		return true
-	  end
+		end
 	end
 	return false
 end
 
 --v function(char: CA_CHAR, spellSlots: vector<string>)					
 function applySpellDisableEffect(char, spellSlots)
-	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."option")
+	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."option")
 	local charCqi = char:cqi();
 	if savedOption == "Spells for free" and not char:military_force():has_effect_bundle("wh2_sm0_mazda_effect_bundle_enable_all") then
 		cm:apply_effect_bundle_to_characters_force("wh2_sm0_effect_bundle_enable_all", charCqi, -1, false);
@@ -169,17 +373,17 @@ end
 
 --v [NO_CHECK] function(spellName: any, char: CA_CHAR) --> vector<string>
 function updateSaveTable(spellName, char)
-	local savedValue = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname());
+	local savedValue = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()));
 	if not savedValue then
 		resetSaveTable(char);
 	end
-	local spellSlots = loadstring(cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname()))();
+	local spellSlots = loadstring(cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi())))();
 	if spellName then
 		for i, spellSlot in ipairs(spellSlots) do
 			if "Spell Slot - "..i.." -" == spellSlotSelected then
 				spellSlots[i] = spellName;
 				local saveString = "return {"..cm:process_table_save(spellSlots).."}";
-				cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname(), saveString);
+				cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()), saveString);
 			end
 		end
 	end
@@ -205,7 +409,7 @@ function createSpellButtonContainer(lore, char)
 				spellButton.uic:SetTooltipText("This spell has already been selected.");	
 			end
 		end
-		local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."option")
+		local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."option")
 		if savedOption ~= "Spells for free" and not ml_tables.has_skills[skill] then
 			spellButton:SetDisabled(true);
 			local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_"..skill);
@@ -328,7 +532,7 @@ function editSpellBrowserUI()
 		loreFrame:PositionRelativeTo(spell_browser, spell_browser:Width(), spell_browser:Height() - loreFrame:Height() + 53);
 	end
 	local char = getmlChar();
-	ml_tables = force_require("ml_tables/ml_"..char:character_subtype_key());
+	ml_tables = ml_force_require(char);
 	if char then
 		local spellSlots = updateSaveTable(false, char);
 		for spellName, button in pairs(ml_tables.spells) do
@@ -406,7 +610,7 @@ function createOptionsFrame(char)
 	freeSpellsButton:SetState("active");
 	table.insert(optionButtons, freeSpellsButton);
 	optionButtonList:AddComponent(freeSpellsButton);
-	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."option")
+	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."option")
 	local savedButton = find_uicomponent(core:get_ui_root(), savedOption);
 	for _, button in ipairs(optionButtons) do
 		button:SetState("active");
@@ -420,7 +624,7 @@ function createOptionsFrame(char)
 						otherButton:SetState("active");
 					end
 				end
-				cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname().."option", button.name);
+				cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."option", button.name);
 			end
 		);
 	end
@@ -512,7 +716,7 @@ function createLoreUI()
 		loreFrame:PositionRelativeTo(spell_browser, spell_browser:Width(), spell_browser:Height() - loreFrame:Height() + 53);
 	end
 	local char = getmlChar();
-	ml_tables = force_require("ml_tables/ml_"..char:character_subtype_key());
+	ml_tables = ml_force_require(char);
 	updateSkillTable(char);
 	local spellSlots = updateSaveTable(false, char);
 	createSpellBrowserButton();
@@ -525,7 +729,8 @@ end
 
 --v function()
 function updateButtonVisibility_charPanel()
-	if getmlChar() then
+	local char = getmlChar()
+	if char and not is_agentSelected(char) then
 		loreButton_charPanel:SetVisible(true);
 	else
 		loreButton_charPanel:SetVisible(false);
@@ -568,9 +773,6 @@ function createloreButton_preBattle(battle_type)
 			local posFrameX, posFrameY = buttonParent:Position();
 			local sizeFrameX, sizeFrameY = buttonParent:Bounds(); 
 			local referenceButton = find_uicomponent(buttonParent, "battle_information_panel", "button_holder", "button_info");
-			if battle_type == "settlement_standard" or battle_type == "settlement_unfortified"then 
-				referenceButton = find_uicomponent(buttonParent, "siege_information_panel", "button_holder", "button_info"); 
-			end
 			local posReferenceButtonX, posReferenceButtonY = referenceButton:Position();
 			local offsetX = (posFrameX + sizeFrameX) - (posReferenceButtonX + referenceButton:Width())
 			loreButton_preBattle:MoveTo(posFrameX + offsetX, posReferenceButtonY);
@@ -579,6 +781,13 @@ function createloreButton_preBattle(battle_type)
 			loreButton_preBattle:SetTooltipText("Lore of Magic");
 			loreButton_preBattle:PropagatePriority(100);
 			loreButton_preBattle:SetState("active");
+			if battle_type == "settlement_standard" or battle_type == "settlement_unfortified" then 
+				referenceButton = find_uicomponent(buttonParent, "siege_information_panel", "button_holder", "button_info");
+			elseif battle_type == "ambush" or battle_type == "land_ambush" then
+				loreButton_preBattle:SetDisabled(true);
+				loreButton_preBattle:SetTooltipText("This is not the time...");
+				loreButton_preBattle:SetOpacity(50);
+			end
 	--		end, 0, "positionloreButton_preBattle"
 	--);
 	Util.registerForClick(loreButton_preBattle, "loreButton_preBattle_Listener",
@@ -633,7 +842,7 @@ function aiRandomSpells(char)
 	updateSkillTable(char);
 	local spellSlots = updateSaveTable(false, char);
 	local skillPool = {};
-	ml_tables = force_require("ml_tables/ml_"..char:character_subtype_key());
+	ml_tables = ml_force_require(char);
 	for skill, has_skill in pairs(ml_tables.has_skills) do
 		if has_skill then
 			table.insert(skillPool, skill);
@@ -644,13 +853,13 @@ function aiRandomSpells(char)
 	end
 	applySpellDisableEffect(char, spellSlots);
 	core:add_listener(
-		"ml_CharacterCompletedBattle"..char:get_forename()..char:get_surname(),
+		"ml_CharacterCompletedBattle"..tostring(char:cqi()),
 		"CharacterCompletedBattle",
 		function(context)		
-			return context:character():get_forename() == char:get_forename() and context:character():get_surname() == char:get_surname(); 
+			return context:character():cqi() == char:cqi();
 		end,
 		function(context)
-			ml_tables = force_require("ml_tables/ml_"..context:character():character_subtype_key());
+			ml_tables = ml_force_require(context:character());
 			local charCqi = context:character():cqi();
 			for _, effectBundle in pairs(ml_tables.effectBundles) do
 				if context:character():military_force():has_effect_bundle(effectBundle) then
@@ -664,8 +873,8 @@ end
 
 --v function(char: CA_CHAR)
 function setupInnateSpells(char)
-	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."option")
-	ml_tables = force_require("ml_tables/ml_"..char:character_subtype_key());
+	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."option")
+	ml_tables = ml_force_require(char);
 	if savedOption ~= "Spells for free" then
 		local spellSlots = updateSaveTable(false, char);
 		local innateSpells = {}
@@ -691,58 +900,76 @@ end
 
 --v function(char: CA_CHAR)
 function setupSavedOptions(char)
-	local savedRule = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."rule")
+	local savedRule = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."rule")
 	if not savedRule then
-		cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname().."rule", ml_tables.default_rule);
+		cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."rule", ml_tables.default_rule);
 	end
-	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."option")
+	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."option")
 	if not savedOption then
-		cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname().."option", ml_tables.default_option);
+		cm:set_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."option", ml_tables.default_option);
 	end
 end
 
---v function()
-function playerLoreListener()
-	local buttonLocation_charPanel = true;	
-	local buttonLocation_preBattle = true;	
-	local buttonLocation_unitsPanel = true;	
+local buttonLocation_charPanel = true;	
+local buttonLocation_preBattle = true;	
+local buttonLocation_unitsPanel = true;	
 
-	core:add_listener(
-		"ml_resetLClickUp",
-		"ComponentLClickUp",
-		function(context)
-			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
-			return context.string == "button_stats_reset" and is_uicomponent(panel);
-		end,
-		function(context)
-			--cm:callback(
-			--	function(context)
-					local char = getmlChar();
-					if char then
-						deleteLoreFrame();
-						resetSaveTable(char);
-						applySpellDisableEffect(getmlChar(), updateSaveTable(false, char));
-						pulse_uicomponent(loreButton_charPanel.uic, false, 10, false, "active");		
-					end
-			--	end, 0.1, "resetSkills"
-			--);
-		end,
-		true
-	);
+core:add_listener(
+	"ml_resetLClickUp",
+	"ComponentLClickUp",
+	function(context)
+		local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
+		return context.string == "button_stats_reset" and is_uicomponent(panel);
+	end,
+	function(context)
+		--cm:callback(
+		--	function(context)
+				local char = getmlChar();
+				if char and not is_agentSelected(char) then
+					deleteLoreFrame();
+					resetSaveTable(char);
+					applySpellDisableEffect(getmlChar(), updateSaveTable(false, char));
+					pulse_uicomponent(loreButton_charPanel.uic, false, 10, false, "active");		
+				end
+		--	end, 0.1, "resetSkills"
+		--);
+	end,
+	true
+);
 
-	core:add_listener(
-		"ml_CharacterSkillPointAllocated",
-		"CharacterSkillPointAllocated",
-		function(context)
-			return is_mlChar(context:character());
-		end,
-		function(context)
-			ml_tables = force_require("ml_tables/ml_"..context:character():character_subtype_key());
-			if context:character():faction():is_human() and ml_tables.skillnames[context:skill_point_spent_on()] then
-				local savedOption = cm:get_saved_value("ml_"..context:character():get_forename().." "..context:character():get_surname().."option")
-				if savedOption ~= "Spells for free" then
-					updateSkillTable(context:character());
-					local spellSlots = updateSaveTable(false, context:character());
+core:add_listener(
+	"llrRespec",
+	"UITriggerScriptEvent",
+	function(context)
+		return context:trigger() == "LegendaryLordRespec"
+	end,
+	function(context)
+		local cqi = context:faction_cqi() --: CA_CQI
+		local char = cm:get_character_by_cqi(cqi);
+		if is_mlChar(char) and not is_agentSelected(char) then
+			deleteLoreFrame();
+			resetSaveTable(char);
+			applySpellDisableEffect(getmlChar(), updateSaveTable(false, char));
+			pulse_uicomponent(loreButton_charPanel.uic, false, 10, false, "active");		
+		end
+	end,
+	true
+);
+
+core:add_listener(
+	"ml_CharacterSkillPointAllocated",
+	"CharacterSkillPointAllocated",
+	function(context)
+		return is_mlChar(context:character());
+	end,
+	function(context)
+		ml_tables = ml_force_require(context:character());
+		if ml_tables and context:character():faction():is_human() and ml_tables.skillnames[context:skill_point_spent_on()] then
+			local savedOption = cm:get_saved_value("ml_"..context:character():get_forename().." "..context:character():get_surname().."|"..tostring(context:character():cqi()).."_".."option")
+			if savedOption ~= "Spells for free" then
+				updateSkillTable(context:character());
+				local spellSlots = updateSaveTable(false, context:character());
+				if not tableContains(spellSlots, ml_tables.skillnames[context:skill_point_spent_on()]) then
 					for _, spellSlot in ipairs(spellSlots) do
 						if string.find(spellSlot, "Spell Slot") then
 							spellSlotSelected = spellSlot;
@@ -768,106 +995,108 @@ function playerLoreListener()
 					);
 				end
 			end
-		end,
-		true
-	);
-	
-	core:add_listener(
-		"ml_spellBrowserPanelOpened",
-		"PanelOpenedCampaign",
-		function(context)		
-			return context.string == "spell_browser"; 
-		end,
-		function(context)
-			editSpellBrowserUI();
-		end,
-		true
-	);
+		end
+	end,
+	true
+);
 
-	core:add_listener(
-		"ml_spellBrowserPanelclosed",
-		"PanelClosedCampaign",
-		function(context)		
-			return context.string == "spell_browser"; 
-		end,
-		function(context)
-			if loreFrame then
-				Util.centreComponentOnScreen(loreFrame);
-				spellBrowserButton:SetState("active");
-			end
-			--deleteLoreFrame();
-		end,
-		true
-	);
+core:add_listener(
+	"ml_spellBrowserPanelOpened",
+	"PanelOpenedCampaign",
+	function(context)		
+		return context.string == "spell_browser"; 
+	end,
+	function(context)
+		editSpellBrowserUI();
+	end,
+	true
+);
 
-	core:add_listener(
-		"ml_aiPendingBattle",
-		"PendingBattle", 
-		function()
-			local panel = find_uicomponent(core:get_ui_root(), "popup_pre_battle");
-			return is_uicomponent(panel);
-		end,
-		function(context)
-			local pb = context:pending_battle();
-			local attackers = pb:secondary_attackers();
-			local defenders = pb:secondary_defenders();
-			if not pb:attacker():is_human() and is_mlChar(pb:attacker()) then
-				aiRandomSpells(pb:attacker());
-			elseif not pb:defender():is_human() and is_mlChar(pb:defender()) then
-				aiRandomSpells(pb:defender());
-			elseif attackers:num_items() > 0 then
-				for i = 0, attackers:num_items() - 1 do
-					if is_mlChar(attackers:item_at(i)) then
-						aiRandomSpells(attackers:item_at(i));
-					end
-				end
-			elseif defenders:num_items() > 0 then
-				for i = 0, defenders:num_items() - 1 do
-					if is_mlChar(defenders:item_at(i)) then
-						aiRandomSpells(defenders:item_at(i));
-					end
+core:add_listener(
+	"ml_spellBrowserPanelclosed",
+	"PanelClosedCampaign",
+	function(context)		
+		return context.string == "spell_browser"; 
+	end,
+	function(context)
+		if loreFrame then
+			Util.centreComponentOnScreen(loreFrame);
+			spellBrowserButton:SetState("active");
+		end
+		--deleteLoreFrame();
+	end,
+	true
+);
+
+core:add_listener(
+	"ml_aiPendingBattle",
+	"PendingBattle", 
+	function()
+		local panel = find_uicomponent(core:get_ui_root(), "popup_pre_battle");
+		return is_uicomponent(panel);
+	end,
+	function(context)
+		local pb = context:pending_battle();
+		local attackers = pb:secondary_attackers();
+		local defenders = pb:secondary_defenders();
+		if not pb:attacker():is_human() and is_mlChar(pb:attacker()) then
+			aiRandomSpells(pb:attacker());
+		elseif not pb:defender():is_human() and is_mlChar(pb:defender()) then
+			aiRandomSpells(pb:defender());
+		elseif attackers:num_items() > 0 then
+			for i = 0, attackers:num_items() - 1 do
+				if is_mlChar(attackers:item_at(i)) then
+					aiRandomSpells(attackers:item_at(i));
 				end
 			end
-		end,
-		true
-	);
-
-	core:add_listener(
-		"ml_ConfederationListener",
-		"FactionJoinsConfederation", 
-		true,
-		function(context)
-			if context:confederation():is_human() then
-				local characterList = context:confederation():character_list();
-				for i = 0, characterList:num_items() - 1 do
-					local currentChar = characterList:item_at(i);
-					ml_tables = force_require("ml_tables/ml_"..currentChar:character_subtype_key());	
-					if is_mlChar(currentChar) then
-						setupSavedOptions(currentChar);
-						setupInnateSpells(currentChar);
-					end
+		elseif defenders:num_items() > 0 then
+			for i = 0, defenders:num_items() - 1 do
+				if is_mlChar(defenders:item_at(i)) then
+					aiRandomSpells(defenders:item_at(i));
 				end
 			end
-		end,
-		true
-	);
+		end
+	end,
+	true
+);
 
-	core:add_listener(
-		"ml_agentCreatedListener",
-		"CharacterCreated", 
-		true,
-		function(context)
-			if context:character():faction():is_human() then
-				ml_tables = force_require("ml_tables/ml_"..context:character():character_subtype_key());
-				if is_mlChar(context:character()) then
-					setupSavedOptions(context:character());
-					setupInnateSpells(context:character());
+core:add_listener(
+	"ml_ConfederationListener",
+	"FactionJoinsConfederation", 
+	true,
+	function(context)
+		if context:confederation():is_human() then
+			local characterList = context:confederation():character_list();
+			for i = 0, characterList:num_items() - 1 do
+				local currentChar = characterList:item_at(i);
+				ml_tables = ml_force_require(currentChar);	
+				if is_mlChar(currentChar) then
+					setupSavedOptions(currentChar);
+					setupInnateSpells(currentChar);
 				end
 			end
-		end,
-		true
-	);
+		end
+	end,
+	true
+);
 
+core:add_listener(
+	"ml_agentCreatedListener",
+	"CharacterCreated", 
+	true,
+	function(context)
+		if context:character():faction():is_human() then
+			ml_tables = ml_force_require(context:character());
+			if is_mlChar(context:character()) then
+				setupSavedOptions(context:character());
+				setupInnateSpells(context:character());
+			end
+		end
+	end,
+	true
+);
+
+if buttonLocation_charPanel then
 	core:add_listener(
 		"ml_loreCharacterPanelOpened",
 		"PanelOpenedCampaign",
@@ -883,211 +1112,198 @@ function playerLoreListener()
 		end,
 		true
 	);
-	
-	if buttonLocation_charPanel then
-		core:add_listener(
-			"ml_loreCharacterPanelOpened",
-			"PanelOpenedCampaign",
-			function(context)		
-				return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
-			end,
-			function(context)
-				createloreButton_charPanel(); 
-				if loreFrame then
-					spellBrowserButton:SetDisabled(true);
-					spellBrowserButton:SetOpacity(50);	
-				end			
-			end,
-			true
-		);
 
-		core:add_listener(
-			"ml_loreCharacterPanelClosed",
-			"PanelClosedCampaign",
-			function(context) 
-				return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
-			end,
-			function(context)
-				if loreButton_charPanel then
-					loreButton_charPanel:Delete();
-					loreButton_charPanel = nil;
-				end
-				deleteLoreFrame();
-			end,
-			true
-		);
-	
-		core:add_listener(
-			"ml_cycleRightLClickUp",
-			"ComponentLClickUp",
-			function(context)
-				local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
-				return context.string == "button_cycle_right" and is_uicomponent(panel);
-			end,
-			function(context)
-				cm:callback(
-					function(context)
-						updateButtonVisibility_charPanel();
-						deleteLoreFrame();
-					end, 0, "checkNamePanelText"
-				);		
-			end,
-			true
-		);
-		
-		core:add_listener(
-			"ml_cycleLeftLClickUp",
-			"ComponentLClickUp",
-			function(context)
-				local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
-				return context.string == "button_cycle_left" and is_uicomponent(panel);
-			end,
-			function(context)
-				cm:callback(
-					function(context)
-						updateButtonVisibility_charPanel();
-						deleteLoreFrame();
-					end, 0, "checkNamePanelText"
-				);	
-			end,
-			true
-		);
-		
-		core:add_listener(
-			"ml_nextShortcutPressed",
-			"ShortcutPressed",
-			function(context)
-				local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
-				return context.string == "select_next" and is_uicomponent(panel);
-			end,
-			function(context)
-				cm:callback(
-					function(context)
-						updateButtonVisibility_charPanel();
-						deleteLoreFrame();
-					end, 0, "checkNamePanelText"
-				);	
-			end,
-			true
-		);
-		
-		core:add_listener(
-			"ml_prevShortcutPressed",
-			"ShortcutPressed",
-			function(context)
-				local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
-				return context.string == "select_prev" and is_uicomponent(panel);
-			end,
-			function(context)
-				cm:callback(
-					function(context)
-						updateButtonVisibility_charPanel();
-						deleteLoreFrame();
-					end, 0, "checkNamePanelText"
-				);	
-			end,
-			true
-		);
-	end
-	
-	if buttonLocation_preBattle then		
-		core:add_listener(
-			"ml_preBattlePanelOpened",
-			"PanelOpenedCampaign", 
-			function(context) 
-				return context.string == "popup_pre_battle" and not loreButton_preBattle; 
-			end,
-			function(context)
-				local pb = cm:model():pending_battle();
-				if getmlChar() and pb:battle_type() ~= "ambush" then
-					createloreButton_preBattle(pb:battle_type());
-				end
-			end,
-			true
-		);
-		
-		core:add_listener(
-			"ml_preBattleCharacterPanelOpened",
-			"PanelOpenedCampaign", 
-			function(context) 
-				return context.string == "character_details_panel" and cm:model():pending_battle():is_active();
-			end,
-			function(context)
-				deleteLoreFrame();
-			end,
-			true
-		);
-			
-		core:add_listener(
-			"ml_preBattlePanelClosed",
-			"PanelClosedCampaign",
-			function(context) 
-				return context.string == "popup_pre_battle"; 
-			end,
-			function(context)
-				if loreButton_preBattle then
-					Util.delete(loreButton_preBattle);
-					core:remove_listener("loreButton_preBattle_Listener");
-					loreButton_preBattle = nil;
-				end
-				deleteLoreFrame();
-			end,
-			true
-		);
-	end
-	
-	if buttonLocation_unitsPanel then
-		core:add_listener(
-			"ml_unitPanelOpened",
-			"PanelOpenedCampaign",
-			function(context)		
-				return context.string == "units_panel" and loreButton_unitsPanel == nil; 
-			end,
-			function(context)
-				if getmlChar() then
-					createloreButton_unitsPanel();	
-				end
-			end,
-			true
-		);
+	core:add_listener(
+		"ml_loreCharacterPanelClosed",
+		"PanelClosedCampaign",
+		function(context) 
+			return context.string == "character_details_panel" and not cm:model():pending_battle():is_active(); 
+		end,
+		function(context)
+			if loreButton_charPanel then
+				loreButton_charPanel:Delete();
+				loreButton_charPanel = nil;
+			end
+			deleteLoreFrame();
+		end,
+		true
+	);
 
-		core:add_listener(
-			"ml_unitPanelClosed",
-			"PanelClosedCampaign",
-			function(context) 
-				return context.string == "units_panel"; 
-			end,
-			function(context)
-				if loreButton_unitsPanel then
-					loreButton_unitsPanel:Delete();
-					loreButton_unitsPanel = nil;
-				end
-				deleteLoreFrame();
-			end,
-			true
-		);
-	
-		core:add_listener(
-			"ml_unitPanelCharacterSelected",
-			"CharacterSelected", 
-			function(context) 
-				local panel = find_uicomponent(core:get_ui_root(), "units_panel");
-				return is_uicomponent(panel);
-			end,
-			function(context)
-				if not loreButton_unitsPanel and is_mlChar(context:character()) then
-					createloreButton_unitsPanel();
-				elseif not is_mlChar(context:character()) then
-					if loreButton_unitsPanel then
-						loreButton_unitsPanel:Delete();
-						loreButton_unitsPanel = nil;
-					end
+	core:add_listener(
+		"ml_cycleRightLClickUp",
+		"ComponentLClickUp",
+		function(context)
+			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
+			return context.string == "button_cycle_right" and is_uicomponent(panel);
+		end,
+		function(context)
+			cm:callback(
+				function(context)
+					updateButtonVisibility_charPanel();
 					deleteLoreFrame();
-				end
-			end,
-			true
-		);
-	end
+				end, 0, "checkNamePanelText"
+			);		
+		end,
+		true
+	);
+	
+	core:add_listener(
+		"ml_cycleLeftLClickUp",
+		"ComponentLClickUp",
+		function(context)
+			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
+			return context.string == "button_cycle_left" and is_uicomponent(panel);
+		end,
+		function(context)
+			cm:callback(
+				function(context)
+					updateButtonVisibility_charPanel();
+					deleteLoreFrame();
+				end, 0, "checkNamePanelText"
+			);	
+		end,
+		true
+	);
+	
+	core:add_listener(
+		"ml_nextShortcutPressed",
+		"ShortcutPressed",
+		function(context)
+			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
+			return context.string == "select_next" and is_uicomponent(panel);
+		end,
+		function(context)
+			cm:callback(
+				function(context)
+					updateButtonVisibility_charPanel();
+					deleteLoreFrame();
+				end, 0, "checkNamePanelText"
+			);	
+		end,
+		true
+	);
+	
+	core:add_listener(
+		"ml_prevShortcutPressed",
+		"ShortcutPressed",
+		function(context)
+			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel");
+			return context.string == "select_prev" and is_uicomponent(panel);
+		end,
+		function(context)
+			cm:callback(
+				function(context)
+					updateButtonVisibility_charPanel();
+					deleteLoreFrame();
+				end, 0, "checkNamePanelText"
+			);	
+		end,
+		true
+	);
+end
+
+if buttonLocation_preBattle then		
+	core:add_listener(
+		"ml_preBattlePanelOpened",
+		"PanelOpenedCampaign", 
+		function(context) 
+			return context.string == "popup_pre_battle" and not loreButton_preBattle; 
+		end,
+		function(context)
+			local pb = cm:model():pending_battle();
+			if getmlChar() then
+				createloreButton_preBattle(pb:battle_type());
+			end
+		end,
+		true
+	);
+	
+	core:add_listener(
+		"ml_preBattleCharacterPanelOpened",
+		"PanelOpenedCampaign", 
+		function(context) 
+			return context.string == "character_details_panel" and cm:model():pending_battle():is_active();
+		end,
+		function(context)
+			deleteLoreFrame();
+		end,
+		true
+	);
+		
+	core:add_listener(
+		"ml_preBattlePanelClosed",
+		"PanelClosedCampaign",
+		function(context) 
+			return context.string == "popup_pre_battle"; 
+		end,
+		function(context)
+			if loreButton_preBattle then
+				Util.delete(loreButton_preBattle);
+				core:remove_listener("loreButton_preBattle_Listener");
+				loreButton_preBattle = nil;
+			end
+			deleteLoreFrame();
+		end,
+		true
+	);
+end
+
+if buttonLocation_unitsPanel then
+	core:add_listener(
+		"ml_unitPanelOpened",
+		"PanelOpenedCampaign",
+		function(context)		
+			return context.string == "units_panel" and not loreButton_unitsPanel; 
+		end,
+		function(context)
+			if getmlChar() then
+				createloreButton_unitsPanel();	
+			end
+		end,
+		true
+	);
+
+	core:add_listener(
+		"ml_unitPanelClosed",
+		"PanelClosedCampaign",
+		function(context) 
+			return context.string == "units_panel"; 
+		end,
+		function(context)
+			if loreButton_unitsPanel then
+				loreButton_unitsPanel:Delete();
+				loreButton_unitsPanel = nil;
+			end
+			deleteLoreFrame();
+		end,
+		true
+	);
+
+	core:add_listener(
+		"ml_unitPanelCharacterSelected",
+		"CharacterSelected", 
+		function(context) 
+			local panel = find_uicomponent(core:get_ui_root(), "units_panel");
+			return is_uicomponent(panel);
+		end,
+		function(context)
+			local char = context:character();
+			--cm:callback(
+			--	function(context)
+					if not loreButton_unitsPanel and is_mlChar(char) then 
+						createloreButton_unitsPanel();
+					elseif not is_mlChar(char)  then 
+						if loreButton_unitsPanel then
+							loreButton_unitsPanel:Delete();
+							loreButton_unitsPanel = nil;
+						end
+						deleteLoreFrame();
+					end
+			--	end, 0, "waitforsmth"
+			--);	
+		end,
+		true
+	);
 end
 
 --v function()
@@ -1096,21 +1312,19 @@ function ml_setup()
 	for i = 0, characterList:num_items() - 1 do
 		local currentChar = characterList:item_at(i);	
 		if is_mlChar(currentChar) then
-			ml_tables = force_require("ml_tables/ml_"..currentChar:character_subtype_key());
+			ml_tables = ml_force_require(currentChar);
 			setupSavedOptions(currentChar);
 			setupInnateSpells(currentChar);
-			--[[	TEST	
-			local cqi = currentChar:cqi();
-			cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);
-			cm:spawn_character_to_pool(cm:get_local_faction(), "", "", "", "", 18, true, "general", "wh2_main_lzd_slann_mage_priest", false, "wh2_main_art_set_lzd_slann_mage_priest_01");
-			--cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_main_lzd_cha_skink_priest_beasts_0");
-			--]]
 		end
 	end
 end
 
-cm.first_tick_callbacks[#cm.first_tick_callbacks+1] = 
-function(context)
-	playerLoreListener();
-	if cm:is_new_game() then ml_setup(); end
+if cm:is_new_game() then 
+	mlLOG_reset();
+	ml_setup(); 
+else
+	local pb = cm:model():pending_battle();
+	if find_uicomponent(core:get_ui_root(), "popup_pre_battle") and pb and getmlChar() then
+		createloreButton_preBattle(pb:battle_type());
+	end
 end

@@ -140,7 +140,7 @@ function applySettingsFromTable(Table)
     end
     cm:callback(
         function()
-            lastCategory:SimulateLClick();
+            if lastCategory then lastCategory:SimulateLClick(); end
         end, 0, "waitForUI"
     );
 end
