@@ -19,6 +19,9 @@ ml_tables.default_rule = "TT 6th edition - Slann";
 --# assume ml_tables.default_option: string
 ml_tables.default_option = "Skill - based";
 
+--# assume ml_tables.enableAllBundle: string
+ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all";
+
 --# assume ml_tables.lores: map<string, map<string, string>>
 ml_tables.lores = {
 	["Lore of High Magic"] = {
@@ -43,7 +46,7 @@ ml_tables.lores = {
 		["wh2_main_skill_magic_life_wizard_flesh_to_stone_lord"] = "Flesh to Stone",
 		["wh2_main_skill_magic_life_wizard_regrowth_lord"] = "Regrowth",
 		["wh2_main_skill_magic_life_wizard_shield_of_thorns_lord"] = "Shield of Thorns",
-		["wh2_main_skill_magic_life_wizard_the_dwellers_below_lord"] = "The Dwellers Below",
+		["wh2_main_skill_magic_life_wizard_the_dwellers_below_lord"] = "The Dwellers Below"
 	},
 	["Lore of Beasts"] = {	
 		["wh2_main_skill_magic_beasts_flock_of_doom_lord"] = "Flock of Doom",
@@ -75,7 +78,7 @@ ml_tables.lores = {
 		["wh2_main_skill_all_magic_metal_04_glittering_robe_lord"] = "Glittering Robe",
 		["wh2_main_skill_all_magic_metal_02_plague_of_rust_lord"] = "Plague of Rust",
 		["wh_main_skill_all_magic_metal_01_searing_doom"] = "Searing Doom",
-		["wh2_main_skill_all_magic_metal_09_transmutation_of_lead_lord"] = "Transmutation of Lead",
+		["wh2_main_skill_all_magic_metal_09_transmutation_of_lead_lord"] = "Transmutation of Lead"
 	},
 	["Lore of Death"] = {	
 		["wh2_main_skill_all_magic_death_02_aspect_of_the_dreadknight_lord"] = "Aspect of the Dread Knight",
@@ -205,9 +208,9 @@ ml_tables.skillnames = {
 	["wh2_main_skill_all_magic_metal_09_transmutation_of_lead_lord"] = "Transmutation of Lead",
 	["wh_dlc05_skill_magic_shadow_mystifying_miasma"] = "Melkoth's Mystifying Miasma",
 	["wh2_main_skill_magic_shadow_okkams_mindrazor_lord"] = "Okkam's Mindrazor",
-	["wh2_main_skill_magic_shadow_penumbral_pendulum_lord"] = "Pit of Shades",
-	["wh2_main_skill_magic_shadow_pit_of_shades_lord"] = "The Enfeebling Foe",
-	["wh2_main_skill_magic_shadow_enfeebling_foe_lord"] = "The Penumbral Pendulum",
+	["wh2_main_skill_magic_shadow_pit_of_shades_lord"] = "Pit of Shades",
+	["wh2_main_skill_magic_shadow_enfeebling_foe_lord"] = "The Enfeebling Foe",
+	["wh2_main_skill_magic_shadow_penumbral_pendulum_lord"] = "The Penumbral Pendulum",
 	["wh2_main_skill_magic_shadow_the_withering_lord"] = "The Withering"
 }
 

@@ -6,8 +6,10 @@
 --# assume global class ml_tables
 --# assume ml_tables.default_rule: string
 --# assume ml_tables.default_option: string
+--# assume ml_tables.enableAllBundle: string
 --# assume ml_tables.lores: map<string, map<string, string>>
 --# assume ml_tables.has_skills: map<string, bool>
 --# assume ml_tables.skillnames: map<string, string>
 --# assume ml_tables.effectBundles: map<string,string>
 --# assume ml_tables.spells: map<string, string>
+--# assume ml_tables.loreName: map<string, string>

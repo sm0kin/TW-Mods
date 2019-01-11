@@ -1,19 +1,24 @@
 local ml_tables = {}
 
 --# assume ml_tables.default_rule: string
-ml_tables.default_rule = "TT 6th edition - Slann";
+ml_tables.default_rule = "Modified TT 8th edition - Teclis";
 --[[
-	Lizardmen (6ed)
-	page: 49
-	SLANN GENERATIONS
+	High Elves (8ed)
+	page: 55
+    TECLIS
+    
+    MAGIC
+	Teclis [...] does not generate
+	spells following the normal rules, but instead can choose
+	either to know all of the spells in the Lore of High Magic,
+	or choose one spell from each of the eight
+	Lores of Battle Magic in the Warhammer rulebook.
 
-	FIFTH GENERATION
-	When a Slann Mage-Priest selects his spells before a battle
-	he is allowed more freedom than normal. He may use any
-	Lore from Warhammer rulebook. What's more, a single
-	Slann can choose from more than one Lore: instead of
-	being limited to just one. Truly these creatures are masters
-	of magic.
+	Modified to: 
+	Teclis can choose a spell list consisting of spells in the
+	Lore of High Magic and one of each of the eight Lores of 
+	Battle Magic in the Warhammer rulebook.
+	combination.
 --]]
 
 --# assume ml_tables.default_option: string
@@ -328,6 +333,64 @@ ml_tables.spells = {
 	["The Enfeebling Foe"] = "wh_dlc05_spell_shadow_the_enfeebling_foe",
 	["The Penumbral Pendulum"] = "wh_dlc05_spell_shadow_the_penumbral_pendulum",
 	["The Withering"] = "wh_dlc05_spell_shadow_the_withering"
+} 
+
+--# assume ml_tables.loreName: map<string, string>
+ml_tables.loreName = {
+	["wh2_main_skill_magic_beasts_flock_of_doom_lord"] = "Lore of Beasts",
+	["wh2_main_skill_magic_beasts_panns_impenetrable_pelt_lord"] = "Lore of Beasts",
+	["wh2_main_skill_magic_beasts_the_amber_spear_lord"] = "Lore of Beasts",
+	["wh2_main_skill_magic_beasts_the_curse_of_anraheir_lord"] = "Lore of Beasts",
+	["wh2_sm0_skill_magic_beasts_transformation_of_kadon"] = "Lore of Beasts",
+	["wh_dlc03_skill_magic_beasts_wyssans_wildform"] = "Lore of Beasts",
+	["wh2_main_skill_all_magic_death_02_aspect_of_the_dreadknight_lord"] = "Lore of Death",
+	["wh2_main_skill_all_magic_death_05_doom_and_darkness_lord"] = "Lore of Death",
+	["wh2_main_skill_all_magic_death_04_soulblight_lord"] = "Lore of Death",
+	["wh2_dlc11_skill_vmp_bloodline_necrarch_magic_spirit_leech"] = "Lore of Death",
+	["wh2_main_skill_all_magic_death_09_the_fate_of_bjuna_lord"] = "Lore of Death",
+	["wh2_main_skill_all_magic_death_10_the_purple_sun_of_xereus_lord"] = "Lore of Death",
+	["wh2_main_skill_all_magic_fire_02_cascading_fire-cloak_lord"] = "Lore of Fire",
+	["wh_main_skill_all_magic_fire_01_fireball"] = "Lore of Fire",
+	["wh2_main_skill_all_magic_fire_10_flame_storm_lord"] = "Lore of Fire",
+	["wh2_main_skill_all_magic_fire_03_flaming_sword_of_rhuin_lord"] = "Lore of Fire",
+	["wh2_main_skill_all_magic_fire_09_piercing_bolts_of_burning_lord"] = "Lore of Fire",
+	["wh2_main_skill_all_magic_fire_05_the_burning_head_lord"] = "Lore of Fire",
+	["wh2_main_skill_all_magic_heavens_10_chain_lightning_lord"] = "Lore of Heavens",
+	["wh2_main_skill_all_magic_heavens_09_comet_of_casandora_lord"] = "Lore of Heavens",
+	["wh2_main_skill_all_magic_heavens_04_curse_of_the_midnight_wind_lord"] = "Lore of Heavens",
+	["wh_main_skill_all_magic_heavens_01_harmonic_convergence"] = "Lore of Heavens",
+	["wh2_main_skill_all_magic_heavens_05_urannons_thunderbolt_lord"] = "Lore of Heavens",
+	["wh2_main_skill_all_magic_heavens_02_wind_blast_lord"] = "Lore of Heavens",
+	["wh2_main_skill_all_magic_high_02_apotheosis_slann"] = "Lore of High Magic",
+	["wh2_sm0_skill_magic_high_arcane_unforging"] = "Lore of High Magic",
+	["wh2_sm0_skill_magic_high_fiery_convocation"] = "Lore of High Magic",
+	["wh2_sm0_skill_magic_high_hand_of_glory"] = "Lore of High Magic",
+	["wh2_main_skill_all_magic_high_01_soul_quench_slann"] = "Lore of High Magic",
+	["wh2_main_skill_all_magic_high_05_tempest_slann"] = "Lore of High Magic",
+	["wh2_sm0_skill_magic_life_awakening_of_the_wood"] = "Lore of Life",
+	["wh2_main_skill_magic_life_wizard_earth_blood_lord"] = "Lore of Life",
+	["wh2_main_skill_magic_life_wizard_flesh_to_stone_lord"] = "Lore of Life",
+	["wh2_main_skill_magic_life_wizard_regrowth_lord"] = "Lore of Life",
+	["wh2_main_skill_magic_life_wizard_shield_of_thorns_lord"] = "Lore of Life",
+	["wh2_main_skill_magic_life_wizard_the_dwellers_below_lord"] = "Lore of Life",
+	["wh2_dlc10_skill_hef_magic_alarielle_banishment"] = "Lore of Light",
+	["wh2_main_skill_all_magic_light_10_bironas_timewarp_lord"] = "Lore of Light",
+	["wh2_sm0_skill_magic_light_light_of_battle"] = "Lore of Light",
+	["wh2_main_skill_all_magic_light_05_net_of_amyntok_lord"] = "Lore of Light",
+	["wh2_main_skill_all_magic_light_02_phas_protection_lord"] = "Lore of Light",
+	["wh2_sm0_skill_magic_light_shems_burning_gaze"] = "Lore of Light",
+	["wh2_main_skill_all_magic_metal_10_final_transmutation_lord"] = "Lore of Metal",
+	["wh2_main_skill_all_magic_metal_05_gehennas_golden_hounds_lord"] = "Lore of Metal",
+	["wh2_main_skill_all_magic_metal_04_glittering_robe_lord"] = "Lore of Metal",
+	["wh2_main_skill_all_magic_metal_02_plague_of_rust_lord"] = "Lore of Metal",
+	["wh_main_skill_all_magic_metal_01_searing_doom"] = "Lore of Metal",
+	["wh2_main_skill_all_magic_metal_09_transmutation_of_lead_lord"] = "Lore of Metal",
+	["wh_dlc05_skill_magic_shadow_mystifying_miasma"] = "Lore of Shadows",
+	["wh2_main_skill_magic_shadow_okkams_mindrazor_lord"] = "Lore of Shadows",
+	["wh2_main_skill_magic_shadow_penumbral_pendulum_lord"] = "Lore of Shadows",
+	["wh2_main_skill_magic_shadow_pit_of_shades_lord"] = "Lore of Shadows",
+	["wh2_main_skill_magic_shadow_enfeebling_foe_lord"] = "Lore of Shadows",
+	["wh2_main_skill_magic_shadow_the_withering_lord"] = "Lore of Shadows"
 } 
 
 return ml_tables;
