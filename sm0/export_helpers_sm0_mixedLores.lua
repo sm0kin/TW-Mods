@@ -207,7 +207,7 @@ local createSpellSlotButtonContainer --:function(char: CA_CHAR, spellSlots: vect
 
 --v function(char: CA_CHAR) --> bool
 function is_mlChar(char)
-	if not char:is_null_interface() and string.find(file_str, char:character_subtype_key()) then
+	if char ~= nil and not char:is_null_interface() and string.find(file_str, char:character_subtype_key()) then
 		return true;
 	else
 		return false;
@@ -424,7 +424,7 @@ function randomSpells(char)
 		end
 	end
 	local lorePool = {} 
-	--#assume skillPool :map<number, string>
+	--# assume skillPool: map<number, string>
 	if #skillPool > #spellSlots then
 		skillPool = shuffle(skillPool);
 	end
@@ -455,7 +455,7 @@ function randomSpells(char)
 	applySpellDisableEffect(char, spellSlots);
 end	
 
---v [NO_CHECK] function(lore: string, char: CA_CHAR)
+--v function(lore: string, char: CA_CHAR)
 function createSpellButtonContainer(lore, char)
 	local loreTable = ml_tables.lores[lore] --:map<string, string>
 	updateSkillTable(char);
@@ -467,8 +467,11 @@ function createSpellButtonContainer(lore, char)
 	for skill, spell in pairs(loreTable) do
 		local spellButton = TextButton.new(spell, loreFrame, "TEXT", spell);
 		spellButton:SetState("hover");
-		spellButton.uic:SetTooltipText("Select "..spell.." to replace "..spellSlots[tonumber(string.match(spellSlotSelected, "%d"))]..".");	
+		local index = string.match(spellSlotSelected, "%d");
+		--# assume spellSlots: map<number, string>
+		spellButton.uic:SetTooltipText("Select "..spell.." to replace "..spellSlots[tonumber(index)]..".");	
 		spellButton:SetState("active");
+		--# assume spellSlots: vector<string>
 		for _, spellSlot in ipairs(spellSlots) do
 			if spellSlot == spell then
 				spellButton:SetDisabled(true);
@@ -481,6 +484,7 @@ function createSpellButtonContainer(lore, char)
 			local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_"..skill);
 			spellButton.uic:SetTooltipText(reqTooltip);	
 		end
+		--[[
 		if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(loreTable, spellSlots[tonumber(string.match(spellSlotSelected, "%d"))]) and lore ~= "Lore of High Magic" then
 			for _, spell in ipairs(spellSlots) do
 				if tableContains(loreTable, spell) then
@@ -489,6 +493,7 @@ function createSpellButtonContainer(lore, char)
 				end
 			end
 		end
+		--]]
 		table.insert(spellButtons, spellButton);
 		spellButton:RegisterForClick(
 			function(context)
@@ -544,6 +549,20 @@ function createLoreButtonContainer(char)
 		loreButtonList:AddComponent(loreButton);
 	end	
 	setupSingleSelectedButtonGroup(loreButtons, char);
+	local spellSlots = updateSaveTable(false, char);
+	for _, loreButton in ipairs(loreButtons) do
+		local indexStr = string.match(spellSlotSelected, "%d");
+		--# assume spellSlots: map<number, string>
+		if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(ml_tables.lores[loreButton.name], spellSlots[tonumber(indexStr)]) and loreButton.name ~= "Lore of High Magic" then
+			--# assume spellSlots: vector<string>
+			for _, spell in ipairs(spellSlots) do
+				if tableContains(ml_tables.lores[loreButton.name], spell) then
+					loreButton:SetDisabled(true);
+					loreButton.uic:SetTooltipText("You can only choose one spell from the "..loreButton.name..".");	
+				end
+			end
+		end
+	end
 	loreButtonContainer:AddComponent(loreButtonList);
 	loreButtonContainer:PositionRelativeTo(loreFrame, 22, dummyButtonY/4);
 	loreFrame:AddComponent(loreButtonContainer);
@@ -612,7 +631,7 @@ function editSpellBrowserUI()
 		local spellSlots = updateSaveTable(false, char);
 		for spellName, button in pairs(ml_tables.spells) do
 			local compositeSpell = find_uicomponent(core:get_ui_root(), "spell_browser", "composite_lore_parent", "composite_spell_list", button);
-			if not tableContains(spellSlots, spellName) then
+			if not tableContains(spellSlots, spellName) and is_uicomponent(compositeSpell) then
 				Util.delete(compositeSpell);
 			end
 		end
@@ -952,8 +971,10 @@ end
 --v function(char: CA_CHAR)
 function setupInnateSpells(char)
 	local savedOption = cm:get_saved_value("ml_"..char:get_forename().." "..char:get_surname().."|"..tostring(char:cqi()).."_".."option")
-	ml_tables = ml_force_require(char);
 	if savedOption ~= "Spells for free" then
+		randomSpells(char)
+		--[[
+		ml_tables = ml_force_require(char);
 		local spellSlots = updateSaveTable(false, char);
 		local innateSpells = {}
 		updateSkillTable(char);
@@ -975,6 +996,7 @@ function setupInnateSpells(char)
 				end
 			end
 		end
+		--]]
 	end
 end
 
@@ -1213,8 +1235,9 @@ core:add_listener(
 			local characterList = context:confederation():character_list();
 			for i = 0, characterList:num_items() - 1 do
 				local currentChar = characterList:item_at(i);
-				ml_tables = ml_force_require(currentChar);	
-				if is_mlChar(currentChar) then
+				ml_tables = ml_force_require(currentChar);
+				local savedRule = cm:get_saved_value("ml_"..currentChar:get_forename().." "..currentChar:get_surname().."|"..tostring(currentChar:cqi()).."_".."rule")
+				if is_mlChar(currentChar) and not savedRule then
 					setupSavedOptions(currentChar);
 					setupInnateSpells(currentChar);
 				end

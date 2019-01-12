@@ -63,7 +63,7 @@ function getCharByFaction(charSubtype, faction)
     end
     return char;
 end
-
+--cm:force_confederation("wh2_main_hef_avelorn", "wh2_main_hef_order_of_loremasters");
 			--TEST
 			--local cqi = currentChar:cqi();
 			--cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);

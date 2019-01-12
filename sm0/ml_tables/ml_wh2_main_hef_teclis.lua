@@ -18,7 +18,6 @@ ml_tables.default_rule = "Modified TT 8th edition - Teclis";
 	Teclis can choose a spell list consisting of spells in the
 	Lore of High Magic and one of each of the eight Lores of 
 	Battle Magic in the Warhammer rulebook.
-	combination.
 --]]
 
 --# assume ml_tables.default_option: string
