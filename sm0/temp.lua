@@ -68,4 +68,26 @@ end
 			--local cqi = currentChar:cqi();
 			--cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);
 			--cm:spawn_character_to_pool(cm:get_local_faction(), "", "", "", "", 18, true, "general", "wh2_main_lzd_slann_mage_priest", false, "wh2_main_art_set_lzd_slann_mage_priest_01");
-			--cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_main_lzd_cha_skink_priest_beasts_0");
+            --cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_main_lzd_cha_skink_priest_beasts_0");
+--# assume CM.show_message_event_located: method(
+--#     faction_key: string,
+--#     primary_detail: string,
+--#     secondary_detail: string,
+--#     flavour_text: string,
+--#     location_x: number,
+--#     location_y: number,
+--#     show_immediately: boolean,
+--#     event_picture_id: number
+--#)
+cm:show_message_event(
+            human_factions[i],
+            "event_feed_strings_text_wh_event_feed_string_scripted_event_karak_ekrund1_primary_detail",
+            "",
+            "event_feed_strings_text_wh_event_feed_string_scripted_event_karak_ekrund1_secondary_detail",
+            true,
+            592
+        );
+
+        --"[[col:" .. colour .. "]]" .. traitDescription .. traitEffectScopeDesc .. "[[/col]]";
+
+       -- local divider = Image.new(name, parent, "ui/skins/default/separator_line.png")

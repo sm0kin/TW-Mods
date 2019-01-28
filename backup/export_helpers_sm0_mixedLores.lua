@@ -167,8 +167,6 @@ function mlDEBUG()
 end
 
 mlDEBUG();
-local ColouredTextButton = require("ml_coloured_text_button")
---#assume ColouredTextButton: COLOURED_TEXT_BUTTON
 local loreButton_charPanel = nil --:BUTTON
 local loreButton_preBattle = nil --:CA_UIC
 local loreButton_unitsPanel = nil --:BUTTON
@@ -198,9 +196,10 @@ if string.find(playerFaction:name(), "wh_") then
 end
 local ml_tables --:ml_tables
 local spellSlotButtons = {} --:vector<TEXT_BUTTON>
+--local spellSlotSelected = nil --:string
 local pX --:number
 local pY --:number
-local dummyButton = ColouredTextButton.new("dummyButton", core:get_ui_root(), "ui/templates/square_large_text_button_grey", "dummy");
+local dummyButton = TextButton.new("dummyButton", core:get_ui_root(), "TEXT", "dummy");
 local dummyButtonX, dummyButtonY = dummyButton:Bounds();
 dummyButton:Delete();
 local file_str = cm:get_game_interface():filesystem_lookup("/script/ml_tables", "ml*")
@@ -322,6 +321,7 @@ function re_init()
 	--loreButtonContainer = nil;
 	--spellButtonContainer = nil;
 	--spellSlotButtonContainer = nil;
+	--spellSlotSelected = nil;
 	--optionButton = nil;
 	--spellBrowserButton = nil;
 	--resetButton = nil;
@@ -463,11 +463,15 @@ function randomSpells(char)
 	for i, spellSlot in ipairs(spellSlots) do
 		if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
 			if ml_tables.has_skills["wh2_sm0_skill_magic_spell_slot_"..i] then
+				--spellSlotSelected = "Spell Slot - "..i.." -";
 				spellSlots = updateSaveTable(ml_tables.skillnames[skillPool[i]], "Spell Slot - "..i.." -", char);
+				--spellSlotSelected = nil;
 			end
 		else
 			spellSlots[i] = ml_tables.skillnames[skillPool[i]];
+			--spellSlotSelected = "Spell Slot - "..i.." -";
 			spellSlots = updateSaveTable(spellSlots[i], "Spell Slot - "..i.." -", char);
+			--spellSlotSelected = nil;
 		end
 	end
 	applySpellDisableEffect(char, spellSlots);
@@ -508,61 +512,114 @@ function createSpellButtonContainer(lore, selectedSpellSlot, char)
 	local spellButtonList = ListView.new("SpellButtonList", loreFrame, "VERTICAL");
 	spellButtonList:Resize(pX/2 - 18, pY - dummyButtonY/2);
 	spellButtonContainer = Container.new(FlowLayout.VERTICAL);	
+	--local spellButtons = {} --:vector<TEXT_BUTTON>
 	local spellSlots = updateSaveTable(false, false, char);
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
-	local loreStr
 	if savedOption == "Multi-Colour" then
+		local loreStr
 		if lore then
 			loreStr = string.gsub(lore, "Lore of ", "");
 			loreStr = string.gsub(loreStr, " Magic", "");
 			loreStr = string.lower(loreStr);
+			mlLOG("loreStr = "..loreStr)
 		end
-	end
-	for skill, spell in pairs(loreTable) do
-		local spellButton
-		if savedOption == "Multi-Colour" then
-			--#assume spellButton: COLOURED_TEXT_BUTTON
-			spellButton = ColouredTextButton.new(spell, loreFrame, "ui/templates/square_large_text_button_"..loreStr, spell);
-		else	
-			--#assume spellButton: TEXT_BUTTON
-			spellButton = TextButton.new(spell, loreFrame, "TEXT", spell);
-		end
-		--#assume spellButton: TEXT_BUTTON		
-		hideButtonSmoke(spellButton.uic);
-		spellButton:SetState("hover");
-		local index = string.match(selectedSpellSlot, "%d");
-		--# assume spellSlots: map<number, string>
-		spellButton.uic:SetTooltipText("Select "..spell.." to replace "..spellSlots[tonumber(index)]..".");	
-		spellButton:SetState("active");
-		--# assume spellSlots: vector<string>
-		for _, spellSlot in ipairs(spellSlots) do
-			if spellSlot == spell then
+		for skill, spell in pairs(loreTable) do
+			local spellButton = Util.createComponent(spell, loreFrame.uic, "ui/templates/square_large_text_button_"..loreStr); --"ui/templates/square_large_text_button_toggle_"..loreStr
+			spellButtonText = UIComponent(spellButton:Find("button_txt"));
+			spellButtonText:SetStateText(spell);
+			hideButtonSmoke(spellButton);
+			spellButton:SetState("hover");
+			local index = string.match(selectedSpellSlot, "%d");
+			--# assume spellSlots: map<number, string>
+			spellButton:SetTooltipText("Select "..spell.." to replace "..spellSlots[tonumber(index)]..".");	
+			spellButton:SetState("active");
+			--# assume spellSlots: vector<string>
+			for _, spellSlot in ipairs(spellSlots) do
+				if spellSlot == spell then
+					spellButton:SetDisabled(true);
+					spellButton:SetOpacity(50);
+					spellButton:SetTooltipText("This spell has already been selected.");	
+				end
+			end
+			local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
+			if savedOption ~= "Spells for free" and not ml_tables.has_skills[skill] then
 				spellButton:SetDisabled(true);
-				spellButton.uic:SetTooltipText("This spell has already been selected.");	
+				spellButton:SetOpacity(50);
+				local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_"..skill);
+				spellButton:SetTooltipText(reqTooltip);	
 			end
-		end
-		local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
-		if savedOption ~= "Spells for free" and not ml_tables.has_skills[skill] then
-			spellButton:SetDisabled(true);
-			local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_"..skill);
-			spellButton.uic:SetTooltipText(reqTooltip);	
-		end
-		--if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(loreTable, spellSlots[tonumber(string.match(spellSlotSelected, "%d"))]) and lore ~= "Lore of High Magic" then
-		--	for _, spell in ipairs(spellSlots) do
-		--		if tableContains(loreTable, spell) then
-		--			spellButton:SetDisabled(true);
-		--			spellButton.uic:SetTooltipText("You can only choose one spell from the "..lore..".");	
-		--		end
-		--	end
-		--end
-		spellButton:RegisterForClick(
-			function(context)
-				local spellSlots = updateSaveTable(spellButton.name, selectedSpellSlot, char);
-				createSpellSlotButtonContainer(char, spellSlots);
-				applySpellDisableEffect(char, spellSlots)
+			--[[
+			if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(loreTable, spellSlots[tonumber(string.match(spellSlotSelected, "%d"))]) and lore ~= "Lore of High Magic" then
+				for _, spell in ipairs(spellSlots) do
+					if tableContains(loreTable, spell) then
+						spellButton:SetDisabled(true);
+						spellButton.uic:SetTooltipText("You can only choose one spell from the "..lore..".");	
+					end
+				end
 			end
-		)
-		spellButtonList:AddComponent(spellButton);
+			--]]
+			--table.insert(spellButtons, spellButton);
+			core:remove_listener("ml_Listener_spellButton_"..spellButton:Id());
+			Util.registerForClick(spellButton, "ml_Listener_spellButton_"..spellButton:Id(),
+				function(context)
+					--mlLOG("registerForClick works")
+					--local spellButton = UIComponent(context.component);
+					mlLOG("registerForClick/spellButton = "..spellButton:Id())
+					local spellSlots = updateSaveTable(spellButton:Id(), selectedSpellSlot, char);
+					--mlLOG("updateSaveTable works")
+					createSpellSlotButtonContainer(char, spellSlots);
+					--mlLOG("createSpellSlotButtonContainer works")
+					applySpellDisableEffect(char, spellSlots)
+					--mlLOG("applySpellDisableEffect works")
+					--spellSlotSelected = nil;
+					--mlLOG("spellSlotSelected works")
+				end
+			)
+			spellButtonList:AddComponent(spellButton);
+		end
+	else
+		for skill, spell in pairs(loreTable) do
+			local spellButton = TextButton.new(spell, loreFrame, "TEXT", spell);
+			hideButtonSmoke(spellButton.uic);
+			spellButton:SetState("hover");
+			local index = string.match(selectedSpellSlot, "%d");
+			--# assume spellSlots: map<number, string>
+			spellButton.uic:SetTooltipText("Select "..spell.." to replace "..spellSlots[tonumber(index)]..".");	
+			spellButton:SetState("active");
+			--# assume spellSlots: vector<string>
+			for _, spellSlot in ipairs(spellSlots) do
+				if spellSlot == spell then
+					spellButton:SetDisabled(true);
+					spellButton.uic:SetTooltipText("This spell has already been selected.");	
+				end
+			end
+			local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
+			if savedOption ~= "Spells for free" and not ml_tables.has_skills[skill] then
+				spellButton:SetDisabled(true);
+				local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_"..skill);
+				spellButton.uic:SetTooltipText(reqTooltip);	
+			end
+			--[[
+			if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(loreTable, spellSlots[tonumber(string.match(spellSlotSelected, "%d"))]) and lore ~= "Lore of High Magic" then
+				for _, spell in ipairs(spellSlots) do
+					if tableContains(loreTable, spell) then
+						spellButton:SetDisabled(true);
+						spellButton.uic:SetTooltipText("You can only choose one spell from the "..lore..".");	
+					end
+				end
+			end
+			--]]
+			--table.insert(spellButtons, spellButton);
+			spellButton:RegisterForClick(
+				function(context)
+					local spellSlots = updateSaveTable(spellButton.name, selectedSpellSlot, char);
+					createSpellSlotButtonContainer(char, spellSlots);
+					applySpellDisableEffect(char, spellSlots)
+					--spellSlotSelected = nil;
+				end
+			)
+			spellButtonList:AddComponent(spellButton);
+		end
 	end
 	spellButtonContainer:AddComponent(spellButtonList);
 	spellButtonContainer:PositionRelativeTo(loreFrame, pX/2 + 35, dummyButtonY/4);
@@ -570,83 +627,152 @@ function createSpellButtonContainer(lore, selectedSpellSlot, char)
 end
 
 
---v function(buttons: vector<TEXT_BUTTON>, selectedSpellSlot: string, char: CA_CHAR)
+--v function(buttons: vector<TEXT_BUTTON | CA_UIC>, selectedSpellSlot: string, char: CA_CHAR)
 function setupSingleSelectedButtonGroup(buttons, selectedSpellSlot, char)
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
-	for _, button in ipairs(buttons) do
-		button:SetState("active");
-		button:RegisterForClick(
-			function(context)
-				for _, otherButton in ipairs(buttons) do
-					if button.name == otherButton.name then
-						otherButton:SetState("selected_hover");
-						otherButton.uic:SetTooltipText("Select your prefered spell of the "..button.name..".");
-					else
-						otherButton:SetState("hover");
-						otherButton.uic:SetTooltipText("Select the Lore of Magic you want to pick a spell from.");
-						otherButton:SetState("active");
+	if savedOption == "Multi-Colour" then
+		--#assume buttons: vector<CA_UIC>
+		for _, button in ipairs(buttons) do
+			--button = UIComponent(loreFrame.uic:Find(buttonID));
+			button:SetState("active");
+			core:remove_listener("ml_Listener_loreButton_"..button:Id());
+			Util.registerForClick(button, "ml_Listener_loreButton_"..button:Id(),
+				function(context)
+					for _, otherButton in ipairs(buttons) do
+						--otherButton = UIComponent(loreFrame.uic:Find(otherButtonID));
+						if button:Id() == otherButton:Id() then
+							otherButton:SetState("selected_hover");
+							otherButton:SetTooltipText("Select your prefered spell of the "..button:Id()..".");
+						else
+							otherButton:SetState("hover");
+							otherButton:SetTooltipText("Select the Lore of Magic you want to pick a spell from.");
+							otherButton:SetState("active");
+						end
 					end
+					mlLOG("registerForClick/loreButton = "..button:Id())
+					createSpellButtonContainer(button:Id(), selectedSpellSlot, char);
 				end
-				createSpellButtonContainer(button.name, selectedSpellSlot, char);
-			end
-		);
+			);
+		end
+	else
+		--#assume buttons: vector<TEXT_BUTTON>
+		for _, button in ipairs(buttons) do
+			button:SetState("active");
+			button:RegisterForClick(
+				function(context)
+					for _, otherButton in ipairs(buttons) do
+						if button.name == otherButton.name then
+							otherButton:SetState("selected_hover");
+							otherButton.uic:SetTooltipText("Select your prefered spell of the "..button.name..".");
+						else
+							otherButton:SetState("hover");
+							otherButton.uic:SetTooltipText("Select the Lore of Magic you want to pick a spell from.");
+							otherButton:SetState("active");
+						end
+					end
+					createSpellButtonContainer(button.name, selectedSpellSlot, char);
+				end
+			);
+		end
 	end
 end
 
 --v function(char: CA_CHAR, selectedSpellSlot: string)
 function createLoreButtonContainer(char, selectedSpellSlot)
 	if not returnButton then createReturnButton(char); end
-	if spellSlotButtonContainer then spellSlotButtonContainer:Clear(); end
+	spellSlotButtonContainer:Clear();
 	loreButtonList = ListView.new("LoreButtonList", loreFrame, "VERTICAL");
 	loreButtonList:Resize(pX/2 - 9, pY - dummyButtonY/2); -- width vslider 18
 	loreButtonContainer = Container.new(FlowLayout.VERTICAL);
-	local loreButtons = {} --: vector<TEXT_BUTTON>
+	local loreButtons = {} --:vector<TEXT_BUTTON | CA_UIC>
 	local loreEnable = {};
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
+	if savedOption == "Multi-Colour" then
 		for lore, _ in pairs(ml_tables.lores) do
 			local loreStr = string.gsub(lore, "Lore of ", "");
 			loreStr = string.gsub(loreStr, " Magic", "");
 			loreStr = string.lower(loreStr);
-			local loreButton 
-			if savedOption == "Multi-Colour" then
-				--#assume loreButton: COLOURED_TEXT_BUTTON
-				loreButton = ColouredTextButton.new(lore, loreFrame, "ui/templates/square_large_text_button_toggle_"..loreStr, lore);
-			else
-				--#assume loreButton: TEXT_BUTTON
-				loreButton = TextButton.new(lore, loreFrame, "TEXT_TOGGLE", lore);
+			--mlLOG(loreStr);
+			local loreButton = Util.createComponent(lore, loreFrame.uic, "ui/templates/square_large_text_button_toggle_"..loreStr); --"ui/templates/square_large_text_button_toggle_"..loreStr
+			loreButtonText = UIComponent(loreButton:Find("button_txt"));
+			loreButtonText:SetStateText(lore);
+			--mlLOG(loreStr.." works!");
+			hideButtonSmoke(loreButton);
+			--Util.registerComponent(lore, loreButton)
+			table.insert(loreButtons, loreButton);
+			loreButtonList:AddComponent(loreButton);
+		end	
+		setupSingleSelectedButtonGroup(loreButtons, selectedSpellSlot, char);
+		--#assume loreButtons: vector<CA_UIC>
+		local spellSlots = updateSaveTable(false, false, char);
+		for _, loreButton in ipairs(loreButtons) do
+			--loreButton = UIComponent(loreFrame.uic:Find(loreButtonID));
+			local indexStr = string.match(selectedSpellSlot, "%d");
+			--# assume spellSlots: map<number, string>
+			if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(ml_tables.lores[loreButton:Id()], spellSlots[tonumber(indexStr)]) and loreButton:Id() ~= "Lore of High Magic" then
+				--# assume spellSlots: vector<string>
+				for _, spell in ipairs(spellSlots) do
+					if tableContains(ml_tables.lores[loreButton:Id()], spell) then
+						loreButton:SetDisabled(true);
+						loreButton:SetOpacity(50);
+						loreButton:SetTooltipText("You can only choose one spell from the "..loreButton:Id()..".");	
+					end
+				end
+			elseif ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
+				local occupiedSlotCount = 0;
+				--# assume spellSlots: vector<string>
+				for _, spell in ipairs(spellSlots) do
+					if not string.find(spell, "Spell Slot") then
+						occupiedSlotCount = occupiedSlotCount + 1;
+					end
+				end
+				--# assume spellSlots: vector<string>
+				for _, spell in ipairs(spellSlots) do
+					--# assume spellSlots: map<number, string>
+					if not string.find(spell, "Spell Slot") and not tableContains(ml_tables.lores[loreButton:Id()], spell) and (occupiedSlotCount > 1 or (occupiedSlotCount == 1 and string.find(spellSlots[tonumber(indexStr)], "Spell Slot"))) then
+						loreButton:SetDisabled(true);
+						loreButton:SetOpacity(50);
+						loreButton:SetTooltipText("You can only choose spells from one lore of magic.");	
+					end
+				end
 			end
-			--#assume loreButton: TEXT_BUTTON
+		end
+	else
+		for lore, _ in pairs(ml_tables.lores) do
+			local loreButton = TextButton.new(lore, loreFrame, "TEXT_TOGGLE", lore);
 			hideButtonSmoke(loreButton.uic);
 			table.insert(loreButtons, loreButton);
 			loreButtonList:AddComponent(loreButton);
-			setupSingleSelectedButtonGroup(loreButtons, selectedSpellSlot, char);			
 		end
-	local spellSlots = updateSaveTable(false, false, char);
-	for _, loreButton in ipairs(loreButtons) do
-		local indexStr = string.match(selectedSpellSlot, "%d");
-		--# assume spellSlots: map<number, string>
-		if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(ml_tables.lores[loreButton.name], spellSlots[tonumber(indexStr)]) and loreButton.name ~= "Lore of High Magic" then
-			--# assume spellSlots: vector<string>
-			for _, spell in ipairs(spellSlots) do
-				if tableContains(ml_tables.lores[loreButton.name], spell) then
-					loreButton:SetDisabled(true);
-					loreButton.uic:SetTooltipText("You can only choose one spell from the "..loreButton.name..".");	
+		setupSingleSelectedButtonGroup(loreButtons, selectedSpellSlot, char);
+		--#assume loreButtons: vector<TEXT_BUTTON>
+		local spellSlots = updateSaveTable(false, false, char);
+		for _, loreButton in ipairs(loreButtons) do
+			local indexStr = string.match(selectedSpellSlot, "%d");
+			--# assume spellSlots: map<number, string>
+			if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(ml_tables.lores[loreButton.name], spellSlots[tonumber(indexStr)]) and loreButton.name ~= "Lore of High Magic" then
+				--# assume spellSlots: vector<string>
+				for _, spell in ipairs(spellSlots) do
+					if tableContains(ml_tables.lores[loreButton.name], spell) then
+						loreButton:SetDisabled(true);
+						loreButton.uic:SetTooltipText("You can only choose one spell from the "..loreButton.name..".");	
+					end
 				end
-			end
-		elseif ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
-			local occupiedSlotCount = 0;
-			--# assume spellSlots: vector<string>
-			for _, spell in ipairs(spellSlots) do
-				if not string.find(spell, "Spell Slot") then
-					occupiedSlotCount = occupiedSlotCount + 1;
+			elseif ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
+				local occupiedSlotCount = 0;
+				--# assume spellSlots: vector<string>
+				for _, spell in ipairs(spellSlots) do
+					if not string.find(spell, "Spell Slot") then
+						occupiedSlotCount = occupiedSlotCount + 1;
+					end
 				end
-			end
-			--# assume spellSlots: vector<string>
-			for _, spell in ipairs(spellSlots) do
-				--# assume spellSlots: map<number, string>
-				if not string.find(spell, "Spell Slot") and not tableContains(ml_tables.lores[loreButton.name], spell) and (occupiedSlotCount > 1 or (occupiedSlotCount == 1 and string.find(spellSlots[tonumber(indexStr)], "Spell Slot"))) then
-					loreButton:SetDisabled(true);
-					loreButton.uic:SetTooltipText("You can only choose spells from one lore of magic.");	
+				--# assume spellSlots: vector<string>
+				for _, spell in ipairs(spellSlots) do
+					--# assume spellSlots: map<number, string>
+					if not string.find(spell, "Spell Slot") and not tableContains(ml_tables.lores[loreButton.name], spell) and (occupiedSlotCount > 1 or (occupiedSlotCount == 1 and string.find(spellSlots[tonumber(indexStr)], "Spell Slot"))) then
+						loreButton:SetDisabled(true);
+						loreButton.uic:SetTooltipText("You can only choose spells from one lore of magic.");	
+					end
 				end
 			end
 		end
@@ -658,7 +784,7 @@ end
 
 createSpellSlotButtonContainer = function(char, spellSlots)
 	if returnButton then
-		if frameButtonContainer then frameButtonContainer:Clear(); end
+		frameButtonContainer:Clear();
 		returnButton = nil;
 		local closeButton = find_uicomponent(core:get_ui_root(), "Lore of MagicCloseButton");
 		local closeButtonX, closeButtonY = closeButton:Position();
@@ -669,41 +795,69 @@ createSpellSlotButtonContainer = function(char, spellSlots)
 	local spellSlotButtonList = ListView.new("SpellSlotButtonList", loreFrame, "VERTICAL");
 	local xOffset = 50; --default(wh1) button is too large
 	spellSlotButtonList:Resize(dummyButtonX + xOffset, pY - dummyButtonY/2); --(pX/2 - 13, pY - 40);
+	--Util.centreComponentOnComponent(spellSlotButtonList, loreFrame);
 	spellSlotButtonContainer = Container.new(FlowLayout.VERTICAL);
 	updateSkillTable(char);
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")	
-	for i, spellSlot in ipairs(spellSlots) do
-		local spellSlotButton
-		if savedOption == "Multi-Colour" then
-			--#assume spellSlotButton: COLOURED_TEXT_BUTTON
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
+	if savedOption == "Multi-Colour" then
+		for i, spellSlot in ipairs(spellSlots) do
+			--local spellSlotButton = TextButton.new("Spell Slot - "..i.." -", loreFrame, "TEXT", spellSlot);
+			local spellSlotButton --:CA_UIC
 			if string.find(spellSlot, "Spell Slot") then
-				spellSlotButton = ColouredTextButton.new("Spell Slot - "..i.." -", loreFrame, "ui/templates/square_large_text_button_grey", spellSlot);
+				spellSlotButton = Util.createComponent("Spell Slot - "..i.." -", loreFrame.uic, "ui/templates/square_large_text_button_grey"); --"ui/templates/square_large_text_button_toggle_"..loreStr
 			else
-				local loreStr = ml_tables.spellToLore[spellSlot]
+				local loreStr
 				if ml_tables.spellToLore[spellSlot] then
-					loreStr = string.gsub(loreStr, "Lore of ", "");
+					loreStr = string.gsub(ml_tables.spellToLore[spellSlot], "Lore of ", "");
 					loreStr = string.gsub(loreStr, " Magic", "");
 					loreStr = string.lower(loreStr);
-					spellSlotButton = ColouredTextButton.new("Spell Slot - "..i.." -", loreFrame, "ui/templates/square_large_text_button_"..loreStr, spellSlot);
+					spellSlotButton = Util.createComponent("Spell Slot - "..i.." -", loreFrame.uic, "ui/templates/square_large_text_button_"..loreStr); --"ui/templates/square_large_text_button_toggle_"..loreStr
 				end
 			end
-		else
-			--#assume spellSlotButton: TEXT_BUTTON
-			spellSlotButton = TextButton.new("Spell Slot - "..i.." -", loreFrame, "TEXT", spellSlot); 
-		end	
-		--#assume spellSlotButton: TEXT_BUTTON
-		hideButtonSmoke(spellSlotButton.uic);
-		spellSlotButton:RegisterForClick(
-			function(context)
-				createLoreButtonContainer(char, spellSlotButton.name);
-			end
-		)
-		spellSlotButtonList:AddComponent(spellSlotButton);
-		if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
-			if not ml_tables.has_skills["wh2_sm0_skill_magic_spell_slot_"..tostring(i)] then
-				spellSlotButton:SetDisabled(true);
-				local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_".."wh2_sm0_skill_magic_spell_slot_"..tostring(i));
-				spellSlotButton.uic:SetTooltipText(reqTooltip);	
+			--if is_uicomponent(spellSlotButton) then
+				spellSlotButtonText = UIComponent(spellSlotButton:Find("button_txt"));
+				spellSlotButtonText:SetStateText(spellSlot);
+				hideButtonSmoke(spellSlotButton);
+				--table.insert(spellSlotButtons, spellSlotButton);
+				core:remove_listener("ml_Listener_spellSlotButton_"..spellSlotButton:Id());
+				Util.registerForClick(spellSlotButton, "ml_Listener_spellSlotButton_"..spellSlotButton:Id(),
+					function(context)
+						--# assume context: CA_UIContext
+						--local spellSlotButton = UIComponent(context.component);
+						mlLOG("registerForClick/spellSlotButton = "..spellSlotButton:Id())
+						--spellSlotSelected = spellSlotButton:Id();
+						createLoreButtonContainer(char, spellSlotButton:Id());
+					end
+				)
+				spellSlotButtonList:AddComponent(spellSlotButton);
+				if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
+					if not ml_tables.has_skills["wh2_sm0_skill_magic_spell_slot_"..tostring(i)] then
+						spellSlotButton:SetDisabled(true);
+						spellSlotButton:SetOpacity(50);
+						local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_".."wh2_sm0_skill_magic_spell_slot_"..tostring(i));
+						spellSlotButton:SetTooltipText(reqTooltip);	
+					end
+				end
+			--end
+		end
+	else
+		for i, spellSlot in ipairs(spellSlots) do
+			local spellSlotButton = TextButton.new("Spell Slot - "..i.." -", loreFrame, "TEXT", spellSlot);
+			hideButtonSmoke(spellSlotButton.uic);
+			--table.insert(spellSlotButtons, spellSlotButton);
+			spellSlotButton:RegisterForClick(
+				function(context)
+					--spellSlotSelected = spellSlotButton.name;
+					createLoreButtonContainer(char,spellSlotButton.name);
+				end
+			)
+			spellSlotButtonList:AddComponent(spellSlotButton);
+			if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
+				if not ml_tables.has_skills["wh2_sm0_skill_magic_spell_slot_"..tostring(i)] then
+					spellSlotButton:SetDisabled(true);
+					local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_".."wh2_sm0_skill_magic_spell_slot_"..tostring(i));
+					spellSlotButton.uic:SetTooltipText(reqTooltip);	
+				end
 			end
 		end
 	end
@@ -808,7 +962,7 @@ function createOptionsFrame(char)
 		optionCloseButton:SetImage("ui/skins/default/icon_check.png");
 	end
 	local optionContainerV = Container.new(FlowLayout.VERTICAL);
-	local optionListV = ListView.new("optionListV", optionFrame, "VERTICAL");
+	local optionListV = ListView.new("SpellButtonList", optionFrame, "VERTICAL");
 	local skillOptionContainerH = Container.new(FlowLayout.HORIZONTAL);
 	local colourOptionContainerH = Container.new(FlowLayout.HORIZONTAL);
 	optionFrame:AddComponent(optionContainerV);
@@ -1161,8 +1315,10 @@ function setupInnateSpells(char)
 			if not tableContains(spellSlots, innateSpell) then
 				for i, spellSlot in ipairs(spellSlots) do
 					if string.find(spellSlot, "Spell Slot") then
+						spellSlotSelected = "Spell Slot - "..i.." -";
 						spellSlots = updateSaveTable(innateSpell, char);
 						applySpellDisableEffect(char, spellSlots)
+						spellSlotSelected = nil;
 						break;
 					end
 				end
@@ -1171,8 +1327,10 @@ function setupInnateSpells(char)
 	end
 	--]]
 	if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" and char:rank() == 1  then
+		--spellSlotSelected = "Spell Slot - ".."1".." -";
 		spellSlots = updateSaveTable(ml_tables.innateSpell, "Spell Slot - ".."1".." -", char);
 		applySpellDisableEffect(char, spellSlots)
+		--spellSlotSelected = nil
 	else
 		randomSpells(char)
 	end
@@ -1190,7 +1348,7 @@ function setupSavedOptions(char)
 	end
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
 	if not savedOption then
-		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option", "Single-Colour");
+		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option", "Multi-Colour");
 	end
 end
 
@@ -1233,7 +1391,9 @@ core:add_listener(
 							for _, newSpell in ipairs(newSpellSlots) do
 								for i, spellSlot in ipairs(spellSlots) do
 									if string.find(spellSlot, "Spell Slot") then
+										--spellSlotSelected = "Spell Slot - "..i.." -";
 										spellSlots = updateSaveTable(newSpell, "Spell Slot - "..i.." -", char);
+										--spellSlotSelected = nil;
 										break;	
 									end
 								end
@@ -1249,7 +1409,9 @@ core:add_listener(
 							for _, newSpell in ipairs(newSpellSlots) do
 								for i, spellSlot in ipairs(spellSlots) do
 									if string.find(spellSlot, "Spell Slot") and ml_tables.has_skills["wh2_sm0_skill_magic_spell_slot_"..i] then
+										--spellSlotSelected = "Spell Slot - "..i.." -";
 										spellSlots = updateSaveTable(newSpell, "Spell Slot - "..i.." -", char);
+										--spellSlotSelected = nil;
 										break;	
 									end
 								end
@@ -1341,6 +1503,7 @@ core:add_listener(
 						end
 						spellSlots = updateSaveTable(ml_tables.skillnames[context:skill_point_spent_on()], selectedSpellSlot, context:character());
 						applySpellDisableEffect(context:character(), spellSlots)
+						--spellSlotSelected = nil;
 						lorebuttonPulse();
 					end
 				end

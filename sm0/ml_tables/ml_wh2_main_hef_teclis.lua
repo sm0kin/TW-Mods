@@ -334,8 +334,8 @@ ml_tables.spells = {
 	["The Withering"] = "wh_dlc05_spell_shadow_the_withering"
 } 
 
---# assume ml_tables.loreName: map<string, string>
-ml_tables.loreName = {
+--# assume ml_tables.skillToLore: map<string, string>
+ml_tables.skillToLore = {
 	["wh2_main_skill_magic_beasts_flock_of_doom_lord"] = "Lore of Beasts",
 	["wh2_main_skill_magic_beasts_panns_impenetrable_pelt_lord"] = "Lore of Beasts",
 	["wh2_main_skill_magic_beasts_the_amber_spear_lord"] = "Lore of Beasts",
@@ -390,6 +390,64 @@ ml_tables.loreName = {
 	["wh2_main_skill_magic_shadow_pit_of_shades_lord"] = "Lore of Shadows",
 	["wh2_main_skill_magic_shadow_enfeebling_foe_lord"] = "Lore of Shadows",
 	["wh2_main_skill_magic_shadow_the_withering_lord"] = "Lore of Shadows"
+} 
+
+--# assume ml_tables.spellToLore: map<string, string>
+ml_tables.spellToLore = {
+	["Flock of Doom"] = "Lore of Beasts",
+	["Pann's Impenetrable Pelt"] = "Lore of Beasts",
+	["The Amber Spear"] = "Lore of Beasts",
+	["The Curse of Anraheir"] = "Lore of Beasts",
+	["Transformation of Kadon"] = "Lore of Beasts",
+	["Wyssan's Wildform"] = "Lore of Beasts",
+	["Aspect of the Dread Knight"] = "Lore of Death",
+	["Doom & Darkness"] = "Lore of Death",
+	["Soulblight"] = "Lore of Death",
+	["Spirit Leech"] = "Lore of Death",
+	["The Fate of Bjuna"] = "Lore of Death",
+	["The Purple Sun of Xereus"] = "Lore of Death",
+	["Cascading Fire-Cloak"] = "Lore of Fire",
+	["Fireball"] = "Lore of Fire",
+	["Flame Storm"] = "Lore of Fire",
+	["Flaming Sword of Rhuin"] = "Lore of Fire",
+	["Piercing Bolts of Burning"] = "Lore of Fire",
+	["The Burning Head"] = "Lore of Fire",
+	["Chain Lightning"] = "Lore of Heavens",
+	["Comet of Casandora"] = "Lore of Heavens",
+	["Curse of the Midnight Wind"] = "Lore of Heavens",
+	["Harmonic Convergence"] = "Lore of Heavens",
+	["Urannon's Thunderbolt"] = "Lore of Heavens",
+	["Wind Blast"] = "Lore of Heavens",
+	["Apotheosis"] = "Lore of High Magic",
+	["Arcane Unforging"] = "Lore of High Magic",
+	["Fiery Convocation"] = "Lore of High Magic",
+	["Hand of Glory"] = "Lore of High Magic",
+	["Soul Quench"] = "Lore of High Magic",
+	["Tempest"] = "Lore of High Magic",
+	["Awakening of the Wood"] = "Lore of Life",
+	["Earth Blood"] = "Lore of Life",
+	["Flesh to Stone"] = "Lore of Life",
+	["Regrowth"] = "Lore of Life",
+	["Shield of Thorns"] = "Lore of Life",
+	["The Dwellers Below"] = "Lore of Life",
+	["Banishment"] = "Lore of Light",
+	["Birona's Timewarp"] = "Lore of Light",
+	["Light of Battle"] = "Lore of Light",
+	["Net of Amyntok"] = "Lore of Light",
+	["Pha's Protection"] = "Lore of Light",
+	["Shem's Burning Gaze"] = "Lore of Light",
+	["Final Transmutation"] = "Lore of Metal",
+	["Gehenna's Golden Hounds"] = "Lore of Metal",
+	["Glittering Robe"] = "Lore of Metal",
+	["Plague of Rust"] = "Lore of Metal",
+	["Searing Doom"] = "Lore of Metal",
+	["Transmutation of Lead"] = "Lore of Metal",
+	["Melkoth's Mystifying Miasma"] = "Lore of Shadows",
+	["Okkam's Mindrazor"] = "Lore of Shadows",
+	["Pit of Shades"] = "Lore of Shadows",
+	["The Enfeebling Foe"] = "Lore of Shadows",
+	["The Penumbral Pendulum"] = "Lore of Shadows",
+	["The Withering"] = "Lore of Shadows"
 } 
 
 return ml_tables;

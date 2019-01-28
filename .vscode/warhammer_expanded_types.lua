@@ -12,4 +12,29 @@
 --# assume ml_tables.skillnames: map<string, string>
 --# assume ml_tables.effectBundles: map<string,string>
 --# assume ml_tables.spells: map<string, string>
---# assume ml_tables.loreName: map<string, string>
+--# assume ml_tables.skillToLore: map<string, string>
+--# assume ml_tables.spellToLore: map<string, string>
+--# assume ml_tables.innateSpell: string
+
+--# assume global ColouredTextButton: COLOURED_TEXT_BUTTON
+--# assume COLOURED_TEXT_BUTTON.new: function(name: string, parent: CA_UIC | COMPONENT_TYPE, path: string, text: string) --> COLOURED_TEXT_BUTTON
+--# assume COLOURED_TEXT_BUTTON.MoveTo: method(xPos: number, yPos: number)
+--# assume COLOURED_TEXT_BUTTON.Move: method(XMove: number, yMove: number)
+--# assume COLOURED_TEXT_BUTTON.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
+--# assume COLOURED_TEXT_BUTTON.Scale: method(factor:number)
+--# assume COLOURED_TEXT_BUTTON.Resize: method(width: number, height: number)
+--# assume COLOURED_TEXT_BUTTON.SetVisible: method(visible: boolean)
+--# assume COLOURED_TEXT_BUTTON.Visible: method() --> boolean
+--# assume COLOURED_TEXT_BUTTON.Position: method() --> (number, number)
+--# assume COLOURED_TEXT_BUTTON.Bounds: method() --> (number, number)
+--# assume COLOURED_TEXT_BUTTON.RegisterForClick: method(callback: function(context: CA_UIContext?))
+--# assume COLOURED_TEXT_BUTTON.SetDisabled: method(disabled: boolean)
+--# assume COLOURED_TEXT_BUTTON.GetContentComponent: method() --> CA_UIC
+--# assume COLOURED_TEXT_BUTTON.SetState: method(state: BUTTON_STATE)
+--# assume COLOURED_TEXT_BUTTON.Width: method() --> number
+--# assume COLOURED_TEXT_BUTTON.Height: method() --> number
+--# assume COLOURED_TEXT_BUTTON.XPos: method() --> number
+--# assume COLOURED_TEXT_BUTTON.YPos: method() --> number
+--# assume COLOURED_TEXT_BUTTON.Delete: method()
+--# assume COLOURED_TEXT_BUTTON.name: string
+--# assume COLOURED_TEXT_BUTTON.uic: CA_UIC

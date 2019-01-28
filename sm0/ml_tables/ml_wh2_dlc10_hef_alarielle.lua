@@ -10,7 +10,7 @@ ml_tables.default_rule = "TT 8th edition - Alarielle the Radiant";
     MAGIC
     Alarielle the Radiant [...]
     uses spells form the Lore of Life, the Lore of Light and the
-    Lore of High Magic[...]. She can generate all of
+    Lore of High Magic [...]. She can generate all of
     her spells from the same, or from two or more of the
     above lores in any combination. 
 --]]
@@ -135,6 +135,29 @@ ml_tables.spells = {
 	["Net of Amyntok"] = "wh_main_spell_light_net_of_amyntok",
 	["Pha's Protection"] = "wh_main_spell_light_phas_protection",
 	["Shem's Burning Gaze"] = "wh_main_spell_light_shems_burning_gaze"
+} 
+
+--# assume ml_tables.spellToLore: map<string, string>
+ml_tables.spellToLore = {
+	["Apotheosis"] = "Lore of High Magic",
+	["Arcane Unforging"] = "Lore of High Magic",
+	["Fiery Convocation"] = "Lore of High Magic",
+	["Hand of Glory"] = "Lore of High Magic",
+	["Soul Quench"] = "Lore of High Magic",
+	["Tempest"] = "Lore of High Magic",
+	["Awakening of the Wood"] = "Lore of Life",
+	["Earth Blood"] = "Lore of Life",
+	["Flesh to Stone"] = "Lore of Life",
+	["Regrowth"] = "Lore of Life",
+	["Shield of Thorns"] = "Lore of Life",
+	["The Dwellers Below"] = "Lore of Life",
+	["Banishment"] = "Lore of Light",
+	["Birona's Timewarp"] = "Lore of Light",
+	["Light of Battle"] = "Lore of Light",
+	["Net of Amyntok"] = "Lore of Light",
+	["Pha's Protection"] = "Lore of Light",
+	["Shem's Burning Gaze"] = "Lore of Light",
+	["Final Transmutation"] = "Lore of Metal"
 } 
 
 return ml_tables;

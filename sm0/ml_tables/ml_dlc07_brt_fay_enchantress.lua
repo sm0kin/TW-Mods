@@ -1,37 +1,28 @@
 local ml_tables = {}
 
 --# assume ml_tables.default_rule: string
-ml_tables.default_rule = "TT 6th edition - Slann";
+ml_tables.default_rule = "TT 6th edition - The Fay Enchantress";
 --[[
-	Lizardmen (6ed)
-	page: 49
-	SLANN GENERATIONS
-
-	FIFTH GENERATION
-	When a Slann Mage-Priest selects his spells before a battle
-	he is allowed more freedom than normal. He may use any
-	Lore from Warhammer rulebook. What's more, a single
-	Slann can choose from more than one Lore: instead of
-	being limited to just one. Truly these creatures are masters
-	of magic.
+	Bretonnia (6ed)
+	page: 77
+    The Fay Enchantress
+    
+    MAGIC
+	The Fay Enchantress [...] may use any of 
+	the eight lores from the warhammer rulebook.
 --]]
 
 --# assume ml_tables.default_option: string
-ml_tables.default_option = "Skill - based";
+ml_tables.default_option = "Spells for free";
 
 --# assume ml_tables.enableAllBundle: string
-ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all";
+ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all_fay";
+
+--# assume ml_tables.innateSpell: string
+ml_tables.innateSpell = "Earth Blood";
 
 --# assume ml_tables.lores: map<string, map<string, string>>
 ml_tables.lores = {
-	["Lore of High Magic"] = {
-		["wh2_main_skill_all_magic_high_02_apotheosis_slann"] = "Apotheosis",
-		["wh2_sm0_skill_magic_high_arcane_unforging"] = "Arcane Unforging",
-		["wh2_sm0_skill_magic_high_fiery_convocation"] = "Fiery Convocation",
-		["wh2_sm0_skill_magic_high_hand_of_glory"] = "Hand of Glory",
-		["wh2_main_skill_all_magic_high_01_soul_quench_slann"] = "Soul Quench",
-		["wh2_main_skill_all_magic_high_05_tempest_slann"] = "Tempest"
-	},
 	["Lore of Light"] = {		
 		["wh2_dlc10_skill_hef_magic_alarielle_banishment"] = "Banishment",
 		["wh2_main_skill_all_magic_light_10_bironas_timewarp_lord"] = "Birona's Timewarp",
@@ -53,7 +44,7 @@ ml_tables.lores = {
 		["wh2_main_skill_magic_beasts_panns_impenetrable_pelt_lord"] = "Pann's Impenetrable Pelt",
 		["wh2_main_skill_magic_beasts_the_amber_spear_lord"] = "The Amber Spear",
 		["wh2_main_skill_magic_beasts_the_curse_of_anraheir_lord"] = "The Curse of Anraheir",
-		["wh2_sm0_skill_magic_beasts_transformation_of_kadon"] = "Transformation of Kadon",
+		["wh2_main_skill_magic_beasts_transformation_of_kadon_lord"] = "Transformation of Kadon",
 		["wh_dlc03_skill_magic_beasts_wyssans_wildform"] = "Wyssan's Wildform"
 	},
 	["Lore of Fire"] = {	
@@ -100,60 +91,12 @@ ml_tables.lores = {
 
 --# assume ml_tables.has_skills: map<string, bool>
 ml_tables.has_skills = {
-	["wh2_main_skill_magic_beasts_flock_of_doom_lord"] = false,
-	["wh2_main_skill_magic_beasts_panns_impenetrable_pelt_lord"] = false,
-	["wh2_main_skill_magic_beasts_the_amber_spear_lord"] = false,
-	["wh2_main_skill_magic_beasts_the_curse_of_anraheir_lord"] = false,
-	["wh2_main_skill_magic_beasts_transformation_of_kadon_lord"] = false,
-	["wh_dlc03_skill_magic_beasts_wyssans_wildform"] = false,
-	["wh2_main_skill_all_magic_death_02_aspect_of_the_dreadknight_lord"] = false,
-	["wh2_main_skill_all_magic_death_05_doom_and_darkness_lord"] = false,
-	["wh2_main_skill_all_magic_death_04_soulblight_lord"] = false,
-	["wh2_dlc11_skill_vmp_bloodline_necrarch_magic_spirit_leech"] = false,
-	["wh2_main_skill_all_magic_death_09_the_fate_of_bjuna_lord"] = false,
-	["wh2_main_skill_all_magic_death_10_the_purple_sun_of_xereus_lord"] = false,
-	["wh2_main_skill_all_magic_fire_02_cascading_fire-cloak_lord"] = false,
-	["wh_main_skill_all_magic_fire_01_fireball"] = false,
-	["wh2_main_skill_all_magic_fire_10_flame_storm_lord"] = false,
-	["wh2_main_skill_all_magic_fire_03_flaming_sword_of_rhuin_lord"] = false,
-	["wh2_main_skill_all_magic_fire_09_piercing_bolts_of_burning_lord"] = false,
-	["wh2_main_skill_all_magic_fire_05_the_burning_head_lord"] = false,
-	["wh2_main_skill_all_magic_heavens_10_chain_lightning_lord"] = false,
-	["wh2_main_skill_all_magic_heavens_09_comet_of_casandora_lord"] = false,
-	["wh2_main_skill_all_magic_heavens_04_curse_of_the_midnight_wind_lord"] = false,
-	["wh_main_skill_all_magic_heavens_01_harmonic_convergence"] = false,
-	["wh2_main_skill_all_magic_heavens_05_urannons_thunderbolt_lord"] = false,
-	["wh2_main_skill_all_magic_heavens_02_wind_blast_lord"] = false,
-	["wh2_main_skill_all_magic_high_02_apotheosis_slann"] = false,
-	["wh2_sm0_skill_magic_high_arcane_unforging"] = false,
-	["wh2_sm0_skill_magic_high_fiery_convocation"] = false,
-	["wh2_sm0_skill_magic_high_hand_of_glory"] = false,
-	["wh2_main_skill_all_magic_high_01_soul_quench_slann"] = false,
-	["wh2_main_skill_all_magic_high_05_tempest_slann"] = false,
-	["wh2_sm0_skill_magic_life_awakening_of_the_wood"] = false,
-	["wh2_main_skill_magic_life_wizard_earth_blood_lord"] = false,
-	["wh2_main_skill_magic_life_wizard_flesh_to_stone_lord"] = false,
-	["wh2_main_skill_magic_life_wizard_regrowth_lord"] = false,
-	["wh2_main_skill_magic_life_wizard_shield_of_thorns_lord"] = false,
-	["wh2_main_skill_magic_life_wizard_the_dwellers_below_lord"] = false,
-	["wh2_dlc10_skill_hef_magic_alarielle_banishment"] = false,
-	["wh2_main_skill_all_magic_light_10_bironas_timewarp_lord"] = false,
-	["wh2_sm0_skill_magic_light_light_of_battle"] = false,
-	["wh2_main_skill_all_magic_light_05_net_of_amyntok_lord"] = false,
-	["wh2_main_skill_all_magic_light_02_phas_protection_lord"] = false,
-	["wh2_sm0_skill_magic_light_shems_burning_gaze"] = false,
-	["wh2_main_skill_all_magic_metal_10_final_transmutation_lord"] = false,
-	["wh2_main_skill_all_magic_metal_05_gehennas_golden_hounds_lord"] = false,
-	["wh2_main_skill_all_magic_metal_04_glittering_robe_lord"] = false,
-	["wh2_main_skill_all_magic_metal_02_plague_of_rust_lord"] = false,
-	["wh_main_skill_all_magic_metal_01_searing_doom"] = false,
-	["wh2_main_skill_all_magic_metal_09_transmutation_of_lead_lord"] = false,
-	["wh_dlc05_skill_magic_shadow_mystifying_miasma"] = false,
-	["wh2_main_skill_magic_shadow_okkams_mindrazor_lord"] = false,
-	["wh2_main_skill_magic_shadow_penumbral_pendulum_lord"] = false,
-	["wh2_main_skill_magic_shadow_pit_of_shades_lord"] = false,
-	["wh2_main_skill_magic_shadow_enfeebling_foe_lord"] = false,
-	["wh2_main_skill_magic_shadow_the_withering_lord"] = false
+	["wh2_sm0_skill_magic_spell_slot_1"] = false,
+	["wh2_sm0_skill_magic_spell_slot_2"] = false,
+	["wh2_sm0_skill_magic_spell_slot_3"] = false,
+	["wh2_sm0_skill_magic_spell_slot_4"] = false,
+	["wh2_sm0_skill_magic_spell_slot_5"] = false,
+	["wh2_sm0_skill_magic_spell_slot_6"] = false
 } 
 
 --# assume ml_tables.skillnames: map<string, string>
@@ -182,12 +125,6 @@ ml_tables.skillnames = {
 	["wh_main_skill_all_magic_heavens_01_harmonic_convergence"] = "Harmonic Convergence",
 	["wh2_main_skill_all_magic_heavens_05_urannons_thunderbolt_lord"] = "Urannon's Thunderbolt",
 	["wh2_main_skill_all_magic_heavens_02_wind_blast_lord"] = "Wind Blast",
-	["wh2_main_skill_all_magic_high_02_apotheosis_slann"] = "Apotheosis",
-	["wh2_sm0_skill_magic_high_arcane_unforging"] = "Arcane Unforging",
-	["wh2_sm0_skill_magic_high_fiery_convocation"] = "Fiery Convocation",
-	["wh2_sm0_skill_magic_high_hand_of_glory"] = "Hand of Glory",
-	["wh2_main_skill_all_magic_high_01_soul_quench_slann"] = "Soul Quench",
-	["wh2_main_skill_all_magic_high_05_tempest_slann"] = "Tempest",
 	["wh2_sm0_skill_magic_life_awakening_of_the_wood"] = "Awakening of the Wood",
 	["wh2_main_skill_magic_life_wizard_earth_blood_lord"] = "Earth Blood",
 	["wh2_main_skill_magic_life_wizard_flesh_to_stone_lord"] = "Flesh to Stone",
@@ -240,12 +177,6 @@ ml_tables.effectBundles = {
 	["Harmonic Convergence"] = "wh2_sm0_effect_bundle_disable_heavens_harmonic_convergence",
 	["Urannon's Thunderbolt"] = "wh2_sm0_effect_bundle_disable_heavens_urannons_thunderbolt",
 	["Wind Blast"] = "wh2_sm0_effect_bundle_disable_heavens_wind_blast",
-	["Apotheosis"] = "wh2_sm0_effect_bundle_disable_high_magic_apotheosis",
-	["Arcane Unforging"] = "wh2_sm0_effect_bundle_disable_high_magic_arcane_unforging",
-	["Fiery Convocation"] = "wh2_sm0_effect_bundle_disable_high_magic_fiery_convocation",
-	["Hand of Glory"] = "wh2_sm0_effect_bundle_disable_high_magic_hand_of_glory",
-	["Soul Quench"] = "wh2_sm0_effect_bundle_disable_high_magic_soul_quench",
-	["Tempest"] = "wh2_sm0_effect_bundle_disable_high_magic_tempest",
 	["Awakening of the Wood"] = "wh2_sm0_effect_bundle_disable_life_awakening_of_the_wood",
 	["Earth Blood"] = "wh2_sm0_effect_bundle_disable_life_earth_blood",
 	["Flesh to Stone"] = "wh2_sm0_effect_bundle_disable_life_flesh_to_stone",
@@ -298,12 +229,6 @@ ml_tables.spells = {
 	["Harmonic Convergence"] = "wh_main_spell_heavens_harmonic_convergence",
 	["Urannon's Thunderbolt"] = "wh_main_spell_heavens_urannons_thunderbolt",
 	["Wind Blast"] = "wh_main_spell_heavens_wind_blast",
-	["Apotheosis"] = "wh2_main_spell_high_magic_apotheosis",
-	["Arcane Unforging"] = "wh2_main_spell_high_magic_arcane_unforging",
-	["Fiery Convocation"] = "wh2_main_spell_high_magic_fiery_convocation",
-	["Hand of Glory"] = "wh2_main_spell_high_magic_hand_of_glory",
-	["Soul Quench"] = "wh2_main_spell_high_magic_soul_quench",
-	["Tempest"] = "wh2_main_spell_high_magic_tempest",
 	["Awakening of the Wood"] = "wh_dlc05_spell_life_awakening_of_the_wood",
 	["Earth Blood"] = "wh_dlc05_spell_life_earth_blood",
 	["Flesh to Stone"] = "wh_dlc05_spell_life_flesh_to_stone",
@@ -356,12 +281,6 @@ ml_tables.spellToLore = {
 	["Harmonic Convergence"] = "Lore of Heavens",
 	["Urannon's Thunderbolt"] = "Lore of Heavens",
 	["Wind Blast"] = "Lore of Heavens",
-	["Apotheosis"] = "Lore of High Magic",
-	["Arcane Unforging"] = "Lore of High Magic",
-	["Fiery Convocation"] = "Lore of High Magic",
-	["Hand of Glory"] = "Lore of High Magic",
-	["Soul Quench"] = "Lore of High Magic",
-	["Tempest"] = "Lore of High Magic",
 	["Awakening of the Wood"] = "Lore of Life",
 	["Earth Blood"] = "Lore of Life",
 	["Flesh to Stone"] = "Lore of Life",

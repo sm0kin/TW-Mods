@@ -9,9 +9,10 @@
 --# assume global class DUMMY
 --# assume global class UTIL
 --# assume global class COMPONENTS
+--# assume global class COLOURED_TEXT_BUTTON
 
 --# type global COMPONENT_TYPE = 
---# TEXT | IMAGE | BUTTON | TEXT_BUTTON | FRAME | TEXT_BOX | LIST_VIEW | DUMMY
+--# TEXT | IMAGE | BUTTON | TEXT_BUTTON | FRAME | TEXT_BOX | LIST_VIEW | DUMMY | COLOURED_TEXT_BUTTON
 
 --# type global BUTTON_TYPE = 
 --# "CIRCULAR" | "SQUARE" | "CIRCULAR_TOGGLE" | "SQUARE_TOGGLE"
@@ -108,6 +109,8 @@
 --# assume TEXT_BUTTON.SetState: method(state: BUTTON_STATE)
 --# assume TEXT_BUTTON.Width: method() --> number
 --# assume TEXT_BUTTON.Height: method() --> number
+--# assume TEXT_BUTTON.XPos: method() --> number
+--# assume TEXT_BUTTON.YPos: method() --> number
 --# assume TEXT_BUTTON.Delete: method()
 --# assume TEXT_BUTTON.SetButtonText: method(text: string) 
 
@@ -175,7 +178,10 @@
 --# assume LIST_VIEW.Delete: method()
 --# assume LIST_VIEW.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
 --# assume LIST_VIEW.MoveTo: method(x: number, y:number)
+--# assume LIST_VIEW.Move: method(xMove: number, yMove: number)
 --# assume LIST_VIEW.Position: method() --> (number, number)
+--# assume LIST_VIEW.Width: method() --> number
+--# assume LIST_VIEW.Height: method() --> number
 
 --sm0kin
 --# assume TEXT.uic: CA_UIC
@@ -198,7 +204,3 @@
 --# assume CONTAINER.SetVisible: method(visible: boolean)
 --# assume UTIL.createComponent: function(component: string, parent: CA_UIC, template_path: string) --> CA_UIC
 --# assume UTIL.registerForClick: function(component: CA_UIC, listener_name: string, callback: function(context: CA_UIContext?))
-
-
- --# assume BUTTON.SetTooltipText: method(tooltip: string)
- --# assume TEXT_BUTTON.SetTooltipText: method(tooltip: string)

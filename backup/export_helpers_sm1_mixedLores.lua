@@ -1190,7 +1190,7 @@ function setupSavedOptions(char)
 	end
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
 	if not savedOption then
-		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option", "Single-Colour");
+		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option", "Multi-Colour");
 	end
 end
 
