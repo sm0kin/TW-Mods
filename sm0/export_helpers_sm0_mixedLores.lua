@@ -1190,7 +1190,7 @@ function setupSavedOptions(char)
 	end
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
 	if not savedOption then
-		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option", "Single-Colour");
+		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option", "Multi-Colour");
 	end
 end
 
@@ -1697,6 +1697,7 @@ if cm:is_new_game() then
 	mlLOG_reset();
 	ml_setup(); 
 else
+	ml_setup(); 
 	local pb = cm:model():pending_battle();
 	if find_uicomponent(core:get_ui_root(), "popup_pre_battle") and pb and getmlChar() then
 		createloreButton_preBattle(pb:battle_type());

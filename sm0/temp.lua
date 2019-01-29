@@ -91,3 +91,6 @@ cm:show_message_event(
         --"[[col:" .. colour .. "]]" .. traitDescription .. traitEffectScopeDesc .. "[[/col]]";
 
        -- local divider = Image.new(name, parent, "ui/skins/default/separator_line.png")
+
+       Example usage: vfs.exists("script/docgen.lua") 
+        Returns true if that Lua file exists
