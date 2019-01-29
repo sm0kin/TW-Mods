@@ -17,5 +17,5 @@ require("sm0/ml_tables/ml_dlc03_bst_malagor")
 require("sm0/ml_tables/ml_dlc07_brt_fay_enchantress")
 --require("sm0/ml_coloured_text_button")
 
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_mixedLores")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_mixedLores")
 --require("sm0/ml_log")
