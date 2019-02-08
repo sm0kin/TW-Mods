@@ -94,3 +94,36 @@ cm:show_message_event(
 
        Example usage: vfs.exists("script/docgen.lua") 
         Returns true if that Lua file exists
+
+
+        local playerFaction = cm:get_faction(cm:get_local_faction(true));
+        cm:faction_set_food_factor_value(playerFaction:name(), "wh_dlc07_chivalry_events", 600);
+
+        CA MitchToday at 00:45
+You can use the FrontEnd script interface to do some stuff
+In WH you have these functions:
+[23:44.14]        frontend    table: 000000006FA23E50
+
+[23:44.14]                continue_campaign    function: 000000006FA32770
+
+[23:44.14]                campaign_saves_exist    function: 000000006FBB00E0
+
+[23:44.14]                start_named_battle    function: 000000006FB6CA20
+
+[23:44.14]                start_campaign    function: 000000000217FBE8
+
+[23:44.14]                load_campaign    function: 000000006F96F998
+
+[23:44.14]                campaign_saves_exist_mp    function: 000000006F9ACA40
+excuse formatting
+start campaign takes a key
+FrontEnd.start_campaign("key");
+Iv not used it, but might work..
+
+sm0kin01/02/2019
+There is no way use a mod to remove table entries another mod add to the game, right? e.g. special_ability_groups_to_unit_abilities_junctions
+Cataph01/02/2019
+no
+you'd have to redirect the main unit to a new land unit that doesn't have that stuff, for example
+
+

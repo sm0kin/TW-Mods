@@ -1144,8 +1144,8 @@ end
 --v function(char: CA_CHAR)
 function setupInnateSpells(char)
 	ml_tables = ml_force_require(char);
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
 	--[[
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
 	if savedOption ~= "Spells for free" then
 		randomSpells(char)
 		ml_tables = ml_force_require(char);
@@ -1688,7 +1688,7 @@ function ml_setup()
 		if is_mlChar(currentChar) then
 			ml_tables = ml_force_require(currentChar);
 			setupSavedOptions(currentChar);
-			setupInnateSpells(currentChar);
+			if cm:is_new_game() then setupInnateSpells(currentChar); end
 		end
 	end
 end

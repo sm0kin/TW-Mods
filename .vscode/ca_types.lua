@@ -227,6 +227,16 @@
 --#    otherName: string, age: int, male: boolean, agentKey: string, agent_subtypeKey: string, 
 --#    isImmortal: boolean, artSetId: string
 --#)
+--# assume CM.create_agent: method(
+--#     faction_key: string,
+--#     character_type: string,
+--#     character_subtype: string,
+--#     xPos: number,
+--#     yPos: number,
+--#     --agent_id: string,   --- @p string id, Unique string for agent.
+--#     use_command_queue: boolean,
+--#     success_callback: function(CA_CQI)
+--# )
 --spawn location finding
 --# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, settlement_key: string, rebellion_spawn: boolean, on_sea: boolean, rebel_spawn_distance: number?) --> (number, number)
 --# assume CM.find_valid_spawn_location_for_character_from_position: method(faction_key: string, x: number, y:number, on_sea: boolean) --> (number, number)
@@ -315,6 +325,17 @@
 --# assume CM.faction_add_pooled_resource: method(faction_key: string, pooled_resource: string, factor: string, quantity: number)
 --checks
 --# assume CM.char_is_mobile_general_with_army: method(char: CA_CHAR) --> boolean
+--# assume CM.char_in_owned_region: method(character: CA_CHAR) --> boolean
+--# assume CM.char_is_in_region_list: method(character: CA_CHAR) --> boolean
+--# assume CM.char_is_governor: method(character: CA_CHAR) --> boolean
+--# assume CM.char_is_general_with_navy: method(character: CA_CHAR) --> boolean
+--# assume CM.char_is_general_with_army: method(character: CA_CHAR) --> boolean
+--# assume CM.char_is_defeated_general: method(character: CA_CHAR) --> boolean
+--# assume CM.char_is_victorious_general: method(character: CA_CHAR) --> boolean
+--# assume CM.char_is_general: method(character: CA_CHAR) --> boolean
+--# assume CM.char_is_agent: method(character: CA_CHAR) --> boolean
+--# assume CM.char_has_navy: method(character: CA_CHAR) --> boolean
+--# assume CM.char_has_army: method(character: CA_CHAR) --> boolean
 --# assume CM.is_local_players_turn: method() --> boolean
 --model overrides
 --# assume CM.override_building_chain_display: method(building_chain: string, settlement_skin: string)
@@ -398,7 +419,7 @@
 --# assume CA_CHAR.has_skill: method(skill_key: string) --> boolean
 --# assume CA_CHAR.is_politician: method() --> boolean
 --# assume CA_CHAR.has_garrison_residence: method() --> boolean
-
+--# assume global Give_Trait: function(character: CA_CHAR, trait: string, _points: number?, _chance: number?)
 -- CHARACTER LIST
 --# assume CA_CHAR_LIST.num_items: method() --> number
 --# assume CA_CHAR_LIST.item_at: method(index: number) --> CA_CHAR

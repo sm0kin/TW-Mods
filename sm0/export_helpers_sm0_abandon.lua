@@ -25,7 +25,7 @@ local mcm = _G.mcm;
 if not not mcm then
     local abandon = mcm:register_mod("abandon_region", "Abandon Region", "Adds the possibility to abandon a settlement.");
     local restriction = abandon:add_tweaker("penalty", "Public Order - Penalty", "Enable/Disable the public order penalty for abandoning one of your regions.");
-    restriction:add_option("penalty", "Public Order  - Penalty", "If you choose to enact a scorched earth policy you have to suffer the consequences.");
+    restriction:add_option("penalty", "Public Order - Penalty", "If you choose to enact a scorched earth policy you have to suffer the consequences.");
 	restriction:add_option("nopenalty", "No Penalty", "Abandoning Regions has no consequences!");
 	mcm:add_post_process_callback(
 		function()
