@@ -24,6 +24,8 @@ require("sm0/unlocker_uc")
 --require("sm0/TEST/export_helpers_why_grudge")
 --require("sm0/TEST/export_helpers_whyll_defeated_traits")
 --require("sm0/TEST/export_helpers_vauls_anvil")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/ultimate_chaos")
+
 
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_dlc08_norscan_gods")

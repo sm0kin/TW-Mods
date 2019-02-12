@@ -11,6 +11,21 @@ function hideWizardButtons()
     );
 end
 
+function addChaosHordeBuildings()
+    local factionList = cm:model():world():faction_list();
+    for i = 0, factionList:num_items() - 1 do
+        local currentFaction = factionList:item_at(i);
+        if currentFaction:culture() == "wh_main_chs_chaos" then
+            local characterList = currentFaction:character_list();
+            for j = 0, characterList:num_items() - 1 do
+                local currentChar = characterList:item_at(j);
+                local mfCQI = currentChar:military_force():command_queue_index();
+                cm:add_building_to_force(mfCQI, "_steel_cult_1");
+            end
+        end
+    end
+end
+
 function ultimate_chaos()
     local playerFaction = cm:get_faction(cm:get_local_faction(true));
     if playerFaction:culture() == "wh_main_chs_chaos" then
@@ -36,5 +51,8 @@ function ultimate_chaos()
             end,
             true
         );
+    end
+    if cm:is_new_game() then
+        addChaosHordeBuildings()
     end
 end

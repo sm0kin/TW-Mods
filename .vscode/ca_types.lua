@@ -316,6 +316,8 @@
 --# assume CM.remove_event_restricted_unit_record_for_faction: method(unit: string, faction_key: string)
 --# assume CM.add_restricted_building_level_record: method(faction_key: string, building_key: string)
 --# assume CM.remove_restricted_building_level_record: method(faction_key: string, building_key: string)
+--buildings
+--# assume CM.add_building_to_force: method(cqi: CA_CQI, building_level: string | vector<string>)
 --rituals commands
 --# assume CM.set_ritual_unlocked: method(cqi: CA_CQI, rite_key: string, unlock: boolean)
 --# assume CM.set_ritual_chain_unlocked: method(cqi: CA_CQI, ritual_chain_key: string, unlock: boolean)
