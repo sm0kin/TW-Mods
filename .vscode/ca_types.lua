@@ -310,6 +310,8 @@
 --# assume CM.lock_technology: method(faction_key: string, tech_key: string)
 --# assume CM.unlock_starting_general_recruitment: method(startpos: string, faction: string)
 --# assume CM.unlock_technology: method(faction_key: string, tech_key: string)
+--# assume CM.add_event_restricted_building_record_for_faction: method(unit: string, faction_key: string)
+--# assume CM.remove_event_restricted_building_record_for_faction: method(unit: string, faction_key: string)
 --# assume CM.add_event_restricted_unit_record_for_faction: method(unit: string, faction_key: string)
 --# assume CM.remove_event_restricted_unit_record_for_faction: method(unit: string, faction_key: string)
 --# assume CM.add_restricted_building_level_record: method(faction_key: string, building_key: string)
@@ -576,6 +578,7 @@
 --# assume CA_FACTION.has_rituals: method() --> boolean
 --# assume CA_FACTION.holds_entire_province: method(province_key: string, include_vassals: boolean)
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
+--# assume CA_FACTION.imperium_level: method() --> number
 
 -- FACTION LIST
 --# assume CA_FACTION_LIST.num_items: method() --> number
