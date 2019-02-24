@@ -29,7 +29,7 @@ function unitCheat()
 						"wh2_pro06_tmb_mon_bone_giant_0",
 						"wh2_pro06_tmb_mon_bone_giant_0",
 						"wh2_pro06_tmb_mon_bone_giant_0",
-						"wh2_pro06_tmb_mon_bone_giant_0"};
+						"wh2_pro06_tmb_mon_bone_giant_0"} --:vector<string>
 	local DEFunitstring = {"wh2_main_def_inf_black_guard_0",
 						"wh2_main_def_inf_black_guard_0",
 						"wh2_main_def_inf_black_guard_0",
@@ -48,7 +48,7 @@ function unitCheat()
 						"wh2_main_def_mon_black_dragon",
 						"wh2_main_def_mon_black_dragon",
 						"wh2_main_def_mon_black_dragon",
-						"wh2_main_def_mon_black_dragon"};
+						"wh2_main_def_mon_black_dragon"} --:vector<string>
 						
 	local playerFaction = cm:get_faction(cm:get_local_faction(true));
 	if playerFaction:name() == "wh2_dlc09_tmb_khemri" then

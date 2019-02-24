@@ -229,49 +229,13 @@ end
 
 function ci_setup()
 	if cm:is_new_game() then					-- Initialize Values
-		cm:set_saved_value("chaos_first_wave_turn", false);
-		cm:set_saved_value("chaos_second_wave_turn", false);
+		cm:set_saved_value("chaos_first_wave_turn", 150);
+		cm:set_saved_value("chaos_second_wave_turn", 200);
 		cm:set_saved_value("chaos_first_wave_spawned", false);
 		cm:set_saved_value("chaos_second_wave_spawned", false);
-		cm:set_saved_value("chaos_invasion_dilemma", true);			-- Set to false before Turn 3 to disable the Dilemma from appearing
 		cm:set_saved_value("check_imperium_level", true);
 	end
 	
-	-- Trigger the Chaos Invasion Dilemma, check for whether a faction exists that is human, not Chaos and if so, wait until turn 3 to trigger the Chaos Invasion Dilemma
-	core:add_listener(
-		"Chaos_Invasion_Dilemma",
-		"FactionTurnStart",
-		function(context) return context:faction():is_human() and context:faction():culture() ~= "wh_main_chs_chaos" and cm:model():turn_number() >= 3 and cm:get_saved_value("chaos_invasion_dilemma") end,
-		function(context) cm:trigger_dilemma(player_1:name(), "wh_main_dilemma_chaos_invasion", true) end,
-		false
-	);
-	
-	-- Listen to the Chaos Invasion Dilemma Choice result and define the Chaos Invasion trigger conditions
-	core:add_listener(
-		"Chaos_Invasion_Dilemma_Choice",
-		"DilemmaChoiceMadeEvent",
-		function(context) return context:dilemma() == "wh_main_dilemma_chaos_invasion" end,
-		function(context)
-			local choice = context:choice();
-			
-			if choice == 0 then
-				cm:set_saved_value("chaos_first_wave_turn", 150);
-				cm:set_saved_value("chaos_second_wave_turn", 200);
-			elseif choice == 1 then
-				cm:set_saved_value("chaos_first_wave_spawned", true);
-				cm:set_saved_value("chaos_second_wave_spawned", true);
-			elseif choice == 2 then
-				cm:set_saved_value("chaos_first_wave_turn", 100);
-				cm:set_saved_value("chaos_second_wave_turn", 150);
-				cm:set_saved_value("check_imperium_level", false);
-			else
-				cm:set_saved_value("chaos_first_wave_turn", 150);
-				cm:set_saved_value("chaos_second_wave_turn", 200);
-				cm:set_saved_value("check_imperium_level", false);
-			end
-		end,
-		false
-	);
 	
 	-- Trigger the Chaos Invasion under the correct conditions
 	core:add_listener(

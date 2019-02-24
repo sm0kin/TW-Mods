@@ -36,6 +36,7 @@
 --# assume global class CA_UNIT
 --# assume global class CA_UNIT_LIST
 --# assume global class CA_POOLED
+--# assume global class CA_POOLED_LIST
 --# assume global class CA_FACTION_RITUALS
 --# assume global class CA_RITUAL
 --# assume global class CA_RITUAL_LIST
@@ -55,7 +56,7 @@
 --# type global BUTTON_STATE = 
 --# "active" | "hover" | "down" | 
 --# "selected" | "selected_hover" | "selected_down" |
---# "drop_down"
+--# "drop_down" | "inactive"
 
 --# type global BATTLE_SIDE =
 --# "Attacker" | "Defender" 
@@ -152,6 +153,7 @@
 --#     delay: number?,
 --#     name: string?
 --# )
+--# assume CM.add_first_tick_callback_sp_each: method(callback: function)
 --# assume CM.remove_callback: method(name: string)
 --# assume CM.repeat_callback: method(
 --#     callback: function(),
@@ -160,7 +162,7 @@
 --# )
 --# assume CM.add_turn_countdown_event: method(faction_name: string, turn_offset: number, event_name: string, context_str: string?)
 --random number
---# assume CM.random_number: method(num: number | int, max: number?) --> number | int
+--# assume CM.random_number: method(max: number | int, min: number? | int?) --> number | int
 --message events
 --# assume CM.show_message_event_located: method(
 --#     faction_key: string,
@@ -170,7 +172,9 @@
 --#     location_x: number,
 --#     location_y: number,
 --#     show_immediately: boolean,
---#     event_picture_id: number
+--#     event_picture_id: number,
+--#     callback: (function())?,
+--#     callback_delay: number?
 --#)
 --# assume CM.show_message_event: method(
 --#    faction_key: string,
@@ -189,7 +193,10 @@
 --# assume CM.force_add_skill: method(lookup: string, skill_key: string)
 --# assume CM.force_reset_skills: method(lookup: string)
 --# assume CM.force_add_and_equip_ancillary: method(lookup: string, ancillary: string)
---# assume CM.force_add_ancillary: method(character: string, ancillary_key: string)
+--# assume CM.force_add_ancillary: method(lookup: string, ancillary: string)
+--# assume CM.force_remove_ancillary: method(lookup: string, ancillary: string, removeToPool: bool)
+--# assume CM.force_remove_ancillary_from_faction: method(factionKey: string, ancillary: string)
+--# assume CM.add_ancillary_to_faction: method(factionKey: string, ancillary: string, displayEvent: bool)
 --More character commands
 --# assume CM.award_experience_level: method(char_lookup_str: string, level: int)
 --# assume CM.kill_character: method(lookup: CA_CQI, kill_army: boolean, throughcq: boolean)
@@ -211,7 +218,7 @@
 --#     family_name: string,
 --#     other_name: string,
 --#     make_faction_leader: boolean,
---#     success_callback: function(CA_CQI)
+--#     success_callback: (function(CA_CQI))?
 --# )
 --# assume CM.create_force: method(
 --#     faction_key: string,
@@ -223,20 +230,39 @@
 --#     success_callback: (function(CA_CQI))?
 --# )
 --# assume CM.spawn_character_to_pool: method(
---#    factionKey: string, forname: string, familyName: string, clanName: string, 
---#    otherName: string, age: int, male: boolean, agentKey: string, agent_subtypeKey: string, 
---#    isImmortal: boolean, artSetId: string
---#)
---# assume CM.create_agent: method(
---#     faction_key: string,
---#     character_type: string,
---#     character_subtype: string,
---#     xPos: number,
---#     yPos: number,
---#     --agent_id: string,   --- @p string id, Unique string for agent.
---#     use_command_queue: boolean,
---#     success_callback: function(CA_CQI)
+--#    faction_key: string,
+--#    forename: string,
+--#    family_name: string,
+--#    clanName: string,
+--#    otherName: string,
+--#    age: int,
+--#    is_male: boolean,
+--#    agent_type: string,
+--#    agent_subtype: string, 
+--#    is_immortal: boolean,
+--#    art_set_id: string
 --# )
+--# assume CM.create_agent: method(
+--#    faction_key: string,
+--#    agent_type: string,
+--#    agent_subtype: string,
+--#    x: number,
+--#    y: number,
+--#    command_queue: boolean,
+--#    success_callback: (function(CA_CQI))?
+--# )
+--# assume CM.create_force_with_existing_general: method(
+--#    charlookup: string,
+--#    factionKey: string,
+--#    armyList: string,
+--#    regionKey: string,
+--#    xPos: number,
+--#    yPos: number,
+--#    success_callback: (function(CA_CQI))?
+--# )
+--# assume CM.force_attack_of_opportunity: method(attacking_mf: CA_CQI, defending_mf: CA_CQI, thruCq: bool)
+--# assume CM.pending_battle_cache_is_quest_battle: method() --> boolean
+--# assume CM.add_first_tick_callback: method(function)
 --spawn location finding
 --# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, settlement_key: string, rebellion_spawn: boolean, on_sea: boolean, rebel_spawn_distance: number?) --> (number, number)
 --# assume CM.find_valid_spawn_location_for_character_from_position: method(faction_key: string, x: number, y:number, on_sea: boolean) --> (number, number)
@@ -296,6 +322,8 @@
 --Region Commands
 --# assume CM.transfer_region_to_faction: method(region: string, faction:string)
 --# assume CM.set_region_abandoned: method(region: string)
+--# assume CM.set_public_order_disabled_for_province_for_region_for_all_factions_and_set_default: method(region_key: string, bool: boolean)
+--# assume CM.exempt_province_from_tax_for_all_factions_and_set_default: method(region_key: string, bool: boolean)
 --autoresolve
 --# assume CM.win_next_autoresolve_battle: method(faction: string)
 --# assume CM.modify_next_autoresolve_battle: method(attacker_win_chance: number, defender_win_chance: number, attacker_losses_modifier: number, defender_losses_modifier: number, wipe_out_loser: boolean)
@@ -308,6 +336,7 @@
 --# assume CM.complete_scripted_mission_objective: method(mission_key: string, objective_key: string, success: boolean)
 --locks and unlocks
 --# assume CM.lock_technology: method(faction_key: string, tech_key: string)
+--# assume CM.restrict_technologies_for_faction: method(factionKey: string, techList: vector<string>, disable: boolean)
 --# assume CM.unlock_starting_general_recruitment: method(startpos: string, faction: string)
 --# assume CM.unlock_technology: method(faction_key: string, tech_key: string)
 --# assume CM.add_event_restricted_building_record_for_faction: method(unit: string, faction_key: string)
@@ -341,8 +370,39 @@
 --# assume CM.char_has_navy: method(character: CA_CHAR) --> boolean
 --# assume CM.char_has_army: method(character: CA_CHAR) --> boolean
 --# assume CM.is_local_players_turn: method() --> boolean
+
 --model overrides
---# assume CM.override_building_chain_display: method(building_chain: string, settlement_skin: string)
+--# assume CM.override_building_chain_display: method(building_chain: string, settlement_skin: string, region_name: string)
+--aux
+--# assume CM.show_shroud: method(opt: boolean)
+--# assume CM.end_turn: method(opt: boolean)
+--# assume CM.whitelist_event_feed_event_type: method(event_type: string)
+--battle stuff
+--# assume CM.add_custom_battlefield: method(
+--#     id: string,
+--#     xPos: number,
+--#     yPos: number,
+--#     radius: number,
+--#     dump_campaign: boolean,
+--#     loading_override: string,
+--#     script_override: string,
+--#     battle_override: string,
+--#     player_alliance: number,
+--#     launch_immediately: boolean,
+--#     is_land_battle: boolean,
+--#     force_autoresolve: boolean
+--#)
+--# assume CM.remove_custom_battlefield: method(id: string)
+-- campaign markers
+--# assume CM.add_interactable_campaign_marker: method(
+--#    uniqueID: string,
+--#    markerKey: string,
+--#    xPos: number,
+--#    yPos: number,
+--#    radius: number,
+--#    factionKey: string?,
+--#    subcultureKey: string?
+--# )
 
 -- CAMPAIGN UI MANAGER
 --# assume CUIM.get_char_selected: method() --> string
@@ -354,6 +414,8 @@
 --# assume CUIM.get_char_selected_cqi: method() --> CA_CQI
 --# assume CUIM_OVERRIDE.lock_ui: method()
 --# assume CUIM_OVERRIDE.unlock_ui: method(force: bool, silent: bool)
+--# assume CUIM.is_char_selected_from_faction: method(factionKey: string) --> bool
+--# assume CUIM.suppress_end_of_turn_warning: method(warning: string, disable: bool)
 
 -- CAMPAIGN UI MANAGER OVERRIDES
 --# assume CUIM_OVERRIDE.set_allowed: method(allowed: bool)
@@ -423,7 +485,15 @@
 --# assume CA_CHAR.has_skill: method(skill_key: string) --> boolean
 --# assume CA_CHAR.is_politician: method() --> boolean
 --# assume CA_CHAR.has_garrison_residence: method() --> boolean
---# assume global Give_Trait: function(character: CA_CHAR, trait: string, _points: number?, _chance: number?)
+--# assume CA_CHAR.has_region: method() --> boolean 
+--# assume CA_CHAR.is_besieging: method() --> boolean
+--# assume CA_CHAR.is_blockading: method() --> boolean
+--# assume CA_CHAR.performed_action_this_turn: method() --> boolean
+--# assume CA_CHAR.is_ambushing: method() --> boolean
+--# assume CA_CHAR.turns_in_own_regions: method() --> int
+--# assume CA_CHAR.turns_in_enemy_regions: method() --> int
+--# assume CA_CHAR.is_at_sea: method() --> boolean
+--# assume CA_CHAR.is_embedded_in_military_force: method() --> boolean
 -- CHARACTER LIST
 --# assume CA_CHAR_LIST.num_items: method() --> number
 --# assume CA_CHAR_LIST.item_at: method(index: number) --> CA_CHAR
@@ -478,6 +548,8 @@
 --# assume CA_REGION.resource_exists: method(resource_key: string) --> boolean
 --# assume CA_REGION.any_resource_available: method() --> boolean
 --# assume CA_REGION.adjacent_region_list: method() --> CA_REGION_LIST
+--# assume CA_REGION.logical_position_x: method() --> number
+--# assume CA_REGION.logical_position_y: method() --> number
 
 --REGION LIST
 --# assume CA_REGION_LIST.num_items: method() --> number
@@ -575,12 +647,14 @@
 --# assume CA_FACTION.factions_at_war_with: method() --> CA_FACTION_LIST
 --# assume CA_FACTION.at_war: method() --> boolean
 --# assume CA_FACTION.has_pooled_resource: method(resource: string) --> boolean
+--# assume CA_FACTION.pooled_resources: method() --> CA_POOLED_LIST
 --# assume CA_FACTION.pooled_resource: method(resource: string) --> CA_POOLED
 --# assume CA_FACTION.rituals: method() --> CA_FACTION_RITUALS
 --# assume CA_FACTION.has_rituals: method() --> boolean
 --# assume CA_FACTION.holds_entire_province: method(province_key: string, include_vassals: boolean)
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
 --# assume CA_FACTION.imperium_level: method() --> number
+--# assume CA_FACTION.factions_of_same_subculture: method() --> CA_FACTION_LIST
 
 -- FACTION LIST
 --# assume CA_FACTION_LIST.num_items: method() --> number
@@ -601,6 +675,10 @@
 --# assume CA_PENDING_BATTLE.contested_garrison: method() --> CA_GARRISON_RESIDENCE
 --# assume CA_PENDING_BATTLE.battle_type: method() --> BATTLE_TYPE
 --# assume CA_PENDING_BATTLE.is_active: method() --> boolean
+--# assume CA_PENDING_BATTLE.has_attacker: method() --> boolean
+--# assume CA_PENDING_BATTLE.has_defender: method() --> boolean
+--# assume CA_PENDING_BATTLE.attacker_battle_result: method() --> string
+--# assume CA_PENDING_BATTLE.defender_battle_result: method() --> string
 
 -- CORE
 --# assume CORE.get_ui_root: method() --> CA_UIC
@@ -617,9 +695,21 @@
 --# assume CORE.trigger_event: method(event_name: string, any...)
 --# assume CORE.add_static_object: method(name: string, value: any, override: boolean?)
 --# assume CORE.is_campaign: method() --> boolean
+--# assume CORE.cache_and_set_tooltip_for_component_state: method(component: CA_UIC, state: BUTTON_STATE, ui_tr: string)
+
+-- POOLED RESOURCE LIST
+--# assume CA_POOLED_LIST.is_empty: method() --> boolean
+--# assume CA_POOLED_LIST.item_at: method(index: number) --> CA_POOLED
+--# assume CA_POOLED_LIST.num_items: method() --> number
 
 -- POOLED RESOURCE
 --# assume CA_POOLED.value: method() --> number
+--# assume CA_POOLED.key: method() --> string
+--# assume CA_POOLED.maxium_value: method() --> number
+--# assume CA_POOLED.number_of_effect_types: method() --> number
+--# assume CA_POOLED.active_effect: method() --> WHATEVER
+--# assume CA_POOLED.minimum_value: method() --> number
+--# assume CA_POOLED.percentage_of_capacity: method() --> number
 
 -- FACTION RITUALS
 --# assume CA_FACTION_RITUALS.active_rituals: method() --> CA_RITUAL_LIST
@@ -639,7 +729,7 @@
 --# assume CA_RITUAL.ritual_category: method() --> string
 
 -- RITUAL LIST
---# assume CA_RITUAL_LIST.item_at: method(i: int) --> CA_RITUAL
+--# assume CA_RITUAL_LIST.item_at: method(index: number) --> CA_RITUAL
 --# assume CA_RITUAL_LIST.is_empty: method() --> boolean
 --# assume CA_RITUAL_LIST.num_items: method() --> int
 
@@ -652,7 +742,7 @@
 --# assume global out: function(out: string | number)  
 --# assume global print_all_uicomponent_children: function(component: CA_UIC)
 --# assume global is_uicomponent: function(object: any) --> boolean
---# assume global output_uicomponent: function(uic: CA_UIC, omit_children: boolean)
+--# assume global output_uicomponent: function(uic: CA_UIC, omit_children: boolean?)
 --# assume global wh_faction_is_horde: function(faction: CA_FACTION) --> boolean
 --# assume global uicomponent_to_str: function(component: CA_UIC) --> string
 --# assume global is_string: function(arg: string) --> boolean
@@ -667,6 +757,8 @@
 --# assume global force_require: function(file: string)
 --# assume global highlight_component: function(value: bool, is_square: bool, string...)
 --# assume global pulse_uicomponent: function(uic: CA_UIC, should_pulse: bool, brightness_modifier: number?, propagate: bool?, state_name: BUTTON_STATE?) --buttons: brightness_modifier = 10, frames: brightness_modifier = 5
+--# assume global is_valid_spawn_point: function(x: number, y: number) --> boolean
+--# assume global Give_Trait: function(character: CA_CHAR, trait: string, _points: number?, _chance: number?)
 
 -- CAMPAIGN
 --# assume global get_cm: function() --> CM
@@ -724,7 +816,7 @@
 --# assume RAM.new_force: method(key: string)
 --# assume RAM.add_mandatory_unit: method(forcekey: string, unitkey: string, q: number)
 --# assume RAM.add_unit: method(forcekey: string, unitkey: string, q: number)
---# assume RAM.generate_force: method(id: string, sizes: {number, number}) --> string
+--# assume RAM.generate_force: method(id: string, sizes: {number, number}, is_table: boolean) --> string
 
 -- CAMPAIGN CUTSCENE OBJECT
 --# assume global class CA_CUTSCENE
@@ -748,7 +840,8 @@
 --# assume INVASION.apply_effect: method(effect_key: string, turns: number)
 --# assume INVASION.add_character_experience: method(quanity: number)
 --# assume INVASION.add_unit_experience: method(quantity: number)
---# assume INVASION.start_invasion: method(callback: function?, declare_war: boolean?, invite_attacker_allies: boolean?, invite_defender_allies: boolean?)
+--# assume INVASION.start_invasion: method(callback: function(self: WHATEVER), declare_war: boolean?, invite_attacker_allies: boolean?, invite_defender_allies: boolean?)
+--# assume INVASION.kill: method(general_only: bool)
 
 -- INTERVENTION MANAGER
 --# assume IM.lock_ui: method(bool, bool)

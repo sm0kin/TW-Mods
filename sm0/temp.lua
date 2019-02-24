@@ -127,3 +127,7 @@ no
 you'd have to redirect the main unit to a new land unit that doesn't have that stuff, for example
 
 
+bm:modify_battle_speed(1);	-- 2 == double, 0.5 == half the normal speed
+
+
+core_object:svr_save_registry_bool(name, value)
