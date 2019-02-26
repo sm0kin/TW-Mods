@@ -22,7 +22,11 @@ require("sm0/ml_tables/ml_dlc07_brt_fay_enchantress")
 --require("sm0/ml_coloured_text_button")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_mixedLores")
 
-require("sm0/campaign/mod/unlocker_uc")
+--require("sm0/campaign/mod/unlocker_uc")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/unlocker_uc")
+--require("sm0/TEST/unlocker_uc/campaign/mod/ultimate_chaos")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/ultimate_chaos")
+
 
 --require("sm0/ml_log")
 -- other modders
@@ -32,7 +36,6 @@ require("sm0/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/ultimate_chaos")
 
 
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_dlc08_norscan_gods")
 
 require("sm0/battle_speed")
