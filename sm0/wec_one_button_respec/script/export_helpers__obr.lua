@@ -85,9 +85,7 @@ function llr.create_button(cqi)
         llr.button:MoveTo(effects_window_XPos + effects_window:Width() / 2 - llr.button:Width() / 2, llr.button:YPos())
         if cm:get_saved_value("llr_respec_" .. tostring(cqi)) then
             llr.button:SetDisabled(true)
-            llr.button.uic:SetTooltipText(
-                "[[col:red]]You have already respec'd this lord. This cannot be done twice! [[/col]]"
-            )
+            llr.button.uic:SetTooltipText("[[col:red]]You have already respec'd this lord. This cannot be done twice! [[/col]]")
         else
             llr.button:SetState("hover")
             llr.button.uic:SetTooltipText("[[col:green]]Respec your Lord. This can only be done once! [[/col]]")
