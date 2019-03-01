@@ -230,7 +230,7 @@ end
 function resetSaveTable(char)
 	local spellSlots = {"Spell Slot - 1 -", "Spell Slot - 2 -", "Spell Slot - 3 -", "Spell Slot - 4 -", "Spell Slot - 5 -", "Spell Slot - 6 -"} --:vector<string>
 	local saveString = "return {"..cm:process_table_save(spellSlots).."}";
-	cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_spellSlots", saveString);
+	cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_spellSlots", saveString);
 end
 
 --v function() --> CA_CHAR					
@@ -354,8 +354,8 @@ end
 
 --v function(char: CA_CHAR, spellSlots: vector<string>)					
 function applySpellDisableEffect(char, spellSlots)
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
-	local charCqi = char:cqi();
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
+	local charCqi = char:command_queue_index();
 	ml_tables = ml_force_require(char);
 	if ml_tables then
 		if savedOption == "Spells for free" and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
@@ -378,17 +378,17 @@ end
 
 --v [NO_CHECK] function(spellName: any, selectedSpellSlot: any, char: CA_CHAR) --> vector<string>
 function updateSaveTable(spellName, selectedSpellSlot, char)
-	local savedValue = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_spellSlots");
+	local savedValue = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_spellSlots");
 	if not savedValue then
 		resetSaveTable(char);
 	end
-	local spellSlots = loadstring(cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_spellSlots"))();
+	local spellSlots = loadstring(cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_spellSlots"))();
 	if spellName and selectedSpellSlot then
 		for i, spellSlot in ipairs(spellSlots) do
 			if  "Spell Slot - "..i.." -" == selectedSpellSlot then
 				spellSlots[i] = spellName;
 				local saveString = "return {"..cm:process_table_save(spellSlots).."}";
-				cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_spellSlots", saveString);
+				cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_spellSlots", saveString);
 			end
 		end
 	end
@@ -411,7 +411,7 @@ function randomSpells(char)
 	local skillPool = {};
 	ml_tables = ml_force_require(char);
 	updateSkillTable(char);
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option");
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option");
 	if savedOption == "Spells for free" then
 		for skill, _ in pairs(ml_tables.has_skills) do
 			table.insert(skillPool, skill);
@@ -509,7 +509,7 @@ function createSpellButtonContainer(lore, selectedSpellSlot, char)
 	spellButtonList:Resize(pX/2 - 18, pY - dummyButtonY/2);
 	spellButtonContainer = Container.new(FlowLayout.VERTICAL);	
 	local spellSlots = updateSaveTable(false, false, char);
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option")
 	local loreStr
 	if savedOption == "Multi-Colour" then
 		if lore then
@@ -541,7 +541,7 @@ function createSpellButtonContainer(lore, selectedSpellSlot, char)
 				spellButton.uic:SetTooltipText("This spell has already been selected.");	
 			end
 		end
-		local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
+		local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 		if savedOption ~= "Spells for free" and not ml_tables.has_skills[skill] then
 			spellButton:SetDisabled(true);
 			local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_"..skill);
@@ -572,7 +572,7 @@ end
 
 --v function(buttons: vector<TEXT_BUTTON>, selectedSpellSlot: string, char: CA_CHAR)
 function setupSingleSelectedButtonGroup(buttons, selectedSpellSlot, char)
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option")
 	for _, button in ipairs(buttons) do
 		button:SetState("active");
 		button:RegisterForClick(
@@ -602,7 +602,7 @@ function createLoreButtonContainer(char, selectedSpellSlot)
 	loreButtonContainer = Container.new(FlowLayout.VERTICAL);
 	local loreButtons = {} --: vector<TEXT_BUTTON>
 	local loreEnable = {};
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option")
 		for lore, _ in pairs(ml_tables.lores) do
 			local loreStr = string.gsub(lore, "Lore of ", "");
 			loreStr = string.gsub(loreStr, " Magic", "");
@@ -671,7 +671,7 @@ createSpellSlotButtonContainer = function(char, spellSlots)
 	spellSlotButtonList:Resize(dummyButtonX + xOffset, pY - dummyButtonY/2); --(pX/2 - 13, pY - 40);
 	spellSlotButtonContainer = Container.new(FlowLayout.VERTICAL);
 	updateSkillTable(char);
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")	
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option")	
 	for i, spellSlot in ipairs(spellSlots) do
 		local spellSlotButton
 		if savedOption == "Multi-Colour" then
@@ -835,12 +835,12 @@ function createOptionsFrame(char)
 	freeOptionButton:SetState("active");
 	table.insert(skillOptionButtons, freeOptionButton);
 	skillOptionContainerH:AddComponent(freeOptionButton);
-	local savedSkillOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
+	local savedSkillOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 	local savedSkillButton = find_uicomponent(core:get_ui_root(), savedSkillOption);
 	for _, button in ipairs(skillOptionButtons) do
 		button:RegisterForClick(
 			function(context)
-				cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option", button.name);
+				cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option", button.name);
 			end
 		);
 	end
@@ -876,12 +876,12 @@ function createOptionsFrame(char)
 	singleColourOptionButton:SetState("active");
 	table.insert(colourOptionButtons, singleColourOptionButton);
 	colourOptionContainerH:AddComponent(singleColourOptionButton);
-	local savedColourOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
+	local savedColourOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option")
 	local savedColourButton = find_uicomponent(core:get_ui_root(), savedColourOption);
 	for _, button in ipairs(colourOptionButtons) do
 		button:RegisterForClick(
 			function(context)
-				cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option", button.name);
+				cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option", button.name);
 			end
 		);
 	end
@@ -1141,7 +1141,7 @@ end
 function setupInnateSpells(char)
 	ml_tables = ml_force_require(char);
 	--[[
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 	if savedOption ~= "Spells for free" then
 		randomSpells(char)
 		ml_tables = ml_force_require(char);
@@ -1176,17 +1176,17 @@ end
 
 --v function(char: CA_CHAR)
 function setupSavedOptions(char)
-	local savedRule = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."rule")
+	local savedRule = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."rule")
 	if not savedRule then
-		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."rule", ml_tables.default_rule);
+		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."rule", ml_tables.default_rule);
 	end
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 	if not savedOption then
-		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option", ml_tables.default_option);
+		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option", ml_tables.default_option);
 	end
-	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option")
+	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option")
 	if not savedOption then
-		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."colour_option", "Multi-Colour");
+		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option", "Multi-Colour");
 	end
 end
 
@@ -1210,7 +1210,7 @@ core:add_listener(
 					pulse_uicomponent(loreButton_charPanel.uic, false, 10, false, "active");	
 					ml_tables = ml_force_require(char);
 					if ml_tables and char:faction():is_human() then
-						local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:cqi()).."_".."skill_option")
+						local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 						updateSkillTable(char);
 						local spellSlots = updateSaveTable(false, false, char);
 						local newSpellSlots = {};
@@ -1306,7 +1306,7 @@ core:add_listener(
 	function(context)
 		ml_tables = ml_force_require(context:character());
 		if ml_tables and context:character():faction():is_human() then
-			local savedOption = cm:get_saved_value("ml_forename_"..context:character():get_forename().."_surname_"..context:character():get_surname().."_cqi_"..tostring(context:character():cqi()).."_".."option")
+			local savedOption = cm:get_saved_value("ml_forename_"..context:character():get_forename().."_surname_"..context:character():get_surname().."_cqi_"..tostring(context:character():command_queue_index()).."_".."option")
 			updateSkillTable(context:character());
 			if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
 				if ml_tables.has_skills[context:skill_point_spent_on()] then
@@ -1379,13 +1379,13 @@ core:add_listener(
 --v function(char: CA_CHAR)
 function setupAICompletedBattleListener(char)
 	core:add_listener(
-		"ml_BattleCompleted"..tostring(char:cqi()),
+		"ml_BattleCompleted"..tostring(char:command_queue_index()),
 		"ScriptEventPlayerBattleCompleted",
 		true,
 		function(context)
 			ml_tables = ml_force_require(char);
 			if ml_tables.default_rule ~= "TT 6th edition - The Fay Enchantress" then
-				local charCqi = char:cqi();
+				local charCqi = char:command_queue_index();
 				for _, effectBundle in pairs(ml_tables.effectBundles) do
 					if char:military_force():has_effect_bundle(effectBundle) then
 						cm:remove_effect_bundle_from_characters_force(effectBundle, charCqi);

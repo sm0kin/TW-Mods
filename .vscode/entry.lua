@@ -40,3 +40,6 @@ require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 --require("sm0/z_BETA/!genevieve/script/export_helpers_whyll_defeated_traits")
 
 require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
+
+--require("sm0/wec_one_button_respec/script/export_helpers__obr")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")

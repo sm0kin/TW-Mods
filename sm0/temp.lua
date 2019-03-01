@@ -131,3 +131,52 @@ bm:modify_battle_speed(1);	-- 2 == double, 0.5 == half the normal speed
 
 
 core_object:svr_save_registry_bool(name, value)
+
+
+
+LL 2:  ERROR    : [27, 02 2019 23:36:22]
+LL 2:  [string "/script/campaign/mod/sr_chaos.lua"]:83: attempt to call method 'command_queue_index' (a nil value)    : [27, 02 2019 23:36:22]
+LL 2:  stack traceback:
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:60: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:78: in function <[string "/script/campaign/mod/mixu_darkhand.lua"]:73>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:56: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:78: in function <[string "/script/campaign/mod/mixu_darkhand.lua"]:73>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:56: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:78: in function '?'
+	[string "data/script/_lib/lib_core.lua"]:954: in function 'event_callback'
+	[string "data/script/_lib/lib_core.lua"]:907: in function 'callback'
+    [string "data/script/_lib/lib_core.lua"]:915: in function <[string "data/script/_lib/lib_core.lua"]:915>    : [27, 02 2019 23:36:22]
+LL 2:  ERROR    : [27, 02 2019 23:40:22]
+LL 2:  [string "/script/campaign/mod/sr_halfling.lua"]:33: attempt to call method 'command_queue_index' (a nil value)    : [27, 02 2019 23:40:22]
+LL 2:  stack traceback:
+    [string "/script/campaign/mod/mixu_darkhand.lua"]:60: in function 'safeCall'
+    [string "/script/campaign/mod/mixu_darkhand.lua"]:78: in function <[string "/script/campaign/mod/mixu_darkhand.lua"]:73>
+    (tail call): ?
+    [C]: in function 'pcall'
+    [string "/script/campaign/mod/mixu_darkhand.lua"]:56: in function 'safeCall'
+    [string "/script/campaign/mod/mixu_darkhand.lua"]:78: in function <[string "/script/campaign/mod/mixu_darkhand.lua"]:73>
+    (tail call): ?
+    [C]: in function 'pcall'
+    [string "/script/campaign/mod/mixu_darkhand.lua"]:56: in function 'safeCall'
+    [string "/script/campaign/mod/mixu_darkhand.lua"]:78: in function '?'
+    [string "data/script/_lib/lib_core.lua"]:954: in function 'event_callback'
+    [string "data/script/_lib/lib_core.lua"]:907: in function 'callback'
+    [string "data/script/_lib/lib_core.lua"]:915: in function <[string "data/script/_lib/lib_core.lua"]:915>    : [27, 02 2019 23:40:22]
+    
+
+    cm:create_agent(
+    "wh2_main_lzd_hexoatl",
+    "wizard",
+    "wh2_main_lzd_skink_priest_heavens",
+    29,
+    296,
+    false,
+    function(cqi)
+        local char_str = cm:char_lookup_str(cqi);
+        cm:replenish_action_points(char_str);
+    end
+);

@@ -1,4 +1,4 @@
-local playerFaction = cm:get_faction(cm:get_local_faction(true));
+local playerFaction = nil;
 local restrictTKconfed --:bool
 local OccupationOptionID = {
 	["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupation_decision_confederate",
@@ -56,7 +56,8 @@ function addTkImmortalityTrait()
 		if currentFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" and not currentFaction:is_dead() then
 			local leaderChar = currentFaction:faction_leader();
 			if not leaderChar:has_trait("wh2_sm0_trait_immortality") and not leaderChar:is_wounded() then
-				cm:force_add_trait("character_cqi:"..tostring(leaderChar:command_queue_index()), "wh2_sm0_trait_immortality", true);
+				cm:force_add_trait("character_cqi:"..tostring(leaderChar:command_queue_index()), "wh2_sm0_trait_immortality", true); --    cm:set_character_immortality(cm:char_lookup_str(character:command_queue_index()), true);
+
 			elseif not leaderChar:has_trait("wh2_sm0_trait_immortality") and leaderChar:is_wounded() then
 				local leaderSubtype = leaderChar:character_subtype_key();
 				local TraitListenerStr = "TraitListener_" ..leaderSubtype;
@@ -94,7 +95,7 @@ function killAllUnits(faction)
 	for i = 0, mfList:num_items() - 1 do
 		local mf = mfList:item_at(i);	
 		if mf:has_general() then
-			cm:kill_character(mf:general_character():cqi(), true, true);
+			cm:kill_character(mf:general_character():command_queue_index(), true, true);
 		end
 	end
 end
@@ -115,6 +116,7 @@ end
 
 --v function() --init
 function sm0_confed()
+	playerFaction = cm:get_faction(cm:get_local_faction(true));
 	initMCMconfed();
 	addTkImmortalityTrait();
 

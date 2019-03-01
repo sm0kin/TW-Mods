@@ -100,7 +100,7 @@ function editChaosStartingUnits(units)
 			local currentChar = characterList:item_at(i);		
 			if currentChar and units[currentChar:character_subtype_key()] then
 				cm:remove_all_units_from_general(currentChar);
-				local cqi = currentChar:cqi();
+				local cqi = currentChar:command_queue_index();
 				for _, unit in ipairs(units[currentChar:character_subtype_key()]) do
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), unit);
 				end

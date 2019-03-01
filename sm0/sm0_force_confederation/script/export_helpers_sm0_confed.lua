@@ -225,7 +225,7 @@ function killAllUnits(faction)
 	for i = 0, mfList:num_items() - 1 do
 		local mf = mfList:item_at(i);	
 		if mf:has_general() then
-			cm:kill_character(mf:general_character():cqi(), true, true);
+			cm:kill_character(mf:general_character():command_queue_index(), true, true);
 		end
 	end
 end

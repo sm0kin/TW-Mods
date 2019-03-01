@@ -90,9 +90,11 @@
 --# assume BUTTON.SetState: method(state: BUTTON_STATE)
 --# assume BUTTON.CurrentState: method() --> string
 --# assume BUTTON.IsSelected: method() --> boolean
---# assume BUTTON.RegisterForClick: method(callback: function(context: CA_UIContext?))
+--# assume BUTTON.RegisterForClick: method(callback: function(context: WHATEVER?))
 --# assume BUTTON.SetImage: method(path: string)
 --# assume BUTTON.SetDisabled: method(disabled: boolean)
+--# assume BUTTON.XPos: method() --> number
+--# assume BUTTON.YPos: method() --> number
 --text button
 --# assume TEXT_BUTTON.MoveTo: method(xPos: number, yPos: number)
 --# assume TEXT_BUTTON.Move: method(XMove: number, yMove: number)
@@ -103,7 +105,7 @@
 --# assume TEXT_BUTTON.Visible: method() --> boolean
 --# assume TEXT_BUTTON.Position: method() --> (number, number)
 --# assume TEXT_BUTTON.Bounds: method() --> (number, number)
---# assume TEXT_BUTTON.RegisterForClick: method(callback: function(context: CA_UIContext?))
+--# assume TEXT_BUTTON.RegisterForClick: method(callback: function(context: WHATEVER?))
 --# assume TEXT_BUTTON.SetDisabled: method(disabled: boolean)
 --# assume TEXT_BUTTON.GetContentComponent: method() --> CA_UIC
 --# assume TEXT_BUTTON.SetState: method(state: BUTTON_STATE)
@@ -203,4 +205,4 @@
 --# assume CONTAINER.Clear: method()
 --# assume CONTAINER.SetVisible: method(visible: boolean)
 --# assume UTIL.createComponent: function(component: string, parent: CA_UIC, template_path: string) --> CA_UIC
---# assume UTIL.registerForClick: function(component: CA_UIC, listener_name: string, callback: function(context: CA_UIContext?))
+--# assume UTIL.registerForClick: function(component: CA_UIC, listener_name: string, callback: function(context: WHATEVER?))
