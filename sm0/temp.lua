@@ -180,3 +180,16 @@ LL 2:  stack traceback:
         cm:replenish_action_points(char_str);
     end
 );
+
+DOCK_POINT_NONE    0
+DOCK_POINT_TL    1
+DOCK_POINT_TC    2
+DOCK_POINT_TR    3
+DOCK_POINT_CL    4
+DOCK_POINT_C    5
+DOCK_POINT_CR    6
+DOCK_POINT_BL    7
+DOCK_POINT_BC    8
+DOCK_POINT_BR    9
+uic:SetDockingPoint(number dock point)
+Those refer to like, Top left, Top Center, Top Right, Center Left, Center, Center Right, Bottom Left, Bottom Center, Bottom Right
