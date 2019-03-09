@@ -1,4 +1,5 @@
 -- CLASS DECLARATION
+--# assume global class BM
 --# assume global class CM
 --# assume global class CUIM
 --# assume global class CUIM_OVERRIDE
@@ -762,6 +763,7 @@
 
 -- CAMPAIGN
 --# assume global get_cm: function() --> CM
+--# assume global get_bm: function() --> BM
 --# assume global get_events: function() --> map<string, vector<function(context:WHATEVER?)>>
 --# assume global Get_Character_Side_In_Last_Battle: function(char: CA_CHAR) --> BATTLE_SIDE
 --# assume global q_setup: function()

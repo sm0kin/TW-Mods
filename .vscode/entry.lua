@@ -31,7 +31,8 @@ require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_dlc08_norscan_gods")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_chaos_invasion")
 
---require("sm0/sm0_battle_speed/script/battle/mod/battle_speed")
+require("sm0/sm0_battle_speed/script/battle/mod/battle_speed")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/battle/battle_speed")
 
 --require("sm0/ml_log")
 
@@ -42,4 +43,4 @@ require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
 --require("sm0/wec_one_button_respec/script/export_helpers__obr")
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")

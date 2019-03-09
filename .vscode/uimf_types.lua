@@ -62,14 +62,13 @@
 --# assume FLOW_LAYOUT.VERTICAL: FLOW_LAYOUT
 --# assume FLOW_LAYOUT.HORIZONTAL: FLOW_LAYOUT
 --# assume CONTAINER.new: function(layout: LAYOUT) --> CONTAINER
+--# assume TEXT_BOX.new: function(name: string, parent: CA_UIC | COMPONENT_TYPE) --> TEXT_BOX
 
 --utility
 --# assume UTIL.getComponentWithName: function(name: string) --> COMPONENT_TYPE
 --# assume UTIL.centreComponentOnScreen: function(component: CA_UIC | COMPONENT_TYPE | CONTAINER)
 --# assume UTIL.centreComponentOnComponent: function(component: CA_UIC | COMPONENT_TYPE | CONTAINER, other_component: CA_UIC | COMPONENT_TYPE | CONTAINER)    
 --# assume UTIL.recurseThroughChildrenApplyingFunction: function(parent: CA_UIC, callback:function(child: CA_UIC))
-
-
 
 --button
 --# assume BUTTON.MoveTo: method(xPos: number, yPos: number)
@@ -95,6 +94,7 @@
 --# assume BUTTON.SetDisabled: method(disabled: boolean)
 --# assume BUTTON.XPos: method() --> number
 --# assume BUTTON.YPos: method() --> number
+
 --text button
 --# assume TEXT_BUTTON.MoveTo: method(xPos: number, yPos: number)
 --# assume TEXT_BUTTON.Move: method(XMove: number, yMove: number)
@@ -115,6 +115,25 @@
 --# assume TEXT_BUTTON.YPos: method() --> number
 --# assume TEXT_BUTTON.Delete: method()
 --# assume TEXT_BUTTON.SetButtonText: method(text: string) 
+
+--text box
+--# assume TEXT_BOX.MoveTo: method(xPos: number, yPos: number)
+--# assume TEXT_BOX.Move: method(XMove: number, yMove: number)
+--# assume TEXT_BOX.PositionRelativeTo: method(component: CA_UIC | COMPONENT_TYPE, xDiff: number, yDiff: number)
+--# assume TEXT_BOX.Scale: method(factor:number)
+--# assume TEXT_BOX.Resize: method(width: number, height: number)
+--# assume TEXT_BOX.SetVisible: method(visible: boolean)
+--# assume TEXT_BOX.Visible: method() --> boolean
+--# assume TEXT_BOX.Position: method() --> (number, number)
+--# assume TEXT_BOX.Bounds: method() --> (number, number)
+--# assume TEXT_BOX.GetContentComponent: method() --> CA_UIC
+--# assume TEXT_BOX.GetPositioningComponent: method() --> CA_UIC
+--# assume TEXT_BOX.Width: method() --> number
+--# assume TEXT_BOX.Height: method() --> number
+--# assume TEXT_BOX.XPos: method() --> number
+--# assume TEXT_BOX.YPos: method() --> number
+--# assume TEXT_BOX.Delete: method()
+--# assume TEXT_BOX.GetText: method() --> string
 
 --frame
 --# assume FRAME.MoveTo: method(xPos: number, yPos: number)
@@ -192,6 +211,7 @@
 --# assume TEXT_BUTTON.uic: CA_UIC
 --# assume LIST_VIEW.uic: CA_UIC
 --# assume COMPONENTS.uic: CA_UIC
+--# assume TEXT_BOX.uic: CA_UIC
 
 --# assume FRAME.name: string
 --# assume TEXT.name: string
