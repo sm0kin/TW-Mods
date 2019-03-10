@@ -31,7 +31,7 @@ require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_dlc08_norscan_gods")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_chaos_invasion")
 
-require("sm0/sm0_battle_speed/script/battle/mod/battle_speed")
+--require("sm0/sm0_battle_speed/script/battle/mod/battle_speed")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/battle/battle_speed")
 
 --require("sm0/ml_log")

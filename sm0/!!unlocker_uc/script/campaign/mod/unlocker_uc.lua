@@ -221,9 +221,9 @@ local mcm = _G.mcm
 --v function()
 function uc_mcm()
 	local settings = mcm:register_mod("unlocker_uc", "Ultimate Chaos - Faction Unlocker", "Ultimate Chaos - Faction Unlocker: Options")
-	local startingUnits = settings:add_tweaker("starting_units", "Chaos - Starting Units", "Enables Ultimate Chaos or Faction Unlocker Starting unit.")
-	startingUnits:add_option("uc_units", "Ultimate Chaos", "Enables Ultimate Chaos starting unit.")
-	startingUnits:add_option("unlocker_units", "Faction Unlocker", "Enables Faction Unlocker starting unit.")
+	local startingUnits = settings:add_tweaker("starting_units", "Chaos - Starting Units", "Enables Ultimate Chaos or Faction Unlocker Starting units.")
+	startingUnits:add_option("uc_units", "Ultimate Chaos", "Enables Ultimate Chaos starting units.")
+	startingUnits:add_option("unlocker_units", "Faction Unlocker", "Enables Faction Unlocker starting units.")
 	mcm:add_new_game_only_callback(
 		function(context)
 			if cm:get_saved_value("mcm_tweaker_unlocker_uc_starting_units_value") == "unlocker_units" then
