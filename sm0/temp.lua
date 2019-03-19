@@ -193,3 +193,39 @@ DOCK_POINT_BC    8
 DOCK_POINT_BR    9
 uic:SetDockingPoint(number dock point)
 Those refer to like, Top left, Top Center, Top Right, Center Left, Center, Center Right, Bottom Left, Bottom Center, Bottom Right
+
+
+
+cm:add_custom_battlefield(
+		"generic",											-- string identifier
+		0,													-- x co-ord
+		0,													-- y co-ord
+		5000,												-- radius around position
+		false,												-- will campaign be dumped
+		"",													-- loading override
+		"script/battle/campaign_battle/battle_start.lua",	-- script override
+		"",													-- entire battle override
+		0,													-- human alliance when battle override
+		false,												-- launch battle immediately
+		true,												-- is land battle (only for launch battle immediately)
+		false												-- force application of autoresolver result
+    );
+
+--D:\Modding\scripts\vanilla\campaign\wh_campaign_mod_scripting.lua
+--D:\Modding\VScode\TW-Mods\backup\battle\campaign_battle\battle_start.lua
+
+the ethereal effect is handled via material files and an ethereal shader
+
+ <shader>shaders/weighted2_ethereal_optimized.xml.shader</shader>
+
+
+for wsmodels
+check existing units like the vampire wraiths, vmp_cairn_wraith_body_01_weighted2_alpha_on.xml.material
+it can be tricky to get working properly though
+
+
+bm:set_volume(volume_type, 0..100) 
+
+cm:add_first_tick_callback(function()
+    Gotrek_and_Felix_add()
+end)

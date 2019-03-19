@@ -69,6 +69,9 @@
 --# "siege" | "Tutorial" | "underground_intercept" | "unfortified_port" | "unfortified_settlement" |
 --# "land_ambush" | "land_bridge" | "land_normal" | "naval_blockade" | "naval_breakout" | "naval_normal" | "port_assault" | "settlement_relief" | "settlement_sally" | "settlement_standard" | "settlement_unfortified"
 
+-- BATTLE
+--# assume BM.modify_battle_speed: method(gamespeed: number)
+
 -- CONTEXT
 --# assume CA_UIContext.component: CA_Component
 --# assume CA_UIContext.string: string
@@ -697,6 +700,11 @@
 --# assume CORE.add_static_object: method(name: string, value: any, override: boolean?)
 --# assume CORE.is_campaign: method() --> boolean
 --# assume CORE.cache_and_set_tooltip_for_component_state: method(component: CA_UIC, state: BUTTON_STATE, ui_tr: string)
+--# assume CORE.svr_load_string: method(svrname: string) --> string
+--# assume CORE.svr_load_bool: method(svrname: string) --> boolean
+
+
+
 
 -- POOLED RESOURCE LIST
 --# assume CA_POOLED_LIST.is_empty: method() --> boolean

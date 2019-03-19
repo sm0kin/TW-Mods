@@ -228,6 +228,7 @@ end
 
 
 function ci_setup()
+	--[[ OLD (NOT NEEDED)
 	if cm:is_new_game() then					-- Initialize Values
 		cm:set_saved_value("chaos_first_wave_turn", 150);
 		cm:set_saved_value("chaos_second_wave_turn", 200);
@@ -235,6 +236,33 @@ function ci_setup()
 		cm:set_saved_value("chaos_second_wave_spawned", false);
 		cm:set_saved_value("check_imperium_level", true);
 	end
+	--]]
+
+	--[[
+	local human_factions = cm:get_human_factions()
+	player_1 = cm:get_faction(human_factions[1])
+	player_2 = false
+	-- only get player_2 if one exists
+	if cm:is_multiplayer() then
+		player_2 = cm:get_faction(human_factions[2])
+	end
+	
+	
+	
+	if player_1:subculture() == "wh_main_sc_nor_norsca" or (player_2 and player_2:subculture() == "wh_main_sc_nor_norsca") then
+		Setup_Norsca_Chaos_Invasion()
+	else
+		Chaos_Invasion()
+	end
+	--]]
+	-- Currently disabled as it breaks MCM for Wulfrik and Throgg
+
+
+
+	Chaos_Invasion()
+end
+
+function Chaos_Invasion()
 	
 	
 	-- Trigger the Chaos Invasion under the correct conditions
@@ -255,6 +283,7 @@ function ci_setup()
 		return;
 	end;
 	
+	--[[ OLD (NOT NEEDED)
 	if cm:is_multiplayer() == false then
 		local norscan_1 = cm:get_faction("wh_dlc08_nor_norsca");
 		local norscan_2 = cm:get_faction("wh_dlc08_nor_wintertooth");
@@ -274,7 +303,8 @@ function ci_setup()
 			return;
 		end
 	end
-	
+	--]]
+
 	--[[
 	local human_factions = cm:get_human_factions();
 	
