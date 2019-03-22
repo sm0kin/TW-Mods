@@ -358,18 +358,19 @@ function applySpellDisableEffect(char, spellSlots)
 	local charCqi = char:command_queue_index();
 	ml_tables = ml_force_require(char);
 	if ml_tables then
-		if savedOption == "Spells for free" and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
+		mlLOG("CHAR: "..char:character_subtype_key())
+		if savedOption == "Spells for free" and char:has_military_force() and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
 			cm:apply_effect_bundle_to_characters_force(ml_tables.enableAllBundle, charCqi, -1, false);
-		elseif savedOption ~= "Spells for free" and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
+		elseif savedOption ~= "Spells for free" and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
 			cm:remove_effect_bundle_from_characters_force(ml_tables.enableAllBundle, charCqi);
 		end
 		for _, effectBundle in pairs(ml_tables.effectBundles) do
-			if not char:military_force():has_effect_bundle(effectBundle) then
+			if char:has_military_force() and not char:military_force():has_effect_bundle(effectBundle) then
 				cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false);
 			end
 		end
 		for _, spell in ipairs(spellSlots) do 
-			if ml_tables.effectBundles[spell] and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
+			if ml_tables.effectBundles[spell] and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
 				cm:remove_effect_bundle_from_characters_force(ml_tables.effectBundles[spell], charCqi);
 			end
 		end

@@ -703,9 +703,6 @@
 --# assume CORE.svr_load_string: method(svrname: string) --> string
 --# assume CORE.svr_load_bool: method(svrname: string) --> boolean
 
-
-
-
 -- POOLED RESOURCE LIST
 --# assume CA_POOLED_LIST.is_empty: method() --> boolean
 --# assume CA_POOLED_LIST.item_at: method(index: number) --> CA_POOLED

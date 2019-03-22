@@ -1,0 +1,73 @@
+NEW LOG [22, 03 2019 18:49:03] 
+ML:  [22, 03 2019 18:49:09]:  ERROR  
+ML:  [22, 03 2019 18:49:09]:  [string "script/export_helpers_sm0_mixedlores.lua"]:363: attempt to call method 'has_effect_bundle' (a nil value)  
+ML:  [22, 03 2019 18:49:09]:  stack traceback:
+	[string "script/export_helpers_sm0_mixedlores.lua"]:44: in function 'safeCall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:65: in function <[string "script/export_helpers_sm0_mixedlores.lua"]:59>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:65: in function <[string "script/export_helpers_sm0_mixedlores.lua"]:59>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:65: in function <[string "script/export_helpers_sm0_mixedlores.lua"]:59>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:65: in function '?'
+	[string "data/script/_lib/lib_core.lua"]:954: in function 'event_callback'
+	[string "data/script/_lib/lib_core.lua"]:907: in function 'callback'
+	[string "data/script/_lib/lib_core.lua"]:915: in function <[string "data/script/_lib/lib_core.lua"]:915>  
+ML:  [22, 03 2019 18:49:11]:  ERROR  
+ML:  [22, 03 2019 18:49:11]:  [string "script/export_helpers_sm0_mixedlores.lua"]:361: attempt to call method 'has_effect_bundle' (a nil value)  
+ML:  [22, 03 2019 18:49:11]:  stack traceback:
+	[string "script/export_helpers_sm0_mixedlores.lua"]:44: in function 'safeCall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:65: in function <[string "script/export_helpers_sm0_mixedlores.lua"]:59>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:65: in function <[string "script/export_helpers_sm0_mixedlores.lua"]:59>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:65: in function <[string "script/export_helpers_sm0_mixedlores.lua"]:59>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:65: in function '?'
+	[string "data/script/_lib/lib_core.lua"]:954: in function 'event_callback'
+	[string "data/script/_lib/lib_core.lua"]:907: in function 'callback'
+	[string "data/script/_lib/lib_core.lua"]:915: in function <[string "data/script/_lib/lib_core.lua"]:915>  
+    ML:  [22, 03 2019 19:08:08]:  ERROR  
+ML:  [22, 03 2019 19:08:08]:  [string "script/export_helpers_sm0_mazdamundi.lua"]:1026: bad argument #1 to 'gsub' (string expected, got nil)  
+ML:  [22, 03 2019 19:08:08]:  stack traceback:
+	[string "script/export_helpers_sm0_mixedlores.lua"]:44: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:83: in function <[string "/script/campaign/mod/mixu_darkhand.lua"]:78>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:83: in function <[string "/script/campaign/mod/mixu_darkhand.lua"]:78>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:83: in function '?'
+	[string "data/script/_lib/lib_core.lua"]:954: in function 'event_callback'
+	[string "data/script/_lib/lib_core.lua"]:907: in function 'callback'
+	[string "data/script/_lib/lib_core.lua"]:915: in function <[string "data/script/_lib/lib_core.lua"]:915>  
+ML:  [22, 03 2019 19:08:08]:  ERROR  
+ML:  [22, 03 2019 19:08:08]:  [string "script/export_helpers_sm0_mazdamundi.lua"]:1026: bad argument #1 to 'gsub' (string expected, got nil)  
+ML:  [22, 03 2019 19:08:08]:  stack traceback:
+	[string "script/export_helpers_sm0_mixedlores.lua"]:44: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:83: in function <[string "/script/campaign/mod/mixu_darkhand.lua"]:78>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:83: in function <[string "/script/campaign/mod/mixu_darkhand.lua"]:78>
+	(tail call): ?
+	[C]: in function 'pcall'
+	[string "script/export_helpers_sm0_mixedlores.lua"]:40: in function 'safeCall'
+	[string "/script/campaign/mod/mixu_darkhand.lua"]:83: in function '?'
+	[string "data/script/_lib/lib_core.lua"]:954: in function 'event_callback'
+	[string "data/script/_lib/lib_core.lua"]:907: in function 'callback'
+	[string "data/script/_lib/lib_core.lua"]:915: in function <[string "data/script/_lib/lib_core.lua"]:915>  

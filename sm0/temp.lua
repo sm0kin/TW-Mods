@@ -229,3 +229,14 @@ bm:set_volume(volume_type, 0..100)
 cm:add_first_tick_callback(function()
     Gotrek_and_Felix_add()
 end)
+
+Is there an easy, quick and painless way to change lord's/hero's name with scropts?
+
+make a trait
+apply the trait
+
+Which kinda means no (at least for now, making dozens of traits is quite a bit)  for me, I was considering renaming every single lord / hero as you recruit him
+I though it would be somehow possible to do with just two lua tables and single listener
+
+    spawn char to pool has name args, but any existing characters need a tarit
+and a trait
