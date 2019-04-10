@@ -25,7 +25,7 @@ require("sm0/sm0_mixedlores/script/ml_tables/ml_dlc07_brt_fay_enchantress")
 
 require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/unlocker_uc")
-require("sm0/!!unlocker_uc/script/campaign/main_warhammer/wh_chaos_invasion")
+--require("sm0/!!unlocker_uc/script/campaign/main_warhammer/wh_chaos_invasion")
 
 --require("sm0/_ultimate_chaos_wh2/script/campaign/mod/ultimate_chaos")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/ultimate_chaos")
