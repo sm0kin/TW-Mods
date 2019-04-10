@@ -63,7 +63,7 @@ function getCharByFaction(charSubtype, faction)
     end
     return char;
 end
---cm:force_confederation("wh2_main_hef_avelorn", "wh2_main_hef_order_of_loremasters");
+--cm:force_confederation("wh_main_emp_empire", "wh_main_emp_wissenland");
 			--TEST
 			--local cqi = currentChar:cqi();
 			--cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);
@@ -240,3 +240,307 @@ I though it would be somehow possible to do with just two lua tables and single 
 
     spawn char to pool has name args, but any existing characters need a tarit
 and a trait
+
+
+
+-- trigger quests (data is set up in the respective campaign folder)
+function set_up_rank_up_listener(quests, subtype, infotext)
+	for i = 1, #quests do
+		-- grab some local data for this quest record
+		local current_quest_record = quests[i];
+		
+		local current_type = current_quest_record[1];
+		local current_ancillary_key = current_quest_record[2];
+		local current_mission_key = current_quest_record[3];
+		local current_rank_req = current_quest_record[4];
+		local current_mp_mission_key = current_quest_record[5];
+		local current_advice_key = current_quest_record[6];
+		local current_x = current_quest_record[7];
+		local current_y = current_quest_record[8];
+		local current_region_key = current_quest_record[9];
+		local current_intervention_name = false;
+		local current_saved_name = false;
+		
+		if current_mission_key then
+			current_intervention_name = "in_" .. current_mission_key;
+			current_saved_name = current_mission_key .. "_issued";
+		else
+			-- ai only, we don't have a mission for the player
+			current_saved_name = current_ancillary_key .. "_issued";
+		end;
+		
+		out.design("[Quests] establishing rank up listener for char type [" .. subtype .. "] and rank [" .. current_rank_req .. "] for mission [" .. tostring(current_mission_key) .. "]");
+		out.design("\tadvice key is " .. tostring(current_advice_key) .. ", x is " .. tostring(current_x) .. " and y is " .. tostring(current_y));
+		
+		-- pre-declare the intervention and trigger function, so that they exist in this scope as a local
+		local current_intervention = false;
+		local current_intervention_trigger = false;
+		
+		-- only establish the intervention properly in single-player mode, however
+		if not cm:is_multiplayer() and current_intervention_name then
+			out.design("\testablishing intervention as it's a singleplayer campaign");
+			
+			--------------------------------------------
+			-- called when the intervention is triggered
+			function current_intervention_trigger()
+				out.design("[Quests] intervention triggering for [" .. current_mission_key .. "], character subtype [" .. subtype .. "]");
+				
+				-- save this value in order to not issue this quest multiple times
+				cm:set_saved_value(current_saved_name, true);
+				
+				-- stop listener
+				core:remove_listener(current_mission_key);
+				
+				-- set up a mission manager to trigger
+				local mm = mission_manager:new(cm:get_local_faction(), current_mission_key);
+				if current_type == "dilemma" then
+					mm:set_is_dilemma_in_db();
+					out.design("\tthis quest is a dilemma");
+				elseif current_type == "incident" then
+					mm:set_is_incident_in_db();
+					out.design("\tthis quest is an incident");
+				else
+					mm:set_is_mission_in_db();
+					out.design("\tthis quest is a mission");
+				end;
+				
+				if core:is_advice_level_minimal() then
+					out.design("\tjust issuing mission, advice level is minimal");
+				
+					-- advice is set to minimal, just trigger the mission
+					mm:trigger(function() current_intervention:complete() end);	
+					return;
+				end;
+				
+				-- decide whether to show infotext or not
+				local infotext_to_show = false
+				if not effect.get_advice_history_string_seen("quests_infotext") then
+					infotext_to_show = infotext;
+					effect.set_advice_history_string_seen("quests_infotext");
+				end;
+				
+				if current_advice_key and current_x and current_y then
+					out.design("\tscrolling the camera with advice");
+					
+					-- we have advice to deliver and a position
+					current_intervention:scroll_camera_for_intervention(
+						current_region_key,
+						current_x,
+						current_y,
+						current_advice_key,
+						infotext_to_show,
+						mm,
+						4
+					);
+				elseif current_advice_key then
+					-- we have advice, but no position
+					out.design("\tplaying advice with no camera movement");
+					
+					current_intervention:play_advice_for_intervention(
+						current_advice_key,
+						infotext_to_show,
+						mm
+					);
+				elseif current_x and current_y then
+					-- we have a position but no advice
+					out.design("\tscrolling camera with no advice");
+					
+					local cam_x, cam_y, cam_d, cam_b, cam_h = cm:get_camera_position();
+					
+					local cutscene = campaign_cutscene:new(
+						current_mission_key,
+						4,
+						function()
+							-- trigger mission when cutscene finishes
+							mm:trigger(
+								function()
+									-- restore shroud and complete when mission is accepted
+									cm:restore_shroud_from_snapshot();
+									current_intervention:complete() 
+								end
+							);
+						end
+					);
+					
+					cutscene:set_skippable(true);
+					cutscene:set_skip_camera(current_x, current_y, cam_d, cam_b, cam_h);
+					cutscene:set_disable_settlement_labels(false);
+					cutscene:set_dismiss_advice_on_end(false);
+					cutscene:set_restore_shroud(false);
+					
+					-- make the target region visible if we have one
+					if current_region_key then
+						cutscene:action(function() cm:make_region_visible_in_shroud(cm:get_local_faction(), current_region_key) end, 0);
+					end;
+					cutscene:action(function() cm:scroll_camera_from_current(true, 4, {current_x, current_y, cam_d, cam_b, cam_h}) end, 0);
+					
+					cutscene:start();
+				else
+					-- we have no position or advice, just trigger
+					out.design("\tno advice or position to scroll to, just issuing mission");
+					
+					mm:trigger(function() current_intervention:complete() end);	
+				end;
+			end;
+			--------------------------------------------
+			--------------------------------------------
+			
+			-- declare the intervention itself
+			current_intervention = intervention:new(
+				current_intervention_name,							-- string name
+				0,	 												-- cost
+				function() current_intervention_trigger() end,		-- trigger callback
+				BOOL_INTERVENTIONS_DEBUG	 						-- show debug output
+			);
+		end;
+		
+		-- establish listeners for this character rank-up event if the quest chain has not already been started
+		if cm:get_saved_value(current_saved_name) then
+			out.design("\tthis quest has already been triggered, not establishing listeners");
+		else
+			out.design("\tthis quest has not been triggered, establishing listeners");
+			
+			-- listen for the character ranking up
+			core:add_listener(
+				current_ancillary_key,
+				"CharacterTurnStart",
+				function(context)
+					return context:character():character_subtype(subtype) and context:character():rank() >= current_rank_req 
+				end,
+				function(context)
+					local character = context:character();
+					out.design("[Quests] Character [" .. cm:char_lookup_str(character) .. "] of subtype [" .. subtype .. "] has achieved rank [" .. current_rank_req .. "]");
+					
+					-- if the character is player controlled then begin the quest chain
+					if character:faction():is_human() then
+						if cm:is_multiplayer() or cm:get_saved_value("advice_is_disabled") then
+							-- save this value in order to not issue this quest multiple times
+							cm:set_saved_value(current_saved_name, true);	-- don't do this if the intervention is going to be triggered
+							
+							-- character is player-controlled and this is a multiplayer game, trigger the mission/dilemma etc
+							if current_type == "mission" then
+								if cm:is_multiplayer() and current_mp_mission_key then
+									current_mission_key = current_mp_mission_key;
+								end;
+								
+								out.design("\tcharacter is player controlled and this is an mp game or advice is disabled, triggering mission " .. current_mission_key);
+								cm:trigger_mission(character:faction():name(), current_mission_key, true);
+							elseif current_type == "dilemma" then
+								out.design("\tcharacter is player controlled and this is an mp game or advice is disabled, triggering dilemma " .. current_mission_key);
+								cm:trigger_dilemma(character:faction():name(), current_mission_key, true);
+							elseif current_type == "incident" then
+								out.design("\tcharacter is player controlled and this is an mp game or advice is disabled, triggering incident " .. current_mission_key);
+								cm:trigger_incident(character:faction():name(), current_mission_key, true);
+							elseif current_type == "ai_only" then
+								-- don't do anything
+							else
+								out.design("\tcouldn't determine mission type [" .. tostring(current_type) .. "] - see script error");
+								script_error("ERROR: Tried to start a quest, but the event type [" .. tostring(current_type) .. " could not be parsed!");
+							end;
+						elseif current_mission_key then
+							-- character is player-controlled and this is a single-player game, sending a scriptevent that will trigger the intervention
+							out.design("\tthis is a single-player campaign, triggering a message for the intervention");
+							core:trigger_event("ScriptEventTriggerQuestChain", current_mission_key);
+						end;
+					else
+						out.design("\tcharacter is not player-controlled, immediately giving them ancillary [" .. current_ancillary_key .. "]");
+						
+						-- save this value in order to not issue this quest multiple times
+						cm:set_saved_value(current_saved_name, true);
+						
+						-- character is AI-controlled, give them the ancillary
+						cm:force_add_ancillary(cm:char_lookup_str(character), current_ancillary_key);
+					end;
+				end,
+				false
+			);
+			
+			-- if it's a single-player game, then set up the intervention monitors
+			if not cm:is_multiplayer() and current_intervention then
+				-- listen for the scriptevent message, triggered from the monitor above if the player levels up a char on their turn
+				current_intervention:add_trigger_condition(
+					"ScriptEventTriggerQuestChain",
+					function(context)
+						return context.string == current_mission_key;
+					end
+				);
+				
+				current_intervention:start();
+			end;
+		end;
+	end;
+end;
+
+
+Taiyoumaru01/03/2019
+is there any way I can get OBR or the other mod to reset a non-mod LL's quests as well?
+considering when I confederated the LL he was wounded
+DrunkFlamingo01/03/2019
+Nope, quests are not reset able
+Struggled with trying for a while with llr, its theoretically possible you would just have to redo the db for all of them
+So I didnt
+Taiyoumaru01/03/2019
+sad to hear
+not sure what redo the database means exatly but it sounds like a lot of work
+but modders can theoretically do it without needing CA right?
+DrunkFlamingo01/03/2019
+Modders can theoretically do it without needing CA yes
+it basically means:
+There is a bunch of work that goes into setting up any kind of event, quest chains included
+To make quests which are more pliable to resetting, you would need to redo all of those setups
+and possibly change some of the objectives
+so it would involve basically remaking a lot of the backend of the quests which is a lot of work, but yes 100% doable without CA
+
+
+local playerFaction = cm:get_faction(cm:get_local_faction(true));
+--
+local faction_leader = playerFaction:faction_leader();
+local x = faction_leader:logical_position_x()
+local y = faction_leader:logical_position_y()
+local region = faction_leader:faction():home_region():name()
+local faction_leader_cqi = playerFaction:faction_leader():command_queue_index();	
+cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), false);
+cm:kill_character(faction_leader_cqi, true, true); 
+core:add_listener(
+	"sm0_test123",
+	"CharacterCreated",
+	function(context) return context:character():character_subtype_key() == "wh2_main_lzd_lord_mazdamundi" end,
+	function(context) 
+		cm:add_agent_experience(cm:char_lookup_str(context:character()), 70000);
+		cm:set_character_immortality(cm:char_lookup_str(context:character()), true); 
+	end,
+	false
+); 
+	local unit_list = "wh2_main_lzd_inf_temple_guards,wh2_main_lzd_inf_saurus_warriors_0,wh2_main_lzd_inf_skink_cohort_1,wh2_main_lzd_inf_skink_cohort_1,wh2_main_lzd_mon_bastiladon_0,wh2_main_lzd_mon_kroxigors,wh2_main_lzd_mon_bastiladon_blessed_2"
+	local game_interface = cm:get_game_interface();--wh2_main_lzd_hexoatl
+	game_interface:create_force_with_general("wh2_main_lzd_last_defenders", unit_list, region, x, y, "general", "wh2_main_lzd_lord_mazdamundi", "names_name_2147359221", "", "names_name_2147359230", "", "2140784856", true)
+	local mazdamundi_quests = {
+		{"mission", "wh2_main_anc_weapon_cobra_mace_of_mazdamundi", "wh2_main_lzd_mazdamundi_cobra_mace_of_mazdamundi_stage_1", 10},
+		{"mission", "wh2_main_anc_magic_standard_sunburst_standard_of_hexoatl", "wh2_main_lzd_mazdamundi_sunburst_standard_of_hexoatl_stage_1", 6}
+	};
+	--set_up_rank_up_listener(mazdamundi_quests, "wh2_main_lzd_lord_mazdamundi");
+	--[[
+	cm:create_force_with_general(
+		"wh2_main_lzd_hexoatl",
+		"wh2_main_lzd_inf_temple_guards,wh2_main_lzd_inf_saurus_warriors_0,wh2_main_lzd_inf_skink_cohort_1,wh2_main_lzd_inf_skink_cohort_1,wh2_main_lzd_mon_bastiladon_0,wh2_main_lzd_mon_kroxigors,wh2_main_lzd_mon_bastiladon_blessed_2",
+		region, --
+		x, --47
+		y, --299
+		"general",
+		"wh2_main_lzd_lord_mazdamundi",
+		"names_name_2147359221",
+		"",
+		"names_name_2147359230",
+		"",
+		true,
+		function(cqi)
+			local mazdamundi_quests = {
+				{"mission", "wh2_main_anc_weapon_cobra_mace_of_mazdamundi", "wh2_main_lzd_mazdamundi_cobra_mace_of_mazdamundi_stage_1", 10},
+				{"mission", "wh2_main_anc_magic_standard_sunburst_standard_of_hexoatl", "wh2_main_lzd_mazdamundi_sunburst_standard_of_hexoatl_stage_1", 6}
+			};
+			--set_up_rank_up_listener(mazdamundi_quests, "wh2_main_lzd_lord_mazdamundi");
+			cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);
+			cm:set_character_immortality(cm:char_lookup_str(cqi), true);
+		end
+	);
+--]]

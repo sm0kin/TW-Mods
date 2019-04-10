@@ -238,7 +238,7 @@ function ci_setup()
 	end
 	--]]
 
-	--[[
+	
 	local human_factions = cm:get_human_factions()
 	player_1 = cm:get_faction(human_factions[1])
 	player_2 = false
@@ -248,7 +248,7 @@ function ci_setup()
 	end
 	
 	
-	
+	--[[
 	if player_1:subculture() == "wh_main_sc_nor_norsca" or (player_2 and player_2:subculture() == "wh_main_sc_nor_norsca") then
 		Setup_Norsca_Chaos_Invasion()
 	else

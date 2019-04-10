@@ -11,8 +11,8 @@ require("sm0/sm0_test/script/campaign/mod/sm0_test")
 
 require("sm0/@hidden_legendaries/script/export_helpers_sm0_hidden_legendaries")
 
-require("sm0/sm0_mixedlores/script/export_helpers_sm0_mixedLores")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_mixedLores")
+--require("sm0/sm0_mixedlores/script/export_helpers_sm0_mixedLores")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_mixedLores")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_main_lzd_lord_mazdamundi")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_main_lzd_slann_mage_priest")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_main_def_morathi")
@@ -25,7 +25,7 @@ require("sm0/sm0_mixedlores/script/ml_tables/ml_dlc07_brt_fay_enchantress")
 
 require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/unlocker_uc")
---require("sm0/!!unlocker_uc/script/campaign/main_warhammer/wh_chaos_invasion")
+require("sm0/!!unlocker_uc/script/campaign/main_warhammer/wh_chaos_invasion")
 
 --require("sm0/_ultimate_chaos_wh2/script/campaign/mod/ultimate_chaos")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/ultimate_chaos")
@@ -33,6 +33,8 @@ require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_chaos_invasion")
 
 require("sm0/sm0_battle_speed/script/battle/battle_speed")
+require("sm0/sm0_battle_speed/script/campaign/mod/sm0_battle_speed")
+
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/battle/battle_speed")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/battle/default_battle/battle_start")
 --require("sm0/ml_log")

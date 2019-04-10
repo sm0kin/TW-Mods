@@ -71,3 +71,4 @@ ML:  [22, 03 2019 19:08:08]:  stack traceback:
 	[string "data/script/_lib/lib_core.lua"]:954: in function 'event_callback'
 	[string "data/script/_lib/lib_core.lua"]:907: in function 'callback'
 	[string "data/script/_lib/lib_core.lua"]:915: in function <[string "data/script/_lib/lib_core.lua"]:915>  
+-- solved

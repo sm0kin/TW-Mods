@@ -1,7 +1,10 @@
-local applyButton = nil --:CA_UIC
+local disableSL = false;
 local speedBox = nil --:CA_UIC
+local applyButton = nil --:CA_UIC
+local saveButton = nil --:CA_UIC
+local loadButton = nil --:CA_UIC
 local bm = get_bm();
-local savedEntry = 1 --:number
+local savedEntry = tonumber(core:svr_load_string("svr_battleSpeed")) or 1 --:number
 
 --v function(uic: CA_UIC)
 function deleteUIC(uic)
@@ -14,16 +17,34 @@ function deleteUIC(uic)
 end
 
 --v function()
+function deleteSpeedUI()
+    if speedBox then
+        deleteUIC(speedBox);
+        speedBox = nil;
+    elseif applyButton then
+        deleteUIC(applyButton);
+        core:remove_listener("sm0_applyButton");
+        applyButton = nil;
+    elseif saveButton then
+        deleteUIC(saveButton);
+        core:remove_listener("sm0_saveButton");
+        saveButton = nil;
+    elseif loadButton then
+        deleteUIC(loadButton);
+        core:remove_listener("sm0_loadButton");
+        loadButton = nil;
+    end
+end
+
+--v function()
 function createSpeedUI()
     local speed_buttons = find_uicomponent(core:get_ui_root(), "layout", "radar_holder", "speed_controls", "speed_buttons");
     local referenceButton = find_uicomponent(speed_buttons, "pause");
     local referenceButtonW, referenceButtonH = referenceButton:Bounds();
     local referenceButtonX, referenceButtonY = referenceButton:Position();
 
-    if speedBox then
-        deleteUIC(speedBox);
-        speedBox = nil;
-    end
+    deleteSpeedUI();
+
     speed_buttons:CreateComponent("speedBox", "ui/common ui/text_box");
     speedBox = UIComponent(speed_buttons:Find("speedBox"));
     speed_buttons:Adopt(speedBox:Address());
@@ -35,11 +56,6 @@ function createSpeedUI()
     speedBox:SetCanResizeWidth(false);
     speedBox:MoveTo(referenceButtonX - 1.5*referenceButtonW, referenceButtonY)
 
-    if applyButton then
-        deleteUIC(applyButton);
-        core:remove_listener("sm0_applyButton");
-        applyButton = nil;
-    end
     speed_buttons:CreateComponent("applyButton", "ui/templates/square_medium_button");
     applyButton = UIComponent(speed_buttons:Find("applyButton"));
     speed_buttons:Adopt(applyButton:Address());
@@ -53,7 +69,7 @@ function createSpeedUI()
     applyButton:Resize(referenceButtonW, referenceButtonH);
     applyButton:MoveTo(referenceButtonX - 1.5*referenceButtonW, referenceButtonY + referenceButtonH)
     applyButton:SetState("hover");
-    applyButton:SetStateText("")
+    applyButton:SetTooltipText("apply speed")
     applyButton:SetState("active")
     core:add_listener(
         "sm0_applyButton",
@@ -92,10 +108,84 @@ function createSpeedUI()
             else
                 speedBox:SetStateText("[[col:red]]Invalid![[/col]]");
             end
-
         end,
         true
     )
+
+    --local battle_type = core:svr_load_string("battle_type");
+    --out("sm0/battle_type = "..battle_type) --only campaign uses the battle_type svr
+    if not disableSL then
+        speed_buttons:CreateComponent("saveButton", "ui/templates/square_medium_button");
+        saveButton = UIComponent(speed_buttons:Find("saveButton"));
+        speed_buttons:Adopt(saveButton:Address());
+        saveButton:PropagatePriority(referenceButton:Priority());
+        if (core:svr_load_bool("primary_defender_is_player") and string.find(core:svr_load_string("primary_defender_subculture"), "wh_")) or 
+        (core:svr_load_bool("primary_attacker_is_player") and string.find(core:svr_load_string("primary_attacker_subculture"), "wh_")) then
+            saveButton:SetImage("ui/icon_quick_save.png"); 
+        else
+            saveButton:SetImage("ui/icon_quick_save2.png"); 
+        end
+        saveButton:Resize(referenceButtonW, referenceButtonH);
+        saveButton:MoveTo(referenceButtonX - 1.5*referenceButtonW - referenceButtonW, referenceButtonY)
+        saveButton:SetState("hover");
+        saveButton:SetTooltipText("save prefered speed")
+        saveButton:SetState("active")
+        core:add_listener(
+            "sm0_saveButton",
+            "ComponentLClickUp",
+            function(context)
+                return context.string == "saveButton";
+            end,
+            function(context)
+                local speedButton --: CA_UIC
+                local stateText = speedBox:GetStateText();
+                stateText = string.gsub(stateText, "%[%[col:green%]%]", "");
+                stateText = string.gsub(stateText, "%[%[/col%]%]", "");
+                local number = stateText;
+                if not tonumber(number) then
+                    speedBox:SetStateText("[[col:red]]Invalid![[/col]]");
+                else
+                    if tonumber(number) < 0.1 and number ~= "0" then number = "0.1"; end
+                    core:svr_save_string("svr_battleSpeed", tostring(number));
+                    loadButton:SetDisabled(false);
+                    loadButton:SetOpacity(255);
+                end
+            end,
+            true
+        )
+
+        speed_buttons:CreateComponent("loadButton", "ui/templates/square_medium_button");
+        loadButton = UIComponent(speed_buttons:Find("loadButton"));
+        speed_buttons:Adopt(loadButton:Address());
+        loadButton:PropagatePriority(referenceButton:Priority());
+        if (core:svr_load_bool("primary_defender_is_player") and string.find(core:svr_load_string("primary_defender_subculture"), "wh_")) or 
+        (core:svr_load_bool("primary_attacker_is_player") and string.find(core:svr_load_string("primary_attacker_subculture"), "wh_")) then
+            loadButton:SetImage("ui/icon_load.png"); 
+        else
+            loadButton:SetImage("ui/icon_load2.png"); 
+        end
+        loadButton:Resize(referenceButtonW, referenceButtonH);
+        loadButton:MoveTo(referenceButtonX - 1.5*referenceButtonW - referenceButtonW, referenceButtonY + referenceButtonH)
+        loadButton:SetState("hover");
+        loadButton:SetTooltipText("load prefered speed")
+        loadButton:SetState("active")
+        if not tonumber(core:svr_load_string("svr_battleSpeed")) then 
+            loadButton:SetDisabled(true);
+            loadButton:SetTooltipText("no prefered speed found")
+            loadButton:SetOpacity(50);
+        end
+        core:add_listener(
+            "sm0_loadButton",
+            "ComponentLClickUp",
+            function(context)
+                return context.string == "loadButton";
+            end,
+            function(context)
+                speedBox:SetStateText(""..core:svr_load_string("svr_battleSpeed"));
+            end,
+            true
+        )
+    end
 end
 
 core:add_listener(
@@ -110,7 +200,6 @@ core:add_listener(
     end,
     true
 )
-
 
 core:add_listener(
     "sm0_speedButtons",
@@ -131,23 +220,26 @@ core:add_listener(
     end,
     true
 )
+core:add_listener(
+    "sm0_tactical_map",
+    "ComponentLClickUp",
+    function(context)
+        return context.string == "button_tactical_map";
+	end,
+    function(context)
+        deleteSpeedUI();
+    end,
+    true
+)
 
 core:add_listener(
     "sm0_unselectAll",
-    "ShortcutPressed",
+    "ShortcutTriggered",
     function(context)
-        return context.string == "toggle_ui_with_borders" or context.string == "toggle_ui";
+        return context.string == "toggle_ui_with_borders" or context.string == "toggle_ui" or context.string == "show_tactical_map";
     end,
     function(context)
-        if applyButton then
-            deleteUIC(applyButton);
-            core:remove_listener("sm0_applyButton");
-            applyButton = nil;
-        end
-        if speedBox then
-            deleteUIC(speedBox);
-            speedBox = nil;
-        end
+        deleteSpeedUI();
     end,
     true
 )

@@ -313,6 +313,7 @@
 --# assume CM.pending_battle_cache_faction_is_involved: method(faction_key: string) --> boolean
 --# assume CM.pending_battle_cache_num_attackers: method() --> int
 --# assume CM.pending_battle_cache_num_defenders: method() --> int
+--# assume CM.pending_battle_cache_human_is_involved: method() --> boolean
 --CAI
 --# assume CM.force_change_cai_faction_personality: method(key: string, personality: string)
 ---Markers
@@ -702,6 +703,8 @@
 --# assume CORE.cache_and_set_tooltip_for_component_state: method(component: CA_UIC, state: BUTTON_STATE, ui_tr: string)
 --# assume CORE.svr_load_string: method(svrname: string) --> string
 --# assume CORE.svr_load_bool: method(svrname: string) --> boolean
+--# assume CORE.svr_save_string: method(svrname: string, value: string)
+--# assume CORE.svr_save_bool: method(svrname: string, value: boolean)
 
 -- POOLED RESOURCE LIST
 --# assume CA_POOLED_LIST.is_empty: method() --> boolean
