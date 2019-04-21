@@ -1,19 +1,12 @@
-cm:set_saved_value("sm0_save_cam", true);
 --# assume table:TABLE
-force_require("table_save");
-local loadButton = nil --:BUTTON
-local saveButton = nil --:BUTTON
-local resetButton = nil --:BUTTON
+force_require("script/table_save");
+local loadButton = nil --:CA_UIC
+local saveButton = nil --:CA_UIC
+local resetButton = nil --:CA_UIC
 local resetIconPath = "ui/icon_stats_reset_small.png";
 local saveIconPath = "ui/icon_quick_save.png";
 local loadIconPath = "ui/icon_load.png";
-local playerFaction = cm:get_faction(cm:get_local_faction(true));
-local playerFactionStr = playerFaction:name();
-if string.find(playerFactionStr, "wh2_") then
-    resetIconPath = "ui/icon_stats_reset_small2.png";
-    saveIconPath = "ui/icon_quick_save2.png";
-    loadIconPath = "ui/icon_load2.png";
-end
+
 local camTableReset = {
     ["apply_player"] = {    
         ["dropdown_armies_camera"] = "option0",
@@ -145,80 +138,115 @@ function applySettingsFromTable(Table)
     );
 end
 
---v function()
-function createUI()
-    if not loadButton then
-        loadButton = Button.new("loadButton", find_uicomponent(core:get_ui_root(), "camera_settings", "button_holder"), "CIRCULAR", loadIconPath);
-        local closeButton = find_uicomponent(core:get_ui_root(), "camera_settings", "button_holder", "button_close");
-        loadButton:Resize(closeButton:Width(), closeButton:Height());
-        loadButton:PositionRelativeTo(closeButton, 0, closeButton:Height() + 25);
-        loadButton:SetState("hover");
-        loadButton.uic:SetTooltipText("Load user camera settings");
-        loadButton:SetState("active");	
-        loadButton:RegisterForClick(
-            function(context)
-                local camTable, err = table.load("cameraPreferences.txt");
-                if not err then
-                    applySettingsFromTable(camTable);
-                else
-                    applySettingsFromTable(camTableReset);
-                end
-            end 
-        )	
-    end
-    if not saveButton then
-        saveButton = Button.new("saveButton", find_uicomponent(core:get_ui_root(), "camera_settings", "button_holder"), "CIRCULAR", saveIconPath);
-        local closeButton = find_uicomponent(core:get_ui_root(), "camera_settings", "button_holder", "button_close");
-        saveButton:Resize(closeButton:Width(), closeButton:Height());
-        saveButton:PositionRelativeTo(loadButton, - closeButton:Width() - 1, 0);
-        saveButton:SetState("hover");
-        saveButton.uic:SetTooltipText("Save user camera settings as default");
-        saveButton:SetState("active");	
-        saveButton:RegisterForClick(
-            function(context)
-                saveSettingsToTable();
-                table.save(camTable, "cameraPreferences.txt");
-            end 
-        )	
-    end
-    if not resetButton then
-        resetButton = Button.new("resetButton", find_uicomponent(core:get_ui_root(), "camera_settings", "button_holder"), "CIRCULAR", resetIconPath);
-        local closeButton = find_uicomponent(core:get_ui_root(), "camera_settings", "button_holder", "button_close");
-        resetButton:Resize(closeButton:Width(), closeButton:Height());
-        resetButton:PositionRelativeTo(saveButton, - closeButton:Width() - 1, 0);
-        resetButton:SetState("hover");
-        resetButton.uic:SetTooltipText("Reset camera settings to CA default");
-        resetButton:SetState("active");	
-        resetButton:RegisterForClick(
-            function(context)
-                applySettingsFromTable(camTableReset);
-            end 
-        )		
-    end
+--v function(uic: CA_UIC)
+function deleteUIC(uic)
+    local root = core:get_ui_root();
+    root:CreateComponent("Garbage", "UI/campaign ui/script_dummy");
+    local component = root:Find("Garbage");
+    local garbage = UIComponent(component);
+    garbage:Adopt(uic:Address());
+    garbage:DestroyChildren();
 end
+
 
 --v function()
 function deleteUI()
 	if resetButton then
-		resetButton:Delete();
+        deleteUIC(resetButton);
+        core:remove_listener("sm0_resetButton");
         resetButton = nil;
     end
     if saveButton then
-		saveButton:Delete();
-		saveButton = nil;
+        deleteUIC(saveButton);
+        core:remove_listener("sm0_saveButton");
+        saveButton = nil;
     end
     if loadButton then
-		loadButton:Delete();
-		loadButton = nil;
+        deleteUIC(loadButton);
+        core:remove_listener("sm0_loadButton");
+        loadButton = nil;
     end
 end
 
-if cm:is_new_game() then
-    local loadTable, err = table.load("cameraPreferences.txt");
-    if not err then
-        applySettingsFromTable(loadTable);
-        deleteUI();
-    end
+--v function()
+function createUI()
+    deleteUI();
+    local camera_buttons = find_uicomponent(core:get_ui_root(), "camera_settings", "button_holder");
+    local referenceButton = find_uicomponent(core:get_ui_root(), "camera_settings", "button_holder", "button_close");
+    local referenceButtonW, referenceButtonH = referenceButton:Bounds();
+    local referenceButtonX, referenceButtonY = referenceButton:Position();
+
+    camera_buttons:CreateComponent("loadButton", "ui/templates/round_small_button");
+    loadButton = UIComponent(camera_buttons:Find("loadButton"));
+    camera_buttons:Adopt(loadButton:Address());
+    loadButton:PropagatePriority(referenceButton:Priority());
+    loadButton:SetImage(loadIconPath); 
+    loadButton:Resize(referenceButtonW, referenceButtonH);
+    loadButton:MoveTo(referenceButtonX, referenceButtonY + referenceButtonH + 25)
+    loadButton:SetState("hover");
+    loadButton:SetTooltipText("Load user camera settings")
+    loadButton:SetState("active")
+    core:add_listener(
+        "sm0_loadButton",
+        "ComponentLClickUp",
+        function(context)
+            return context.string == "loadButton";
+        end,
+        function(context)
+            local camTable, err = table.load("cameraPreferences.txt");
+            if not err then
+                applySettingsFromTable(camTable);
+            else
+                applySettingsFromTable(camTableReset);
+            end
+        end,
+        true
+    )
+
+    camera_buttons:CreateComponent("saveButton", "ui/templates/round_small_button");
+    saveButton = UIComponent(camera_buttons:Find("saveButton"));
+    camera_buttons:Adopt(saveButton:Address());
+    saveButton:PropagatePriority(referenceButton:Priority());
+    saveButton:SetImage(saveIconPath); 
+    saveButton:Resize(referenceButtonW, referenceButtonH);
+    saveButton:MoveTo(referenceButtonX - referenceButtonW - 1, referenceButtonY + referenceButtonH + 25)
+    saveButton:SetState("hover");
+    saveButton:SetTooltipText("Save user camera settings as default")
+    saveButton:SetState("active")
+    core:add_listener(
+        "sm0_saveButton",
+        "ComponentLClickUp",
+        function(context)
+            return context.string == "saveButton";
+        end,
+        function(context)
+            saveSettingsToTable();
+            table.save(camTable, "cameraPreferences.txt");
+        end,
+        true
+    )
+    
+    camera_buttons:CreateComponent("resetButton", "ui/templates/round_small_button");
+    resetButton = UIComponent(camera_buttons:Find("resetButton"));
+    camera_buttons:Adopt(resetButton:Address());
+    resetButton:PropagatePriority(referenceButton:Priority());
+    resetButton:SetImage(resetIconPath); 
+    resetButton:Resize(referenceButtonW, referenceButtonH);
+    resetButton:MoveTo(referenceButtonX - 2*referenceButtonW - 2, referenceButtonY + referenceButtonH + 25)
+    resetButton:SetState("hover");
+    resetButton:SetTooltipText("Reset camera settings to CA default")
+    resetButton:SetState("active")
+    core:add_listener(
+        "sm0_resetButton",
+        "ComponentLClickUp",
+        function(context)
+            return context.string == "resetButton";
+        end,
+        function(context)
+            applySettingsFromTable(camTableReset);
+        end,
+        true
+    )
 end
 
 core:add_listener(
@@ -248,7 +276,6 @@ core:add_listener(
             function()
                 local apply_current_faction = find_uicomponent(core:get_ui_root(), "layout", "settings_panel", "camera_settings", "buttons_list", "apply_current_faction");
                 if apply_current_faction:CurrentState() ~= "selected" and apply_current_faction:CurrentState() ~= "selected_hover" and apply_current_faction:CurrentState() ~= "selected_down" then
-                    deleteUI();
                     createUI();
                 else
                     deleteUI();
@@ -258,3 +285,20 @@ core:add_listener(
     end,
     true
 )
+
+function sm0_save_cam()
+    local playerFaction = cm:get_faction(cm:get_local_faction(true));
+    local playerFactionStr = playerFaction:name();
+    if string.find(playerFactionStr, "wh2_") then
+        resetIconPath = "ui/icon_stats_reset_small2.png";
+        saveIconPath = "ui/icon_quick_save2.png";
+        loadIconPath = "ui/icon_load2.png";
+    end
+    if cm:is_new_game() then
+        local loadTable, err = table.load("cameraPreferences.txt");
+        if not err then
+            applySettingsFromTable(loadTable);
+            deleteUI();
+        end
+    end
+end

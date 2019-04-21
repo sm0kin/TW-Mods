@@ -72,8 +72,7 @@ function setupRankListener(quests, subtype)
 	end
 end
 
-cm.first_tick_callbacks[#cm.first_tick_callbacks+1] = 
-function(context) 
+function sm0_hidden_legendaries()
 	setupRankListener(tyrion_extra_items, tyrion_subtype);
 	setupRankListener(teclis_extra_items, teclis_subtype);
 	setupRankListener(malekith_extra_items, malekith_subtype);

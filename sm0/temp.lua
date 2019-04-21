@@ -473,7 +473,7 @@ end;
 
 
 Taiyoumaru01/03/2019
-is there any way I can get OBR or the other mod to reset a non-mod LL's quests as well?
+is there any way I can get OBR or the other mod to reset a non-mod LLs quests as well?
 considering when I confederated the LL he was wounded
 DrunkFlamingo01/03/2019
 Nope, quests are not reset able
@@ -519,7 +519,7 @@ core:add_listener(
 		{"mission", "wh2_main_anc_magic_standard_sunburst_standard_of_hexoatl", "wh2_main_lzd_mazdamundi_sunburst_standard_of_hexoatl_stage_1", 6}
 	};
 	--set_up_rank_up_listener(mazdamundi_quests, "wh2_main_lzd_lord_mazdamundi");
-	--[[
+	
 	cm:create_force_with_general(
 		"wh2_main_lzd_hexoatl",
 		"wh2_main_lzd_inf_temple_guards,wh2_main_lzd_inf_saurus_warriors_0,wh2_main_lzd_inf_skink_cohort_1,wh2_main_lzd_inf_skink_cohort_1,wh2_main_lzd_mon_bastiladon_0,wh2_main_lzd_mon_kroxigors,wh2_main_lzd_mon_bastiladon_blessed_2",
@@ -543,4 +543,94 @@ core:add_listener(
 			cm:set_character_immortality(cm:char_lookup_str(cqi), true);
 		end
 	);
---]]
+
+
+
+---------------------------------------------		
+Command: 	force_religion_factors	
+Description: 	Forces regligion factors to a certain value, please note this will only work on turn 1 and at least 1 region key must be provided. Religions that are not represented by a pair of religion record key and value will be flattened down to 0.f. Numerical religion values added need to be between 0.0 and 1.0, the total of all value pairs must also be in that range.	
+Usage: 		force_religion_factors("region_key", "religion_1_key", "religion_1_value", "religion_2_key", "religion_2_value", ...)
+---------------------------------------------		
+Command: 	stop_character_convalescing	
+Description: 	Instantly stop a character from convalescing	
+Usage: 		stop_character_convalescing(card32 character_cqi)
+---------------------------------------------		
+Command: 	heal_garrison	
+Description: 	Heals the Garrison in a region back to full health	
+Usage: 		heal_garrison(card32 region_cqi)
+---------------------------------------------		
+Command: 	set_scripted_mission_position	
+Description: 	Set the position of a scripted mission objective	
+Usage: 		set_scripted_mission_position(string mission_key, string script_key, card16 pos_x, card16 pos_y)
+---------------------------------------------		
+Command: 	find_valid_spawn_location_for_character_from_character	
+Description: 	Utilise the pathfinder to locate a valid spawn point for a character, based around another character. Returns -1, -1 if invalid	
+Usage: 		find_valid_spawn_location_for_character_from_character(String faction_key, String character_lookup)
+---------------------------------------------		
+Command: 	add_units_to_province_mercenary_pool_by_region	
+Description: 	Add count of a specified unit to the province mercenary pool	
+Usage: 		add_units_to_province_mercenary_pool_by_region(region_key, "awesome_unit", 2)
+---------------------------------------------		
+Command: 	add_foreign_slot_set_to_region_for_faction	
+Description: 	Add the specified foreign slot set to the target region, for the target faction. Returns the foreign slot manager of the faction (may be null if parameters are invalid)	
+Usage: 		add_foreign_slot_set_to_region_for_faction(faction_cqi, region_cqi, slot_set_key)
+---------------------------------------------		
+Command: 	remove_faction_foreign_slots_from_region	
+Description: 	Add the specified foreign slot set to the target region, for the target faction.	
+Usage: 		add_foreign_slot_set_to_region_for_faction(faction_cqi, region_cqi)
+---------------------------------------------		
+Command: 	foreign_slot_instantly_upgrade_building	
+Description: 	Instantly upgrade the building in the specified foreign slot	
+Usage: 		foreign_slot_instantly_upgrade_building(foreign_slot_cqi, upgrade_building_key)
+---------------------------------------------		
+Command: 	foreign_slot_instantly_dismantle_building	
+Description: 	Instantly dismantle the building in the specified foreign slot	
+Usage: 		foreign_slot_instantly_dismantle_building(foreign_slot_cqi)
+---------------------------------------------		
+Command: 	trigger_mission_with_targets	
+Description: 	Trigger a mission with specified targets. Pass zero for CQI's if you don't want a target set.	
+Usage: 		bool trigger_mission_with_targets(owning_faction_cqi, mission_key, faction_cqi, secondary_faction_cqi, character_cqi, military_force_cqi, region_cqi, settlement_cqi)
+---------------------------------------------		
+Command: 	trigger_incident_with_targets	
+Description: 	Trigger an incident with specified targets. Pass zero for CQI's if you don't want a target set.	
+Usage: 		bool trigger_incident_with_targets(owning_faction_cqi, incident_key, faction_cqi, secondary_faction_cqi, character_cqi, military_force_cqi, region_cqi, settlement_cqi)
+---------------------------------------------		
+Command: 	trigger_dilemma_with_targets	
+Description: 	Trigger an dilemma with specified targets. Pass zero for CQI's if you don't want a target set.	
+Usage: 		bool trigger_dilemma_with_targets(owning_faction_cqi, dilemma_key, faction_cqi, secondary_faction_cqi, character_cqi, military_force_cqi, region_cqi, settlement_cqi)
+---------------------------------------------		
+Command: 	trigger_intrigue	
+Description: 	Triggers an intrigue incident which improves or worsens diplomatic relations between two factions. Fourth boolean argument improves relations if set to true, worsens them if set to false. Fifth argument exempts the issuing faction from the influence cost if true.	
+Usage: 		trigger_intrigue(issuing faction key, first target faction key, second target faction key, should_improve, exempt_from_cost)
+---------------------------------------------		
+Command: 	apply_dilemma_diplomatic_bonus	
+Description: 	Directly applies a diplomatic bonus or penalty between two factions, as if it had come from a dilemma. The bonus should be an integer between -6 and +6, each integer value of which corresponds to a change type (from PENALTY_XXXLARGE (-6) to BONUS_XXXLARGE (+6)) which carries a diplomatic attitude modifier that is actually applied.	
+Usage: 		apply_dilemma_diplomatic_penalty(first_faction_key, second_faction_key, attitude_bonus)
+---------------------------------------------	
+
+--- @function svr_save_registry_bool
+--- @desc Saves a boolean value to the registry. This will persist, even if the game is reloaded.
+--- @p string value name
+--- @p boolean value
+function core_object:svr_save_registry_bool(name, value)
+	if not is_string(name) then
+		script_error("ERROR: svr_save_registry_bool() called but supplied name [" .. tostring(name) .. "] is not a string");
+		return false;
+	end;
+	
+	if not is_boolean(value) then
+		script_error("ERROR: svr_save_registry_bool() called but supplied value [" .. tostring(value) .. "] is not boolean");
+		return false;
+	end;
+
+	return self.svr:SaveRegistryBool(name, value);
+end;
+
+
+--- @function svr_load_registry_bool
+--- @desc Loads a boolean value from the registry.
+--- @p string value name
+--- @return boolean value
+function core_object:svr_load_registry_bool(name)
+	return self.svr:LoadRegistryBool(name);
+end;

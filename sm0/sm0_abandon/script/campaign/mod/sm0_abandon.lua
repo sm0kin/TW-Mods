@@ -173,7 +173,6 @@ function sm0_abandon_init()
         end,
         function(context)
             createAbandonButton();
-            out("sm0/PanelOpenedCampaign");
         end,
         true
     )
@@ -199,7 +198,6 @@ function sm0_abandon_init()
             regionStr = context:garrison_residence():region():name();
             local currentFactionStr = context:garrison_residence():faction():name();
             local currentGarrison = context:garrison_residence();
-            out("sm0/SettlementSelected");
             cm:callback(
                 function(context)
                     if abandonFrame then

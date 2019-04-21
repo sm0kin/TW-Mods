@@ -1,4 +1,5 @@
 local playerFaction = nil;
+--# assume playerFaction: CA_FACTION
 local restrictTKconfed --:bool
 local OccupationOptionID = {
 	["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupation_decision_confederate",
@@ -48,45 +49,16 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --v function()
-function addTkImmortalityTrait()
-	local factionList = cm:model():world():faction_list();
-	cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_traits", "");
-	for i = 0, factionList:num_items() - 1 do
-		local currentFaction = factionList:item_at(i);
-		if currentFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" and not currentFaction:is_dead() then
-			local leaderChar = currentFaction:faction_leader();
-			if not leaderChar:has_trait("wh2_sm0_trait_immortality") and not leaderChar:is_wounded() then
-				cm:force_add_trait("character_cqi:"..tostring(leaderChar:command_queue_index()), "wh2_sm0_trait_immortality", true); --    cm:set_character_immortality(cm:char_lookup_str(character:command_queue_index()), true);
-
-			elseif not leaderChar:has_trait("wh2_sm0_trait_immortality") and leaderChar:is_wounded() then
-				local leaderSubtype = leaderChar:character_subtype_key();
-				local TraitListenerStr = "TraitListener_" ..leaderSubtype;
-
-				core:add_listener(
-					TraitListenerStr,
-					"CharacterTurnStart",
-					function(context)
-						return context:character():character_subtype(leaderSubtype) and not context:character():is_wounded();
-					end,
-					function(context)
-						cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_traits", "");
-						cm:force_add_trait("character_cqi:"..tostring(leaderChar:command_queue_index()), "wh2_sm0_trait_immortality", true);
-						cm:callback(
-							function(context)
-								cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_traits", "");
-							end, 1, "enableEventFeed"
-						);
-					end,
-					false
-				);
+function addTkImmortality()
+	if playerFaction and playerFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
+		local characterList = playerFaction:character_list();
+		for i = 0, characterList:num_items() - 1 do
+			local currentChar = characterList:item_at(i);			
+			if currentChar:is_wounded() and cm:char_is_general(currentChar) then
+				cm:set_character_immortality(cm:char_lookup_str(currentChar:command_queue_index()), true); 
 			end
 		end
 	end
-	cm:callback(
-		function(context)
-			cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_traits", "");
-		end, 1, "enableEventFeed"
-	);
 end
 
 --v function(faction: CA_FACTION)
@@ -105,21 +77,22 @@ function forceConfed(char, faction)
 	local winnerFactionName = char:faction():name();
 	local loserFaction = faction;
 	local loserFactionName = loserFaction:name();
-	if playerFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
-		addTkImmortalityTrait();
-	end
 	killAllUnits(loserFaction);
 	cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
 	cm:force_confederation(winnerFactionName, loserFactionName);
 	cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
+	cm:callback(
+		function(context)
+			addTkImmortality();
+		end, 1, "wait for character list to update"
+	);
 end
 
 --v function() --init
 function sm0_confed()
 	playerFaction = cm:get_faction(cm:get_local_faction(true));
 	initMCMconfed();
-	addTkImmortalityTrait();
-
+	addTkImmortality(); -- delete next patch
 	core:add_listener(
 		"force_confederation_expired",
 		"ScriptEventConfederationExpired",

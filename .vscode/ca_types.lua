@@ -102,7 +102,7 @@
 --# assume CA_UIC.SetDisabled: method(disabled: boolean)
 --# assume CA_UIC.ShaderTechniqueSet: method(technique: string | number, unknown: boolean)
 --# assume CA_UIC.ShaderVarsSet: method(p1: number, p2: number, p3: number, p4: number, unknown: boolean)
---# assume CA_UIC.SimulateClick: method()
+----# assume CA_UIC.SimulateClick: method()
 --# assume CA_UIC.SimulateMouseOn: method()
 --# assume CA_UIC.Visible: method() --> boolean
 --# assume CA_UIC.RegisterTopMost: method()
@@ -314,6 +314,7 @@
 --# assume CM.pending_battle_cache_num_attackers: method() --> int
 --# assume CM.pending_battle_cache_num_defenders: method() --> int
 --# assume CM.pending_battle_cache_human_is_involved: method() --> boolean
+--# assume CM.is_processing_battle: method() --> boolean
 --CAI
 --# assume CM.force_change_cai_faction_personality: method(key: string, personality: string)
 ---Markers
@@ -333,6 +334,7 @@
 --# assume CM.win_next_autoresolve_battle: method(faction: string)
 --# assume CM.modify_next_autoresolve_battle: method(attacker_win_chance: number, defender_win_chance: number, attacker_losses_modifier: number, defender_losses_modifier: number, wipe_out_loser: boolean)
 --events
+--# assume CM.trigger_incident_with_targets: method(owning_faction_cqi: CA_CQI, incident_key: string, faction_cqi: CA_CQI | 0, secondary_faction_cqi: CA_CQI | 0, character_cqi: CA_CQI | 0, military_force_cqi: CA_CQI | 0, region_cqi: CA_CQI | 0, settlement_cqi: CA_CQI | 0)
 --# assume CM.trigger_dilemma: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean)
 --# assume CM.trigger_incident: method(factionName: string, incidentKey: string, fireImmediately: boolean)
 --# assume CM.trigger_mission: method(faction_key: string, mission_key: string, trigger_immediately: boolean)

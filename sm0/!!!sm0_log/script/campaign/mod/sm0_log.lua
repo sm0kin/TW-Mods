@@ -167,9 +167,8 @@ function sm0DEBUG()
 	core.add_listener = myAddListener;
 end
 
-sm0DEBUG();
-
 function sm0_log()
+	sm0DEBUG();
 	if cm:is_new_game() then 
 		sm0LOG_reset();
 	end
