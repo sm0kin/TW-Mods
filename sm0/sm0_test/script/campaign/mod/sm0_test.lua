@@ -159,5 +159,5 @@ end
 function sm0_test()
 	expCheat();
 	unitCheat();
-	cm:win_next_autoresolve_battle(cm:get_local_faction());
+	--cm:win_next_autoresolve_battle(cm:get_local_faction());
 end

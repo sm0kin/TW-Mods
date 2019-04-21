@@ -330,6 +330,7 @@
 --# assume CM.set_region_abandoned: method(region: string)
 --# assume CM.set_public_order_disabled_for_province_for_region_for_all_factions_and_set_default: method(region_key: string, bool: boolean)
 --# assume CM.exempt_province_from_tax_for_all_factions_and_set_default: method(region_key: string, bool: boolean)
+--# assume CM.instantly_upgrade_building_in_region: method (region_key: string, slot_num: number, target_building_key: string)
 --autoresolve
 --# assume CM.win_next_autoresolve_battle: method(faction: string)
 --# assume CM.modify_next_autoresolve_battle: method(attacker_win_chance: number, defender_win_chance: number, attacker_losses_modifier: number, defender_losses_modifier: number, wipe_out_loser: boolean)

@@ -32,18 +32,23 @@ function initMCMconfed()
 				elseif restriction == "unrestricted" then
 					restrictTKconfed = false;
 				end
+				local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value");
+				if not confed_option_tmb or confed_option_tmb == "yield" then
+					cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false);
+				end
 			end
 		)
-	end
-	local restriction_value = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value");
-	if restriction_value == "unrestricted" then
-		restrictTKconfed = false;
 	else
-		restrictTKconfed = true;
-	end
-	local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_tmb_value");
-	if not confed_option_tmb then
-		cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false);
+		local restriction_value = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value");
+		if restriction_value == "unrestricted" then
+			restrictTKconfed = false;
+		else
+			restrictTKconfed = true;
+		end
+		local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value");
+		if not confed_option_tmb or confed_option_tmb == "yield" then
+			cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false);
+		end
 	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

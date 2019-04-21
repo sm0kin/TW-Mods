@@ -1109,7 +1109,11 @@ function createloreButton_unitsPanel()
 			local renownButton = find_uicomponent(unitsPanel, "button_renown"); 
 			local recruitButton = find_uicomponent(unitsPanel, "button_recruitment");
 			loreButton_unitsPanel:Resize(renownButton:Width(), renownButton:Height());
-			if renownButton:Visible() then
+			local blessedButton = find_uicomponent(unitsPanel, "button_blessed_spawn_pool"); 
+			local recruitButton = find_uicomponent(unitsPanel, "button_recruitment");
+			if blessedButton and blessedButton:Visible() then
+				loreButton_unitsPanel:PositionRelativeTo(blessedButton, loreButton_unitsPanel:Width() + 4, 0);
+			elseif not blessedButton and renownButton:Visible() then
 				loreButton_unitsPanel:PositionRelativeTo(renownButton, loreButton_unitsPanel:Width() + 4, 0);
 			else
 				loreButton_unitsPanel:PositionRelativeTo(recruitButton, loreButton_unitsPanel:Width() + 4, 0);
@@ -1683,7 +1687,7 @@ function ml_setup()
 		local currentFaction = factionList:item_at(i);	
 		local characterList = currentFaction:character_list();
 		for j = 0, characterList:num_items() - 1 do
-			local currentChar = characterList:item_at(j);	
+			local currentChar = characterList:item_at(j);
 			if is_mlChar(currentChar) then
 				ml_tables = ml_force_require(currentChar);
 				setupSavedOptions(currentChar);

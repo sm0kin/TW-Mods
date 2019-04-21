@@ -63,7 +63,7 @@ function getCharByFaction(charSubtype, faction)
     end
     return char;
 end
---cm:force_confederation("wh_main_emp_empire", "wh_main_emp_wissenland");
+--cm:force_confederation("wh2_main_lzd_xlanhuapec", "wh2_main_lzd_hexoatl");
 			--TEST
 			--local cqi = currentChar:cqi();
 			--cm:add_agent_experience(cm:char_lookup_str(cqi), 70000);
@@ -545,7 +545,6 @@ core:add_listener(
 	);
 
 
-
 ---------------------------------------------		
 Command: 	force_religion_factors	
 Description: 	Forces regligion factors to a certain value, please note this will only work on turn 1 and at least 1 region key must be provided. Religions that are not represented by a pair of religion record key and value will be flattened down to 0.f. Numerical religion values added need to be between 0.0 and 1.0, the total of all value pairs must also be in that range.	
@@ -607,6 +606,15 @@ Command: 	apply_dilemma_diplomatic_bonus
 Description: 	Directly applies a diplomatic bonus or penalty between two factions, as if it had come from a dilemma. The bonus should be an integer between -6 and +6, each integer value of which corresponds to a change type (from PENALTY_XXXLARGE (-6) to BONUS_XXXLARGE (+6)) which carries a diplomatic attitude modifier that is actually applied.	
 Usage: 		apply_dilemma_diplomatic_penalty(first_faction_key, second_faction_key, attitude_bonus)
 ---------------------------------------------	
+Function: has_banner_ancillary
+Description: Returns whether the unit has a banner equipped
+Parameters: has_banner_ancillary()
+Return: bool
+
+Function: banner_ancillary
+Description: Returns the ancillary key of the banner equipped by the unit, or an empty string if no banner is equipped
+Parameters: banner_ancillary()
+Return: String
 
 --- @function svr_save_registry_bool
 --- @desc Saves a boolean value to the registry. This will persist, even if the game is reloaded.
