@@ -2,17 +2,39 @@ local abandonButton = nil --:BUTTON
 local abandonFrame = nil --:FRAME
 local buildingCost = {800, 1600, 3200, 4800, 7200} --:vector<number>
 local regionStr = "";
-local frameName = effect.get_localised_string("sm0_frame_name"); --"Abandon Region"
-local abandonText1 = effect.get_localised_string("sm0_text_string1"); --"If the enemy is getting too close and it looks likely you may lose control of a region, it is possible to abandon a settlement – enacting a scorched earth policy to deny the invaders their prize. When you leave, a small amount will be added to your treasury as the population save their valuables from the destruction. Although other regions won't approve of your decision..."
-local abandonText2 = effect.get_localised_string("sm0_text_string2"); --"Do you really want to abandon the settlement of"
-local abandonText3 = effect.get_localised_string("sm0_text_string3"); --"this turn?"
-local confirmButtonText = effect.get_localised_string("sm0_confirm_button_text"); --"Abandon"
-local confirmButtonTooltipHover1 = effect.get_localised_string("sm0_confirm_button_tooltip_hover1"); --"Abandoning the settlement of"
-local confirmButtonTooltipHover2 = effect.get_localised_string("sm0_confirm_button_tooltip_hover2"); --"nets you"
-local confirmButtonTooltipDisabled = effect.get_localised_string("sm0_confirm_button_tooltip_disabled"); --"Besieged Settlements can't be abandoned!"
-local abandonButtonTooltip = effect.get_localised_string("sm0_abandom_button_tooltip_hover"); --"Abandon selected settlement"
+local frameName = "Abandon Region"
+local abandonText1 = "If the enemy is getting too close and it looks likely you may lose control of a region, it is possible to abandon a settlement – enacting a scorched earth policy to deny the invaders their prize. When you leave, a small amount will be added to your treasury as the population save their valuables from the destruction. Although other regions won't approve of your decision..."
+local abandonText2 = "Do you really want to abandon the settlement of"
+local abandonText3 = "this turn?"
+local abandonText4 = "next turn?"
+local confirmButtonText = "Abandon"
+local confirmButtonTooltipHover1 = "Abandoning the settlement of"
+local confirmButtonTooltipHover2 = "nets you"
+local confirmButtonTooltipHover3 = " will be abandoned at the beginning of the next turn."
+local confirmButtonTooltipDisabled = "Besieged Settlements can't be abandoned!"
+local abandonButtonTooltip = "Abandon selected settlement"
 local penaltyEnable = true --:bool                    
 local iconPath = "ui/icon_raze.png";
+local id_from_subculture = {
+    ["wh_dlc03_sc_bst_beastmen"] = 19130,
+    ["wh_dlc05_sc_wef_wood_elves"] = 19131,
+    ["wh_main_sc_brt_bretonnia"] = 19132,
+    ["wh_main_sc_chs_chaos"] = 19133,
+    ["wh_main_sc_dwf_dwarfs"] = 19134,
+    ["wh_main_sc_emp_empire"] = 19135,
+    ["wh_main_sc_grn_greenskins"] = 19136,
+    ["wh_main_sc_grn_savage_orcs"] = 19137,
+    ["wh_main_sc_ksl_kislev"] = 19138,
+    ["wh_main_sc_nor_norsca"] = 19139,
+    ["wh_main_sc_teb_teb"] = 19140,
+    ["wh_main_sc_vmp_vampire_counts"] = 19141,
+    ["wh2_dlc09_sc_tmb_tomb_kings"] = 19142,
+    ["wh2_main_sc_def_dark_elves"] = 19143,
+    ["wh2_main_sc_hef_high_elves"] = 19144,
+    ["wh2_main_sc_lzd_lizardmen"] = 19145,
+    ["wh2_main_sc_skv_skaven"]  = 19146,
+    ["wh2_dlc11_sc_cst_vampire_coast"] = 19147
+} --: map<string, number>
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --v function()
@@ -23,6 +45,9 @@ function initMCMabandon()
         local restriction = abandon:add_tweaker("penalty", "Public Order - Penalty", "Enable/Disable the public order penalty for abandoning one of your regions.");
         restriction:add_option("penalty", "Public Order - Penalty", "If you choose to enact a scorched earth policy you have to suffer the consequences.");
         restriction:add_option("nopenalty", "No Penalty", "Abandoning Regions has no consequences!");
+        local delay = abandon:add_tweaker("delay", "Turns until Regions are abandoned", "Choose between instant and single turn delay until Regions are abandoned.");
+        delay:add_option("instant", "Instant", "Regions can be abandoned instantly.");
+        delay:add_option("oneTurn", "One Turn", "Abandoning a region takes one turn.");
         mcm:add_post_process_callback(
             function()
                 penalty = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value");
@@ -33,12 +58,13 @@ function initMCMabandon()
                 end
             end
         )
-    end
-    local penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value");
-    if penalty_value == "nopenalty" then
-        penaltyEnable = false;
     else
-        penaltyEnable = true;
+        local penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value");
+        if penalty_value == "nopenalty" then
+            penaltyEnable = false;
+        else
+            penaltyEnable = true;
+        end
     end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -87,6 +113,11 @@ function createAbandonFrame(abandonRegionStr)
     money = math.floor(money);
     abandonText = Text.new("abandonText", abandonFrame, "NORMAL", "test1");
     abandonText:Resize(640, 225);
+    if cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") ~= "oneTurn" then 
+        abandonText:SetText(abandonText1 .. "\n\n\n" ..abandonText2.. " " ..regionOnscreenName.. " " ..abandonText4);
+    else
+        abandonText:SetText(abandonText1 .. "\n\n\n" ..abandonText2.. " " ..regionOnscreenName.. " " ..abandonText3);
+    end
     abandonText:SetText(abandonText1 .. "\n\n\n" ..abandonText2.. " " ..regionOnscreenName.. " " ..abandonText3);
     Util.centreComponentOnComponent(abandonText, abandonFrame);
 	abandonFrame:AddCloseButton(
@@ -96,7 +127,7 @@ function createAbandonFrame(abandonRegionStr)
         end,
         true
     );
-    local confirmButton = TextButton.new("confirmButton", abandonFrame, "TEXT", confirmButtonText.. " " .. regionOnscreenName);
+    local confirmButton = TextButton.new("confirmButton", abandonFrame, "TEXT_TOGGLE", confirmButtonText.. " " .. regionOnscreenName);
     confirmButton.uic:PropagatePriority(100);
     abandonFrame:AddComponent(confirmButton);
     confirmButton:SetState("hover");
@@ -107,15 +138,33 @@ function createAbandonFrame(abandonRegionStr)
         confirmButton:SetDisabled(true);
         confirmButton.uic:SetTooltipText(confirmButtonTooltipDisabled);
     end
+    local region = cm:get_region(regionStr)
+    local regionOwner = region:owning_faction()
+    if cm:get_saved_value("abandon_"..regionStr.."_"..regionOwner:name()) then
+        confirmButton:SetState("selected_hover");
+        confirmButton.uic:SetTooltipText(regionOnscreenName..confirmButtonTooltipHover1);
+    end
+
     --Changed this to campaignUI trigger
     confirmButton:RegisterForClick( 
         function(context)
             local regionToSend = regionStr;
             local moneyToSend = calcCost(cm:get_region(regionToSend));
-            CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable));
-            abandonFrame:Delete();
-            abandonFrame = nil;
-            abandonButton:SetDisabled(true);
+            if cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") ~= "oneTurn" then
+                CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable).."~");
+                abandonFrame:Delete();
+                abandonFrame = nil;
+                abandonButton:SetDisabled(true);
+            else
+                if not cm:get_saved_value("abandon_"..regionStr.."_"..regionOwner:name()) then
+                    confirmButton:SetState("selected_hover");
+                    confirmButton.uic:SetTooltipText(regionOnscreenName.." will be abandoned at the beginning of the next turn.");
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable).."~");
+                else
+                    confirmButton:SetState("active");
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable).."~remove");
+                end
+            end
         end 
     );
     Util.centreComponentOnComponent(confirmButton, abandonFrame);
@@ -155,11 +204,21 @@ function closeAbandonUI()
 end
 
 --v function() --init
-function sm0_abandon_init()
+function sm0_abandon()
+    frameName = effect.get_localised_string("sm0_frame_name"); --"Abandon Region"
+    abandonText1 = effect.get_localised_string("sm0_text_string1"); --"If the enemy is getting too close and it looks likely you may lose control of a region, it is possible to abandon a settlement – enacting a scorched earth policy to deny the invaders their prize. When you leave, a small amount will be added to your treasury as the population save their valuables from the destruction. Although other regions won't approve of your decision..."
+    abandonText2 = effect.get_localised_string("sm0_text_string2"); --"Do you really want to abandon the settlement of"
+    abandonText3 = effect.get_localised_string("sm0_text_string3"); --"this turn?"
+    abandonText4 = effect.get_localised_string("sm0_text_string4"); --"next turn?"
+    confirmButtonText = effect.get_localised_string("sm0_confirm_button_text"); --"Abandon"
+    confirmButtonTooltipHover1 = effect.get_localised_string("sm0_confirm_button_tooltip_hover1"); --"Abandoning the settlement of"
+    confirmButtonTooltipHover2 = effect.get_localised_string("sm0_confirm_button_tooltip_hover2"); --"nets you"
+    confirmButtonTooltipHover2 = effect.get_localised_string("sm0_confirm_button_tooltip_hover3"); --" will be abandoned at the beginning of the next turn."
+    confirmButtonTooltipDisabled = effect.get_localised_string("sm0_confirm_button_tooltip_disabled"); --"Besieged Settlements can't be abandoned!"
+    abandonButtonTooltip = effect.get_localised_string("sm0_abandom_button_tooltip_hover"); --"Abandon selected settlement"
     local playerFaction = cm:get_faction(cm:get_local_faction(true));
     local playerFactionStr = playerFaction:name();
     local playerCultureStr = playerFaction:culture();
-    cm:set_saved_value("sm0_abandon", true);
     if string.find(playerCultureStr, "wh2_") then
         iconPath = "ui/icon_raze2.png";
     end
@@ -236,16 +295,67 @@ function sm0_abandon_init()
             local regionToAbandon = cm:get_region(regionName);
             local cashEnd = string.find(info, ">")
             local cash = tonumber(string.sub(info, regionNameEnd + 1, cashEnd - 1));
-            local penalty = string.sub(info, cashEnd + 1)
-            cm:set_region_abandoned(regionName);
-            cm:treasury_mod(faction, cash);
-            if penalty == "true" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5); end
+            local penaltyEnd = string.find(info, "~")
+            local penalty = string.sub(info, cashEnd + 1, penaltyEnd - 1);
+            local remove = string.sub(info, penaltyEnd + 1)
+            
+            if cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") ~= "oneTurn" then
+                cm:show_message_event(
+                    faction,
+                    "event_feed_targeted_events_title_provinces_settlement_abandonedevent_feed_target_settlement_faction",
+                    "regions_onscreen_"..regionName,
+                    "event_feed_strings_text_wh_event_feed_string_provinces_settlement_abandoned_description",
+                    true,
+                    id_from_subculture[cm:get_faction(faction):subculture()]
+                )
+                cm:set_region_abandoned(regionName);
+                cm:treasury_mod(faction, cash);
+                if penalty == "true" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5); end
+            else
+                if remove == "remove" then
+                    core:remove_listener("Abandon_"..regionName.."_"..faction);
+                    cm:set_saved_value("abandon_"..regionName.."_"..faction, false)
+                else
+                    cm:set_saved_value("abandon_"..regionName.."_"..faction, context:trigger())
+                    core:add_listener(
+                        "Abandon_"..regionName.."_"..faction,
+                        "FactionTurnStart",
+                        function(context)
+                            return context:faction():name() == faction;
+                        end,
+                        function(context)
+                            local region = cm:get_region(regionName)
+                            local regionOwner = region:owning_faction()
+                            if regionOwner:name() == context:faction():name() then
+                                cm:show_message_event(
+                                    faction,
+                                    "event_feed_targeted_events_title_provinces_settlement_abandonedevent_feed_target_settlement_faction",
+                                    "regions_onscreen_"..regionName,
+                                    "event_feed_strings_text_wh_event_feed_string_provinces_settlement_abandoned_description",
+                                    true,
+                                    id_from_subculture[cm:get_faction(faction):subculture()]
+                                )
+                                cm:set_region_abandoned(regionName);
+                                cm:treasury_mod(faction, cash);
+                                if penalty == "true" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5); end
+                                cm:set_saved_value("abandon_"..regionName.."_"..regionOwner:name(), false)
+                            end
+                        end,
+                        false
+                    )
+                end
+            end
         end,
         true
     )
-end
 
-cm.first_tick_callbacks[#cm.first_tick_callbacks+1] = 
-function(context) 
-    sm0_abandon_init();
+    if cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") == "oneTurn" then
+        local regionList = playerFaction:region_list()
+        for i = 0, regionList:num_items() - 1 do
+            local currentRegion = regionList:item_at(i);
+            if cm:get_saved_value("abandon_"..currentRegion:name().."_"..playerFaction:name()) then
+                CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), cm:get_saved_value("abandon_"..currentRegion:name().."_"..playerFaction:name()));
+            end
+        end
+    end
 end

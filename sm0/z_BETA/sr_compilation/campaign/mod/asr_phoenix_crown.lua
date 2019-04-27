@@ -82,6 +82,7 @@ local mcm = _G.mcm
 
 if not not mcm then
 	local ovn = nil;
+	local chance = 100;
 	if mcm:has_mod("ovn") then
 		ovn = mcm:get_mod("ovn");
 	else
@@ -90,13 +91,22 @@ if not not mcm then
 	local phoenix_crown = ovn:add_tweaker("phoenix_crown", "Phoenix Crown", "")
 	phoenix_crown:add_option("enable", "Enable", "")
 	phoenix_crown:add_option("disable", "Disable", "")
+	phoenix_crown:add_option("chance", "by Chance", "")
+	ovn:add_variable("phoenix_crown_chance", 5, 95, 50, 5, "Phoenix Crown Chance", "Chance this \"event\" is happening."):add_callback(
+		function(context)
+        	chance = context:get_mod("ovn"):get_variable_with_key("phoenix_crown_chance"):current_value()
+		end
+	)
 	mcm:add_post_process_callback(
 		function(context)
 			if cm:get_saved_value("mcm_tweaker_ovn_phoenix_crown_value") == "enable" then
 				sr_phoenix_crown()
+			elseif cm:get_saved_value("mcm_tweaker_ovn_phoenix_crown_value") == "chance" and cm:random_number(100) <= chance then
+				sr_phoenix_crown()
 			end
 		end
 	)
+
 end
 
 cm:add_first_tick_callback(

@@ -43,7 +43,6 @@
 --# assume global class CA_RITUAL_LIST
 
 --# assume global class IM
-
 --# assume global class CORE
 --# assume global class _G
 
@@ -170,9 +169,9 @@
 --message events
 --# assume CM.show_message_event_located: method(
 --#     faction_key: string,
---#     primary_detail: string,
---#     secondary_detail: string,
---#     flavour_text: string,
+--#     title_loc_key: string,
+--#     primary_detail_loc_key: string,
+--#     secondary_detail_loc_key: string,
 --#     location_x: number,
 --#     location_y: number,
 --#     show_immediately: boolean,
@@ -182,9 +181,9 @@
 --#)
 --# assume CM.show_message_event: method(
 --#    faction_key: string,
---#    primary_detail: string,
---#    secondary_detail: string,
---#    flavour_text: string,
+--#    title_loc_key: string,
+--#    primary_detail_loc_key: string,
+--#    secondary_detail_loc_key: string,
 --#    show_immediately: boolean,
 --#    event_picture_id: number
 --#)
@@ -208,6 +207,8 @@
 --# assume CM.kill_all_armies_for_faction: method(factionName: CA_FACTION)
 --# assume CM.teleport_to: method(charString: string, xPos: number, yPos: number, useCommandQueue: boolean)
 --# assume CM.replenish_action_points: method(lookup:string)
+--# assume CM.stop_character_convalescing: method(character_cqi: CA_CQI)
+
 --spawning
 --# assume CM.create_force_with_general: method(
 --#     faction_key: string,
@@ -267,8 +268,10 @@
 --# assume CM.force_attack_of_opportunity: method(attacking_mf: CA_CQI, defending_mf: CA_CQI, thruCq: bool)
 --# assume CM.pending_battle_cache_is_quest_battle: method() --> boolean
 --# assume CM.add_first_tick_callback: method(function)
+--# assume CM.force_rebellion_in_region: method(region: string, unitsize: number, unit_list: string, xpos: number, ypos: number, suppress_message: boolean)
+
 --spawn location finding
---# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, settlement_key: string, rebellion_spawn: boolean, on_sea: boolean, rebel_spawn_distance: number?) --> (number, number)
+--# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, region_key: string, rebellion_spawn: boolean, on_sea: boolean, rebel_spawn_distance: number?) --> (number, number)
 --# assume CM.find_valid_spawn_location_for_character_from_position: method(faction_key: string, x: number, y:number, on_sea: boolean) --> (number, number)
 --saving and loading
 --# assume CM.add_saving_game_callback: method(function(context: WHATEVER))
@@ -708,6 +711,10 @@
 --# assume CORE.svr_load_bool: method(svrname: string) --> boolean
 --# assume CORE.svr_save_string: method(svrname: string, value: string)
 --# assume CORE.svr_save_bool: method(svrname: string, value: boolean)
+
+-- VFS
+--# assume global class vfs
+--# assume vfs.exits: method(filepath: string) --> boolean
 
 -- POOLED RESOURCE LIST
 --# assume CA_POOLED_LIST.is_empty: method() --> boolean

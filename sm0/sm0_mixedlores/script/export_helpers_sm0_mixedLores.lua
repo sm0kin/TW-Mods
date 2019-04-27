@@ -356,25 +356,7 @@ end
 function applySpellDisableEffect(char, spellSlots)
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 	local charCqi = char:command_queue_index();
-	ml_tables = ml_force_require(char);
-	if ml_tables then
-		mlLOG("CHAR: "..char:character_subtype_key())
-		if savedOption == "Spells for free" and char:has_military_force() and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
-			cm:apply_effect_bundle_to_characters_force(ml_tables.enableAllBundle, charCqi, -1, false);
-		elseif savedOption ~= "Spells for free" and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
-			cm:remove_effect_bundle_from_characters_force(ml_tables.enableAllBundle, charCqi);
-		end
-		for _, effectBundle in pairs(ml_tables.effectBundles) do
-			if char:has_military_force() and not char:military_force():has_effect_bundle(effectBundle) then
-				cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false);
-			end
-		end
-		for _, spell in ipairs(spellSlots) do 
-			if ml_tables.effectBundles[spell] and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
-				cm:remove_effect_bundle_from_characters_force(ml_tables.effectBundles[spell], charCqi);
-			end
-		end
-	end
+	CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|"..tostring(charCqi))
 end
 
 --v [NO_CHECK] function(spellName: any, selectedSpellSlot: any, char: CA_CHAR) --> vector<string>
@@ -395,6 +377,62 @@ function updateSaveTable(spellName, selectedSpellSlot, char)
 	end
 	return spellSlots;
 end
+
+--Multiplayer listener
+core:add_listener(
+    "MixedLoresMultiplayer",
+    "UITriggerScriptEvent",
+    function(context)
+        return context:trigger():starts_with("MixedLores|");
+    end,
+    function(context)
+		local str = context:trigger() --:string
+		if context:trigger():starts_with("MixedLores|apply") or context:trigger():starts_with("MixedLores|remove") then
+			local info = string.gsub(str, "MixedLores|", "");
+			local commandEnd = string.find(info, "<")
+			local command = string.sub(info, 1, commandEnd - 1);
+			local cqiEnd = string.find(info, ">")
+			local cqiStr = string.sub(info, commandEnd + 1, cqiEnd - 1);
+			local cqi = tonumber(cqiStr)
+			local effectBundle = string.sub(info, cqiEnd + 1)
+			-- "MixedLores|".."remove".."<"..tostring(charCqi)..">"..effectBundle
+			--# assume cqi: CA_CQI
+			if command == "remove" then cm:remove_effect_bundle_from_characters_force(effectBundle, cqi); end
+			if command == "apply" then cm:apply_effect_bundle_to_characters_force(effectBundle, cqi, -1, false); end
+		else
+			local info = string.gsub(str, "MixedLores|", "");
+			local charCqi = tonumber(info)
+			--# assume charCqi: CA_CQI
+			local char = cm:get_character_by_cqi(charCqi);
+			local spellSlots = updateSaveTable(false, false, char);
+
+			local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
+			ml_tables = ml_force_require(char);
+			if ml_tables then
+				--mlLOG("CHAR: "..char:character_subtype_key())
+				if savedOption == "Spells for free" and char:has_military_force() and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
+					CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."apply".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
+					cm:apply_effect_bundle_to_characters_force(ml_tables.enableAllBundle, charCqi, -1, false);
+				elseif savedOption ~= "Spells for free" and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
+					CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
+					cm:remove_effect_bundle_from_characters_force(ml_tables.enableAllBundle, charCqi);
+				end
+				for _, effectBundle in pairs(ml_tables.effectBundles) do
+					if char:has_military_force() and not char:military_force():has_effect_bundle(effectBundle) then
+						cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false);
+					end
+				end
+				for _, spell in ipairs(spellSlots) do 
+					if ml_tables.effectBundles[spell] and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
+						cm:remove_effect_bundle_from_characters_force(ml_tables.effectBundles[spell], charCqi);
+						--mlLOG("applySpellDisableEffect / effectBundle = "..ml_tables.effectBundles[spell].." / cqi = "..tostring(charCqi).." / command = ".."remove")
+					end
+				end
+			end
+		end
+    end,
+    true
+)
 
 --v function(tbl: map<number | integer, WHATEVER>) --> map<number | integer, WHATEVER>
 function shuffle(tbl)
@@ -1113,7 +1151,7 @@ function createloreButton_unitsPanel()
 			local recruitButton = find_uicomponent(unitsPanel, "button_recruitment");
 			if blessedButton and blessedButton:Visible() then
 				loreButton_unitsPanel:PositionRelativeTo(blessedButton, loreButton_unitsPanel:Width() + 4, 0);
-			elseif not blessedButton and renownButton:Visible() then
+			elseif blessedButton and not blessedButton:Visible() and renownButton and renownButton:Visible() then
 				loreButton_unitsPanel:PositionRelativeTo(renownButton, loreButton_unitsPanel:Width() + 4, 0);
 			else
 				loreButton_unitsPanel:PositionRelativeTo(recruitButton, loreButton_unitsPanel:Width() + 4, 0);
@@ -1192,6 +1230,10 @@ function setupSavedOptions(char)
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option")
 	if not savedOption then
 		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."colour_option", "Multi-Colour");
+	end
+	local ownerFaction = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."ownerFaction")
+	if not ownerFaction then
+		cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."ownerFaction", char:faction():name());
 	end
 end
 
@@ -1393,7 +1435,8 @@ function setupAICompletedBattleListener(char)
 				local charCqi = char:command_queue_index();
 				for _, effectBundle in pairs(ml_tables.effectBundles) do
 					if char:military_force():has_effect_bundle(effectBundle) then
-						cm:remove_effect_bundle_from_characters_force(effectBundle, charCqi);
+						CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..effectBundle)
+						--cm:remove_effect_bundle_from_characters_force(effectBundle, charCqi);
 					end
 				end
 			end
@@ -1449,7 +1492,11 @@ core:add_listener(
 			if is_mlChar(currentChar) then
 				ml_tables = ml_force_require(currentChar);
 				setupSavedOptions(currentChar);
-				if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" or context:confederation():is_human() then setupInnateSpells(currentChar); end
+				local ownerFaction = cm:get_saved_value("ml_forename_"..currentChar:get_forename().."_surname_"..currentChar:get_surname().."_cqi_"..tostring(currentChar:command_queue_index()).."_".."ownerFaction");
+				if (ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" or context:confederation():is_human()) and context:confederation():name() ~= ownerFaction then 
+					cm:set_saved_value("ml_forename_"..currentChar:get_forename().."_surname_"..currentChar:get_surname().."_cqi_"..tostring(currentChar:command_queue_index()).."_".."ownerFaction", currentChar:faction():name());
+					setupInnateSpells(currentChar); 
+				end
 			end
 		end
 	end,
@@ -1463,9 +1510,14 @@ core:add_listener(
 		return is_mlChar(context:character()); 
 	end,
 	function(context)
-		ml_tables = ml_force_require(context:character());
-		setupSavedOptions(context:character());
-		if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" or context:character():faction():is_human() then setupInnateSpells(context:character()); end
+		local char = context:character();
+		ml_tables = ml_force_require(char);
+		setupSavedOptions(char);
+		local ownerFaction = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."ownerFaction");
+		if (ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" or char:faction():is_human()) and char:faction():name() ~= ownerFaction then
+			cm:set_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."ownerFaction", char:faction():name());
+			setupInnateSpells(char);
+		end
 	end,
 	true
 );

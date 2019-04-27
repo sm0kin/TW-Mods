@@ -5,8 +5,8 @@ require("sm0/sm0_force_confederation/script/campaign/mod/sm0_confed")
 
 
 -- ABANDON REGION
-require("sm0/sm0_abandon/script/campaign/mod/sm0_abandon")
---require("sm0/sm0_abandon/script/export_helpers_sm0_abandon")
+--require("sm0/sm0_abandon/script/campaign/mod/sm0_abandon")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_abandon")
 
 
 -- SAVE CAMERA SETTINGS
@@ -81,5 +81,6 @@ require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
 --frostydemise
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
-require("sm0/frosty_mods/script/campaign/main_warhammer/mod/legendary_confeds_me")
-require("sm0/frosty_mods/script/campaign/wh2_main_great_vortex/mod/legendary_confeds_me")
+
+--require("sm0/frosty_mods/script/campaign/mod/legendary_confeds_me")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds_me")
