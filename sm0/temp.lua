@@ -103,7 +103,7 @@ cm:show_message_event(
 
 
         local playerFaction = cm:get_faction(cm:get_local_faction(true));
-        cm:faction_set_food_factor_value(playerFaction:name(), "wh_dlc07_chivalry_events", 600);
+        cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 600);
 
         CA MitchToday at 00:45
 You can use the FrontEnd script interface to do some stuff

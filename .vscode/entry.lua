@@ -5,8 +5,8 @@ require("sm0/sm0_force_confederation/script/campaign/mod/sm0_confed")
 
 
 -- ABANDON REGION
---require("sm0/sm0_abandon/script/campaign/mod/sm0_abandon")
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_abandon")
+require("sm0/sm0_abandon/script/campaign/mod/sm0_abandon")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_abandon")
 
 
 -- SAVE CAMERA SETTINGS

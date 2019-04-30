@@ -417,7 +417,7 @@
 
 -- CAMPAIGN UI MANAGER
 --# assume CUIM.get_char_selected: method() --> string
---# assume CUIM.settlement_selected: string
+--# assume CUIM.settlement_selected: string -- format = "settlement:"..regionname
 --# assume CUIM.override: method(ui_override: string) --> CUIM_OVERRIDE
 --# assume CUIM.start_scripted_sequence: method()
 --# assume CUIM.stop_scripted_sequence: method()

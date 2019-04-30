@@ -232,6 +232,14 @@ function sm0_abandon()
         end,
         function(context)
             createAbandonButton();
+            local region = cm:get_region(regionStr)
+            local currentFactionStr = region:owning_faction():name()
+            if currentFactionStr ~= playerFactionStr then
+                abandonButton:SetDisabled(true);
+                abandonButton.uic:SetTooltipText(abandonButtonTooltip);
+            else
+                abandonButton:SetDisabled(false);
+            end
         end,
         true
     )
@@ -243,7 +251,6 @@ function sm0_abandon()
             return context.string == "settlement_panel"
         end,
         function(context)
-            regionStr = "";
             closeAbandonUI();
         end,
         true
@@ -255,6 +262,7 @@ function sm0_abandon()
         true,
         function(context)
             regionStr = context:garrison_residence():region():name();
+            
             local currentFactionStr = context:garrison_residence():faction():name();
             local currentGarrison = context:garrison_residence();
             cm:callback(
