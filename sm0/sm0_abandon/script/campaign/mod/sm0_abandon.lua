@@ -10,7 +10,7 @@ local abandonText4 = "next turn?"
 local confirmButtonText = "Abandon"
 local confirmButtonTooltipHover1 = "Abandoning the settlement of"
 local confirmButtonTooltipHover2 = "nets you"
-local confirmButtonTooltipHover3 = " will be abandoned at the beginning of the next turn."
+local confirmButtonTooltipHover3 = "will be abandoned at the beginning of the next turn."
 local confirmButtonTooltipDisabled = "Besieged Settlements can't be abandoned!"
 local abandonButtonTooltip = "Abandon selected settlement"
 local penaltyEnable = true --:bool                    
@@ -142,7 +142,7 @@ function createAbandonFrame(abandonRegionStr)
     local regionOwner = region:owning_faction()
     if cm:get_saved_value("abandon_"..regionStr.."_"..regionOwner:name()) then
         confirmButton:SetState("selected_hover");
-        confirmButton.uic:SetTooltipText(regionOnscreenName..confirmButtonTooltipHover1);
+        confirmButton.uic:SetTooltipText(regionOnscreenName.." "..confirmButtonTooltipHover3);
     end
 
     --Changed this to campaignUI trigger
@@ -158,7 +158,7 @@ function createAbandonFrame(abandonRegionStr)
             else
                 if not cm:get_saved_value("abandon_"..regionStr.."_"..regionOwner:name()) then
                     confirmButton:SetState("selected_hover");
-                    confirmButton.uic:SetTooltipText(regionOnscreenName.." will be abandoned at the beginning of the next turn.");
+                    confirmButton.uic:SetTooltipText(regionOnscreenName.." "..confirmButtonTooltipHover3);
                     CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable).."~");
                 else
                     confirmButton:SetState("active");
@@ -213,7 +213,7 @@ function sm0_abandon()
     confirmButtonText = effect.get_localised_string("sm0_confirm_button_text"); --"Abandon"
     confirmButtonTooltipHover1 = effect.get_localised_string("sm0_confirm_button_tooltip_hover1"); --"Abandoning the settlement of"
     confirmButtonTooltipHover2 = effect.get_localised_string("sm0_confirm_button_tooltip_hover2"); --"nets you"
-    confirmButtonTooltipHover2 = effect.get_localised_string("sm0_confirm_button_tooltip_hover3"); --" will be abandoned at the beginning of the next turn."
+    confirmButtonTooltipHover3 = effect.get_localised_string("sm0_confirm_button_tooltip_hover3"); --" will be abandoned at the beginning of the next turn."
     confirmButtonTooltipDisabled = effect.get_localised_string("sm0_confirm_button_tooltip_disabled"); --"Besieged Settlements can't be abandoned!"
     abandonButtonTooltip = effect.get_localised_string("sm0_abandom_button_tooltip_hover"); --"Abandon selected settlement"
     local playerFaction = cm:get_faction(cm:get_local_faction(true));
