@@ -29,7 +29,7 @@
 --// exportstring( string )
 --// returns a "Lua" portable version of the string
 --v function(s: string) --> string
-function exportstring( s )
+local function exportstring( s )
     return string.format("%q", s)
 end
 

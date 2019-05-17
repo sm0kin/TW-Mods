@@ -66,8 +66,8 @@ require("sm0/sm0_battle_speed/script/campaign/mod/sm0_battle_speed")
 
 
 -- BETTER FACTION SELECTION
---require("sm0/sm0_frontend/script/frontend_scripted")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/frontend_scripted")
+--require("sm0/sm0_frontend/script/frontend/mod/sm0_faction_selection")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/frontend/mod/sm0_faction_selection")
 
 
 -- OTHER MODDERS
@@ -81,6 +81,21 @@ require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
 --frostydemise
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
-
---require("sm0/frosty_mods/script/campaign/mod/legendary_confeds_me")
+require("sm0/frosty_mods/script/campaign/mod/legendary_confeds_me")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds_me")
+
+--ships
+require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_lokhir")
+require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_alberic")
+require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_wulfrik")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/new_lokhir")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/new_alberic")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/new_wulfrik")
+
+--Scipion's Recruit Defeated Lords
+require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_ll")
+require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
+--require("sm0/Scipion/script/export_helpers__viemzee_unlock_all_LL")
+--require("sm0/Scipion/script/export_helpers__viemzee_unlock_all_mixu")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__viemzee_unlock_all_LL")
+

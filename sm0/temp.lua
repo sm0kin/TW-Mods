@@ -197,6 +197,7 @@ it can be tricky to get working properly though
 
 
 bm:set_volume(volume_type, 0..100) 
+local volume = bm:get_volume(volume_type)
 
 cm:add_first_tick_callback(function()
     Gotrek_and_Felix_add()

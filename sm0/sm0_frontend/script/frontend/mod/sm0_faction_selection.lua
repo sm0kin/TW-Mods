@@ -1,125 +1,21 @@
 
 
-
-system.ClearRequiredFiles();
-
-require "script.all_scripted"
-
-print("\n\n\n\n\n\n\n\n\n\n");
-print("*************************************************************************************************************");
-print("*************************************************************************************************************");
-
-if __write_output_to_logfile then
-	local file = io.open(__logfile_path, "a");
-	if file then
-		file:write("\n\n\n\n\n\n\n\n\n\n");
-		file:write("*************************************************************************************************************\n");
-		file:write("*************************************************************************************************************\n");
-	end;
-end;
-
-print("frontend_scripted.lua loaded: a new frontend is being initialised");
-print("");
-
--- attempt to generate documentation if we haven't already this game session
-do
-	local svr = ScriptedValueRegistry:new();
-	
-	if not svr:LoadBool("autodoc_generated") and vfs.exists("script/docgen.lua") then
-		require("script.docgen");
-		
-		if generate_documentation() then
-			-- svr:SaveBool("autodoc_generated", true);
-		end;
-	end;
-end
-
-
-
-
-
-
-
-
-
--- Sets the game mode for loading in the script libraries
-__game_mode = __lib_type_frontend;
-__script_libraries_loaded = false;
-
-
-
-
-
-
-
---
--- Functions to add and clear frontend event callbacks. These call functions upstream in all_scripted.lua
---
-
-frontend_user_defined_event_callbacks = {};
-
-function add_frontend_event_callback(event, callback, is_persistent)
-	if is_persistent then
-		-- add this event without a user-defined table i.e. it won't get removed by any clear_event_callbacks() calls
-		add_event_callback(event, callback);
-	else
-		-- add this event, and add it to the frontend user-defined table so that it'll be cleared by clear_frontend_event_callbacks()
-		add_event_callback(event, callback, frontend_user_defined_event_callbacks);
-	end;
-end;
-
-
-function clear_frontend_event_callbacks()
-	local count = clear_event_callbacks(frontend_user_defined_event_callbacks);
-	print("");
-	if count == 1 then
-		print("*** clear_frontend_event_callbacks() called, 1 callback cleared ***");
-	else
-		print("*** clear_frontend_event_callbacks() called, " .. count .. " callbacks cleared ***");
-	end;
-	print("");
-	
-	-- logfile output
-	if __write_output_to_logfile then
-		local file = io.open(__logfile_path, "a");
-		if file then
-			file:write("\n");
-			if count == 1 then
-				file:write("*** clear_frontend_event_callbacks() called, 1 callback cleared ***\n");
-			else
-				file:write("*** clear_frontend_event_callbacks() called, " .. count .. " callbacks cleared ***\n");
-			end;
-			file:close();
-		end;
-	end;
-end;
-
-
-
--- load in other frontend scripts
-require "script.frontend_prelude";
-
-out("*** output_uicomponent_on_click() called ***");
-
 core:add_listener(
 	"output_uicomponent_on_click",
 	"ComponentLClickUp",
 	true,
 	function(context) sm0_print_all_uicomponent_children(UIComponent(context.component), true) end,
 	true
-);
+)
 
 
-function sm0_print_all_uicomponent_children(uic)
-	out(uicomponent_to_str(uic));
+local function sm0_print_all_uicomponent_children(uic)
+	out(uicomponent_to_str(uic))
 	for i = 0, uic:ChildCount() - 1 do
-		local uic_child = UIComponent(uic:Find(i));
-		sm0_print_all_uicomponent_children(uic_child);
+		local uic_child = UIComponent(uic:Find(i))
+		sm0_print_all_uicomponent_children(uic_child)
 	end
 end
-
-
-local empire = effect.get_localised_string("factions_screen_name_wh_main_emp_empire");
 
 
 local mixu = {
@@ -155,7 +51,7 @@ local mixu = {
 	"Gorfang Rotgut",
 	"Tutankhanut",
 	"Naieth the Prophetess"
-} --: vector<string>
+} 
 
 local mixu1 = {
 	["Marius Leitdorf"] = {"empire", "the empire", "empire provinces", "averland", "unlocker", "faction unlocker", "crynsos", "mixu", "mixu 1", "Mixu's Legendary Lords 1"},
@@ -176,7 +72,7 @@ local mixu1 = {
 	"Daith",
 	"Kazador Dragonslayer",
 	"Thorek Ironbrow"
-} --: vector<string>
+} 
 
 local mixu2 = {
 	"Belannaer the Wise",
@@ -194,13 +90,20 @@ local mixu2 = {
 	"Tutankhanut",
 	"Naieth the Prophetess"
 }
+--[[
+["Emperor Karl Franz"] = {"emperor karl franz", "emperor", "karl franz", "karl", "franz", "karl franz i", "protector of the empire", "defier of the dark", "emperor himself", "the son of emperors", "elector count of reikland", "prince of altdorf", "empire", "the empire", "empire provinces", "reikland", "CA", "vanilla", "no peace, just war", "summon the elector counts", "i am franz, they will obey", "bring me to my men", "this action does not have my consent"},
+["Balthasar Gelt"] = {"balthasar gelt", "balthasar", "gelt", "supreme patriarch", "gold", "metal", "empire", "the empire", "empire provinces", "reikland", "CA", "vanilla"},
+"Volkmar the Grim",
+["Marius Leitdorf"] = {"marius leitdorf", "marius", "leitdorf", "mad count", "empire", "the empire", "empire provinces", "averland", "mod", "crynsos", "faction unlocker", "unlocker", "mixu", "mixu 1", "Mixu's Legendary Lords 1"},
+["Aldebrand Ludenhof"] = {"empire"},
+--]]
 
-local crynsos = {
-	["Emperor Karl Franz"] = {"emperor karl franz", "emperor", "karl franz", "karl", "franz", "karl franz i", "protector of the empire", "defier of the dark", "emperor himself", "the son of emperors", "elector count of reikland", "prince of altdorf", "empire", "the empire", "empire provinces", "reikland", "CA", "vanilla", "no peace, just war", "summon the elector counts", "i am franz, they will obey", "bring me to my men", "this action does not have my consent"},
-	["Balthasar Gelt"] = {"balthasar gelt", "balthasar", "gelt", "supreme patriarch", "gold", "metal", "empire", "the empire", "empire provinces", "reikland", "CA", "vanilla"},
+local factionLeaders = {
+	"Emperor Karl Franz",
+	"Balthasar Gelt",
 	"Volkmar the Grim",
-	["Marius Leitdorf"] = {"marius leitdorf", "marius", "leitdorf", "mad count", "empire", "the empire", "empire provinces", "averland", "mod", "crynsos", "faction unlocker", "unlocker", "mixu", "mixu 1", "Mixu's Legendary Lords 1"},
-	["Aldebrand Ludenhof"] = {"empire"},
+	"Marius Leitdorf",
+	"Aldebrand Ludenhof",
 	"Emil von Korden",
 	"Boris Todbringer",
 	"Theoderic Gausser",
@@ -403,7 +306,7 @@ local crynsos = {
 	"Eldarion",
 	"Sesteshal",
 	"Dhulas"
-}
+} --:vector<string>
 
 local cataph = {
 	"Valmir Gausser",
@@ -476,101 +379,114 @@ local filterTable = {}
 --local savedEntry = tonumber(core:svr_load_string("svr_battleSpeed")) or 1 --:number
 
 --v function(uic: CA_UIC)
-function deleteUIC(uic)
-    local root = core:get_ui_root();
-    root:CreateComponent("Garbage", "UI/campaign ui/script_dummy");
-    local component = root:Find("Garbage");
-    local garbage = UIComponent(component);
-    garbage:Adopt(uic:Address());
-    garbage:DestroyChildren();
+local function deleteUIC(uic)
+    local root = core:get_ui_root()
+    root:CreateComponent("Garbage", "UI/campaign ui/script_dummy")
+    local component = root:Find("Garbage")
+    local garbage = UIComponent(component)
+    garbage:Adopt(uic:Address())
+    garbage:DestroyChildren()
 end
 
 --v function()
-function deleteSelectUI()
+local function deleteSelectUI()
     if textBox then
-        deleteUIC(textBox);
-        textBox = nil;
+        deleteUIC(textBox)
+        textBox = nil
     elseif applyButton then
-        deleteUIC(applyButton);
-        core:remove_listener("sm0_applyButton");
-        applyButton = nil;
+        deleteUIC(applyButton)
+        core:remove_listener("sm0_applyButton")
+        applyButton = nil
     end
 end
 
---v function()
-function createSelectUI()
+--v function(lordTable: map<string, vector<string>>)
+local function createSelectUI(lordTable)
 	--[out] <397.7s>   root > sp_frame > menu_bar > button_tw_academy
-	local menu_bar = find_uicomponent(core:get_ui_root(), "sp_frame", "menu_bar");
+	local menu_bar = find_uicomponent(core:get_ui_root(), "sp_frame", "menu_bar")
 	--[out] <151.5s>   root > sp_grand_campaign > dockers > top_docker > lord_select_list > list
-	local uiParent = find_uicomponent(core:get_ui_root(), "sp_grand_campaign", "dockers", "top_docker", "lord_select_list", "list");
+	local uiParent = find_uicomponent(core:get_ui_root(), "sp_grand_campaign", "dockers", "top_docker", "lord_select_list", "list")
 
-    local referenceButton = find_uicomponent(menu_bar, "button_tw_academy");
-    local referenceButtonW, referenceButtonH = referenceButton:Bounds();
-    local referenceButtonX, referenceButtonY = referenceButton:Position();
+    local referenceButton = find_uicomponent(menu_bar, "button_tw_academy")
+    local referenceButtonW, referenceButtonH = referenceButton:Bounds()
+    local referenceButtonX, referenceButtonY = referenceButton:Position()
 
-    deleteSelectUI();
+    deleteSelectUI()
 
-    uiParent:CreateComponent("textBox", "ui/common ui/text_box");
-    textBox = UIComponent(uiParent:Find("textBox"));
-    uiParent:Adopt(textBox:Address());
-    textBox:PropagatePriority(referenceButton:Priority());
-    textBox:SetCanResizeHeight(true);
-    textBox:SetCanResizeWidth(true);
-    textBox:Resize(6*referenceButtonW, referenceButtonH);
-    textBox:SetCanResizeHeight(false);
-    textBox:SetCanResizeWidth(false);
+    uiParent:CreateComponent("textBox", "ui/common ui/text_box")
+    textBox = UIComponent(uiParent:Find("textBox"))
+    uiParent:Adopt(textBox:Address())
+    textBox:PropagatePriority(referenceButton:Priority())
+    textBox:SetCanResizeHeight(true)
+    textBox:SetCanResizeWidth(true)
+    textBox:Resize(6*referenceButtonW, referenceButtonH)
+    textBox:SetCanResizeHeight(false)
+    textBox:SetCanResizeWidth(false)
 	--textBox:MoveTo(referenceButtonX, referenceButtonY + 600)
 
 
-    uiParent:CreateComponent("applyButton", "ui/templates/square_medium_button");
-    applyButton = UIComponent(uiParent:Find("applyButton"));
-    uiParent:Adopt(applyButton:Address());
-    applyButton:PropagatePriority(referenceButton:Priority());
-	applyButton:SetImage("ui/skins/warhammer2/icon_check.png"); 
-	applyButton:Resize(referenceButtonW, referenceButtonH);
-	local textBoxW, textBoxH = textBox:Bounds();
-	local textBoxX, textBoxY = textBox:Position(); 
+    uiParent:CreateComponent("applyButton", "ui/templates/square_medium_button")
+    applyButton = UIComponent(uiParent:Find("applyButton"))
+    uiParent:Adopt(applyButton:Address())
+    applyButton:PropagatePriority(referenceButton:Priority())
+	applyButton:SetImage("ui/skins/warhammer2/icon_check.png") 
+	applyButton:Resize(referenceButtonW, referenceButtonH)
+	local textBoxW, textBoxH = textBox:Bounds()
+	local textBoxX, textBoxY = textBox:Position() 
 	local applyButtonX, applyButtonY = applyButton:Position()
     applyButton:MoveTo(textBoxX + textBoxW, textBoxY)
-    applyButton:SetState("hover");
+    applyButton:SetState("hover")
     applyButton:SetTooltipText("")
     applyButton:SetState("active")
     core:add_listener(
         "sm0_applyButton",
         "ComponentLClickUp",
         function(context)
-            return context.string == "applyButton";
+            return context.string == "applyButton"
         end,
 		function(context)
-			local factionList = find_uicomponent(core:get_ui_root(), "sp_grand_campaign", "dockers", "top_docker", "lord_select_list", "list", "list_clip", "list_box");
-			local stateText = string.lower(textBox:GetStateText());
+			local lordList = find_uicomponent(core:get_ui_root(), "sp_grand_campaign", "dockers", "top_docker", "lord_select_list", "list", "list_clip", "list_box")
+			local stateText = string.lower(textBox:GetStateText())
 			table.insert(filterTable, stateText)
-			local childCount = factionList:ChildCount();
+			local childCount = lordList:ChildCount()
 			if string.find(stateText, "mixu") or string.find(stateText, "moxi") then
 				for i=0, childCount-1  do
-					local child = UIComponent(factionList:Find(i));
+					local child = UIComponent(lordList:Find(i))
 					for _, lord in ipairs(mixu) do
 						if not string.find(string.lower(child:Id()), string.lower(lord)) and not string.find(child:Id(), "") then 
-							child:SetVisible(false); 
+							child:SetVisible(false) 
 						else
-							child:SetVisible(true); 
-							break;
+							child:SetVisible(true) 
+							break
 						end
 					end
 				end
 			else
 				for i=0, childCount-1  do
-					local child = UIComponent(factionList:Find(i));
+					local child = UIComponent(lordList:Find(i))
 					if not string.find(string.lower(child:Id()), stateText) then 
-						child:SetVisible(false); 
+						child:SetVisible(false) 
 					else
-						child:SetVisible(true); 
+						child:SetVisible(true) 
 					end
 				end
 			end
         end,
         true
 	)
+end
+
+--v function(emptyLordTable: vector<string>) --> map<string, vector<string>>
+local function loadLocalisedStrings(emptyLordTable)
+	local loadedLordTable = {} --:map<string, vector<string>>
+	for _, lord in ipairs(emptyLordTable) do
+		local i = 1
+		while effect.get_localised_string(lord.."_"..i) do
+			loadedLordTable[lord][i] = effect.get_localised_string(lord.."_"..i)
+			i = i + 1
+		end
+	end
+	return loadedLordTable
 end
 
 --[out] <230.7s>   root > sp_grand_campaign > dockers > top_docker > lord_select_list > list > list_clip > list_box > Tyrion
@@ -580,11 +496,12 @@ core:add_listener(
     "FrontendScreenTransition",
     function(context) return context.string == "sp_grand_campaign" end,
     function(context)
-        --local factionList = find_uicomponent(core:get_ui_root(), "sp_grand_campaign", "dockers", "top_docker", "lord_select_list", "list", "list_clip", "list_box");
+        --local lordList = find_uicomponent(core:get_ui_root(), "sp_grand_campaign", "dockers", "top_docker", "lord_select_list", "list", "list_clip", "list_box")
 
-		--local test = find_uicomponent(core:get_ui_root(), "sp_grand_campaign", "dockers", "top_docker", "lord_select_list", "list", "list_clip", "list_box", "Tyrion");
-		--test:SetVisible(false);
-		createSelectUI();
+		--local test = find_uicomponent(core:get_ui_root(), "sp_grand_campaign", "dockers", "top_docker", "lord_select_list", "list", "list_clip", "list_box", "Tyrion")
+		--test:SetVisible(false)
+		local loadedLordTable = loadLocalisedStrings(factionLeaders)
+		createSelectUI(loadedLordTable)
     end,
     true	
-);
+)

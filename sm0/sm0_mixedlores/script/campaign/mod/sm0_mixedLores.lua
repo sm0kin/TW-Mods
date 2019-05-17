@@ -356,7 +356,25 @@ end
 local function applySpellDisableEffect(char, spellSlots)
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 	local charCqi = char:command_queue_index()
-	CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|"..tostring(charCqi))
+	ml_tables = ml_force_require(char)
+	if ml_tables then
+		mlLOG("CHAR: "..char:character_subtype_key())
+		if savedOption == "Spells for free" and char:has_military_force() and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
+			cm:apply_effect_bundle_to_characters_force(ml_tables.enableAllBundle, charCqi, -1, false)
+		elseif savedOption ~= "Spells for free" and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
+			cm:remove_effect_bundle_from_characters_force(ml_tables.enableAllBundle, charCqi)
+		end
+		for _, effectBundle in pairs(ml_tables.effectBundles) do
+			if char:has_military_force() and not char:military_force():has_effect_bundle(effectBundle) then
+				cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false)
+			end
+		end
+		for _, spell in ipairs(spellSlots) do 
+			if ml_tables.effectBundles[spell] and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
+				cm:remove_effect_bundle_from_characters_force(ml_tables.effectBundles[spell], charCqi)
+			end
+		end
+	end
 end
 
 --v [NO_CHECK] function(spellName: any, selectedSpellSlot: any, char: CA_CHAR) --> vector<string>
@@ -377,62 +395,6 @@ local function updateSaveTable(spellName, selectedSpellSlot, char)
 	end
 	return spellSlots
 end
-
---Multiplayer listener
-core:add_listener(
-    "MixedLoresMultiplayer",
-    "UITriggerScriptEvent",
-    function(context)
-        return context:trigger():starts_with("MixedLores|")
-    end,
-    function(context)
-		local str = context:trigger() --:string
-		if context:trigger():starts_with("MixedLores|apply") or context:trigger():starts_with("MixedLores|remove") then
-			local info = string.gsub(str, "MixedLores|", "")
-			local commandEnd = string.find(info, "<")
-			local command = string.sub(info, 1, commandEnd - 1)
-			local cqiEnd = string.find(info, ">")
-			local cqiStr = string.sub(info, commandEnd + 1, cqiEnd - 1)
-			local cqi = tonumber(cqiStr)
-			local effectBundle = string.sub(info, cqiEnd + 1)
-			-- "MixedLores|".."remove".."<"..tostring(charCqi)..">"..effectBundle
-			--# assume cqi: CA_CQI
-			if command == "remove" then cm:remove_effect_bundle_from_characters_force(effectBundle, cqi) end
-			if command == "apply" then cm:apply_effect_bundle_to_characters_force(effectBundle, cqi, -1, false) end
-		else
-			local info = string.gsub(str, "MixedLores|", "")
-			local charCqi = tonumber(info)
-			--# assume charCqi: CA_CQI
-			local char = cm:get_character_by_cqi(charCqi)
-			local spellSlots = updateSaveTable(false, false, char)
-
-			local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
-			ml_tables = ml_force_require(char)
-			if ml_tables then
-				--mlLOG("CHAR: "..char:character_subtype_key())
-				if savedOption == "Spells for free" and char:has_military_force() and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
-					CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."apply".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
-					cm:apply_effect_bundle_to_characters_force(ml_tables.enableAllBundle, charCqi, -1, false)
-				elseif savedOption ~= "Spells for free" and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
-					CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
-					cm:remove_effect_bundle_from_characters_force(ml_tables.enableAllBundle, charCqi)
-				end
-				for _, effectBundle in pairs(ml_tables.effectBundles) do
-					if char:has_military_force() and not char:military_force():has_effect_bundle(effectBundle) then
-						cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false)
-					end
-				end
-				for _, spell in ipairs(spellSlots) do 
-					if ml_tables.effectBundles[spell] and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
-						cm:remove_effect_bundle_from_characters_force(ml_tables.effectBundles[spell], charCqi)
-						--mlLOG("applySpellDisableEffect / effectBundle = "..ml_tables.effectBundles[spell].." / cqi = "..tostring(charCqi).." / command = ".."remove")
-					end
-				end
-			end
-		end
-    end,
-    true
-)
 
 --v function(tbl: map<number | integer, WHATEVER>) --> map<number | integer, WHATEVER>
 local function shuffle(tbl)
@@ -1435,8 +1397,7 @@ local function setupAICompletedBattleListener(char)
 				local charCqi = char:command_queue_index()
 				for _, effectBundle in pairs(ml_tables.effectBundles) do
 					if char:military_force():has_effect_bundle(effectBundle) then
-						CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..effectBundle)
-						--cm:remove_effect_bundle_from_characters_force(effectBundle, charCqi)
+						cm:remove_effect_bundle_from_characters_force(effectBundle, charCqi)
 					end
 				end
 			end

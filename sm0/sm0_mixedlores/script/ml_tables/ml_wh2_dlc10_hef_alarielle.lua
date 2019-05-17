@@ -1,7 +1,7 @@
 local ml_tables = {}
 
 --# assume ml_tables.default_rule: string
-ml_tables.default_rule = "TT 8th edition - Alarielle the Radiant";
+ml_tables.default_rule = "TT 8th edition - Alarielle the Radiant"
 --[[
 	High Elves (8ed)
 	page: 59
@@ -16,10 +16,10 @@ ml_tables.default_rule = "TT 8th edition - Alarielle the Radiant";
 --]]
 
 --# assume ml_tables.default_option: string
-ml_tables.default_option = "Skill - based";
+ml_tables.default_option = "Skill - based"
 
 --# assume ml_tables.enableAllBundle: string
-ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all_alarielle";
+ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all_alarielle"
 
 --# assume ml_tables.lores: map<string, map<string, string>>
 ml_tables.lores = {
@@ -160,4 +160,4 @@ ml_tables.spellToLore = {
 	["Final Transmutation"] = "Lore of Metal"
 } 
 
-return ml_tables;
+return ml_tables

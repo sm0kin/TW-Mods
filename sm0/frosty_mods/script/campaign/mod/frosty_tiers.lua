@@ -88,17 +88,17 @@ local regions_table = {
 } --: vector<string>
 
 --v function(tier: string, ownerScope: string, settlementScope: string)
-function upgrade_capitals(tier, ownerScope, settlementScope)
+local function upgrade_capitals(tier, ownerScope, settlementScope)
     --v function(currentRegion: string)
     local function upgrade(currentRegion)
-        local regionCA = cm:get_region(currentRegion);
+        local regionCA = cm:get_region(currentRegion)
         if regionCA and not regionCA:is_abandoned() then
-            local slots = regionCA:slot_list();
-            currentSlot = slots:item_at(0);
+            local slots = regionCA:slot_list()
+            currentSlot = slots:item_at(0)
             local currentBuilding = currentSlot:building():name()
-            currentBuilding = string.gsub(currentBuilding, "_%d", "_"..tier);
+            currentBuilding = string.gsub(currentBuilding, "_%d", "_"..tier)
             if (ownerScope == "playerOnly" and regionCA and regionCA:owning_faction():is_human()) or (ownerScope == "aiOnly" and regionCA and not regionCA:owning_faction():is_human()) or ownerScope == "both" then
-                cm:instantly_upgrade_building_in_region(currentRegion, 0, currentBuilding);
+                cm:instantly_upgrade_building_in_region(currentRegion, 0, currentBuilding)
             end
         end
     end
@@ -115,36 +115,36 @@ function upgrade_capitals(tier, ownerScope, settlementScope)
 end
 
 --v function(tier: string, scope: string)
-function upgrade_horde(tier, scope)
-    local factionList = cm:model():world():faction_list();
+local function upgrade_horde(tier, scope)
+    local factionList = cm:model():world():faction_list()
     for i = 0, factionList:num_items() - 1 do
-        local currentFaction = factionList:item_at(i);
+        local currentFaction = factionList:item_at(i)
         if (scope == "playerOnly" and currentFaction and currentFaction:is_human()) or (scope == "aiOnly" and currentFaction and not currentFaction:is_human()) or scope == "both" then
             if currentFaction and currentFaction:culture() == "wh_main_chs_chaos" then
-                local characterList = currentFaction:character_list();
+                local characterList = currentFaction:character_list()
                 for j = 0, characterList:num_items() - 1 do
-                    local currentChar = characterList:item_at(j);
+                    local currentChar = characterList:item_at(j)
                     if currentChar and currentChar:has_military_force() then
-                        local mfCQI = currentChar:military_force():command_queue_index();
-                        cm:add_building_to_force(mfCQI, "wh_main_horde_chaos_settlement_"..tier); 
+                        local mfCQI = currentChar:military_force():command_queue_index()
+                        cm:add_building_to_force(mfCQI, "wh_main_horde_chaos_settlement_"..tier) 
                     end
                 end
             elseif currentFaction and currentFaction:culture() == "wh_dlc03_bst_beastmen" then
-                local characterList = currentFaction:character_list();
+                local characterList = currentFaction:character_list()
                 for j = 0, characterList:num_items() - 1 do
-                    local currentChar = characterList:item_at(j);
+                    local currentChar = characterList:item_at(j)
                     if currentChar and currentChar:has_military_force() then
-                        local mfCQI = currentChar:military_force():command_queue_index();
-                        cm:add_building_to_force(mfCQI, "wh_dlc03_horde_beastmen_herd_"..tier); 
+                        local mfCQI = currentChar:military_force():command_queue_index()
+                        cm:add_building_to_force(mfCQI, "wh_dlc03_horde_beastmen_herd_"..tier) 
                     end
                 end
             elseif currentFaction and currentFaction:culture() == "wh2_dlc11_cst_vampire_coast" then
-                local characterList = currentFaction:character_list();
+                local characterList = currentFaction:character_list()
                 for j = 0, characterList:num_items() - 1 do
-                    local currentChar = characterList:item_at(j);
+                    local currentChar = characterList:item_at(j)
                     if currentChar and currentChar:has_military_force() then
-                        local mfCQI = currentChar:military_force():command_queue_index();
-                        cm:add_building_to_force(mfCQI, "wh2_dlc11_vampirecoast_ship_captains_cabin_"..tier); 
+                        local mfCQI = currentChar:military_force():command_queue_index()
+                        cm:add_building_to_force(mfCQI, "wh2_dlc11_vampirecoast_ship_captains_cabin_"..tier) 
                     end
                 end
             end
@@ -152,43 +152,44 @@ function upgrade_horde(tier, scope)
     end
 end
 
+--v function()
 function frosty_tiers()
-    local mcm = _G.mcm;
+    local mcm = _G.mcm
 	if not not mcm then
-        local frostyTiers = mcm:register_mod("frostyTiers", "Higher Tier Starting Capitals/Hordes", "With this mod your starting settlements/horde can be set at a higher tier from the get-go.");
-        local ownerScope = frostyTiers:add_tweaker("ownerScope", "Ownership Scope", "Higher Tier Settlements for Player-only, AI-only or both Players & AI?");
-		ownerScope:add_option("both", "Both", "Changes apply to both the AI and the Players.");
-        ownerScope:add_option("playersOnly", "Players-Only", "Changes only apply to Player factions.");
-        ownerScope:add_option("aiOnly", "AI-Only", "Changes only apply to AI factions.");
-        local settlementScope = frostyTiers:add_tweaker("settlementScope", "Settlement Scope", "Only Starting settlements of the playable factions or all province capitals.");
-		settlementScope:add_option("table", "Playable Faction Capitals", "The higher tier upgrade also extends to a small handful of cities that have exceptionally high est. populations in the lore: Hellpit, Itza, Kislev, Magritta, Marienburg, Miragliano, Nuln, Skavenblight and Talabheim.");
-        settlementScope:add_option("all", "All Province Capitals", "All province capitals start at a higher tier.");
-        local settlementTier = frostyTiers:add_tweaker("settlementTier", "Settlement Starting Tier", "Set the Settlement Starting Tier.");
-        settlementTier:add_option("4", "Tier IV", "Sets the Settlement Starting Tier to IV.");
-		settlementTier:add_option("2", "Tier II", "Sets the Settlement Starting Tier to II.");
-        settlementTier:add_option("3", "Tier III", "Sets the Settlement Starting Tier to III.");
-        settlementTier:add_option("5", "Tier V", "Sets the Settlement Starting Tier to V.");
-        local hordeScope = frostyTiers:add_tweaker("hordeScope", "Horde Scope", "Higher Tier Hordes for Player-only, AI-only or both Players & AI?");
-        hordeScope:add_option("playersOnly", "Players-Only", "Changes only apply to Player factions.");
-        hordeScope:add_option("both", "Both", "Changes apply to both the AI and the Players.");
-        hordeScope:add_option("aiOnly", "AI-Only", "Changes only apply to AI factions.");
-        local hordeTier = frostyTiers:add_tweaker("hordeTier", "Horde Starting Tier", "Set the Horde Starting Tier.");
-        hordeTier:add_option("4", "Tier IV", "Sets the Horde Starting Tier to IV.");
-		hordeTier:add_option("2", "Tier II", "Sets the Horde Starting Tier to II.");
-        hordeTier:add_option("3", "Tier III", "Sets the Horde Starting Tier to III.");
-        hordeTier:add_option("5", "Tier V", "Sets the Horde Starting Tier to V.");
+        local frostyTiers = mcm:register_mod("frostyTiers", "Higher Tier Starting Capitals/Hordes", "With this mod your starting settlements/horde can be set at a higher tier from the get-go.")
+        local ownerScope = frostyTiers:add_tweaker("ownerScope", "Ownership Scope", "Higher Tier Settlements for Player-only, AI-only or both Players & AI?")
+		ownerScope:add_option("both", "Both", "Changes apply to both the AI and the Players.")
+        ownerScope:add_option("playersOnly", "Players-Only", "Changes only apply to Player factions.")
+        ownerScope:add_option("aiOnly", "AI-Only", "Changes only apply to AI factions.")
+        local settlementScope = frostyTiers:add_tweaker("settlementScope", "Settlement Scope", "Only Starting settlements of the playable factions or all province capitals.")
+		settlementScope:add_option("table", "Playable Faction Capitals", "The higher tier upgrade also extends to a small handful of cities that have exceptionally high est. populations in the lore: Hellpit, Itza, Kislev, Magritta, Marienburg, Miragliano, Nuln, Skavenblight and Talabheim.")
+        settlementScope:add_option("all", "All Province Capitals", "All province capitals start at a higher tier.")
+        local settlementTier = frostyTiers:add_tweaker("settlementTier", "Settlement Starting Tier", "Set the Settlement Starting Tier.")
+        settlementTier:add_option("4", "Tier IV", "Sets the Settlement Starting Tier to IV.")
+		settlementTier:add_option("2", "Tier II", "Sets the Settlement Starting Tier to II.")
+        settlementTier:add_option("3", "Tier III", "Sets the Settlement Starting Tier to III.")
+        settlementTier:add_option("5", "Tier V", "Sets the Settlement Starting Tier to V.")
+        local hordeScope = frostyTiers:add_tweaker("hordeScope", "Horde Scope", "Higher Tier Hordes for Player-only, AI-only or both Players & AI?")
+        hordeScope:add_option("playersOnly", "Players-Only", "Changes only apply to Player factions.")
+        hordeScope:add_option("both", "Both", "Changes apply to both the AI and the Players.")
+        hordeScope:add_option("aiOnly", "AI-Only", "Changes only apply to AI factions.")
+        local hordeTier = frostyTiers:add_tweaker("hordeTier", "Horde Starting Tier", "Set the Horde Starting Tier.")
+        hordeTier:add_option("4", "Tier IV", "Sets the Horde Starting Tier to IV.")
+		hordeTier:add_option("2", "Tier II", "Sets the Horde Starting Tier to II.")
+        hordeTier:add_option("3", "Tier III", "Sets the Horde Starting Tier to III.")
+        hordeTier:add_option("5", "Tier V", "Sets the Horde Starting Tier to V.")
 		mcm:add_post_process_callback(
             function()
                 if cm:is_new_game() then 
-                    upgrade_capitals(cm:get_saved_value("mcm_tweaker_frostyTiers_settlementTier_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_ownerScope_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_settlementScope_value")); 
-                    upgrade_horde(cm:get_saved_value("mcm_tweaker_frostyTiers_hordeTier_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_hordeScope_value"));
+                    upgrade_capitals(cm:get_saved_value("mcm_tweaker_frostyTiers_settlementTier_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_ownerScope_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_settlementScope_value")) 
+                    upgrade_horde(cm:get_saved_value("mcm_tweaker_frostyTiers_hordeTier_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_hordeScope_value"))
                 end
 			end
         )
     else
         if cm:is_new_game() then 
-            upgrade_capitals("4", "both", "table");    
-            upgrade_horde("4", "playerOnly");
+            upgrade_capitals("4", "both", "table")    
+            upgrade_horde("4", "playerOnly")
         end
     end
 end

@@ -1,7 +1,7 @@
 local ml_tables = {}
 
 --# assume ml_tables.default_rule: string
-ml_tables.default_rule = "TT 6th edition - The Fay Enchantress";
+ml_tables.default_rule = "TT 6th edition - The Fay Enchantress"
 --[[
 	Beastmen (7ed)
 	page: 55
@@ -14,13 +14,13 @@ ml_tables.default_rule = "TT 6th edition - The Fay Enchantress";
 --]]
 
 --# assume ml_tables.default_option: string
-ml_tables.default_option = "Spells for free";
+ml_tables.default_option = "Spells for free"
 
 --# assume ml_tables.enableAllBundle: string
-ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all_malagor";
+ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all_malagor"
 
 --# assume ml_tables.innateSpell: string
-ml_tables.innateSpell = "Viletide";
+ml_tables.innateSpell = "Viletide"
 
 --# assume ml_tables.lores: map<string, map<string, string>>
 ml_tables.lores = {
@@ -180,4 +180,4 @@ ml_tables.spellToLore = {
 	["The Withering"] = "Lore of Shadows"
 } 
 
-return ml_tables;
+return ml_tables

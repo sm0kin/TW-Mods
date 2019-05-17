@@ -41,6 +41,7 @@
 --# assume global class CA_FACTION_RITUALS
 --# assume global class CA_RITUAL
 --# assume global class CA_RITUAL_LIST
+--# assume global class CA_VFS
 
 --# assume global class IM
 --# assume global class CORE
@@ -208,7 +209,6 @@
 --# assume CM.teleport_to: method(charString: string, xPos: number, yPos: number, useCommandQueue: boolean)
 --# assume CM.replenish_action_points: method(lookup:string)
 --# assume CM.stop_character_convalescing: method(character_cqi: CA_CQI)
-
 --spawning
 --# assume CM.create_force_with_general: method(
 --#     faction_key: string,
@@ -381,7 +381,6 @@
 --# assume CM.char_has_navy: method(character: CA_CHAR) --> boolean
 --# assume CM.char_has_army: method(character: CA_CHAR) --> boolean
 --# assume CM.is_local_players_turn: method() --> boolean
-
 --model overrides
 --# assume CM.override_building_chain_display: method(building_chain: string, settlement_skin: string, region_name: string)
 --aux
@@ -467,7 +466,6 @@
 -- GAME INTERFACE
 --# assume CA_GAME.filesystem_lookup: method(filePath: string, matchRegex:string) --> string
 
-
 -- CHARACTER
 --# assume CA_CHAR.has_trait: method(traitName: string) --> boolean
 --# assume CA_CHAR.logical_position_x: method() --> number
@@ -508,7 +506,6 @@
 -- CHARACTER LIST
 --# assume CA_CHAR_LIST.num_items: method() --> number
 --# assume CA_CHAR_LIST.item_at: method(index: number) --> CA_CHAR
-
 
 -- MILITARY FORCE
 --# assume CA_MILITARY_FORCE.general_character: method() --> CA_CHAR
@@ -713,8 +710,7 @@
 --# assume CORE.svr_save_bool: method(svrname: string, value: boolean)
 
 -- VFS
---# assume global class vfs
---# assume vfs.exits: method(filepath: string) --> boolean
+--# assume CA_VFS.exists: function(filepath: string) --> boolean
 
 -- POOLED RESOURCE LIST
 --# assume CA_POOLED_LIST.is_empty: method() --> boolean
@@ -778,7 +774,6 @@
 --# assume global pulse_uicomponent: function(uic: CA_UIC, should_pulse: bool, brightness_modifier: number?, propagate: bool?, state_name: BUTTON_STATE?) --buttons: brightness_modifier = 10, frames: brightness_modifier = 5
 --# assume global is_valid_spawn_point: function(x: number, y: number) --> boolean
 --# assume global Give_Trait: function(character: CA_CHAR, trait: string, _points: number?, _chance: number?)
-
 -- CAMPAIGN
 --# assume global get_cm: function() --> CM
 --# assume global get_bm: function() --> BM
@@ -786,8 +781,6 @@
 --# assume global Get_Character_Side_In_Last_Battle: function(char: CA_CHAR) --> BATTLE_SIDE
 --# assume global q_setup: function()
 --# assume global set_up_rank_up_listener: function(quest_table: vector<vector<string | number>>, subtype: string, infotext: vector<string | number>)
---# assume global CampaignUI: CA_CampaignUI
-
 
 -- CA LUA OBJECTS:
 --RITES UNLOCK OBJECT
@@ -821,14 +814,12 @@
 --# assume MISSION_MANAGER.force_scripted_objective_success: method(script_key: string?)
 --# assume MISSION_MANAGER.force_scripted_objective_failure: method(script_key: string?)
 --# assume MISSION_MANAGER.update_scripted_objective_text: method(override_text_loc: string, script_key: string?)
-
 --# assume MISSION_MANAGER.set_should_cancel_before_issuing: method(boolean)
 --# assume MISSION_MANAGER.set_should_should_whitelist: method(boolean)
-
 --# assume MISSION_MANAGER.set_first_time_startup_callback: method(callback: function())
 --# assume MISSION_MANAGER.set_each_time_startup_callback: method(callback: function())
-
 --# assume MISSION_MANAGER.trigger: method(dismiss_callback: function?, delay: number?)
+
 --# assume CM.get_mission_manager: method(mission_key: string) --> MISSION_MANAGER
 
 -- RANDOM ARMY MANAGER OBJECT
@@ -879,16 +870,9 @@
 --# assume global random_army_manager: RAM
 --# assume global campaign_cutscene: CA_CUTSCENE
 --# assume global invasion_manager: INVASION_MANAGER
+--# assume global CampaignUI: CA_CampaignUI
+--# assume global vfs: CA_VFS
 
---string extensions DF
---v [string_meta] function(s: string, str: string) --> boolean
-function string.starts_with(s, str)
-    return true
-end
---v [string_meta] function(s: string, str: string) --> boolean
-function string.ends_with(s, str)
-    return true
-end
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- sm0kin
 -- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"

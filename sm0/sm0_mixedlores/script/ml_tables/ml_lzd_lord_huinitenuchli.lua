@@ -1,7 +1,7 @@
 local ml_tables = {}
 
 --# assume ml_tables.default_rule: string
-ml_tables.default_rule = "TT 6th edition - Slann";
+ml_tables.default_rule = "TT 6th edition - Slann"
 --[[
 	Lizardmen (6ed)
 	page: 49
@@ -17,10 +17,10 @@ ml_tables.default_rule = "TT 6th edition - Slann";
 --]]
 
 --# assume ml_tables.default_option: string
-ml_tables.default_option = "Skill - based";
+ml_tables.default_option = "Skill - based"
 
 --# assume ml_tables.enableAllBundle: string
-ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all";
+ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all"
 
 --# assume ml_tables.lores: map<string, map<string, string>>
 ml_tables.lores = {
@@ -388,4 +388,4 @@ ml_tables.spellToLore = {
 	["The Withering"] = "Lore of Shadows"
 } 
 
-return ml_tables;
+return ml_tables

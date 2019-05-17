@@ -385,36 +385,36 @@ end
 local mcm = _G.mcm
 
 if not not mcm then
-	local ovn = nil;
-	local chance = 100;
-	if mcm:has_mod("ovn") then
-		ovn = mcm:get_mod("ovn");
-	else
-		ovn = mcm:register_mod("ovn", "OvN - Overhaul", "Let's you enable/disable various parts of the compilation.")
-	end
-	local corsairraid = ovn:add_tweaker("corsairraid", "Corsair Raids", "")
-	corsairraid:add_option("enable", "Enable", "")
-	corsairraid:add_option("disable", "Disable", "")
-	corsairraid:add_option("chance", "by Chance", "")
-	ovn:add_variable("corsairraid_chance", 5, 95, 50, 5, "Corsair Raids Chance", "Chance this \"event\" is happening."):add_callback(
-		function(context)
-        	chance = context:get_mod("ovn"):get_variable_with_key("corsairraid_chance"):current_value()
-		end
-	)
+    local ovn = nil
+    local chance = 100
+    if mcm:has_mod("ovn") then
+        ovn = mcm:get_mod("ovn")
+    else
+        ovn = mcm:register_mod("ovn", "OvN - Overhaul", "Let's you enable/disable various parts of the compilation.")
+    end
+    local corsairraid = ovn:add_tweaker("corsairraid", "Corsair Raids", "")
+    corsairraid:add_option("enable", "Enable", "")
+    corsairraid:add_option("disable", "Disable", "")
+    corsairraid:add_option("chance", "by Chance", "")
+    ovn:add_variable("corsairraid_chance", 5, 95, 50, 5, "Corsair Raids Chance", "Chance this \"event\" is happening."):add_callback(
+        function(context)
+            chance = context:get_mod("ovn"):get_variable_with_key("corsairraid_chance"):current_value()
+        end
+    )
 
-	mcm:add_post_process_callback(
-		function(context)
-			if cm:get_saved_value("mcm_tweaker_ovn_corsairraid_value") == "enable" then
-				sr_corsairraid()
-			elseif cm:get_saved_value("mcm_tweaker_ovn_corsairraid_value") == "chance" and cm:random_number(100) <= chance then
-				sr_corsairraid()
-			end
-		end
-	)
+    mcm:add_post_process_callback(
+        function(context)
+            if cm:get_saved_value("mcm_tweaker_ovn_corsairraid_value") == "enable" then
+                sr_corsairraid()
+            elseif cm:get_saved_value("mcm_tweaker_ovn_corsairraid_value") == "chance" and cm:random_number(100) <= chance then
+                sr_corsairraid()
+            end
+        end
+    )
 end
 
 cm:add_first_tick_callback(
-	function()
-		if not mcm or cm:get_saved_value("mcm_tweaker_ovn_corsairraid_value") == "enable" then sr_corsairraid() end
-	end
+    function()
+        if not mcm or cm:get_saved_value("mcm_tweaker_ovn_corsairraid_value") == "enable" then sr_corsairraid() end
+    end
 )

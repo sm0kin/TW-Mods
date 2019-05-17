@@ -547,13 +547,18 @@ end
 
 local mcm = _G.mcm
 
-if not not mcm then
-	local ovn = nil;
+if not (not mcm) then
+	local ovn = nil
 	if mcm:has_mod("ovn") then
-		ovn = mcm:get_mod("ovn");
+		ovn = mcm:get_mod("ovn")
 	else
 		ovn = mcm:register_mod("ovn", "OvN - Overhaul", "Let's you enable/disable various parts of the compilation.")
 	end
+	if mcm:has_mod("crynsos_faction_unlocker") then
+		local cfu = mcm:get_mod("crynsos_faction_unlocker")
+		local cfu_k8p = cfu:get_tweaker_with_key("MCM_Karak_Eight_Peaks")
+		cfu_k8p:add_option("Disable", "Disables Crynsos Karak Eight Peaks script", "Use if you prefer Shakyrivers Karak Eight Peaks script.")
+	end 
 	local k8p = ovn:add_tweaker("k8p", "War for Karak Eight Peaks", "")
 	k8p:add_option("enable", "Enable", "")
 	k8p:add_option("disable", "Disable", "")
@@ -568,6 +573,8 @@ end
 
 cm:add_first_tick_callback(
 	function()
-		if not mcm or cm:get_saved_value("mcm_tweaker_ovn_k8p_value") == "enable" then sr_k8p() end
+		if not mcm or cm:get_saved_value("mcm_tweaker_ovn_k8p_value") == "enable" then
+			sr_k8p()
+		end
 	end
 )

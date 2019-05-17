@@ -1,7 +1,7 @@
 local ml_tables = {}
 
 --# assume ml_tables.default_rule: string
-ml_tables.default_rule = "TT 8th edition - Morathi";
+ml_tables.default_rule = "TT 8th edition - Morathi"
 --[[
 	Dark Elves (8ed)
 	page: 54
@@ -16,10 +16,10 @@ ml_tables.default_rule = "TT 8th edition - Morathi";
 --]]
 
 --# assume ml_tables.default_option: string
-ml_tables.default_option = "Skill - based";
+ml_tables.default_option = "Skill - based"
 
 --# assume ml_tables.enableAllBundle: string
-ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all_morathi";
+ml_tables.enableAllBundle = "wh2_sm0_effect_bundle_enable_all_morathi"
 
 --# assume ml_tables.lores: map<string, map<string, string>>
 ml_tables.lores = {
@@ -159,4 +159,4 @@ ml_tables.spellToLore = {
 	["The Withering"] = "Lore of Shadows"
 }
 
-return ml_tables;
+return ml_tables

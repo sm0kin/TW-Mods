@@ -104,13 +104,13 @@ function llr.create_button(cqi)
 end
 
 --v function() --> CA_CQI
-function getselectedCharCQI()
+local function getselectedCharCQI()
     local charCQI = cm:get_campaign_ui_manager():get_char_selected_cqi()
     local char = cm:get_character_by_cqi(charCQI)
     if char:has_military_force() then
         local unitsUIC = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "units")
         for i = 0, unitsUIC:ChildCount() - 1 do
-            local uic_child = UIComponent(unitsUIC:Find(i));
+            local uic_child = UIComponent(unitsUIC:Find(i))
             if uic_child:CurrentState() == "Selected" and string.find(uic_child:Id(), "Agent") then
                 local charList = char:military_force():character_list()
                 local agentIndex = string.match(uic_child:Id(), "%d")
