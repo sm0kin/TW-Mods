@@ -389,9 +389,43 @@ function core_object:svr_load_registry_bool(name)
 	return self.svr:LoadRegistryBool(name);
 end;
 
-
+--------------------- semi colon and __G
 Scripts run the exact same way but scripts run separately on both machines
 This means they have to be determinate when they impact the game model, so you have to send triggers for non-determinant events (namely UI)
 “Determinant when they impact the game model” means it would be bad if lets say, player A’s script decided to spawn chaos and player B’s script decided not to. That would be indeterminacy and cause a desync.
 That generally only happens if you write code that uses UI events to cause things to happen (region trading mod, for example) since pressing buttons isn’t determinant across both machines.
 There is a command to send an MP event to both players that is used to make UI mods MP safe. UI mods typically have to use that to be mp compatible.
+
+It is patently false
+that a lack of semi colon causes problems
+I will photocopy you a page of the damn book from the people who wrote lua, the symbol means nothing
+it demarks a statement end in a language where statements are automatically ended when finished
+so including it can only cause errors
+(example: 
+
+function example();
+-- do stuff
+end
+
+
+) the script breaks because you are forcing a statement end in the middle of something which is a single statement (a function definition)
+but because lua automatically ends all statements, it can never cause errors when omitting it
+for example I can write at the top of my script
+
+cm = get_cm() events = get_events() eom = _G.eom 
+
+
+and the script will run perfectly
+also yes, _G. is just accessing the global environment
+all it does is guarentee you are getting the global variable you intend to... when creating important objects you add them to _G, and before you use them you can use like
+
+if not not _G.object then
+    local object = _G.object
+     --do your shit
+end
+
+ 
+to guarentee that the script won't run and cause breaks if the object is missing
+oh and fury owl that convention exists in lua but it is __TWOUNDERSCORES_THEN_CAPITALS_MEAN_DONT_FUCK_WITH_ME
+but yes, doing something like _G = {} would break some shit
+-----------------------

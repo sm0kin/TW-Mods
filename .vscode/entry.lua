@@ -70,6 +70,10 @@ require("sm0/sm0_battle_speed/script/campaign/mod/sm0_battle_speed")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/frontend/mod/sm0_faction_selection")
 
 
+-- Grant Independance / Revive Faction
+require("sm0/grant independance/script/campaign/mod/sm0_revive")
+
+
 -- OTHER MODDERS
 --require("sm0/z_BETA/!genevieve/script/export_helpers_why_grudge")
 --require("sm0/z_BETA/!genevieve/script/export_helpers_whyll_defeated_traits")

@@ -114,7 +114,7 @@ local LORD_FORENAMES = {
 	["wh2_main_lzd_kroq_gar"] = "names_name_2147359240",
 	["wh2_dlc12_lzd_tehenhauin"] = "names_name_1247571489",
 	["wh2_dlc12_lzd_tiktaqto"] = "names_name_1842768957",
-	["wh2_main_skv_lord_skrolk"] = "names_name_2147359296",
+	["wh2_main_skv_lord_skrolk"] = "names_name_2147359289",
     ["wh2_dlc09_skv_tretch_craventail"] = "names_name_421856293",
 	["wh2_main_skv_queek_headtaker"] = "names_name_2147359300",
 	["wh2_dlc12_skv_ikit_claw"] = "names_name_1400581194",
@@ -206,7 +206,7 @@ local LORD_FAMILY_NAMES = {
 	["wh2_main_lzd_kroq_gar"] = "",
 	["wh2_dlc12_lzd_tehenhauin"] = "",
 	["wh2_dlc12_lzd_tiktaqto"] = "",
-    ["wh2_main_skv_lord_skrolk"] = "",
+    ["wh2_main_skv_lord_skrolk"] = "names_name_2147359296",
     ["wh2_dlc09_skv_tretch_craventail"] = "names_name_1843290975",
 	["wh2_main_skv_queek_headtaker"] = "names_name_2147360908",
 	["wh2_dlc12_skv_ikit_claw"] = "",
@@ -423,7 +423,6 @@ local LORDS_ITEM = {
 } --: map<string, vector<string>>
 
 local ITEM_REQ = {
-
 	["wh_dlc04_anc_arcane_item_the_liber_noctus"] = 8,
 	["wh_dlc04_anc_talisman_the_carstein_ring"] = 13,
 	["wh_dlc04_anc_weapon_blood_drinker"] = 8,

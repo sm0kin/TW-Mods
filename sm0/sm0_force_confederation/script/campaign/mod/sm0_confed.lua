@@ -97,7 +97,6 @@ end
 function sm0_confed()
 	playerFaction = cm:get_faction(cm:get_local_faction(true))
 	initMCMconfed()
-	addTkImmortality() -- delete next patch
 	core:add_listener(
 		"force_confederation_expired",
 		"ScriptEventConfederationExpired",
