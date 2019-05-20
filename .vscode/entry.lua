@@ -85,7 +85,7 @@ require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
 --frostydemise
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
-require("sm0/frosty_mods/script/campaign/mod/legendary_confeds_me")
+require("sm0/frosty_mods/script/campaign/mod/legendary_confeds")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds_me")
 
 --ships

@@ -254,8 +254,9 @@ local function remove_confed_penalties(subcultures_factions_table)
     end
 end
 
+
 --v function()
-function legendary_confeds_me()
+function legendary_confeds()
     local humanFactions = cm:get_human_factions()
     mcm = _G.mcm
 	if not not mcm then
@@ -334,6 +335,37 @@ function legendary_confeds_me()
             end
         end
     end
+
+    -- no clone wars
+    core:add_listener(
+        "doppelganger_CharacterCreated",
+        "CharacterCreated",
+        function(context)
+            local charSubtype = context:character():character_subtype_key()
+            local doppelganger = false
+            if charSubtype == "pro01_dwf_grombrindal" or charSubtype == "grn_azhag_the_slaughterer" or charSubtype == "dlc04_vmp_helman_ghorst" or charSubtype == "wh2_main_hef_prince_alastar" then
+                local originalFaction = context:character():faction()
+                local factionList = originalFaction:factions_of_same_subculture()
+                for i = 0, factionList:num_items() - 1 do
+                    local currentFaction = factionList:item_at(i)
+                    local charList = currentFaction:character_list()
+                    for j = 0, charList:num_items() - 1 do
+                        local currentChar = charList:item_at(j)
+                        if currentChar:character_subtype_key() == charSubtype then
+                            doppelganger = true
+                        end
+                    end
+                end
+            end
+            return doppelganger
+        end,
+        function(context) 
+            local char_cqi = context:character():command_queue_index()
+            cm:set_character_immortality(cm:char_lookup_str(char_cqi), false)
+            cm:kill_character(char_cqi, true, true)
+        end,
+        true
+    );
 
     -- vandy confed options compatibility
     core:add_listener(
