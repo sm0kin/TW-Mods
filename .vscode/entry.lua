@@ -103,3 +103,7 @@ require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
 --require("sm0/Scipion/script/export_helpers__viemzee_unlock_all_mixu")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__viemzee_unlock_all_LL")
 
+--sfo
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__sfo_starting_diplomacy")
+
+

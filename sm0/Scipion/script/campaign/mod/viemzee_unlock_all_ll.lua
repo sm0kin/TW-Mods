@@ -405,21 +405,21 @@ local LORDS_ITEM = {
     ["wh2_dlc11_cst_aranessa"] = {"wh2_dlc11_anc_weapon_krakens_bane"},
     ["wh2_dlc11_cst_cylostra"] = {"wh2_dlc11_anc_arcane_item_the_bordeleaux_flabellum"},
     ["wh2_dlc11_cst_harkon"] = {"wh2_dlc11_anc_enchanted_item_slann_gold"},
-	["wh2_dlc11_cst_noctilus"] = {"wh2_dlc11_anc_enchanted_item_captain_roths_moondial"},
+	["wh2_dlc11_cst_noctilus"] = {"wh2_dlc11_anc_enchanted_item_captain_roths_moondial"}
 
 	--MIXU--
-	["brt_chilfroy"] = {"wh_main_anc_mount_brt_artois_barded_warhorse"},
-	["brt_bohemond"] = {"wh_main_anc_mount_brt_bastonne_barded_warhorse"},
-	["brt_adalhard"] = {"wh_main_anc_mount_brt_lyonesse_barded_warhorse"},
-	["brt_cassyon"] = {"wh_main_anc_mount_brt_parravon_royal_pegasus"},	
-	["emp_marius_leitdorf"] = {"wh_anc_marius_leitdorf_mothers_ruin"},
-	["emp_aldebrand_ludenhof"] = {"wh_anc_aldebrand_ludenhof_beast_slayer"},
-	["emp_edward_van_der_kraal"] = {"wh_anc_edward_van_der_kraal_sea_bride_standard"},
-	["emp_theoderic_gausser"] = {"wh_anc_theoderic_gausser_crow_feeder"},
-	["emp_wolfram_hertwig"] = {"wh_anc_wolfram_hertwig_troll_cleaver"},
-	["emp_valmir_von_raukov"] = {"wh_anc_valmir_von_raukov_brain_wounder"},
-	["emp_alberich_haupt_anderssen"] = {"wh_anc_alberich_haupt-anderssen_orc_hewer"},
-	["emp_helmut_feuerbach"] = {"wh_anc_helmut_feuerbach_stone_breaker"}
+	--["brt_chilfroy"] = {"wh_main_anc_mount_brt_artois_barded_warhorse"},
+	--["brt_bohemond"] = {"wh_main_anc_mount_brt_bastonne_barded_warhorse"},
+	--["brt_adalhard"] = {"wh_main_anc_mount_brt_lyonesse_barded_warhorse"},
+	--["brt_cassyon"] = {"wh_main_anc_mount_brt_parravon_royal_pegasus"},	
+	--["emp_marius_leitdorf"] = {"mixu_anc_weapon_emp_marius_leitdorf_averland_runefang"},
+	--["emp_aldebrand_ludenhof"] = {"mixu_anc_weapon_emp_aldebrand_ludenhof_hochland_runefang"},
+	--["emp_edward_van_der_kraal"] = {"mixu_anc_enchanted_item_emp_edward_van_der_kraal_the_cursed_skull"},
+	--["emp_theoderic_gausser"] = {"mixu_anc_weapon_emp_theoderic_gausser_nordland_runefang"},
+	--["emp_wolfram_hertwig"] = {"wh_anc_wolfram_hertwig_troll_cleaver"},
+	--["emp_valmir_von_raukov"] = {"wh_anc_valmir_von_raukov_brain_wounder"},
+	--["emp_alberich_haupt_anderssen"] = {"wh_anc_alberich_haupt-anderssen_orc_hewer"},
+	--["emp_helmut_feuerbach"] = {"mixu_anc_weapon_emp_helmut_feuerbach_talabecland_runefang"}
 } --: map<string, vector<string>>
 
 local ITEM_REQ = {
