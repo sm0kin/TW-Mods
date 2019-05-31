@@ -349,6 +349,7 @@
 --# assume CM.lock_technology: method(faction_key: string, tech_key: string)
 --# assume CM.restrict_technologies_for_faction: method(factionKey: string, techList: vector<string>, disable: boolean)
 --# assume CM.unlock_starting_general_recruitment: method(startpos: string, faction: string)
+--# assume CM.lock_starting_general_recruitment: method(startpos: string, faction: string)
 --# assume CM.unlock_technology: method(faction_key: string, tech_key: string)
 --# assume CM.add_event_restricted_building_record_for_faction: method(unit: string, faction_key: string)
 --# assume CM.remove_event_restricted_building_record_for_faction: method(unit: string, faction_key: string)

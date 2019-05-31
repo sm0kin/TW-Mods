@@ -208,11 +208,53 @@ local function deletePlayerSubcultureFactions()
 	end
 end
 
+--v function()
+local function spamLords()
+	local faction = "wh_main_dwf_dwarfs"--cm:get_local_faction(true)
+	local factionCA = cm:get_faction(faction)
+    local x, y
+    if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction, factionCA:home_region():name(), false, false, 9) end
+	cm:create_force(
+        faction,
+        "wh_main_dwf_inf_hammerers",
+        factionCA:home_region():name(),
+        x,
+        y,
+        false,
+        function(cqi)
+
+        end
+	)
+end
+
+--v function()
+local function unlockLords()
+    local ai_starting_generals = {
+		{["id"] = "2140784160",	["forename"] = "names_name_2147358917",	["faction"] = "wh_main_dwf_dwarfs"},			-- Grombrindal
+		{["id"] = "2140783606",	["forename"] = "names_name_2147345906",	["faction"] = "wh_main_grn_greenskins"},		-- Azhag the Slaughterer
+		{["id"] = "2140783651",	["forename"] = "names_name_2147345320",	["faction"] = "wh_main_vmp_vampire_counts"},	-- Heinrich Kemmler
+		{["id"] = "2140784146",	["forename"] = "names_name_2147358044",	["faction"] = "wh_main_vmp_vampire_counts"},	-- Helman Ghorst
+		{["id"] = "2140784202",	["forename"] = "names_name_2147345124",	["faction"] = "wh_main_vmp_schwartzhafen"}		-- Isabella von Carstein
+	} --:vector<map<string, string>>
+	
+	for i = 1, #ai_starting_generals do
+		local faction = cm:get_faction(ai_starting_generals[i].faction)
+		
+		if not faction:is_human() then
+			cm:unlock_starting_general_recruitment(ai_starting_generals[i].id, ai_starting_generals[i].faction)
+		end
+    end
+end
+
 -- init
 --v function()
 function sm0_test()
 	expCheat()
 	unitCheat()
+	--unlockLords()
+	--spamLords()
 	--deletePlayerSubcultureFactions()
 	--cm:win_next_autoresolve_battle(cm:get_local_faction())
+	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 600)
+	cm:trigger_incident(cm:get_local_faction(true), "frosty_hef_add_influence", true)
 end

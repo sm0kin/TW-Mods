@@ -1,7 +1,24 @@
 local mcm --:MCM
 
-local alastar_quests = {
-    { "wh2_main_anc_armour_lions_pelt", 1}
+local grombrindal_quests = {
+    {"wh_pro01_dwf_grombrindal_amour_of_glimril_scales", 8},
+    {"wh_pro01_dwf_grombrindal_rune_axe_of_grombrindal", 13},
+    {"wh_pro01_dwf_grombrindal_rune_cloak_of_valaya", 18},
+    {"wh_pro01_dwf_grombrindal_rune_helm_of_zhufbar", 23}
+} --:vector<{string, number}>
+
+local isabella_quests = {
+    {"wh_pro02_anc_enchanted_item_blood_chalice_of_bathori", 9}
+} --:vector<{string, number}>
+
+local helman_ghorst_quests = {
+    { "wh_dlc04_anc_arcane_item_the_liber_noctus", 8}
+} --:vector<{string, number}>
+
+local azhag_the_slaughterer_quests = {
+    {"wh_main_anc_enchanted_item_the_crown_of_sorcery", 8},
+    {"wh_main_anc_armour_azhags_ard_armour", 13},
+    {"wh_main_anc_weapon_slaggas_slashas", 18}
 } --:vector<{string, number}>
 
 -- factions with legendary lords
@@ -73,6 +90,20 @@ local function ancillaryOnRankUp(quests, subtype)
 	end
 end
 
+--v function(faction: CA_FACTION, subtype: string) --> boolean
+local function has_agent_subtype(faction, subtype)
+    local charList = faction:character_list()
+    local has_agent = false
+    for i = 0, charList:num_items() - 1 do
+        local char = charList:item_at(i)
+        if char:character_subtype(subtype) then
+            has_agent = true
+            break
+        end
+    end
+    return has_agent
+end
+
 --v function(faction: string, region: string, x: number, y: number, subtype: string, forename: string, surname: string)
 function createNewLord(faction, region, x, y, subtype, forename, surname)
     cm:create_force_with_general(
@@ -93,66 +124,43 @@ function createNewLord(faction, region, x, y, subtype, forename, surname)
                 cm:kill_character(cqi, true, false)
                 cm:stop_character_convalescing(cqi)
         end
-    )
-end
-
---v function(subtype: string, faction: string)
-local function spamLords(subtype, faction)
-	local factionCA = cm:get_faction(faction)
-    local x, y
-    if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction, factionCA:home_region():name(), false, false, 9) end
-    if factionCA:subculture() == "wh2_main_sc_hef_high_elves" and not cm:get_saved_value("v_wh2_main_hef_prince_alastar_LL_unlocked") then
-        cm:spawn_character_to_pool(faction, "names_name_2147360555", "names_name_2147360560", "", "", 18, true, "general", "wh2_main_hef_prince_alastar", true, "")
-        cm:set_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked", true)
-        ancillaryOnRankUp(alastar_quests, "wh2_main_hef_prince_alastar")
-    else
-        for i = 1, 10 do
-            cm:create_force(
-                faction,
-                "wh_main_dwf_inf_hammerers",
-                factionCA:home_region():name(),
-                x,
-                y,
-                false,
-                function(cqi)
-                    local char = cm:get_character_by_cqi(cqi)
-                    if char:character_subtype(subtype) then
-                        cm:set_saved_value(subtype.."_spawned", faction) 
-                    end
-                    cm:kill_character(cqi, true, false)
-                    cm:stop_character_convalescing(cqi)
-                end
-            )
-        end
-    end
+        )
 end
 
 --v function(faction: string)
 local function spawnMissingLords(faction)
-    local ai_starting_generals = {
-		{["id"] = "2140784160",	["forename"] = "names_name_2147358917",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "pro01_dwf_grombrindal"},			            -- Grombrindal
-		{["id"] = "2140783606",	["forename"] = "names_name_2147345906",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_azhag_the_slaughterer"},		        -- Azhag the Slaughterer
-		{["id"] = "2140784146",	["forename"] = "names_name_2147358044",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "dlc04_vmp_helman_ghorst"},	        -- Helman Ghorst
-        {["id"] = "2140784202",	["forename"] = "names_name_2147345124",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "pro02_vmp_isabella_von_carstein"},    -- Isabella von Carstein
-        {["id"] = "1065845653",	["forename"] = "",	["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar"}                                  -- Alastar
-    } --:vector<map<string, string>>
-    
-	local factionCA = cm:get_faction(faction)
-	for i = 1, #ai_starting_generals do
-		local aiFaction = cm:get_faction(ai_starting_generals[i].faction)
-		
-		if not aiFaction:is_human() and aiFaction:subculture() == factionCA:subculture() then
-            if ai_starting_generals[i].subtype == "wh2_main_hef_prince_alastar" then 
-                if cm:model():campaign_name("main_warhammer") then
-                    cm:lock_starting_general_recruitment(ai_starting_generals[i].id, ai_starting_generals[i].faction)
-                else
-                    cm:lock_starting_general_recruitment("2140785181", ai_starting_generals[i].faction)
-                end
-            else
-                cm:unlock_starting_general_recruitment(ai_starting_generals[i].id, ai_starting_generals[i].faction)
+    local factionCA = cm:get_faction(faction)
+    local x, y
+    if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction, factionCA:home_region():name(), false, false, 9) end
+    if not vfs.exists("script/export_helpers__llr_core.lua") and not vfs.exists("script/campaign/mod/viemzee_unlock_all_ll.lua") then -- compatibility for df's legendary lord respec (script path might change)
+        if factionCA:subculture() == "wh_main_sc_dwf_dwarfs" and faction ~= "wh_main_dwf_dwarfs" and not has_agent_subtype(factionCA, "pro01_dwf_grombrindal") and not cm:get_saved_value("pro01_dwf_grombrindal_spawned") then
+            --cm:spawn_character_to_pool(faction, "names_name_2147358917", "names_name_2147358935", "", "", 18, true, "general", "pro01_dwf_grombrindal", true, "") 
+            createNewLord(faction, factionCA:home_region():name(), x, y, "pro01_dwf_grombrindal", "names_name_2147358917", "names_name_2147358935")
+            ancillaryOnRankUp(grombrindal_quests, "pro01_dwf_grombrindal")
+            cm:set_saved_value("pro01_dwf_grombrindal".."_spawned", faction) 
+        elseif factionCA:subculture() == "wh_main_sc_grn_greenskins" and faction ~= "wh_main_grn_greenskins" and not has_agent_subtype(factionCA, "grn_azhag_the_slaughterer") and not cm:get_saved_value("grn_azhag_the_slaughterer_spawned") then
+            --cm:spawn_character_to_pool(faction, "names_name_2147345906", "names_name_2147357356", "", "", 18, true, "general", "grn_azhag_the_slaughterer", true, "")
+            createNewLord(faction, factionCA:home_region():name(), x, y, "grn_azhag_the_slaughterer", "names_name_2147345906", "names_name_2147357356")
+            ancillaryOnRankUp(azhag_the_slaughterer_quests, "grn_azhag_the_slaughterer")    
+            cm:set_saved_value("grn_azhag_the_slaughterer".."_spawned", faction) 
+        elseif factionCA:subculture() == "wh_main_sc_vmp_vampire_counts" then
+            if faction ~= "wh_main_vmp_vampire_counts" and not has_agent_subtype(factionCA, "dlc04_vmp_helman_ghorst") and not cm:get_saved_value("dlc04_vmp_helman_ghorst_spawned") then
+                --cm:spawn_character_to_pool(faction, "names_name_2147358044", "names_name_2147345294", "", "", 18, true, "general", "dlc04_vmp_helman_ghorst", true, "")
+                createNewLord(faction, factionCA:home_region():name(), x, y, "dlc04_vmp_helman_ghorst", "names_name_2147358044", "names_name_2147345294")
+                ancillaryOnRankUp(helman_ghorst_quests, "dlc04_vmp_helman_ghorst")  
+                cm:set_saved_value("dlc04_vmp_helman_ghorst".."_spawned", faction) 
+            end --elseif won't work for some reason
+            if faction ~= "wh_main_vmp_schwartzhafen" and not has_agent_subtype(factionCA, "pro02_vmp_isabella_von_carstein") and not cm:get_saved_value("pro02_vmp_isabella_von_carstein_spawned") then
+                --cm:spawn_character_to_pool(faction, "names_name_2147345124", "names_name_2147343895", "", "", 18, true, "general", "pro02_vmp_isabella_von_carstein", true, "")
+                createNewLord(faction, factionCA:home_region():name(), x, y, "pro02_vmp_isabella_von_carstein", "names_name_2147345124", "names_name_2147343895")
+                ancillaryOnRankUp(isabella_quests, "pro02_vmp_isabella_von_carstein") 
+                cm:set_saved_value("pro02_vmp_isabella_von_carstein".."_spawned", faction) 
             end
-            spamLords(ai_starting_generals[i].subtype, ai_starting_generals[i].faction)
-		end
+        elseif factionCA:subculture() == "wh2_main_sc_hef_high_elves" and faction ~= "wh2_main_hef_eataine" and not has_agent_subtype(factionCA, "wh2_main_hef_prince_alastar") and not cm:get_saved_value("wh2_main_hef_prince_alastar_spawned") then
+            --cm:spawn_character_to_pool(faction, "names_name_2147360555", "names_name_2147360560", "", "", 18, true, "general", "wh2_main_hef_prince_alastar", true, "")
+            createNewLord(faction, factionCA:home_region():name(), x, y, "wh2_main_hef_prince_alastar", "names_name_2147360555", "names_name_2147360560")
+            cm:set_saved_value("wh2_main_hef_prince_alastar".."_spawned", faction) 
+        end
     end
 end
 
@@ -353,6 +361,37 @@ function legendary_confeds()
             end
         end
     end
+
+    -- no clone wars
+    core:add_listener(
+        "doppelganger_CharacterCreated",
+        "CharacterCreated",
+        function(context)
+            local charSubtype = context:character():character_subtype_key()
+            local doppelganger = false
+            if charSubtype == "pro01_dwf_grombrindal" or charSubtype == "grn_azhag_the_slaughterer" or charSubtype == "dlc04_vmp_helman_ghorst" or charSubtype == "pro02_vmp_isabella_von_carstein" or charSubtype == "wh2_main_hef_prince_alastar" then
+                local originalFaction = context:character():faction()
+                local factionList = originalFaction:factions_of_same_subculture()
+                for i = 0, factionList:num_items() - 1 do
+                    local currentFaction = factionList:item_at(i)
+                    local charList = currentFaction:character_list()
+                    for j = 0, charList:num_items() - 1 do
+                        local currentChar = charList:item_at(j)
+                        if currentChar:character_subtype_key() == charSubtype then
+                            doppelganger = true
+                        end
+                    end
+                end
+            end
+            return doppelganger
+        end,
+        function(context) 
+            local char_cqi = context:character():command_queue_index()
+            cm:set_character_immortality(cm:char_lookup_str(char_cqi), false)
+            cm:kill_character(char_cqi, true, true)
+        end,
+        true
+    )
 
     -- vandy confed options compatibility
     core:add_listener(

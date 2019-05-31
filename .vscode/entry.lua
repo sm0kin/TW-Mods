@@ -18,8 +18,8 @@ require("sm0/sm0_save_cam_settings/script/campaign/mod/sm0_save_cam")
 
 
 -- TEST MOD
-require("sm0/sm0_test/script/campaign/mod/sm0_test")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_test")
+--require("sm0/sm0_test/script/campaign/mod/sm0_test")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_test")
 
 
 -- HIDDEN LEGENDARIES
@@ -67,7 +67,7 @@ require("sm0/sm0_battle_speed/script/campaign/mod/sm0_battle_speed")
 
 -- BETTER FACTION SELECTION
 --require("sm0/sm0_frontend/script/frontend/mod/sm0_faction_selection")
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/frontend/mod/sm0_faction_selection")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/frontend/mod/sm0_faction_selection")
 
 
 -- Grant Independance / Revive Faction
@@ -86,7 +86,7 @@ require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 --frostydemise
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
 require("sm0/frosty_mods/script/campaign/mod/legendary_confeds")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds_me")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds")
 
 --ships
 require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_lokhir")
@@ -104,6 +104,6 @@ require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__viemzee_unlock_all_LL")
 
 --sfo
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__sfo_starting_diplomacy")
+--require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__sfo_starting_diplomacy")
 
 

@@ -425,7 +425,21 @@ if not not _G.object then
 end
 
  
-to guarentee that the script won't run and cause breaks if the object is missing
+"to guarentee that the script won't run and cause breaks if the object is missing
 oh and fury owl that convention exists in lua but it is __TWOUNDERSCORES_THEN_CAPITALS_MEAN_DONT_FUCK_WITH_ME
-but yes, doing something like _G = {} would break some shit
+but yes, doing something like _G = {} would break some shit"
 -----------------------
+
+--v function(faction: CA_FACTION, subtype: string) --> boolean
+local function has_agent_subtype(faction, subtype)
+    local charList = faction:character_list()
+    local has_agent = false
+    for i = 0, charList:num_items() - 1 do
+        local char = charList:item_at(i)
+        if char:character_subtype(subtype) then
+            has_agent = true
+            break
+        end
+    end
+    return has_agent
+end
