@@ -1,3 +1,5 @@
+-- OUTDATED
+
 local mcm --:MCM
 
 local alastar_quests = {
@@ -39,7 +41,7 @@ local mixu1_subcultures_factions = {
 
 local mixu2_subcultures_factions = {
     ["wh2_main_sc_hef_high_elves"] = {"wh2_main_hef_saphery", "wh2_main_hef_caledor", "wh2_main_hef_chrace"},
-    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_xlanhuapec", "wh2_main_lzd_itza", "wh2_main_lzd_tlaxtlan", "wh2_main_lzd_tlaqua"},
+    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_xlanhuapec", "wh2_main_lzd_itza", "wh2_main_lzd_tlaxtlan", "wh2_main_lzd_tlaqua", "wh2_main_lzd_konquata"},
     ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_scourge_of_khaine"},
     ["wh2_main_sc_skv_skaven"] = {},
     ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_numas"},
@@ -101,24 +103,29 @@ local function spamLords(subtype, faction)
 	local factionCA = cm:get_faction(faction)
     local x, y
     if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction, factionCA:home_region():name(), false, false, 9) end
-    for i = 1, 10 do
-        cm:create_force(
-            faction,
-            "wh_main_dwf_inf_hammerers",
-            factionCA:home_region():name(),
-            x,
-            y,
-            false,
-            function(cqi)
-                local char = cm:get_character_by_cqi(cqi)
-                if char:character_subtype(subtype) then
-                    cm:set_character_immortality(cm:char_lookup_str(cqi), true)
-                    cm:set_saved_value(subtype.."_spawned", faction) 
+    if factionCA:subculture() == "wh2_main_sc_hef_high_elves" and not cm:get_saved_value("v_wh2_main_hef_prince_alastar_LL_unlocked") then
+        cm:spawn_character_to_pool(faction, "names_name_2147360555", "names_name_2147360560", "", "", 18, true, "general", "wh2_main_hef_prince_alastar", true, "")
+        cm:set_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked", true)
+        ancillaryOnRankUp(alastar_quests, "wh2_main_hef_prince_alastar")
+    else
+        for i = 1, 10 do
+            cm:create_force(
+                faction,
+                "wh_main_dwf_inf_hammerers",
+                factionCA:home_region():name(),
+                x,
+                y,
+                false,
+                function(cqi)
+                    local char = cm:get_character_by_cqi(cqi)
+                    if char:character_subtype(subtype) then
+                        cm:set_saved_value(subtype.."_spawned", faction) 
+                    end
+                    cm:kill_character(cqi, true, false)
+                    cm:stop_character_convalescing(cqi)
                 end
-                cm:kill_character(cqi, true, false)
-                cm:stop_character_convalescing(cqi)
-            end
-        )
+            )
+        end
     end
 end
 
@@ -128,15 +135,24 @@ local function spawnMissingLords(faction)
 		{["id"] = "2140784160",	["forename"] = "names_name_2147358917",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "pro01_dwf_grombrindal"},			            -- Grombrindal
 		{["id"] = "2140783606",	["forename"] = "names_name_2147345906",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_azhag_the_slaughterer"},		        -- Azhag the Slaughterer
 		{["id"] = "2140784146",	["forename"] = "names_name_2147358044",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "dlc04_vmp_helman_ghorst"},	        -- Helman Ghorst
-        {["id"] = "2140784202",	["forename"] = "names_name_2147345124",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "pro02_vmp_isabella_von_carstein"}    -- Isabella von Carstein
+        {["id"] = "2140784202",	["forename"] = "names_name_2147345124",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "pro02_vmp_isabella_von_carstein"},    -- Isabella von Carstein
+        {["id"] = "1065845653",	["forename"] = "",	["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar"}                                  -- Alastar
     } --:vector<map<string, string>>
-
+    
+	local factionCA = cm:get_faction(faction)
 	for i = 1, #ai_starting_generals do
 		local aiFaction = cm:get_faction(ai_starting_generals[i].faction)
-        local factionCA = cm:get_faction(faction)
-
-		if aiFaction and not aiFaction:is_human() and factionCA:subculture() == aiFaction:subculture() and not cm:get_saved_value(ai_starting_generals[i].subtype.."_spawned") then
-            cm:unlock_starting_general_recruitment(ai_starting_generals[i].id, ai_starting_generals[i].faction)
+		
+		if aiFaction and not aiFaction:is_human() and aiFaction:subculture() == factionCA:subculture() then
+            if ai_starting_generals[i].subtype == "wh2_main_hef_prince_alastar" then 
+                if cm:model():campaign_name("main_warhammer") then
+                    cm:lock_starting_general_recruitment(ai_starting_generals[i].id, ai_starting_generals[i].faction)
+                else
+                    cm:lock_starting_general_recruitment("2140785181", ai_starting_generals[i].faction)
+                end
+            else
+                cm:unlock_starting_general_recruitment(ai_starting_generals[i].id, ai_starting_generals[i].faction)
+            end
             spamLords(ai_starting_generals[i].subtype, ai_starting_generals[i].faction)
 		end
     end
@@ -171,94 +187,60 @@ local function confed(subcultures_factions_table)
     for i = 1, #humanFactions do
         spawnMissingLords(humanFactions[i])
         local humanFaction = cm:get_faction(humanFactions[i])
-        if humanFaction:subculture() == "wh2_main_sc_hef_high_elves" and not cm:get_saved_value("v_wh2_main_hef_prince_alastar_LL_unlocked") then
-            if humanFactions[1] ~= "wh2_main_hef_eataine" and humanFactions[2] ~= "wh2_main_hef_eataine" then
-                cm:spawn_character_to_pool(humanFactions[i], "names_name_2147360555", "names_name_2147360560", "", "", 18, true, "general", "wh2_main_hef_prince_alastar", true, "")
-                cm:set_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked", true)
-                ancillaryOnRankUp(alastar_quests, "wh2_main_hef_prince_alastar")
-                if cm:model():campaign_name("main_warhammer") then
-                    cm:lock_starting_general_recruitment("1065845653", "wh2_main_hef_eataine")
-                else
-                    cm:lock_starting_general_recruitment("2140785181", "wh2_main_hef_eataine")
-                end
-            end
-        end
         local subculture = humanFaction:subculture()
         if subcultures_factions_table[subculture] then 
             for _, faction in ipairs(subcultures_factions_table[subculture]) do
-                if faction then
-                    local factionCA = cm:get_faction(faction)
-                    if factionCA and not factionCA:is_human() and cm:get_saved_value("mcm_tweaker_frostyConfed_player"..i.."|"..faction.."_value") ~= "disable" then
-                        local regionList = factionCA:region_list()
-                        local xPos, yPos
-                        local army = ""
-                        if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" then
-                            local mfList = factionCA:military_force_list()
-                            for j = 0, mfList:num_items() - 1 do
-                                local mf = mfList:item_at(j)	
-                                if mf:has_general() and not mf:is_armed_citizenry() then
-                                    local general = mf:general_character()
-                                    xPos = general:logical_position_x()
-                                    yPos = general:logical_position_y()
-                                    local unitList = mf:unit_list()
-                                    for k = 1, unitList:num_items() - 1 do
-                                        local unit = unitList:item_at(k)
-                                        if army ~= "" then army = army.."," end
-                                        army = army..unit:unit_key()	
-                                    end
+                local factionCA = cm:get_faction(faction)
+                if factionCA and not factionCA:is_human() and cm:get_saved_value("mcm_tweaker_frostyConfed_player"..i.."|"..faction.."_value") ~= "disable" then
+                    local regionList = factionCA:region_list()
+                    local xPos, yPos
+                    local army = ""
+                    if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" then
+                        local mfList = factionCA:military_force_list()
+                        for i = 0, mfList:num_items() - 1 do
+                            local mf = mfList:item_at(i)	
+                            if mf:has_general() and not mf:is_armed_citizenry() then
+                                local general = mf:general_character()
+                                xPos = general:logical_position_x()
+                                yPos = general:logical_position_y()
+                                local unitList = mf:unit_list()
+                                for i = 1, unitList:num_items() - 1 do
+                                    local unit = unitList:item_at(i)
+                                    if army ~= "" then army = army.."," end
+                                    army = army..unit:unit_key()	
                                 end
                             end
+                        end
+                        local charList = factionCA:character_list()
+                        for i = 0, charList:num_items() - 1 do
+                            local char = charList:item_at(i)
+                            local cqi = char:command_queue_index()
+                            cm:kill_character(cqi, true, false)
+                        end
+                    end
+                    if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then 
+                        if not not mcm or (humanFactions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" and faction ~= "wh2_dlc09_tmb_khemri" and faction ~= "wh2_dlc09_tmb_followers_of_nagash") then 
                             local charList = factionCA:character_list()
-                            for l = 0, charList:num_items() - 1 do
-                                local char = charList:item_at(l)
+                            for i = 0, charList:num_items() - 1 do
+                                local char = charList:item_at(i)
                                 local cqi = char:command_queue_index()
                                 cm:kill_character(cqi, true, false)
                             end
-                        end
-                        if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then 
-                            if not not mcm or (humanFactions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" and faction ~= "wh2_dlc09_tmb_khemri" and faction ~= "wh2_dlc09_tmb_followers_of_nagash") then 
-                                if vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") then 
-                                    local charList = factionCA:character_list()
-                                    for n = 0, charList:num_items() - 1 do
-                                        local char = charList:item_at(n)
-                                        local cqi = char:command_queue_index()
-                                        cm:kill_character(cqi, true, false)
-                                        if char:is_wounded() then cm:stop_character_convalescing(cqi) end
-                                    end
-                                    cm:force_confederation(humanFactions[i], faction) 
-                                end
-                            end
-                        else
                             cm:force_confederation(humanFactions[i], faction)
                         end
-                        if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" then
-                            cm:callback(function()
-                                reviveFaction(faction, regionList, xPos, yPos, army)
-                                local charList =  humanFaction:character_list()
-                                for o = 0, charList:num_items() - 1 do
-                                    local char = charList:item_at(o)
-                                    local cqi = char:command_queue_index()
-                                    if char:is_wounded() then cm:stop_character_convalescing(cqi) end
-                                    if cm:char_is_agent(char) then
-                                        local x, y
-                                        local x, y = humanFaction:faction_leader():logical_position_x(), humanFaction:faction_leader():logical_position_y()
-                                        local spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], x, y, false)
-                                        local valid = false
-                                        while not valid do
-                                            if spawnX ~= -1 then
-                                                valid = true
-                                                break
-                                            end
-                                            local square = {x - 5, x + 5, y - 5, y + 5}
-                                            spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], cm:random_number(square[2], square[1]), cm:random_number(square[4], square[3]), false)
-                                        end
-                                        if valid then
-                                            cm:teleport_to(cm:char_lookup_str(cqi), spawnX, spawnY, true)
-                                        end
-                                    end
-                                end
-                            end, 1)
-                        end
+                    else
+                        cm:force_confederation(humanFactions[i], faction)
+                    end
+                    if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" then
+                        cm:callback(function()
+                            reviveFaction(faction, regionList, xPos, yPos, army)
+                            local charList =  humanFaction:character_list()
+                            for i = 0, charList:num_items() - 1 do
+                                local char = charList:item_at(i)
+                                local cqi = char:command_queue_index()
+                                if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                            end
+                        end, 1)
                     end
                 end
             end
@@ -266,25 +248,11 @@ local function confed(subcultures_factions_table)
     end
     if cm:get_saved_value("mcm_tweaker_frostyConfed_deadlyAlliances_value") == "enable" then
         for subculture, factions in pairs(subcultures_factions_table) do
-            if subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" or (vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") and subculture == "wh2_dlc09_sc_tmb_tomb_kings") then 
-                if (not cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture) or
-                    (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture and cm:get_faction(humanFactions[2]):subculture() ~= subculture) then
-                    if factions[1] and cm:get_faction(factions[1]) then spawnMissingLords(factions[1]) end
-                    for i = 1, #factions do
-                        if factions[i] and subcultures_factions[subculture][1] ~= factions[i] then 
-                            if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then 
-                                local factionCA = cm:get_faction(factions[i])
-                                local charList = factionCA:character_list()
-                                for j = 0, charList:num_items() - 1 do
-                                    local char = charList:item_at(j)
-                                    local cqi = char:command_queue_index()
-                                    cm:kill_character(cqi, true, false)
-                                    if char:is_wounded() then cm:stop_character_convalescing(cqi) end
-                                end
-                            end
-                            cm:force_confederation(subcultures_factions[subculture][1], factions[i])
-                        end
-                    end
+            if (not cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture) or
+                (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture and cm:get_faction(humanFactions[2]):subculture() ~= subculture) then
+                if factions[1] and cm:get_faction(factions[1]) then spawnMissingLords(factions[1]) end
+                for i = 1, #factions do
+                    if subcultures_factions[subculture][1] ~= factions[i] then cm:force_confederation(subcultures_factions[subculture][1], factions[i]) end
                 end
             end
         end
@@ -308,10 +276,8 @@ local function remove_confed_penalties(subcultures_factions_table)
     for i = 1, #bundles do
         for _, factions in pairs(subcultures_factions_table) do
             for _, faction in ipairs(factions) do
-                if faction then
-                    local factionCA = cm:get_faction(faction)
-                    if factionCA and factionCA:has_effect_bundle(bundles[i]) then cm:remove_effect_bundle(bundles[i], faction) end
-                end
+                local factionCA = cm:get_faction(faction)
+                if factionCA and factionCA:has_effect_bundle(bundles[i]) then cm:remove_effect_bundle(bundles[i], faction) end
             end
         end
     end
@@ -332,39 +298,37 @@ function legendary_confeds()
         for i = 1, #humanFactions do
             local humanFaction = cm:get_faction(humanFactions[i])
             local subculture = humanFaction:subculture()
-            if subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" or (vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") and subculture == "wh2_dlc09_sc_tmb_tomb_kings") then 
-                if subcultures_factions[subculture]  then 
-                    for _, faction in ipairs(subcultures_factions[subculture]) do
-                        if faction and not cm:get_faction(faction):is_human() then 
-                            local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
-                            if (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture())
-                            or (humanFactions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (humanFactions[2] == "wh2_dlc09_tmb_followers_of_nagash")
-                            or (faction == "wh2_dlc09_tmb_khemri") or faction == "wh2_dlc09_tmb_followers_of_nagash" then 
-                                playerConfederations:add_option("disable", "Disable", "")
-                                playerConfederations:add_option("enable", "Enable", "")
-                            else
-                                playerConfederations:add_option("enable", "Enable", "")
-                                playerConfederations:add_option("disable", "Disable", "")
-                            end
+            if subcultures_factions[subculture] then 
+                for _, faction in ipairs(subcultures_factions[subculture]) do
+                    if not cm:get_faction(faction):is_human() then 
+                        local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
+                        if (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture())
+                        or (humanFactions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (humanFactions[2] == "wh2_dlc09_tmb_followers_of_nagash")
+                        or (faction == "wh2_dlc09_tmb_khemri") or faction == "wh2_dlc09_tmb_followers_of_nagash" then 
+                            playerConfederations:add_option("disable", "Disable", "")
+                            playerConfederations:add_option("enable", "Enable", "")
+                        else
+                            playerConfederations:add_option("enable", "Enable", "")
+                            playerConfederations:add_option("disable", "Disable", "")
                         end
                     end
                 end
-                if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") and mixu1_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 1 (script path might change)
-                    for _, faction in ipairs(mixu1_subcultures_factions[subculture]) do
-                        if faction and not cm:get_faction(faction):is_human() then
-                            local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
-                            playerConfederations:add_option("disable", "Disable", "")
-                            playerConfederations:add_option("enable", "Enable", "")
-                        end
+            end
+            if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") and mixu1_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 1 (script path might change)
+                for _, faction in ipairs(mixu1_subcultures_factions[subculture]) do
+                    if not cm:get_faction(faction):is_human() then 
+                        local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
+                        playerConfederations:add_option("disable", "Disable", "")
+                        playerConfederations:add_option("enable", "Enable", "")
                     end
                 end
-                if vfs.exists("script/campaign/mod/mixu_darkhand.lua") and mixu2_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 2 (script path might change)
-                    for _, faction in ipairs(mixu2_subcultures_factions[subculture]) do
-                        if faction and not cm:get_faction(faction):is_human() then 
-                            local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
-                            playerConfederations:add_option("disable", "Disable", "")
-                            playerConfederations:add_option("enable", "Enable", "")
-                        end
+            end
+            if vfs.exists("script/campaign/mod/mixu_darkhand.lua") and mixu2_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 2 (script path might change)
+                for _, faction in ipairs(mixu2_subcultures_factions[subculture]) do
+                    if not cm:get_faction(faction):is_human() then 
+                        local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
+                        playerConfederations:add_option("disable", "Disable", "")
+                        playerConfederations:add_option("enable", "Enable", "")
                     end
                 end
             end

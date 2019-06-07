@@ -99,11 +99,11 @@ require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_wulfrik")
 --Scipion's Recruit Defeated Lords
 require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_ll")
 require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
+require("sm0/recruitdefeated/script/campaign/mod/sm0_recruit_defeated")
+
 --require("sm0/Scipion/script/export_helpers__viemzee_unlock_all_LL")
 --require("sm0/Scipion/script/export_helpers__viemzee_unlock_all_mixu")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__viemzee_unlock_all_LL")
 
 --sfo
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__sfo_starting_diplomacy")
-
-

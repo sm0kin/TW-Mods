@@ -246,15 +246,27 @@ local function unlockLords()
     end
 end
 
+
+
 -- init
 --v function()
 function sm0_test()
+	cm:trigger_incident(cm:get_local_faction(true), "frosty_hef_add_influence", true)
+	core:add_listener(
+		"refugee_FactionTurnStart",
+		"FactionTurnStart",
+		true,
+		function(context)
+			out("sm0/faction = "..context:faction():name())
+		end,
+		true
+	)
 	expCheat()
 	unitCheat()
 	--unlockLords()
 	--spamLords()
-	--deletePlayerSubcultureFactions()
+	deletePlayerSubcultureFactions()
 	--cm:win_next_autoresolve_battle(cm:get_local_faction())
 	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 600)
-	cm:trigger_incident(cm:get_local_faction(true), "frosty_hef_add_influence", true)
+
 end
