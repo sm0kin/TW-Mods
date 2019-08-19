@@ -189,20 +189,25 @@ end
 
 --v function()
 local function deletePlayerSubcultureFactions()
+	cm:force_confederation("wh2_main_hef_caledor", "wh2_main_hef_avelorn")
 	local playerFaction = cm:get_faction(cm:get_local_faction(true))
 	local factionList = playerFaction:factions_of_same_subculture()
 	for i = 0, factionList:num_items() - 1 do
 		local faction = factionList:item_at(i)
 		if faction and not faction:is_dead() and not faction:is_human() then
-			local regionList = faction:region_list()
-			local charList = faction:character_list()
-			for i = 0, regionList:num_items() - 1 do
-				local currentRegion = regionList:item_at(i)
-				cm:set_region_abandoned(currentRegion:name())
-			end
-			for i = 0, charList:num_items() - 1 do
-				local currentChar = charList:item_at(i)
-				cm:kill_character(currentChar:command_queue_index(), true, false)
+			if faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" then
+				--cm:force_confederation(cm:get_local_faction(true), faction:name())
+			else
+				local regionList = faction:region_list()
+				local charList = faction:character_list()
+				for i = 0, regionList:num_items() - 1 do
+					local currentRegion = regionList:item_at(i)
+					cm:set_region_abandoned(currentRegion:name())
+				end
+				for i = 0, charList:num_items() - 1 do
+					local currentChar = charList:item_at(i)
+					cm:kill_character(currentChar:command_queue_index(), true, false)
+				end
 			end
 		end
 	end
@@ -257,7 +262,7 @@ function sm0_test()
 		"FactionTurnStart",
 		true,
 		function(context)
-			out("sm0/faction = "..context:faction():name())
+			--out("sm0/faction = "..context:faction():name())
 		end,
 		true
 	)
@@ -265,8 +270,17 @@ function sm0_test()
 	unitCheat()
 	--unlockLords()
 	--spamLords()
-	deletePlayerSubcultureFactions()
+	core:add_listener(
+		"human_FactionTurnEnd",
+		"FactionTurnEnd",
+		function(context)
+			return context:faction():is_human()
+		end,
+		function(context)
+			deletePlayerSubcultureFactions()
+		end,
+		true
+	)
 	--cm:win_next_autoresolve_battle(cm:get_local_faction())
 	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 600)
-
 end

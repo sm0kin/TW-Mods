@@ -131,6 +131,7 @@
 --# assume CM.get_local_faction: method(force: boolean?) --> string
 --# assume CM.whose_turn_is_it: method() --> string
 --# assume CM.get_human_factions: method() --> vector<string>
+--# assume CM.turn_number: method() --> number
 --get functions
 --# assume CM.get_highest_ranked_general_for_faction: method(faction_key: string) --> CA_CHAR
 --# assume CM.get_character_by_cqi: method(cqi: CA_CQI) --> CA_CHAR
@@ -782,6 +783,7 @@
 --# assume global Get_Character_Side_In_Last_Battle: function(char: CA_CHAR) --> BATTLE_SIDE
 --# assume global q_setup: function()
 --# assume global set_up_rank_up_listener: function(quest_table: vector<vector<string | number>>, subtype: string, infotext: vector<string | number>)
+--# assume global char_with_forename_has_no_military_force: function(forename: string) --> boolean
 
 -- CA LUA OBJECTS:
 --RITES UNLOCK OBJECT
@@ -881,3 +883,145 @@
 
 -- load_values_from_string = USELESS
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------
+-----------------
+-- WH2 UIC API --
+-----------------
+-----------------
+--[[
+
+    List of all valid methods for the UIC game object! I've tried to write it as clearly as I can. If I've messed anything up, or forgotten anything, or need to clarify, do let me know.
+
+    Whatever is within the first brackets are arguments for the method; after the --> is the return values. I've tried to limit descriptors to what is actually necessary.
+    
+    Enjoy!
+    
+    ------------
+    ---- GETTERS
+    ------------
+    
+    uic:Visible() --> (is_visible: boolean)
+    uic:ChildCount() --> (num_children: number)
+    uic:TextDimensions() --> (width: number, height: number)
+    uic:NumImages() --> (num_images: number) 
+    uic:GetImagePath(index_num: number) --> (image_path: string)
+    uic:NumStates() --> (num_states: number)
+    uic:GetStateByIndex(index_num: number) --> (state: string)
+    uic:CurrentState() --> (current_state: string)
+    uic:Id() --> (id: string)
+    uic:Parent() --> (parent: UIC)
+    uic:Position() --> (x: number, y: number)
+    uic:Height() --> (height: number)
+    uic:Width() --> (width: number)
+    uic:Bounds() --> (width: number, height: number)
+    uic:Dimensions() --> (width: number, height: number)
+    
+    uic:GetStateText() --> (state_text: string)
+    uic:GetTooltipText() --> (tooltip_text: string)
+    uic:Address() --> (address: string) -- only used for parent_uic:Adopt(child_uic:Address()), grabs the UIC's memory address
+    uic:Opacity() --> (opacity: number) -- 0-100, I believe
+    uic:Priority() --> (priority: number) -- z-axis priority
+    uic:IsInteractive() --> (is_interactive: boolean)
+    uic:IsMoveable() --> (is_moveable: boolean)
+    uic:Find(index: number) --> (child: UIC) -- gets the child UIC at specified index. starts at 0
+    
+    uic:GetProperty(property_key: string) --> (value: string)
+    uic:DockingPoint() --> (docking_point: number) 
+    
+    uic:CurrentAnimationId() --> (animation: string) -- returns "" if not currently animated
+    uic:IsMouseOverChildren() --> (is: boolean) -- does not return true if it's over the UIC itself, only its children
+    
+    ------------
+    ---- SETTERS 
+    ------------
+    
+    uic:SetVisible(enable: boolean)
+    uic:SetState(state: string)
+    uic:SetImageRotation(unknown1: number, unknown2: number)
+    uic:SetImage(image_path: string, index_num: number?)
+    uic:SetCanResizeHeight(enable: boolean)
+    uic:SetCanResizeWidth(enable: boolean)
+    
+    uic:MoveTo(x_pos: number, y_pos: number)
+    
+    uic:SetContextObject(obj_key: string) -- Unknown usage, probably super powerful
+    uic:SetProperty(property_key: string, value: string)
+    
+    uic:SetOpacity -- unknown args
+    uic:PropagateOpacity -- unknown args
+    uic:PropagateVisibility -- unknown args
+    uic:SetInteractive(enable: boolean)
+    uic:SetTooltipText(tooltip_text: string, enable: boolean)
+    uic:PropagatePriority(priority: number)
+    uic:Resize(width: number, height: number) -- use SetCanResizeHeight/Width prior and after
+    uic:SetDockingPoint
+    uic:SetMoveable(enable: boolean)
+    uic:LockPriority(priority: number) -- keep at specific z-axis prio
+    uic:UnLockPriority() -- allow prio to change
+    uic:SetStateText(state_text: string) -- only linked to current state, has to be called again for other states!
+    uic:SetDisabled(disable: boolean)
+    
+    
+    ------------
+    ---- ACTIONS
+    ------------
+    
+    uic:Highlight(should_highlight: boolean, unknown1: boolean, unknown2: boolean)
+    
+    uic:SimulateKey -- unknown args
+    uic:SimulateKeyUp -- unknown args
+    uic:SimulateKeyDown -- unknown args
+    
+    uic:SimulateMouseOn()
+    uic:SimulateMouseMove -- unknown args
+    uic:SimulateMouseOff()
+    uic:SimulateLClick() 
+    uic:SimulateRClick()
+    uic:SimulateDblLClick()
+    uic:SimulateDblRClick()
+    
+    uic:CreateComponent(id: string, layout_file: string) -- makes a new child of the targeted UIC, with specified ID and layout file. Use `UIComponent(uic:CreateComponent(a, b))` to return the UIC created
+    uic:Adopt(address: string) -- makes the targeted address (use uic:Address()) UIC a child of the one being called
+    uic:Divorce(address: string) -- removes the targeted address (ditto) UIC a non-child of the one being called
+    uic:DestroyChildren() -- destroys all children of this UIC.
+    
+    uic:RegisterTopMost() -- keep on top
+    uic:RemoveTopMost() -- stop being on top
+    
+    uic:ResizeTextResizingComponentToInitialSize(width: number, height: number) -- force the text to a specified size, useful when changing state text
+    
+    
+    ------------
+    ---- UNKNOWN
+    ------------
+    
+    uic:Layout -- returns the layout file path?
+    uic:SetTooltipTextWithRLSKey
+    
+    uic:new -- unusable
+    
+    uic:TextShaderTechniqueSet
+    uic:InterfaceFunction
+    uic:StealShortcutKey
+    uic:ShaderTechniqueGet
+    uic:WidthOfTextLine
+    uic:StartPulseHighlight
+    uic:StopPulseHighlight
+    uic:FullScreenHighlight
+    uic:SequentialFind
+    uic:TextShaderVarsGet
+    uic:CallbackId
+    uic:TextShaderVarsSet
+    uic:ShaderVarsSet
+    uic:ShaderVarsGet
+    uic:ShaderTechniqueSet
+    uic:TriggerAnimation
+    uic:TextDimensionsForText
+    uic:HasInterface 
+    uic:IsDragged
+    uic:TriggerShortcut
+    uic:StealInputFocus
+
+--]]

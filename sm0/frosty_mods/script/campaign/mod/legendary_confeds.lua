@@ -74,7 +74,7 @@ local function ancillaryOnRankUp(quests, subtype)
 end
 
 --v function(faction: string, region: string, x: number, y: number, subtype: string, forename: string, surname: string)
-function createNewLord(faction, region, x, y, subtype, forename, surname) -- not used atm
+local function createNewLord(faction, region, x, y, subtype, forename, surname) -- not used atm
     cm:create_force_with_general(
         faction,
         "wh_main_dwf_inf_hammerers", -- dummy unit
@@ -89,9 +89,12 @@ function createNewLord(faction, region, x, y, subtype, forename, surname) -- not
         "",
         false,
         function(cqi)
-                cm:set_character_immortality(cm:char_lookup_str(cqi), true)
-                cm:kill_character(cqi, true, false)
-                cm:stop_character_convalescing(cqi)
+            local char = cm:get_character_by_cqi(cqi)
+            cm:set_character_immortality(cm:char_lookup_str(cqi), true)
+            cm:kill_character(cqi, true, false)
+            --cm:callback(function()
+                if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+            --end, 0.5)        
         end
     )
 end
@@ -101,7 +104,7 @@ local function spamLords(subtype, faction)
 	local factionCA = cm:get_faction(faction)
     local x, y
     if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction, factionCA:home_region():name(), false, false, 9) end
-    for i = 1, 10 do
+    for i = 1, 20 do
         cm:create_force(
             faction,
             "wh_main_dwf_inf_hammerers",
@@ -116,7 +119,9 @@ local function spamLords(subtype, faction)
                     cm:set_saved_value(subtype.."_spawned", faction) 
                 end
                 cm:kill_character(cqi, true, false)
-                cm:stop_character_convalescing(cqi)
+                --cm:callback(function()
+                    if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                --end, 0.5)
             end
         )
     end
@@ -223,7 +228,9 @@ local function confed(subcultures_factions_table)
                                         local char = charList:item_at(n)
                                         local cqi = char:command_queue_index()
                                         cm:kill_character(cqi, true, false)
-                                        if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                                        --cm:callback(function()
+                                            if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                                        --end, 0.5)
                                     end
                                     cm:force_confederation(humanFactions[i], faction) 
                                 end
@@ -239,9 +246,20 @@ local function confed(subcultures_factions_table)
                                     local char = charList:item_at(o)
                                     local cqi = char:command_queue_index()
                                     if char:is_wounded() then cm:stop_character_convalescing(cqi) end
-                                    if cm:char_is_agent(char) then
+                                    if not char:is_wounded() and cm:char_is_agent(char) and humanFaction:name() ~= "wh_main_dwf_karak_izor" then
                                         local x, y
-                                        local x, y = humanFaction:faction_leader():logical_position_x(), humanFaction:faction_leader():logical_position_y()
+                                        if humanFaction:faction_leader():has_military_force() then 
+                                            x, y = humanFaction:faction_leader():logical_position_x(), humanFaction:faction_leader():logical_position_y()
+                                        else
+                                            local mfList =  humanFaction:military_force_list()
+                                            for p = 0, mfList:num_items() - 1 do
+                                                local mf = mfList:item_at(p)
+                                                if not mf:is_armed_citizenry() and mf:has_general() and mf:general_character():region():name() == humanFaction:home_region():name() then
+                                                    x, y = mf:general_character():logical_position_x(), mf:general_character():logical_position_y()
+                                                    break
+                                                end
+                                            end
+                                        end
                                         local spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], x, y, false)
                                         local valid = false
                                         while not valid do
@@ -263,6 +281,14 @@ local function confed(subcultures_factions_table)
                 end
             end
         end
+        cm:callback(function()
+            local charList =  humanFaction:character_list()
+            for p = 0, charList:num_items() - 1 do
+                local char = charList:item_at(p)
+                local cqi = char:command_queue_index()
+                if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+            end
+        end, 1)
     end
     if cm:get_saved_value("mcm_tweaker_frostyConfed_deadlyAlliances_value") == "enable" then
         for subculture, factions in pairs(subcultures_factions_table) do
@@ -279,7 +305,9 @@ local function confed(subcultures_factions_table)
                                     local char = charList:item_at(j)
                                     local cqi = char:command_queue_index()
                                     cm:kill_character(cqi, true, false)
-                                    if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                                    --cm:callback(function()
+                                        if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                                    --end, 0.5)
                                 end
                             end
                             cm:force_confederation(subcultures_factions[subculture][1], factions[i])
@@ -452,4 +480,49 @@ function legendary_confeds()
         end,
         true
     )
+end
+
+-- vanilla function override (wh_dlc06_karak_eight_peaks.lua)
+local belegar_characters = {
+	-- Belegar Ironhammer [Lord]
+	{forename = "names_name_2147358029", surname = "names_name_2147358036", start_xp = 0, kill_if_AI = false, start_skills = {}},
+	-- King Lunn Ironhammer [Thane]
+	{forename = "names_name_2147358979", surname = "names_name_2147358036", start_xp = 4200, kill_if_AI = false, start_skills = {"wh_main_skill_all_all_self_blade_master_starter", "wh_main_skill_all_all_self_devastating_charge", "wh_main_skill_all_all_self_hard_to_hit", "wh_main_skill_all_all_self_deadly_blade"}},
+	-- Throni Ironbrow [Runesmith]
+	{forename = "names_name_2147358988", surname = "names_name_2147358994", start_xp = 4200, kill_if_AI = false, start_skills = {"wh_main_skill_dwf_runesmith_self_rune_of_hearth_&_home", "wh_main_skill_dwf_runesmith_self_rune_of_oath_&_steel", "wh_main_skill_dwf_runesmith_self_strike_the_runes", "wh_main_skill_dwf_runesmith_self_forgefire"}},
+	-- Halkenhaf Stonebeard [Thane]
+	{forename = "names_name_2147358982", surname = "names_name_2147358985", start_xp = 4200, kill_if_AI = false, start_skills = {"wh_main_skill_all_all_self_blade_master_starter", "wh_main_skill_all_all_self_devastating_charge", "wh_main_skill_all_all_self_hard_to_hit", "wh_main_skill_all_all_self_deadly_blade"}},
+	-- Dramar Hammerfist [Engineer]
+	{forename = "names_name_2147359003", surname = "names_name_2147359010", start_xp = 4200, kill_if_AI = false, start_skills = {"wh_main_skill_dwf_engineer_self_standardised_firing_drill", "wh_main_skill_dwf_engineer_self_requisition", "wh_main_skill_dwf_engineer_self_triangulation", "wh_main_skill_dwf_engineer_self_dead_eye"}}
+} --: vector<{forename: string, surname: string, start_xp: number, kill_if_AI: boolean, start_skills: vector<string>}>
+
+--# assume global find_belegar_character: function(CA_CHAR) --> integer
+--# assume global belegar_give_start_experience: function(CA_CHAR, number)
+--# assume global belegar_give_skills: function(CA_CHAR, vector<string>)
+--# assume global belegar_kill_start_character: function(CA_CHAR, boolean, boolean)
+
+function belegar_start_experience()	
+	local faction = cm:get_faction("wh_main_dwf_karak_izor")
+	
+	if faction then
+		cm:disable_event_feed_events(true, "wh_event_category_traits_ancillaries", "", "")
+		cm:disable_event_feed_events(true, "wh_event_category_character", "", "")
+		
+		local is_human = faction:is_human()
+		local character_list = faction:character_list()
+		
+		for i = 0, character_list:num_items() - 1 do
+			local current_char = character_list:item_at(i)
+			local char_index = find_belegar_character(current_char)
+			
+			if char_index > 0 then
+				belegar_give_start_experience(current_char, belegar_characters[char_index].start_xp)
+				belegar_give_skills(current_char, belegar_characters[char_index].start_skills)
+				belegar_kill_start_character(current_char, is_human, belegar_characters[char_index].kill_if_AI)
+			end
+		end
+		
+		cm:callback(function() cm:disable_event_feed_events(false, "wh_event_category_traits_ancillaries", "", "") end, 1)
+		cm:callback(function() cm:disable_event_feed_events(false, "wh_event_category_character", "", "") end, 1)
+	end
 end

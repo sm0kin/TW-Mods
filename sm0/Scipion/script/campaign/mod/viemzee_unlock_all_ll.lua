@@ -1,5 +1,6 @@
-local v_debug_mode = false
+mcm = _G.mcm
 
+local v_debug_mode = false
 local EVENT_PICS = {
     ["wh_main_emp_empire"] = 591,
     ["wh_main_vmp_vampire_counts"] = 594,
@@ -988,43 +989,40 @@ end
 --v function(lord_subtype: string, playerFaction: CA_FACTION) --> boolean
 local function v_ll_available_for_recruitment(lord_subtype, playerFaction)
 	v_log("v_ll_available_for_recruitment start")
-	local ll_available = false
-	local ll_recruitment_necessary = true
+	local ll_owned_by_player = false
+	local ll_owned_by_ai = false
 	if LORDS_FACTION[lord_subtype] ~= playerFaction:name() then
 		local char_list = playerFaction:character_list()
 		for i = 0, char_list:num_items() - 1 do
 			local current_char = char_list:item_at(i)
 			if current_char:character_subtype_key() == lord_subtype then
-				ll_recruitment_necessary = false
+				ll_owned_by_player = true
 				break
 			end
 		end
-		v_log("ll_recruitment_necessary: "..tostring(ll_recruitment_necessary))
-		if ll_recruitment_necessary then
+		v_log("ll_owned_by_player: "..tostring(ll_owned_by_player))
+		if not ll_owned_by_player then
 			local faction_list = playerFaction:factions_of_same_subculture()
 			for i = 0, faction_list:num_items() - 1 do
 				local current_faction = faction_list:item_at(i)
-				local char_list = current_faction:character_list()
-				for j = 0, char_list:num_items() - 1 do
-					local current_char = char_list:item_at(j)
-					if current_char:character_subtype_key() == lord_subtype then
-						if current_faction:is_dead() or v_debug_mode then
-							ll_available = true
+				if not current_faction:is_dead() then
+					local char_list = current_faction:character_list()
+					for j = 0, char_list:num_items() - 1 do
+						local current_char = char_list:item_at(j)
+						if current_char:character_subtype_key() == lord_subtype then
+							ll_owned_by_ai = true
 							break
 						end
 					end
 				end
 			end
 		end
-		if ll_recruitment_necessary and not ll_available then
-			local original_faction = cm:get_faction(LORDS_FACTION[lord_subtype])
-			if original_faction:is_dead() or v_debug_mode then
-				ll_available = true
-			end
-		end
-		v_log("ll_available: "..tostring(ll_available))
+		v_log("ll_owned_by_ai: "..tostring(ll_owned_by_ai))
+	else
+		ll_owned_by_player = true
+		v_log("ll_owned_by_player: "..tostring(ll_owned_by_player))
 	end
-	return ll_available and ll_recruitment_necessary
+	return ll_owned_by_player or ll_owned_by_ai
 end
 
 --v function(lord_subtype: string)
@@ -1134,7 +1132,7 @@ local function v_check_available_ll(playerFaction)
 	if LEGENDARY_LORDS[fac_subculture] ~= nil then
 		for j = 1, #LEGENDARY_LORDS[fac_subculture].lords do
 			v_log("viemzee_check_recruitable_lords : " .. LEGENDARY_LORDS[fac_subculture].lords[j])
-			if v_ll_available_for_recruitment(LEGENDARY_LORDS[fac_subculture].lords[j], playerFaction) then
+			if not v_ll_available_for_recruitment(LEGENDARY_LORDS[fac_subculture].lords[j], playerFaction) then
 				v_log(LEGENDARY_LORDS[fac_subculture].lords[j] .. " is recruitable")
 				v_unlock_ll(LEGENDARY_LORDS[fac_subculture].lords[j], playerFaction)
 			end
@@ -1143,7 +1141,7 @@ local function v_check_available_ll(playerFaction)
 			for _, mixu_lord in ipairs(LEGENDARY_LORDS[fac_subculture].mixu_lords) do
 				v_log("viemzee_check_recruitable_lords : " .. mixu_lord)
 				if not(fac_name == "wh2_main_def_har_ganeth" and mixu_lord == "def_tullaris_dreadbringer") then 
-					if v_ll_available_for_recruitment(mixu_lord, playerFaction) then
+					if not v_ll_available_for_recruitment(mixu_lord, playerFaction) then
 						v_log(mixu_lord .. " is recruitable")
 						v_unlock_ll(mixu_lord, playerFaction)
 					end
@@ -1154,14 +1152,16 @@ local function v_check_available_ll(playerFaction)
 end
 
 --v function()
-function viemzee_unlock_all_ll()
+local function init()
 	if cm:is_new_game() then v_refresh_log() end
-    core:add_listener(
+	core:add_listener(
 		"trigger_player_faction_turn_start_interventions",
 		"ScriptEventPlayerFactionTurnStart",
-		true,
-        function(context)
-            v_check_available_ll(context:faction())
+		function()
+			return cm:turn_number() >= 2
+		end,
+		function(context)
+			v_check_available_ll(context:faction())
 		end,
 		true
 	)
@@ -1194,4 +1194,26 @@ function viemzee_unlock_all_ll()
 		end,
 		true
 	);
+end
+
+--v function()
+function viemzee_unlock_all_ll()
+	   -- old version compatibility
+	if not not mcm and cm:is_new_game() then
+        mcm:add_post_process_callback(
+            function()
+                local version = cm:get_saved_value("mcm_tweaker_recruit_defeated_version_value")
+                if version == "sm0kin" then
+                    cm:set_saved_value("sm0_recruit_defeated", true)
+                else
+					cm:set_saved_value("sm0_recruit_defeated", false)
+					init()
+                end
+            end
+        )
+    else
+        if not cm:get_saved_value("sm0_recruit_defeated") then
+            init()
+        end
+    end
 end
