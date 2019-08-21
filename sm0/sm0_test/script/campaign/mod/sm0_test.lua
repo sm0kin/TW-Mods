@@ -1,4 +1,31 @@
 --v function()
+local function testLOG_reset()
+	if not __write_output_to_logfile then
+		return
+	end
+	local logTimeStamp = os.date("%d, %m %Y %X")
+	--# assume logTimeStamp: string
+	local popLog = io.open("test_log.txt","w+")
+	popLog :write("NEW LOG ["..logTimeStamp.."] \n")
+	popLog :flush()
+	popLog :close()
+end
+
+--v function(text: string | number | boolean | CA_CQI)
+local function testLOG(text)
+	if not __write_output_to_logfile then
+		return
+	end
+	local logText = tostring(text)
+	local logTimeStamp = os.date("%d, %m %Y %X")
+	local popLog = io.open("test_log.txt","a")
+	--# assume logTimeStamp: string
+	popLog :write("TEST:  [".. logTimeStamp .. "]:  [Turn: ".. tostring(cm:turn_number()) .. "]:  "..logText .. "  \n")
+	popLog :flush()
+	popLog :close()
+end
+
+--v function()
 local function expCheat()
 	local playerFaction = cm:get_faction(cm:get_local_faction(true))
     local characterList = playerFaction:character_list()
@@ -95,7 +122,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_dlc09_tmb_settra") then
 				cm:remove_all_units_from_general(currentChar)
-				out("sm0/test bestanden")
+				testLOG("remove_all_units_from_general/wh2_dlc09_tmb_settra")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(TKunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -108,7 +135,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_dlc09_tmb_arkhan") then
 				cm:remove_all_units_from_general(currentChar)
-				out("sm0/test bestanden")
+				testLOG("remove_all_units_from_general/wh2_dlc09_tmb_arkhan")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(TKunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -121,7 +148,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_dlc09_tmb_khalida") then
 				cm:remove_all_units_from_general(currentChar)
-				out("sm0/test bestanden")
+				testLOG("remove_all_units_from_general/wh2_dlc09_tmb_khalida")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(TKunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -134,7 +161,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_main_def_malekith") then
 				cm:remove_all_units_from_general(currentChar)
-				out("sm0/test bestanden")
+				testLOG("remove_all_units_from_general/wh2_main_def_malekith")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(DEFunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -148,7 +175,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_main_def_morathi") then
 				cm:remove_all_units_from_general(currentChar)
-				out("sm0/test bestanden")
+				testLOG("remove_all_units_from_general/wh2_main_def_morathi")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(DEFunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -162,7 +189,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("vmp_mannfred_von_carstein") then
 				cm:remove_all_units_from_general(currentChar)
-				out("sm0/test bestanden")
+				testLOG("remove_all_units_from_general/vmp_mannfred_von_carstein")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(VMPunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -176,7 +203,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_dlc12_lzd_tehenhauin") then
 				cm:remove_all_units_from_general(currentChar)
-				out("sm0/test bestanden")
+				testLOG("remove_all_units_from_general/wh2_dlc12_lzd_tehenhauin")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(LZDunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -189,24 +216,35 @@ end
 
 --v function()
 local function deletePlayerSubcultureFactions()
-	cm:force_confederation("wh2_main_hef_caledor", "wh2_main_hef_avelorn")
+	if cm:turn_number() == 1 then cm:force_confederation("wh2_main_hef_caledor", "wh2_main_hef_avelorn") end
 	local playerFaction = cm:get_faction(cm:get_local_faction(true))
-	local factionList = playerFaction:factions_of_same_subculture()
+	--local factionList = playerFaction:factions_of_same_subculture()
+	local factionList = cm:model():world():faction_list()
 	for i = 0, factionList:num_items() - 1 do
 		local faction = factionList:item_at(i)
 		if faction and not faction:is_dead() and not faction:is_human() then
-			if faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" then
-				--cm:force_confederation(cm:get_local_faction(true), faction:name())
-			else
-				local regionList = faction:region_list()
-				local charList = faction:character_list()
-				for i = 0, regionList:num_items() - 1 do
-					local currentRegion = regionList:item_at(i)
-					cm:set_region_abandoned(currentRegion:name())
-				end
-				for i = 0, charList:num_items() - 1 do
-					local currentChar = charList:item_at(i)
-					cm:kill_character(currentChar:command_queue_index(), true, false)
+			if faction:name() == "wh_main_teb_tilea" or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn") and cm:turn_number() <= 2) then
+				--if playerFaction:subculture() == faction:subculture() and cm:turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
+			else		
+				if cm:random_number(2, 1) == 1 then
+					testLOG("deleted Faction: "..faction:name())
+					local regionList = faction:region_list()
+					for i = 0, regionList:num_items() - 1 do
+						local currentRegion = regionList:item_at(i)
+						cm:set_region_abandoned(currentRegion:name())
+					end
+					cm:kill_all_armies_for_faction(faction)
+					--local charList = faction:character_list()
+					--for i = 0, charList:num_items() - 1 do
+					--	local currentChar = charList:item_at(i)
+					--	if currentChar and not currentChar:is_null_interface() then 
+					--		--testLOG("kill_character/character_type = "..currentChar:character_type_key()) 
+					--	end
+					--	--if not currentChar:character_type("colonel") then cm:kill_character(currentChar:command_queue_index(), true, false) end
+					--	cm:kill_character(currentChar:command_queue_index(), true, false)
+					--end
+				else
+					--testLOG("No luck deleting Faction: "..faction:name())
 				end
 			end
 		end
@@ -256,13 +294,14 @@ end
 -- init
 --v function()
 function sm0_test()
+	if cm:is_new_game() then testLOG_reset() end
 	cm:trigger_incident(cm:get_local_faction(true), "frosty_hef_add_influence", true)
 	core:add_listener(
 		"refugee_FactionTurnStart",
 		"FactionTurnStart",
 		true,
 		function(context)
-			--out("sm0/faction = "..context:faction():name())
+			--testLOG("sm0/faction = "..context:faction():name())
 		end,
 		true
 	)
@@ -278,6 +317,17 @@ function sm0_test()
 		end,
 		function(context)
 			deletePlayerSubcultureFactions()
+		end,
+		true
+	)
+	core:add_listener(
+		"test_FactionTurnEnd",
+		"FactionTurnEnd", --FactionTurnStart
+		function(context)
+			return true
+		end,
+		function(context)
+			--testLOG("Faction: "..context:faction():name().." /is_dead: "..tostring(context:faction():is_dead()))
 		end,
 		true
 	)

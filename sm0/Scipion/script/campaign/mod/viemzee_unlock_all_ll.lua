@@ -1,6 +1,5 @@
 mcm = _G.mcm
 
-local v_debug_mode = false
 local EVENT_PICS = {
     ["wh_main_emp_empire"] = 591,
     ["wh_main_vmp_vampire_counts"] = 594,
@@ -884,7 +883,7 @@ local LEGENDARY_LORDS = {
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --v function(text: string)
-function v_log(text)
+local function v_log(text)
 	ftext = "UNLOCK_LL"
   	local logText = tostring(text)
   	local logContext = tostring(ftext)
@@ -897,7 +896,7 @@ function v_log(text)
 end
 
 --v function()
-function v_refresh_log()
+local function v_refresh_log()
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	local popLog = io.open("Viemzee_Log.txt","w")
 
@@ -907,39 +906,11 @@ function v_refresh_log()
 end
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
--- Viemzee's cheating tool
------------------------------------------------------------------------------------------------------------------------------------------------------------
-
---v function(faction_name: string)
-function v_give_exp(faction_name)
-    current_faction = cm:get_faction(faction_name)
-    local char_list = current_faction:character_list()
-    for i = 0, char_list:num_items() - 1 do
-        local current_char = char_list:item_at(i)
-        cm:add_agent_experience(cm:char_lookup_str(current_char:command_queue_index()), 66700)
-    end
-end
-
---v function(faction_name: string)
-function v_give_money(faction_name)
-    cm:treasury_mod(faction_name, 50000)
-end
-
---v function()
-function v_cheat()
-    if v_debug_mode then
-        local playerFaction = cm:get_faction(cm:get_local_faction(true))
-        v_give_exp(playerFaction:name())
-        v_give_money(playerFaction:name())
-    end
-end
-
------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Viemzee's debug tool
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --v function(v_faction: CA_FACTION)
-function v_print_character_list(v_faction)
+local function v_print_character_list(v_faction)
 	local char_list = v_faction:character_list()
 
 	for i = 0, char_list:num_items() - 1 do
@@ -951,7 +922,7 @@ function v_print_character_list(v_faction)
 end
 
 --v function()
-function v_print_all_faction()
+local function v_print_all_faction()
 	local faction_list = cm:model():world():faction_list()
     
     v_log("VIEMZEE v_print_all_faction")
@@ -968,23 +939,6 @@ function v_print_all_faction()
 end
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
-
---v function(current_faction: CA_FACTION) --> boolean
-local function v_faction_defeated(current_faction)
-	v_log("v_faction_defeated start")
-    local current_faction_regions = current_faction:region_list()
-    local char_list = current_faction:character_list()
-	local faction_regions = current_faction_regions:num_items()
-	local faction_chars = char_list:num_items()
-	local faction_name = current_faction:name()
-    if faction_regions == 0 and faction_chars == 0 then
-        v_log("faction defeated : " .. faction_name)
-        return true
-	else
-		v_log("faction not defeated : " .. faction_name)
-        return false
-    end
-end
 
 --v function(lord_subtype: string, playerFaction: CA_FACTION) --> boolean
 local function v_ll_available_for_recruitment(lord_subtype, playerFaction)
@@ -1025,35 +979,9 @@ local function v_ll_available_for_recruitment(lord_subtype, playerFaction)
 	return ll_owned_by_player or ll_owned_by_ai
 end
 
---v function(lord_subtype: string)
-local function v_add_skill(lord_subtype)
-	v_log("v_add_skill")
-	for subtype, skill in pairs(LORDS_SKILLS) do
-		if subtype == lord_subtype then
-			v_log("adding skill : " .. skill)
-			cm:force_add_skill(lord_subtype, skill)
-		end
-	end
-end
-
---v function(current_faction: CA_FACTION) --> CA_REGION
-local function v_get_capital(current_faction)
-	v_log("v_get_capital")
-	local region = nil --:CA_REGION
-    local region_list = current_faction:region_list()
-    for i = 0, region_list:num_items() - 1 do
-		current_region = region_list:item_at(i)
-        if current_region:is_province_capital() then
-			region = current_region
-			break
-		end
-	end
-	return region
-end
-
 --v function(lord_subtype: string, current_faction: CA_FACTION)
 local function v_unlock_ll(lord_subtype, current_faction)
-	v_log("v_unlock_ll : " .. lord_subtype)
+	v_log("v_unlock_ll start")
 	local fac_name = current_faction:name()
     if not cm:get_saved_value("v_" .. lord_subtype .. "_LL_unlocked") then 
 		local asi --: string
@@ -1062,6 +990,7 @@ local function v_unlock_ll(lord_subtype, current_faction)
 		else
 			asi = ART_SET_ID[lord_subtype]
 		end
+		v_log("v_unlock_ll : " .. lord_subtype)
 		cm:spawn_character_to_pool(fac_name, LORD_FORENAMES[lord_subtype], LORD_FAMILY_NAMES[lord_subtype], "", "", 50, true, "general", lord_subtype, true, asi)    
 		cm:set_saved_value("v_" .. lord_subtype .. "_LL_unlocked", true)
 		cm:show_message_event(
@@ -1108,7 +1037,7 @@ end
 
 --v function(current_faction: CA_FACTION)
 local function v_set_chaset_character_immortality(current_faction)
-	v_log("v_set_chaset_character_immortality")
+	v_log("v_set_chaset_character_immortality start")
 	local char_list = current_faction:character_list()
 	for i = 0, char_list:num_items() - 1 do
 		local current_char = char_list:item_at(i)
@@ -1123,8 +1052,7 @@ end
 
 --v function(playerFaction: CA_FACTION)
 local function v_check_available_ll(playerFaction)
-	v_log("v_check_available_ll")
-	if v_debug_mode then v_cheat() end
+	v_log("v_check_available_ll start")
 	local fac_subculture = playerFaction:subculture()
 	local fac_name = playerFaction:name()
 	v_set_chaset_character_immortality(playerFaction)
@@ -1153,7 +1081,6 @@ end
 
 --v function()
 local function init()
-	if cm:is_new_game() then v_refresh_log() end
 	core:add_listener(
 		"trigger_player_faction_turn_start_interventions",
 		"ScriptEventPlayerFactionTurnStart",
@@ -1193,27 +1120,42 @@ local function init()
 			v_log("doppelganger_killed: "..cm:char_lookup_str(char_cqi))
 		end,
 		true
-	);
+	)
 end
 
 --v function()
 function viemzee_unlock_all_ll()
-	   -- old version compatibility
-	if not not mcm and cm:is_new_game() then
-        mcm:add_post_process_callback(
-            function()
-                local version = cm:get_saved_value("mcm_tweaker_recruit_defeated_version_value")
-                if version == "sm0kin" then
-                    cm:set_saved_value("sm0_recruit_defeated", true)
-                else
-					cm:set_saved_value("sm0_recruit_defeated", false)
-					init()
-                end
-            end
-        )
-    else
-        if not cm:get_saved_value("sm0_recruit_defeated") then
-            init()
-        end
-    end
+	-- old version compatibility
+	if cm:is_new_game() then
+		v_refresh_log()
+		if not not mcm then
+			mcm:add_post_process_callback(
+				function()
+					local version = cm:get_saved_value("mcm_tweaker_recruit_defeated_version_value")
+					v_log("Mod Version: "..tostring(version))
+					if version == "default" then
+						cm:set_saved_value("sm0_recruit_defeated", true)
+					else
+						cm:set_saved_value("sm0_recruit_defeated", false)
+						init()
+					end
+				end
+			)
+		elseif not cm:get_saved_value("sm0_recruit_defeated") then
+			v_log("Mod Version: legacy")
+			init()
+		end
+	else
+		local version = cm:get_saved_value("mcm_tweaker_recruit_defeated_version_value")
+		if version then
+			if version == "default" then
+				cm:set_saved_value("sm0_recruit_defeated", true)
+			else
+				cm:set_saved_value("sm0_recruit_defeated", false)
+				init()
+			end
+		elseif not cm:get_saved_value("sm0_recruit_defeated") then
+			init()
+		end
+	end
 end

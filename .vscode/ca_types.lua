@@ -481,6 +481,7 @@
 --# assume CA_CHAR.garrison_residence: method() --> CA_GARRISON_RESIDENCE
 --# assume CA_CHAR.character_subtype: method(subtype: string) --> boolean
 --# assume CA_CHAR.character_type: method(char_type: string) --> boolean
+--# assume CA_CHAR.character_type_key: method() --> string
 --# assume CA_CHAR.get_forename: method() --> string
 --# assume CA_CHAR.get_surname: method() --> string
 --# assume CA_CHAR.command_queue_index: method() --> CA_CQI
