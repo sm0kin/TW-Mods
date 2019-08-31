@@ -18,6 +18,10 @@ local OccupationOptionID = {
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --v function()
 local function initMCMconfed()
+	local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
+	if not confed_option_tmb or confed_option_tmb == "yield" then
+		cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+	end
 	local mcm = _G.mcm
 	if not not mcm then
 		local confed = mcm:register_mod("force_confederation", "Force Confederation", "Adds Force Confederation as occupation option.")
@@ -44,10 +48,6 @@ local function initMCMconfed()
 			restrictTKconfed = false
 		else
 			restrictTKconfed = true
-		end
-		local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
-		if not confed_option_tmb or confed_option_tmb == "yield" then
-			cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
 		end
 	end
 end
@@ -100,47 +100,115 @@ function sm0_confed()
 	core:add_listener(
 		"force_confederation_expired",
 		"ScriptEventConfederationExpired",
+		true,
 		function(context)
-			local faction_name = context.string
-			local faction = cm:get_faction(faction_name)
-			return faction:is_human()
-		end,
-		function(context)
+			local subculture_confed_disabled = {
+				--"wh2_dlc11_sc_cst_vampire_coast"
+				-- by default
+				"wh_main_sc_chs_chaos",
+				"wh_main_sc_grn_savage_orcs",
+				"wh_main_sc_ksl_kislev",
+				"wh_main_sc_teb_teb",
+				"wh2_dlc09_sc_tmb_tomb_kings",
+				"wh2_main_rogue_abominations",
+				"wh2_main_rogue_beastcatchas",
+				"wh2_main_rogue_bernhoffs_brigands",
+				"wh2_main_rogue_black_spider_tribe",
+				"wh2_main_rogue_boneclubbers_tribe",
+				"wh2_main_rogue_celestial_storm",
+				"wh2_main_rogue_college_of_pyrotechnics",
+				"wh2_main_rogue_doomseekers",
+				"wh2_main_rogue_gerhardts_mercenaries",
+				"wh2_main_rogue_heirs_of_mourkain",
+				"wh2_main_rogue_hung_warband",
+				"wh2_main_rogue_hunters_of_kurnous",
+				"wh2_main_rogue_jerrods_errantry",
+				"wh2_main_rogue_mangy_houndz",
+				"wh2_main_rogue_mengils_manflayers",
+				"wh2_main_rogue_morrsliebs_howlers",
+				"wh2_main_rogue_pirates_of_the_far_sea",
+				"wh2_main_rogue_pirates_of_the_southern_ocean",
+				"wh2_main_rogue_pirates_of_trantio",
+				"wh2_main_rogue_scions_of_tesseninck",
+				"wh2_main_rogue_scourge_of_aquitaine",
+				"wh2_main_rogue_stuff_snatchers",
+				"wh2_main_rogue_teef_snatchaz",
+				"wh2_main_rogue_the_wandering_dead",
+				"wh2_main_rogue_tor_elithis",
+				"wh2_main_rogue_troll_skullz",
+				"wh2_main_rogue_vashnaar",
+				"wh2_main_rogue_vauls_expedition",
+				"wh2_main_rogue_worldroot_rangers",
+				"wh2_main_rogue_wrath_of_nature"
+			} --:vector<string>
 			local faction_name = context.string
 			local faction = cm:get_faction(faction_name)
 			local subculture = faction:subculture()
 			local culture = faction:culture()
 			local confed_option = cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value")
 			local option = {}
-			if confed_option == "enabled" or confed_option == "player_only" then
+			if confed_option == "enabled" then
 				option.offer = true
 				option.accept = true
-				option.enable_payment = true
+				option.enable_payment = false
+			elseif confed_option == "player_only" then
+				if faction:is_human() then
+					option.offer = true
+					option.accept = true
+					option.enable_payment = false
+				else
+					option.offer = false
+					option.accept = true
+					option.enable_payment = false	
+				end
 			elseif confed_option == "disabled" then
 				option.offer = false
 				option.accept = false
 				option.enable_payment = false				
-			elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh2_dlc09_sc_tmb_tomb_kings" then
-				option.offer = false
-				option.accept = false
-				option.enable_payment = false	
+			elseif confed_option == "yield" or confed_option == nil then
+				option.offer = true
+				option.accept = true
+				option.enable_payment = false
+				for i, subculture_confed in ipairs(subculture_confed_disabled) do
+					if subculture == subculture_confed then
+						option.offer = false
+						option.accept = false
+						option.enable_payment = false
+					end
+				end	
 			elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh_dlc05_sc_wef_wood_elves" then
 				option.accept = false
-				option.enable_payment = false	
+				option.enable_payment = false        	
 				oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
 				if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") then
 					option.offer = true
 				else
 					option.offer = false
-				end
-			elseif (confed_option == "yield" or confed_option == nil) and subculture ~= "wh_dlc05_sc_wef_wood_elves" and subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" then
-				option.offer = true
-				option.accept = true
-				option.enable_payment = false
+				end  
 			end
 			cm:callback(
 				function(context)
 					cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option.offer, option.accept, option.enable_payment)
+		
+					if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
+						cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
+						cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
+					end
+					if (confed_option == "yield" or confed_option == nil) and subculture == "wh_main_sc_brt_bretonnia" then
+						local bret_confederation_tech = {
+							{tech = "tech_dlc07_brt_heraldry_artois", faction = "wh_main_brt_artois"},
+							{tech = "tech_dlc07_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
+							{tech = "tech_dlc07_brt_heraldry_bordeleaux", faction = "wh_main_brt_bordeleaux"},
+							{tech = "tech_dlc07_brt_heraldry_bretonnia", faction = "wh_main_brt_bretonnia"},
+							{tech = "tech_dlc07_brt_heraldry_carcassonne", faction = "wh_main_brt_carcassonne"},
+							{tech = "tech_dlc07_brt_heraldry_lyonesse", faction = "wh_main_brt_lyonesse"},
+							{tech = "tech_dlc07_brt_heraldry_parravon", faction = "wh_main_brt_parravon"}
+						} --:vector<map<string, string>>
+						for i = 1, #bret_confederation_tech do
+							local has_tech = faction:has_technology(bret_confederation_tech[i].tech);
+							cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true);
+						end
+					end
 				end, 1, "changeDiplomacyOptions"
 			)
 		end,

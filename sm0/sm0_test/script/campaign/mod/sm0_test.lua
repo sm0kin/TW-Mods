@@ -223,11 +223,11 @@ local function deletePlayerSubcultureFactions()
 	for i = 0, factionList:num_items() - 1 do
 		local faction = factionList:item_at(i)
 		if faction and not faction:is_dead() and not faction:is_human() then
-			if faction:name() == "wh_main_teb_tilea" or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn") and cm:turn_number() <= 2) then
+			if faction:name() == "wh_main_teb_tilea" or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh2_dlc11_cst_vampire_coast" or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:turn_number() <= 3) then
 				--if playerFaction:subculture() == faction:subculture() and cm:turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else		
-				if cm:random_number(2, 1) == 1 then
-					testLOG("deleted Faction: "..faction:name())
+				if cm:random_number(2, 1) == 1 then --playerFaction:subculture() == faction:subculture() 
+					--testLOG("deleted Faction: "..faction:name())
 					local regionList = faction:region_list()
 					for i = 0, regionList:num_items() - 1 do
 						local currentRegion = regionList:item_at(i)
@@ -295,7 +295,7 @@ end
 --v function()
 function sm0_test()
 	if cm:is_new_game() then testLOG_reset() end
-	cm:trigger_incident(cm:get_local_faction(true), "frosty_hef_add_influence", true)
+	--cm:trigger_incident(cm:get_local_faction(true), "frosty_hef_add_influence", true)
 	core:add_listener(
 		"refugee_FactionTurnStart",
 		"FactionTurnStart",
@@ -305,15 +305,16 @@ function sm0_test()
 		end,
 		true
 	)
-	expCheat()
-	unitCheat()
+	--expCheat()
+	--unitCheat()
 	--unlockLords()
 	--spamLords()
 	core:add_listener(
 		"human_FactionTurnEnd",
 		"FactionTurnEnd",
 		function(context)
-			return context:faction():is_human()
+			local human_factions = cm:get_human_factions()
+			return context:faction():name() == human_factions[1]
 		end,
 		function(context)
 			deletePlayerSubcultureFactions()

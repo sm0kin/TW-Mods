@@ -884,6 +884,9 @@ local LEGENDARY_LORDS = {
 
 --v function(text: string)
 local function v_log(text)
+	if not __write_output_to_logfile then
+		return
+	end
 	ftext = "UNLOCK_LL"
   	local logText = tostring(text)
   	local logContext = tostring(ftext)
@@ -897,6 +900,9 @@ end
 
 --v function()
 local function v_refresh_log()
+	if not __write_output_to_logfile then
+		return
+	end
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	local popLog = io.open("Viemzee_Log.txt","w")
 
@@ -1065,7 +1071,7 @@ local function v_check_available_ll(playerFaction)
 				v_unlock_ll(LEGENDARY_LORDS[fac_subculture].lords[j], playerFaction)
 			end
 		end
-		if vfs.exists("script/campaign/mod/viemzee_unlock_all_mixu.lua") then
+		if vfs.exists("script/campaign/mod/mixu_darkhand.lua") and vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then
 			for _, mixu_lord in ipairs(LEGENDARY_LORDS[fac_subculture].mixu_lords) do
 				v_log("viemzee_check_recruitable_lords : " .. mixu_lord)
 				if not(fac_name == "wh2_main_def_har_ganeth" and mixu_lord == "def_tullaris_dreadbringer") then 

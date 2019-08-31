@@ -101,6 +101,7 @@ require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_wulfrik")
 require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_ll")
 require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
 require("sm0/recruitdefeated/script/campaign/mod/sm0_recruit_defeated")
+require("sm0/Scipion/script/export_helpers__viemzee_sarthorael")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_recruit_defeated")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/viemzee_unlock_all_ll")
 
@@ -109,3 +110,6 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 
 --sfo
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__sfo_starting_diplomacy")
+
+--ai exp
+require("sm0/sm0_ai_exp/script/campaign/mod/sm0_ai_exp")

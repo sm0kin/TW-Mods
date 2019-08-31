@@ -4,7 +4,7 @@ core:add_listener(
     true,
     function(context)
         local svr_battleSpeed = core:svr_load_string("svr_battleSpeed")
-        out("sm0/SavingGame = "..svr_battleSpeed)
+        out("sm0/SavingGame = "..tostring(svr_battleSpeed))
         if svr_battleSpeed ~= "" then
             cm:set_saved_value("battleSpeed", svr_battleSpeed)
         end
@@ -18,7 +18,7 @@ core:add_listener(
     true,
     function(context)
         local battleSpeed = cm:get_saved_value("battleSpeed")
-        out("sm0/LoadingGame = "..battleSpeed.."/cm:is_processing_battle() = "..tostring(cm:is_processing_battle()))
+        out("sm0/LoadingGame = "..tostring(battleSpeed).."/cm:is_processing_battle() = "..tostring(cm:is_processing_battle()))
         if not cm:is_processing_battle() then core:svr_save_string("svr_battleSpeed", tostring(battleSpeed)) end
     end,
     true
@@ -32,7 +32,7 @@ core:add_listener(
     end,
     function(context)
         local svr_battleSpeed = core:svr_load_string("svr_battleSpeed")
-        out("sm0/BattleCompleted = "..svr_battleSpeed.."/cm:is_processing_battle() = "..tostring(cm:is_processing_battle()))
+        out("sm0/BattleCompleted = "..tostring(svr_battleSpeed).."/cm:is_processing_battle() = "..tostring(cm:is_processing_battle()))
         if svr_battleSpeed ~= "" then
             cm:set_saved_value("battleSpeed", svr_battleSpeed)
         end

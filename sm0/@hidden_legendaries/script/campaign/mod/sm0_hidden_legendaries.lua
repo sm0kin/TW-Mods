@@ -78,5 +78,5 @@ function sm0_hidden_legendaries()
 	setupRankListener(malekith_extra_items, malekith_subtype)
 	setupRankListener(morathi_extra_items, morathi_subtype)
 	setupRankListener(louen_extra_items, louen_subtype)	
-	setupRankListener(alith_anar_extra_items, alith_anar_subtype)
+	--setupRankListener(alith_anar_extra_items, alith_anar_subtype)
 end
