@@ -82,7 +82,7 @@ require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
 --require("sm0/wec_one_button_respec/script/export_helpers__obr")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__mcm_ui")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__mcm_ui")
 
 --frostydemise
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
@@ -98,8 +98,8 @@ require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_wulfrik")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/new_wulfrik")
 
 --Scipion's Recruit Defeated Lords
-require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_ll")
-require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
+require("sm0/recruitdefeated/script/campaign/mod/viemzee_unlock_all_ll")
+--require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
 require("sm0/recruitdefeated/script/campaign/mod/sm0_recruit_defeated")
 require("sm0/Scipion/script/export_helpers__viemzee_sarthorael")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_recruit_defeated")

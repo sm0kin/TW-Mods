@@ -1139,7 +1139,7 @@ function viemzee_unlock_all_ll()
 				function()
 					local version = cm:get_saved_value("mcm_tweaker_recruit_defeated_version_value")
 					v_log("Mod Version: "..tostring(version))
-					if version == "default" then
+					if version ~= "legacy" then
 						cm:set_saved_value("sm0_recruit_defeated", true)
 					else
 						cm:set_saved_value("sm0_recruit_defeated", false)
@@ -1154,7 +1154,7 @@ function viemzee_unlock_all_ll()
 	else
 		local version = cm:get_saved_value("mcm_tweaker_recruit_defeated_version_value")
 		if version then
-			if version == "default" then
+			if version ~= "legacy" then
 				cm:set_saved_value("sm0_recruit_defeated", true)
 			else
 				cm:set_saved_value("sm0_recruit_defeated", false)

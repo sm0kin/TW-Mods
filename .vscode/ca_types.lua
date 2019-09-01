@@ -121,6 +121,7 @@
 --# assume CA_UIC.ResizeTextResizingComponentToInitialSize: method(width: number, height: number)
 --# assume CA_UIC.SimulateLClick: method()
 --# assume CA_UIC.SimulateKey: method(keyString: string)
+--# assume CA_UIC.Divorce: method()
 
 -- CAMPAIGN MANAGER
 --# assume CM.get_game_interface: method() --> CA_GAME
@@ -132,6 +133,7 @@
 --# assume CM.whose_turn_is_it: method() --> string
 --# assume CM.get_human_factions: method() --> vector<string>
 --# assume CM.turn_number: method() --> number
+--# assume CM.is_any_cutscene_running: method() --> boolean
 --get functions
 --# assume CM.get_highest_ranked_general_for_faction: method(faction_key: string) --> CA_CHAR
 --# assume CM.get_character_by_cqi: method(cqi: CA_CQI) --> CA_CHAR
@@ -711,6 +713,8 @@
 --# assume CORE.svr_load_bool: method(svrname: string) --> boolean
 --# assume CORE.svr_save_string: method(svrname: string, value: string)
 --# assume CORE.svr_save_bool: method(svrname: string, value: boolean)
+--# assume CORE.progress_on_uicomponent_animation_finished: method(component: CA_UIC, callback: function())
+--# assume CORE.progress_on_loading_screen_dismissed: method(callback: function())
 
 -- VFS
 --# assume CA_VFS.exists: function(filepath: string) --> boolean
@@ -754,6 +758,7 @@
 -- GLOBAL FUNCTIONS
 -- COMMON
 --# assume global find_uicomponent: function(parent: CA_UIC, string...) --> CA_UIC
+--# assume global find_child_uicomponent: function(parent: CA_UIC, child: string) --> CA_UIC
 --# assume global UIComponent: function(pointer: CA_Component) --> CA_UIC
 --# assume global find_uicomponent_from_table: function(root: CA_UIC, findtable: vector<string>) --> CA_UIC
 --# assume global uicomponent_descended_from: function(root: CA_UIC, parent_name: string) --> boolean
