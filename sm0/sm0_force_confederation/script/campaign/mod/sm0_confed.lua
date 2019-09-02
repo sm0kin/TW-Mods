@@ -180,7 +180,7 @@ function sm0_confed()
 				option.accept = false
 				option.enable_payment = false        	
 				oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
-				if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") then
+				if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
 					option.offer = true
 				else
 					option.offer = false

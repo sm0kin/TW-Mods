@@ -1,7 +1,7 @@
 --v function()
 local function XPLOG_reset()
 	if not __write_output_to_logfile then
-		--return
+		return
 	end
 	local log_time_stamp = os.date("%d, %m %Y %X")
 	--# assume log_time_stamp: string
@@ -14,7 +14,7 @@ end
 --v function(text: string | number | boolean | CA_CQI)
 local function XPLOG(text)
 	if not __write_output_to_logfile then
-		--return
+		return
 	end
 	local log_text = tostring(text)
 	local log_time_stamp = os.date("%d, %m %Y %X")
@@ -38,7 +38,7 @@ function sm0_ai_exp()
             if cm:char_is_general(char) and 
             ((char:has_military_force() and not char:military_force():is_armed_citizenry() and char:rank() < 20) or (char:is_faction_leader() and char:rank() <= 30)) then
                 cm:add_agent_experience(cm:char_lookup_str(char:command_queue_index()), 500, false)
-                XPLOG("Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
+                XPLOG("Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
             end
         end,
         true
