@@ -26,6 +26,8 @@
 --# assume global class CA_GARRISON_RESIDENCE
 --# assume global class CA_SLOT_LIST
 --# assume global class CA_SLOT
+--# assume global class CA_FOREIGN_SLOT
+--# assume global class CA_FOREIGN_SLOT_LIST
 --# assume global class CA_BUILDING
 --# assume global class CA_FACTION
 --# assume global class CA_FACTION_LIST
@@ -42,6 +44,17 @@
 --# assume global class CA_RITUAL
 --# assume global class CA_RITUAL_LIST
 --# assume global class CA_VFS
+--# assume global class CA_CUSTOM_EFFECT_BUNDLE
+--# assume global class CA_POOLED_FACTOR
+--# assume global class CA_POOLED_FACTOR_LIST
+--# assume global class CA_TIMER_MANAGER
+--# assume global class CA_CHAPTER_MISSION
+--# assume global class CA_INTERVENTION
+--# assume global class CA_BATTLE_MANAGER
+--# assume global class EMPIRE_BATTLE
+--# assume global class CA_GENERATED_ARMY
+--# assume global class CA_GENERATED_BATTLE
+--# assume global class CA_GENERATED_CUTSCENE
 
 --# assume global class IM
 --# assume global class CORE
@@ -102,12 +115,16 @@
 --# assume CA_UIC.SetDisabled: method(disabled: boolean)
 --# assume CA_UIC.ShaderTechniqueSet: method(technique: string | number, unknown: boolean)
 --# assume CA_UIC.ShaderVarsSet: method(p1: number, p2: number, p3: number, p4: number, unknown: boolean)
-----# assume CA_UIC.SimulateClick: method()
 --# assume CA_UIC.SimulateMouseOn: method()
+--# assume CA_UIC.SimulateMouseOff: method()
+--# assume CA_UIC.SimulateMouseMove: method(x: number?, y: number?)
+--# assume CA_UIC.SimulateKey: method(key_id: string)
+--# assume CA_UIC.SimulateKeyDown: method(key_id: string)
+--# assume CA_UIC.SimulateKeyUp: method(key_id: string)
 --# assume CA_UIC.Visible: method() --> boolean
 --# assume CA_UIC.RegisterTopMost: method()
 --# assume CA_UIC.RemoveTopMost: method()
---# assume CA_UIC.SetImage: method(path: string)
+--# assume CA_UIC.SetImagePath: method(path: string)
 --# assume CA_UIC.SetCanResizeHeight: method(state: boolean)
 --# assume CA_UIC.SetCanResizeWidth: method(state: boolean)
 --# assume CA_UIC.SetTooltipText: method(tooltip: string, state: boolean?)
@@ -119,10 +136,28 @@
 --# assume CA_UIC.Width: method() --> number
 --# assume CA_UIC.SetImageRotation:  method(unknown: number, rotation: number)
 --# assume CA_UIC.ResizeTextResizingComponentToInitialSize: method(width: number, height: number)
---# assume CA_UIC.SimulateLClick: method()
---# assume CA_UIC.SimulateKey: method(keyString: string)
---# assume CA_UIC.Divorce: method()
+--# assume CA_UIC.SimulateLClick:method(x: number?, y: number?)
+--# assume CA_UIC.SimulateRClick: method(x: number?, y: number?)
+--# assume CA_UIC.SimulateDblLClick: method(x: number?, y: number?)
+--# assume CA_UIC.SimulateDblRClick: method(x: number?, y: number?)
 
+--# assume CA_UIC.Divorce: method()
+--# assume CA_UIC.GetImagePath: method(index_num: number?) --> string
+--# assume CA_UIC.SetMoveable: method(enable: boolean)
+--# assume CA_UIC.CopyComponent: method(uicomponent: string) --> string
+-- CurrentStateImage
+--# assume CA_UIC.GetCurrentStateImageIndex: method(state_image_index: number) --> number
+--# assume CA_UIC.NumCurrentStateImages: method() --> number
+--# assume CA_UIC.SetCurrentStateImageOpacity: method(state_image_index: number, opacity: number)
+--# assume CA_UIC.GetCurrentStateImageOpacity: method(state_image_index: number) --> number
+--# assume CA_UIC.GetCurrentStateImageWidth: method(state_image_index: number) --> number
+--# assume CA_UIC.GetCurrentStateImageHeight: method(state_image_index: number) --> number
+--# assume CA_UIC.GetCurrentStateImageDimensions: method(state_image_index: number) --> (number, number)
+--# assume CA_UIC.ResizeCurrentStateImage: method(state_image_index: number, width: number, height: number)
+--# assume CA_UIC.CanResizeCurrentStateImageWidth: method(state_image_index: number) --> boolean
+--# assume CA_UIC.CanResizeCurrentStateImageHeight: method(state_image_index: number) --> boolean
+--# assume CA_UIC.SetCanResizeCurrentStateImageWidth: method(state_image_index: number, can_resize: boolean)
+--# assume CA_UIC.SetCanResizeCurrentStateImageHeight: method(state_image_index: number, can_resize: boolean)
 -- CAMPAIGN MANAGER
 --# assume CM.get_game_interface: method() --> CA_GAME
 --# assume CM.model: method() --> CA_MODEL
@@ -199,19 +234,44 @@
 --# assume CM.add_agent_experience: method(charName: string, experience: number, by_level: boolean?)
 --# assume CM.force_add_skill: method(lookup: string, skill_key: string)
 --# assume CM.force_reset_skills: method(lookup: string)
---# assume CM.force_add_and_equip_ancillary: method(lookup: string, ancillary: string)
---# assume CM.force_add_ancillary: method(lookup: string, ancillary: string)
---# assume CM.force_remove_ancillary: method(lookup: string, ancillary: string, removeToPool: bool)
+--# assume CM.force_add_ancillary: method(character: CA_CHAR, ancillary: string, force_equip: boolean, suppress_event_feed: boolean)
+--# assume CM.force_remove_ancillary: method(character: CA_CHAR, ancillary: string, remove_to_pool: boolean, suppress_event_feed: boolean)
 --# assume CM.force_remove_ancillary_from_faction: method(factionKey: string, ancillary: string)
---# assume CM.add_ancillary_to_faction: method(factionKey: string, ancillary: string, displayEvent: bool)
+--# assume CM.add_ancillary_to_faction: method(faction: CA_FACTION, ancillary: string, suppress_event_feed: boolean)
 --More character commands
---# assume CM.award_experience_level: method(char_lookup_str: string, level: int)
+--# assume CM.add_experience_to_units_commanded_by_character: method(char_lookup_str: string, level: int) --add_experience_to_units_commanded_by_character("faction:f,type:t,ability:a,surname:s,forename:f,garrison:g,x:1,y:2,r:3", level)
 --# assume CM.kill_character: method(lookup: CA_CQI, kill_army: boolean, throughcq: boolean)
 --# assume CM.set_character_immortality: method(lookup: string, immortal: boolean)
 --# assume CM.kill_all_armies_for_faction: method(factionName: CA_FACTION)
 --# assume CM.teleport_to: method(charString: string, xPos: number, yPos: number, useCommandQueue: boolean)
---# assume CM.replenish_action_points: method(lookup:string)
+--# assume CM.replenish_action_points: method(lookup: string, faction: number) -- A unary AP proportion (0-1) may optionally be specified.
 --# assume CM.stop_character_convalescing: method(character_cqi: CA_CQI)
+--# assume CM.cancel_actions_for: method(character_lookup: string)
+--# assume CM.convert_force_to_type: method(military_force: CA_MILITARY_FORCE, force_type: string)
+--# assume CM.add_unit_to_province_mercenary_pool: method(
+--#    province: CA_REGION, 
+--#    unit_record: string, 
+--#    count: number, 
+--#    replenishment_chance_percentage: number, 
+--#    max_units: number, 
+--#    max_units_replenished_per_turn: number, 
+--#    xp_level: number,
+--#    faction_restricted_record: string?,
+--#    subculture_restricted_record: string?,
+--#    tech_restricted_record: string?
+--#)
+--# assume CM.add_unit_to_faction_mercenary_pool: method(
+--#    faction: CA_FACTION, 
+--#    unit_record: string, 
+--#    count: number, 
+--#    replenishment_chance_percentage: number, 
+--#    max_units: number, 
+--#    max_units_replenished_per_turn: number, 
+--#    xp_level: number,
+--#    faction_restricted_record: string?,
+--#    subculture_restricted_record: string?,
+--#    tech_restricted_record: string?
+--#)
 --spawning
 --# assume CM.create_force_with_general: method(
 --#     faction_key: string,
@@ -272,10 +332,17 @@
 --# assume CM.pending_battle_cache_is_quest_battle: method() --> boolean
 --# assume CM.add_first_tick_callback: method(function)
 --# assume CM.force_rebellion_in_region: method(region: string, unitsize: number, unit_list: string, xpos: number, ypos: number, suppress_message: boolean)
-
+--# assume CM.spawn_unique_agent: method(faction_CQI: CA_CQI, agent_record: string, force: boolean)
+--# assume CM.spawn_unique_agent_at_region: method(faction_CQI: CA_CQI, agent_record: string, region_cqi: CA_CQI, force: boolean)
+--# assume CM.spawn_unique_agent_at_character: method(faction_CQI: CA_CQI, agent_record: string, character_cqi: CA_CQI, force: boolean)
+--# assume CM.spawn_agent_at_military_force: method(owning_faction: CA_FACTION, target_force: CA_MILITARY_FORCE, agent_record: string, agent_subtype_record: string?)
+--# assume CM.spawn_agent_at_settlement: method(owning_faction: CA_FACTION, target_settlement: CA_SETTLEMENT, agent_record: string, agent_subtype_record: string?)
+--# assume CM.spawn_agent_at_position: method(owning_faction: CA_FACTION, x: number, y: number, agent_record: string, agent_subtype_record: string?)
+--# assume CM.embed_agent_in_force: method(agent: CA_CQI, military_force: CA_MILITARY_FORCE)
 --spawn location finding
---# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, region_key: string, rebellion_spawn: boolean, on_sea: boolean, rebel_spawn_distance: number?) --> (number, number)
---# assume CM.find_valid_spawn_location_for_character_from_position: method(faction_key: string, x: number, y:number, on_sea: boolean) --> (number, number)
+--# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, settlement_region_key: string, on_sea: boolean, in_same_region: boolean, preferred_spawn_distance: number?) --> (number, number)
+--# assume CM.find_valid_spawn_location_for_character_from_character: method(faction_key: string, character_lookup: string, in_same_region: boolean, preferred_spawn_distance: number?) --> (number, number)
+--# assume CM.find_valid_spawn_location_for_character_from_position: method(faction_key: string, start_x: number, start_y: number, in_same_region: boolean, preferred_spawn_distance: number?) --> (number, number)
 --saving and loading
 --# assume CM.add_saving_game_callback: method(function(context: WHATEVER))
 --# assume CM.add_loading_game_callback: method(function(context: WHATEVER))
@@ -295,6 +362,17 @@
 --# assume CM.remove_effect_bundle: method(bundle: string, faction: string)
 --# assume CM.apply_effect_bundle_to_characters_force: method(bundleKey: string, charCqi: CA_CQI, turns: number, useCommandQueue: boolean)
 --# assume CM.remove_effect_bundle_from_characters_force: method(bundle_key: string, char_cqi: CA_CQI)
+--# assume CM.apply_effect_bundle_to_character: method(bundleKey: string, character: CA_CHAR, turns: number)
+--# assume CM.apply_effect_bundle_to_faction_province: method(bundleKey: string, region: CA_REGION, turns: number)
+--# assume CM.remove_effect_bundle_from_faction_province: method(bundleKey: string, region: CA_REGION)
+--# assume CM.remove_effect_bundle_from_character: method(bundleKey: string, character: CA_CHAR)
+--# assume CM.create_new_custom_effect_bundle: method(bundleKey: string) --> CA_CUSTOM_EFFECT_BUNDLE
+--# assume CM.apply_custom_effect_bundle_to_faction: method(effect_bundle: CA_CUSTOM_EFFECT_BUNDLE, faction: CA_FACTION)
+--# assume CM.apply_custom_effect_bundle_to_character: method(effect_bundle: CA_CUSTOM_EFFECT_BUNDLE, character: CA_CHAR)
+--# assume CM.apply_custom_effect_bundle_to_force: method(effect_bundle: CA_CUSTOM_EFFECT_BUNDLE, military_force: CA_MILITARY_FORCE)
+--# assume CM.apply_custom_effect_bundle_to_characters_force: method(effect_bundle: CA_CUSTOM_EFFECT_BUNDLE, character: CA_CHAR)
+--# assume CM.apply_custom_effect_bundle_to_region: method(effect_bundle: CA_CUSTOM_EFFECT_BUNDLE, region: CA_REGION)
+--# assume CM.apply_custom_effect_bundle_to_faction_province: method(effect_bundle: CA_CUSTOM_EFFECT_BUNDLE, target_region: CA_REGION)
 --unit manipulation
 --# assume CM.remove_unit_from_character: method(lookup_string: string, unitID: string)
 --# assume CM.grant_unit_to_character: method(lookup: string , unit: string)
@@ -336,14 +414,20 @@
 --# assume CM.set_region_abandoned: method(region: string)
 --# assume CM.set_public_order_disabled_for_province_for_region_for_all_factions_and_set_default: method(region_key: string, bool: boolean)
 --# assume CM.exempt_province_from_tax_for_all_factions_and_set_default: method(region_key: string, bool: boolean)
---# assume CM.instantly_upgrade_building_in_region: method (region_key: string, slot_num: number, target_building_key: string)
+--# assume CM.region_slot_instantly_upgrade_building: method (slot: CA_SLOT, target_building_key: string) --> CA_BUILDING
+--# assume CM.region_slot_instantly_dismantle_building: method (slot: string) --<region_key>:<slot_number>
+--# assume CM.instantly_set_settlement_primary_slot_level: method (settlement: CA_SETTLEMENT, level: number) --> CA_BUILDING
+--# assume CM.region_slot_instantly_repair_building: method (slot: string) --<region_key>:<slot_number>
+--# assume CM.foreign_slot_instantly_upgrade_building: method (slot: CA_FOREIGN_SLOT, upgrade_building_key: string) 
+--# assume CM.foreign_slot_instantly_dismantle_building: method (slot: CA_FOREIGN_SLOT) --<region_key>:<slot_number>
+--# assume CM.add_development_points_to_region: method (region: string, development_points: number )
 --autoresolve
 --# assume CM.win_next_autoresolve_battle: method(faction: string)
 --# assume CM.modify_next_autoresolve_battle: method(attacker_win_chance: number, defender_win_chance: number, attacker_losses_modifier: number, defender_losses_modifier: number, wipe_out_loser: boolean)
 --events
 --# assume CM.trigger_incident_with_targets: method(owning_faction_cqi: CA_CQI, incident_key: string, faction_cqi: CA_CQI | 0, secondary_faction_cqi: CA_CQI | 0, character_cqi: CA_CQI | 0, military_force_cqi: CA_CQI | 0, region_cqi: CA_CQI | 0, settlement_cqi: CA_CQI | 0)
---# assume CM.trigger_dilemma: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean)
---# assume CM.trigger_incident: method(factionName: string, incidentKey: string, fireImmediately: boolean)
+--# assume CM.trigger_dilemma: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean?, whitelist: boolean?)
+--# assume CM.trigger_incident: method(factionName: string, incidentKey: string, fireImmediately: boolean?, whitelist: boolean?)
 --# assume CM.trigger_mission: method(faction_key: string, mission_key: string, trigger_immediately: boolean)
 --# assume CM.cancel_custom_mission: method(faction_key: string, mission_key: string)
 --# assume CM.disable_event_feed_events: method(disable: boolean, categories: string, subcategories: string, events: string)
@@ -363,6 +447,7 @@
 --buildings
 --# assume CM.add_building_to_force: method(cqi: CA_CQI, building_level: string | vector<string>)
 --rituals commands
+--# assume CM.perform_ritual: method(performing_faction: string, target_faction: string, ritual_key: string)
 --# assume CM.set_ritual_unlocked: method(cqi: CA_CQI, rite_key: string, unlock: boolean)
 --# assume CM.set_ritual_chain_unlocked: method(cqi: CA_CQI, ritual_chain_key: string, unlock: boolean)
 --# assume CM.rollback_linked_ritual_chain: method(chain_key: string, level: number)
@@ -385,12 +470,21 @@
 --# assume CM.char_has_navy: method(character: CA_CHAR) --> boolean
 --# assume CM.char_has_army: method(character: CA_CHAR) --> boolean
 --# assume CM.is_local_players_turn: method() --> boolean
+--# assume CM.is_dlc_flag_enabled: method(dlc: string) --> boolean
 --model overrides
 --# assume CM.override_building_chain_display: method(building_chain: string, settlement_skin: string, region_name: string)
 --aux
 --# assume CM.show_shroud: method(opt: boolean)
 --# assume CM.end_turn: method(opt: boolean)
 --# assume CM.whitelist_event_feed_event_type: method(event_type: string)
+--# assume CM.force_normal_character_locomotion_speed_for_turn: method(boolean)
+--# assume CM.hide_character: method(character_lookup: string, command_queue: boolean)
+--# assume CM.unhide_character: method(character_lookup: string, x_pos: number, y_pos: number, command_queue: boolean)
+--# assume CM.add_circle_area_trigger: method(x: number, y: number, radius: number, trigger_name: string, character_lookup: string, trigger_on_enter: boolean, trigger_on_exit: boolean, trigger_once: boolean)
+--# assume CM.add_outline_area_trigger: method(trigger_name: string, character_lookup: string, trigger_on_enter: boolean, trigger_on_exit: boolean, trigger_once: boolean, any...)
+--# assume CM.remove_area_trigger: method(trigger_name: string)
+--# assume CM.add_hex_area_trigger: method(trigger_name: string, x: number, y: number, radius: number, faction: string?, subculture: string?)
+--# assume CM.remove_hex_area_trigger: method(trigger_name: string)
 --battle stuff
 --# assume CM.add_custom_battlefield: method(
 --#     id: string,
@@ -582,6 +676,7 @@
 --# assume CA_SETTLEMENT.slot_list: method() --> CA_SLOT_LIST
 --# assume CA_SETTLEMENT.is_port: method() --> boolean
 --# assume CA_SETTLEMENT.region: method() --> CA_REGION
+--# assume CA_SETTLEMENT.primary_slot: method() --> CA_SLOT 
 
 -- SLOT LIST
 --# assume CA_SLOT_LIST.num_items: method() --> number
@@ -668,10 +763,15 @@
 --# assume CA_FACTION.has_technology: method(technology: string) --> boolean
 --# assume CA_FACTION.imperium_level: method() --> number
 --# assume CA_FACTION.factions_of_same_subculture: method() --> CA_FACTION_LIST
+--# assume CA_FACTION.foreign_slot_managers: method() --> CA_FOREIGN_SLOT_LIST
 
 -- FACTION LIST
 --# assume CA_FACTION_LIST.num_items: method() --> number
 --# assume CA_FACTION_LIST.item_at: method(index: number) --> CA_FACTION
+
+-- FOREIGN SLOT LIST
+--# assume CA_FOREIGN_SLOT_LIST.num_items: method() --> number
+--# assume CA_FOREIGN_SLOT_LIST.item_at: method(index: number) --> CA_FACTION
 
 -- EFFECT
 --# assume CA_EFFECT.get_localised_string: function(key: string) --> string
@@ -715,6 +815,7 @@
 --# assume CORE.svr_save_bool: method(svrname: string, value: boolean)
 --# assume CORE.progress_on_uicomponent_animation_finished: method(component: CA_UIC, callback: function())
 --# assume CORE.progress_on_loading_screen_dismissed: method(callback: function())
+--# assume CORE.is_mod_loaded: method(mod_name: string)
 
 -- VFS
 --# assume CA_VFS.exists: function(filepath: string) --> boolean
@@ -775,7 +876,7 @@
 --# assume global is_boolean: function(arg: boolean) --> boolean
 --# assume global get_timestamp: function() --> string
 --# assume global script_error: function(msg: string)
---# assume global to_number: function(n: any) --> number
+----# assume global to_number: function(n: any) --> number
 --# assume global load_script_libraries: function()
 --# assume global force_require: function(file: string)
 --# assume global highlight_component: function(value: bool, is_square: bool, string...)
@@ -790,6 +891,8 @@
 --# assume global q_setup: function()
 --# assume global set_up_rank_up_listener: function(quest_table: vector<vector<string | number>>, subtype: string, infotext: vector<string | number>)
 --# assume global char_with_forename_has_no_military_force: function(forename: string) --> boolean
+--# assume global is_surtha_ek: function(char: CA_CHAR) --> boolean
+--# assume global is_character: function(char: CA_CHAR) --> boolean
 
 -- CA LUA OBJECTS:
 --RITES UNLOCK OBJECT
@@ -812,6 +915,7 @@
 --# assume MISSION_MANAGER.set_turn_limit: method(turns: number)
 --# assume MISSION_MANAGER.set_chapter: method(turns: integer)
 --# assume MISSION_MANAGER.set_mission_issuer: method(issuer: string)
+--# assume MISSION_MANAGER.set_should_whitelist: method(boolean)
 --localisation
 --# assume MISSION_MANAGER.add_heading: method(heading_loc_key: string)
 --# assume MISSION_MANAGER.add_description: method(description_loc_key: string)
@@ -844,6 +948,12 @@
 --# assume CA_CUTSCENE.set_disable_settlement_labels: method(setting: boolean)
 --# assume CA_CUTSCENE.set_restore_shroud: method(setting: boolean)
 --# assume CA_CUTSCENE.action: method(action: function(), timer: number)
+--# assume CA_CUTSCENE.set_skip_camera: method(x: number, y: number, d: number, b: number, h: number)
+--# assume CA_CUTSCENE.set_dismiss_advice_on_end: method(dismiss_advice: boolean?)
+--# assume CA_CUTSCENE.wait_for_advisor: method(delay: number?)
+--# assume CA_CUTSCENE.start: method()
+--# assume CA_CUTSCENE.set_skippable: method(skippable: boolean?, callback: function?)
+--# assume CA_CUTSCENE.cindy_playback: method(cindy_filepath: string, clear_anim_scenes: boolean, expire_camera: boolean)
 
 -- LL UNLOCK OBJECT
 --# assume global class LL_UNLOCK
@@ -855,7 +965,7 @@
 --# assume global class INVASION
 --# type global INVASION_TARGETS = "NONE" | "REGION" | "LOCATION" | "CHARACTER" | "PATROL"
 --# assume INVASION_MANAGER.new_invasion: method(name: string, faction: string, units: string, coordinates: vector<number>) --> INVASION
-
+--# assume INVASION_MANAGER.get_invasion: method(invasion_key: string) --> INVASION
 --# assume INVASION.set_target: method(target_type: INVASION_TARGETS, target: WHATEVER, target_faction_key: string)
 --# assume INVASION.apply_effect: method(effect_key: string, turns: number)
 --# assume INVASION.add_character_experience: method(quanity: number)
@@ -863,9 +973,327 @@
 --# assume INVASION.start_invasion: method(callback: function(self: WHATEVER), declare_war: boolean?, invite_attacker_allies: boolean?, invite_defender_allies: boolean?)
 --# assume INVASION.kill: method(general_only: bool)
 
+-- CHAPTER MISSIONS
+--# assume CA_CHAPTER_MISSION.new: method(chapter_number: number, faction_name: string, mission_key: string, advice_key: string?, infotext: vector<string>?)
+--# assume CA_CHAPTER_MISSION.manual_start: method()
+--# assume CA_CHAPTER_MISSION.has_been_issued: method() --> boolean
+
+-- FACTION START
+--# assume global class CA_FACTION_START
+--# assume CA_FACTION_START.new: method(faction_name: string, x: number, y: number, d: number, b: number, h: number) --> CA_FACTION_START
+--# assume CA_FACTION_START.register_new_sp_game_callback: method(callback: function())
+--# assume CA_FACTION_START.register_each_sp_game_callback: method(callback: function())
+--# assume CA_FACTION_START.register_new_mp_game_callback: method(callback: function())
+--# assume CA_FACTION_START.register_each_mp_game_callback: method(callback: function())
+--# assume CA_FACTION_START.register_intro_cutscene_callback: method(callback: function())
+--# assume CA_FACTION_START.start: method(should_show_cutscene: boolean?, wait_for_loading_screen: boolean?, suppress_cinematic_borders: boolean?)
+
+-- INTERVENTIONS
+--# assume CA_INTERVENTION.new: method(name: string, priority: number, callback: function(), is_debug: boolean?)
+--# assume CA_INTERVENTION.start: method()
+--# assume CA_INTERVENTION.add_precondition: method(function())
+--# assume CA_INTERVENTION.add_advice_key_precondition: method(advice_key: string)
+--# assume CA_INTERVENTION.add_precondition_unvisited_page: method(help_page: string)
+--# assume CA_INTERVENTION.add_trigger_condition: method(event: string, conditional_check: function() --> boolean)
+--# assume CA_INTERVENTION.set_disregard_cost_when_triggering: method(disregard_priority: boolean?)
+--# assume CA_INTERVENTION.set_suppress_pause_before_triggering: method(suppress_pause: boolean?)
+--# assume CA_INTERVENTION.set_allow_when_advice_disabled: method(allow_advice: boolean?)
+--# assume CA_INTERVENTION.set_min_advice_level: method(min_advice_level: number)
+--# assume CA_INTERVENTION.set_player_turn_only: method(player_turn_only: boolean?)
+--# assume CA_INTERVENTION.set_min_turn: method(minimum_turn: number)
+--# assume CA_INTERVENTION.get_min_turn: method() --> number
+--# assume CA_INTERVENTION.set_wait_for_battle_complete: method(wait_for_battle: boolean?)
+--# assume CA_INTERVENTION.set_allow_attacking: method(allow_attacking: boolean?)
+--# assume CA_INTERVENTION.set_wait_for_event_dismissed: method(wait_for_event: boolean?)
+--# assume CA_INTERVENTION.set_wait_for_dilemma: method(wait_for_dilemma: boolean?)
+--# assume CA_INTERVENTION.set_wait_for_fullscreen_panel_dismissed: method(wait_for_panel: boolean?)
+--# assume CA_INTERVENTION.play_advice_for_intervention: method(advice_key: string, infotext: vector<string>?, mission: any?, mission_delay: number?)
+--# assume CA_INTERVENTION.give_priority_to_intervention: method(intervention_name: string)
+
+-- TIMER MANAGER
+--# assume CA_TIMER_MANAGER.new: method() --> CA_TIMER_MANAGER
+--# assume CA_TIMER_MANAGER.callback: method(callback: function(), delay: number, name: string?)
+---# assume CA_TIMER_MANAGER.remove_callback: method(key: string)
+---# assume CA_TIMER_MANAGER.repeat_callback: method(callback: function(), delay_and_repeat: number, name: string?)
+
 -- INTERVENTION MANAGER
 --# assume IM.lock_ui: method(bool, bool)
 --# assume IM.override: method(ui_override: string) --> CUIM_OVERRIDE
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
+-- --# assume CA_SLOT.type: method() --> CA_SLOT_TYPE -- problem: ".type" is a keyword
+
+-- load_values_from_string = USELESS
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------
+-----------------
+-- WH2 UIC API --
+-----------------
+-----------------
+
+--List of all valid methods for the UIC game object! I've tried to write it as clearly as I can. If I've messed anything up, or forgotten anything, or need to clarify, do let me know.
+--
+--    Whatever is within the first brackets are arguments for the method; after the --> is the return values. I've tried to limit descriptors to what is actually necessary.
+--    
+--    Enjoy!
+--    
+--    ------------
+--    ---- EVENTS
+--    ------------
+--    
+--    Every event has the same two accessible variables:
+--    - context.string
+--    - context.component
+--    
+--    The former is the Id of the UIC referenced in the event.
+--    The latter is the actual UIC. You have to use `UIComponent(context.component)` to actually get the object. I dunno why, don't ask me.
+--    
+--    Every event requires the same two conditions. The UIC must not be disabled, and the UIC must be interactive.
+--    
+--    
+--    "ComponentMouseOn"
+--    -- Triggered upon hovered over a UIC.
+--    
+--    "ComponentLClickUp"
+--    -- Triggered upon clicking a UIC with the left mouse button.
+--    
+--    "ComponentRClickUp"
+--    -- Triggered upon clicking a UIC with the right mouse button.
+--    
+--    "ComponentCreated"
+--    -- Triggered upon the creation of a new UIC object.
+    
+    
+--    --# assume CA_UIC.Visible() --> (is_visible: boolean)
+--    --# assume CA_UIC.ChildCount() --> (num_children: number)
+--    --# assume CA_UIC.TextDimensions() --> (width: number, height: number)
+--    --# assume CA_UIC.NumImages() --> (num_images: number) 
+--    --# assume CA_UIC.GetImagePath(index_num: number) --> (image_path: string)
+--    --# assume CA_UIC.NumStates() --> (num_states: number)
+--    --# assume CA_UIC.GetStateByIndex(index_num: number) --> (state: string)
+--    --# assume CA_UIC.CurrentState() --> (current_state: string)
+--    --# assume CA_UIC.Id() --> (id: string)
+--    --# assume CA_UIC.Parent() --> (parent: UIC)
+--    --# assume CA_UIC.Position() --> (x: number, y: number)
+--    --# assume CA_UIC.Height() --> (height: number)
+--    --# assume CA_UIC.Width() --> (width: number)
+--    --# assume CA_UIC.Bounds() --> (width: number, height: number)
+--    --# assume CA_UIC.Dimensions() --> (width: number, height: number)
+--    
+--    --# assume CA_UIC.GetStateText() --> (state_text: string)
+--    --# assume CA_UIC.GetTooltipText() --> (tooltip_text: string)
+--    --# assume CA_UIC.Address() --> (address: string) -- only used for parent_uic:Adopt(child_uic:Address()), grabs the UIC's memory address
+--    --# assume CA_UIC.Opacity() --> (opacity: number) -- 0-100, I believe
+--    --# assume CA_UIC.Priority() --> (priority: number) -- z-axis priority
+--    --# assume CA_UIC.IsInteractive() --> (is_interactive: boolean)
+--    --# assume CA_UIC.IsMoveable() --> (is_moveable: boolean)
+--    --# assume CA_UIC.Find(index: number) --> (child: UIC) -- gets the child UIC at specified index. starts at 0
+--    
+--    --# assume CA_UIC.GetProperty(property_key: string) --> (value: string)
+--    --# assume CA_UIC.DockingPoint() --> (docking_point: number) 
+--    
+--    --# assume CA_UIC.CurrentAnimationId() --> (animation: string) -- returns "" if not currently animated
+--    --# assume CA_UIC.IsMouseOverChildren() --> (is: boolean) -- does not return true if it's over the UIC itself, only its children
+--    
+--    ------------
+--    ---- SETTERS 
+--    ------------
+--    
+--    --# assume CA_UIC.SetImageRotation(unknown1: number, unknown2: number)
+--    --# assume CA_UIC.SetImage(image_path: string, index_num: number?)
+--    --# assume CA_UIC.SetCanResizeHeight(enable: boolean)
+--    --# assume CA_UIC.SetCanResizeWidth(enable: boolean)
+--    
+--    --# assume CA_UIC.MoveTo(x_pos: number, y_pos: number)
+--    
+--    --# assume CA_UIC.SetContextObject(obj_key: string) -- Unknown usage, probably super powerful
+--    --# assume CA_UIC.SetProperty(property_key: string, value: string)
+--    
+--    --# assume CA_UIC.SetOpacity -- unknown args
+--    --# assume CA_UIC.PropagateOpacity -- unknown args
+--    --# assume CA_UIC.PropagateVisibility -- unknown args
+--    --# assume CA_UIC.SetInteractive(enable: boolean)
+--    --# assume CA_UIC.SetTooltipText(tooltip_text: string, enable: boolean)
+--    --# assume CA_UIC.PropagatePriority(priority: number)
+--    --# assume CA_UIC.Resize(width: number, height: number) -- use SetCanResizeHeight/Width prior and after
+--    --# assume CA_UIC.SetDockingPoint
+--    --# assume CA_UIC.SetMoveable(enable: boolean)
+--    --# assume CA_UIC.LockPriority(priority: number) -- keep at specific z-axis prio
+--    --# assume CA_UIC.UnLockPriority() -- allow prio to change
+--    --# assume CA_UIC.SetDisabled(disable: boolean)
+--    
+--    
+--    ------------
+--    ---- ACTIONS
+--    ------------
+--    
+--    --# assume CA_UIC.Highlight(should_highlight: boolean, unknown1: boolean, unknown2: boolean)
+
+
+--    
+--    
+--    --# assume CA_UIC.CreateComponent(id: string, layout_file: string) -- makes a new child of the targeted UIC, with specified ID and layout file. Use `UIComponent(uic:CreateComponent(a, b))` to return the UIC created
+--    --# assume CA_UIC.Adopt(address: string) -- makes the targeted address (use uic:Address()) UIC a child of the one being called
+--    --# assume CA_UIC.Divorce(address: string) -- removes the targeted address (ditto) UIC a non-child of the one being called
+--    --# assume CA_UIC.DestroyChildren() -- destroys all children of this UIC.
+--    
+--    --# assume CA_UIC.RegisterTopMost() -- keep on top
+--    --# assume CA_UIC.RemoveTopMost() -- stop being on top
+--    
+--    --# assume CA_UIC.ResizeTextResizingComponentToInitialSize(width: number, height: number) -- force the text to a specified size, useful when changing state text
+--    
+--    
+--    ------------
+--    ---- UNKNOWN
+--    ------------
+--    
+--    --# assume CA_UIC.Layout -- returns the layout file path?
+--    --# assume CA_UIC.SetTooltipTextWithRLSKey
+--    
+--    --# assume CA_UIC.new -- unusable
+--    
+--    --# assume CA_UIC.TextShaderTechniqueSet
+--    --# assume CA_UIC.InterfaceFunction
+--    --# assume CA_UIC.StealShortcutKey
+--    --# assume CA_UIC.ShaderTechniqueGet
+--    --# assume CA_UIC.WidthOfTextLine
+--    --# assume CA_UIC.StartPulseHighlight
+--    --# assume CA_UIC.StopPulseHighlight
+--    --# assume CA_UIC.FullScreenHighlight
+--    --# assume CA_UIC.SequentialFind
+--    --# assume CA_UIC.TextShaderVarsGet
+--    --# assume CA_UIC.CallbackId
+--    --# assume CA_UIC.TextShaderVarsSet
+--    --# assume CA_UIC.ShaderVarsSet
+--    --# assume CA_UIC.ShaderVarsGet
+--    --# assume CA_UIC.ShaderTechniqueSet
+--    --# assume CA_UIC.TriggerAnimation
+--    --# assume CA_UIC.TextDimensionsForText
+--    --# assume CA_UIC.HasInterface 
+--    --# assume CA_UIC.IsDragged
+--    --# assume CA_UIC.TriggerShortcut
+--   -- StealInputFocus
+
+
+--# assume math.clamp: function(number, number, number)
+
+
+-- BATTLE_MANAGER
+--# assume CA_BATTLE_MANAGER.new: method(EMPIRE_BATTLE)
+--# assume EMPIRE_BATTLE.new: method() --> EMPIRE_BATTLE
+
+-- GENERATED ARMY
+--# assume CA_GENERATED_ARMY.message_on_rout_proportion: method(message_to_send: string, rout_proportion: number)
+--# assume CA_GENERATED_ARMY.message_on_casualties: method(message_to_send: string, casualty_percent: number)
+
+--# assume CA_GENERATED_ARMY.reinforce_on_message: method(on_message: string)
+--# assume CA_GENERATED_ARMY.attack_on_message: method(on_message: string, wait_offset: number?)
+
+-- GENERATED BATTLE
+--# assume CA_GENERATED_BATTLE.new: method(screen_starts_black: boolean?, prevent_deployment_for_player: boolean?, prevent_deployment_for_ai: boolean?, intro_cutscene: function?, is_debug: boolean?) --> CA_GENERATED_BATTLE
+--# assume CA_GENERATED_BATTLE.get_player_alliance_num: method() --> number
+--# assume CA_GENERATED_BATTLE.get_non_player_alliance_num: method() --> number
+--# assume CA_GENERATED_BATTLE.get_army: method(alliance_num: number, army_number: number?, script_name: string?) --> CA_GENERATED_ARMY
+
+--# assume CA_GENERATED_BATTLE.set_objective_on_message: method(on_message: string, objective_key: string, wait_offset: number?, objective_param_1: number?, objective_param_2: number?)
+--# assume CA_GENERATED_BATTLE.complete_objective_on_message: method(on_message: string, objective_key: string, wait_offset: number?)
+
+-- GENERATED CUTSCENE
+--# assume CA_GENERATED_CUTSCENE.new: method(is_debug: boolean?, disable_outro_camera: boolean?, ignore_last_camera_index: boolean?) --> CA_GENERATED_CUTSCENE
+--# assume CA_GENERATED_CUTSCENE.add_element: method(sfx_name: string, subtitle: string, camera: string, min_length: number, wait_for_vo: boolean, wait_for_camera: boolean, play_taunt_at_start: boolean, message_on_start: string?)
+
+
+--# assume CA_UIC.SetDockingPoint: method(dock_point: number)
+
+
+
+
+
+--# assume CA_UIC.TextDimensions: method() --> (number, number, number)
+--# assume CA_UIC.SetProperty: method(key: string, value: string)
+
+
+--# assume CM.load_global_script: method(script_name: string)
+
+--# assume CM.move_character: method(char_cqi: CA_CQI, move_x: number, move_y: number, replenish_ap: boolean?, allow_post_movement: boolean?, success_callback: function?, failure_callback: function?)
+
+
+--# assume CM.set_advice_enabled: method(advice_enabled: boolean?)
+--# assume CM.show_advice: method(advice_key: string)
+--# assume CM.modify_advice: method(boolean)
+
+
+--# assume CM.pending_battle_cache_defender_victory: method() --> boolean
+
+--# assume CM.pending_battle_cache_attacker_value: method() --> int
+--# assume CM.pending_battle_cache_defender_value: method() --> int 
+
+
+--# assume CA_EFFECT.tweaker_value: function(tweaker_key: string) --> number
+--# assume CA_EFFECT.clear_advice_session_history: function()
+
+
+--# assume CA_PENDING_BATTLE.percentage_of_defender_killed: method() --> number
+--# assume CA_PENDING_BATTLE.percentage_of_attacker_killed: method() --> number
+
+
+--
+--# assume CORE.get_or_create_component: method(key: string, template: string, parent: CA_UIC) --> CA_UIC
+
+--# assume CORE.get_static_object: method(key: string) --> WHATEVER
+
+--# assume CORE.is_battle: method() --> boolean 
+--# assume CORE.is_frontend: method() --> boolean
+
+-- POOLED RESOURCE FACTOR LIST
+--# assume CA_POOLED_FACTOR_LIST.is_empty: method() --> boolean
+--# assume CA_POOLED_FACTOR_LIST.item_at: method(index: number) --> CA_POOLED_FACTOR
+--# assume CA_POOLED_FACTOR_LIST.num_items: method() --> number
+
+-- POOLED RESOURCE FACTOR
+--# assume CA_POOLED_FACTOR.value: method() --> number
+--# assume CA_POOLED_FACTOR.maximum_value: method() --> number
+--# assume CA_POOLED_FACTOR.minimum_value: method() --> number
+
+
+--# assume CA_POOLED.factors: method() --> CA_POOLED_FACTOR_LIST
+
+
+
+
+-- GLOBAL FUNCTIONS
+-- COMMON
+--# assume global is_nil: function(arg: any) --> boolean
+
+
+-- CAMPAIGN
+--# assume global get_tm: function() --> CA_TIMER_MANAGER
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- GLOBAL VARIABLES
 --leave at the bottom of this file
@@ -881,177 +1309,28 @@
 --# assume global invasion_manager: INVASION_MANAGER
 --# assume global CampaignUI: CA_CampaignUI
 --# assume global vfs: CA_VFS
+--# assume global chapter_mission: CA_CHAPTER_MISSION
+--# assume global intervention: CA_INTERVENTION
+--# assume global faction_start: CA_FACTION_START
+--# assume global timer_manager: CA_TIMER_MANAGER
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- sm0kin
--- --# type global CA_SLOT_TYPE = "foreign" | "horde_primary" | "horde_secondary" | "port" | "primary" | "secondary"
--- --# assume CA_SLOT.type: method() --> CA_SLOT_TYPE
+--# assume global empire_battle: EMPIRE_BATTLE
+--# assume global battle_manager: CA_BATTLE_MANAGER
+--# assume global generated_battle: CA_GENERATED_BATTLE
+--# assume global generated_cutscene: CA_GENERATED_CUTSCENE
 
--- load_values_from_string = USELESS
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--# assume global __logfile_path: string
 
---[[
------------------
------------------
--- WH2 UIC API --
------------------
------------------
+--string extensions
 
-List of all valid methods for the UIC game object! I've tried to write it as clearly as I can. If I've messed anything up, or forgotten anything, or need to clarify, do let me know.
-
-    Whatever is within the first brackets are arguments for the method; after the --> is the return values. I've tried to limit descriptors to what is actually necessary.
-    
-    Enjoy!
-    
-    ------------
-    ---- EVENTS
-    ------------
-    
-    Every event has the same two accessible variables:
-    - context.string
-    - context.component
-    
-    The former is the Id of the UIC referenced in the event.
-    The latter is the actual UIC. You have to use `UIComponent(context.component)` to actually get the object. I dunno why, don't ask me.
-    
-    Every event requires the same two conditions. The UIC must not be disabled, and the UIC must be interactive.
-    
-    
-    "ComponentMouseOn"
-    -- Triggered upon hovered over a UIC.
-    
-    "ComponentLClickUp"
-    -- Triggered upon clicking a UIC with the left mouse button.
-    
-    "ComponentRClickUp"
-    -- Triggered upon clicking a UIC with the right mouse button.
-    
-    "ComponentCreated"
-    -- Triggered upon the creation of a new UIC object.
-    
-    ------------
-    ---- GETTERS
-    ------------
-    
-    uic.Visible() --> (is_visible: boolean)
-    uic.ChildCount() --> (num_children: number)
-    uic.TextDimensions() --> (width: number, height: number)
-    uic.NumImages() --> (num_images: number) 
-    uic.GetImagePath(index_num: number) --> (image_path: string)
-    uic.NumStates() --> (num_states: number)
-    uic.GetStateByIndex(index_num: number) --> (state: string)
-    uic.CurrentState() --> (current_state: string)
-    uic.Id() --> (id: string)
-    uic.Parent() --> (parent: UIC)
-    uic.Position() --> (x: number, y: number)
-    uic.Height() --> (height: number)
-    uic.Width() --> (width: number)
-    uic.Bounds() --> (width: number, height: number)
-    uic.Dimensions() --> (width: number, height: number)
-    
-    uic.GetStateText() --> (state_text: string)
-    uic.GetTooltipText() --> (tooltip_text: string)
-    uic.Address() --> (address: string) -- only used for parent_uic:Adopt(child_uic:Address()), grabs the UIC's memory address
-    uic.Opacity() --> (opacity: number) -- 0-100, I believe
-    uic.Priority() --> (priority: number) -- z-axis priority
-    uic.IsInteractive() --> (is_interactive: boolean)
-    uic.IsMoveable() --> (is_moveable: boolean)
-    uic.Find(index: number) --> (child: UIC) -- gets the child UIC at specified index. starts at 0
-    
-    uic.GetProperty(property_key: string) --> (value: string)
-    uic.DockingPoint() --> (docking_point: number) 
-    
-    uic.CurrentAnimationId() --> (animation: string) -- returns "" if not currently animated
-    uic.IsMouseOverChildren() --> (is: boolean) -- does not return true if it's over the UIC itself, only its children
-    
-    ------------
-    ---- SETTERS 
-    ------------
-    
-    uic.SetVisible(enable: boolean)
-    uic.SetState(state: string)
-    uic.SetImageRotation(unknown1: number, unknown2: number)
-    uic.SetImage(image_path: string, index_num: number?)
-    uic.SetCanResizeHeight(enable: boolean)
-    uic.SetCanResizeWidth(enable: boolean)
-    
-    uic.MoveTo(x_pos: number, y_pos: number)
-    
-    uic.SetContextObject(obj_key: string) -- Unknown usage, probably super powerful
-    uic.SetProperty(property_key: string, value: string)
-    
-    uic.SetOpacity -- unknown args
-    uic.PropagateOpacity -- unknown args
-    uic.PropagateVisibility -- unknown args
-    uic.SetInteractive(enable: boolean)
-    uic.SetTooltipText(tooltip_text: string, enable: boolean)
-    uic.PropagatePriority(priority: number)
-    uic.Resize(width: number, height: number) -- use SetCanResizeHeight/Width prior and after
-    uic.SetDockingPoint
-    uic.SetMoveable(enable: boolean)
-    uic.LockPriority(priority: number) -- keep at specific z-axis prio
-    uic.UnLockPriority() -- allow prio to change
-    uic.SetStateText(state_text: string) -- only linked to current state, has to be called again for other states!
-    uic.SetDisabled(disable: boolean)
-    
-    
-    ------------
-    ---- ACTIONS
-    ------------
-    
-    uic.Highlight(should_highlight: boolean, unknown1: boolean, unknown2: boolean)
-    
-    uic.SimulateKey -- unknown args
-    uic.SimulateKeyUp -- unknown args
-    uic.SimulateKeyDown -- unknown args
-    
-    uic.SimulateMouseOn()
-    uic.SimulateMouseMove -- unknown args
-    uic.SimulateMouseOff()
-    uic.SimulateLClick() 
-    uic.SimulateRClick()
-    uic.SimulateDblLClick()
-    uic.SimulateDblRClick()
-    
-    uic.CreateComponent(id: string, layout_file: string) -- makes a new child of the targeted UIC, with specified ID and layout file. Use `UIComponent(uic:CreateComponent(a, b))` to return the UIC created
-    uic.Adopt(address: string) -- makes the targeted address (use uic:Address()) UIC a child of the one being called
-    uic.Divorce(address: string) -- removes the targeted address (ditto) UIC a non-child of the one being called
-    uic.DestroyChildren() -- destroys all children of this UIC.
-    
-    uic.RegisterTopMost() -- keep on top
-    uic.RemoveTopMost() -- stop being on top
-    
-    uic.ResizeTextResizingComponentToInitialSize(width: number, height: number) -- force the text to a specified size, useful when changing state text
-    
-    
-    ------------
-    ---- UNKNOWN
-    ------------
-    
-    uic.Layout -- returns the layout file path?
-    uic.SetTooltipTextWithRLSKey
-    
-    uic.new -- unusable
-    
-    uic.TextShaderTechniqueSet
-    uic.InterfaceFunction
-    uic.StealShortcutKey
-    uic.ShaderTechniqueGet
-    uic.WidthOfTextLine
-    uic.StartPulseHighlight
-    uic.StopPulseHighlight
-    uic.FullScreenHighlight
-    uic.SequentialFind
-    uic.TextShaderVarsGet
-    uic.CallbackId
-    uic.TextShaderVarsSet
-    uic.ShaderVarsSet
-    uic.ShaderVarsGet
-    uic.ShaderTechniqueSet
-    uic.TriggerAnimation
-    uic.TextDimensionsForText
-    uic.HasInterface 
-    uic.IsDragged
-    uic.TriggerShortcut
-    StealInputFocus
---]]
+--- New commands and methods and interface for changing and reading a military force's type (between normal/horde/etc):
+--cm:convert_force_to_type()
+--force_interface:force_type()
+--force_type_interface:key()
+--force_type_interface:has_feature()
+--force_type_interface:can_convert_to_type()
+--force_type_interface:can_automatically_convert_to_type()
+--- There is much more exposure of effects to Lua now. It's easier to read what effects are currently affecting a region, character, faction, province, and military force.
+--
+--CHANGED/FIXED:
+--- Fundamental change to the __write_output_to_file boolean. In order to get script logs to output, you just have to put a file in `script` called `enable_console_logging`, and put any text within the file.

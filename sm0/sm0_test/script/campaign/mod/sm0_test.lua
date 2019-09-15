@@ -32,7 +32,9 @@ local function expCheat()
     for i = 0, characterList:num_items() - 1 do
         local currentChar = characterList:item_at(i)	
         local cqi = currentChar:command_queue_index()
-        cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
+		cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
+		--cm:award_experience_level(cm:char_lookup_str(cqi), 9)
+		--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
     end
 end
 
@@ -307,7 +309,7 @@ function sm0_test()
 		end,
 		true
 	)
-	--expCheat()
+	expCheat()
 	--unitCheat()
 	--unlockLords()
 	--spamLords()

@@ -4,7 +4,10 @@ local applyButton = nil --:CA_UIC
 local saveButton = nil --:CA_UIC
 local loadButton = nil --:CA_UIC
 local bm = get_bm()
+local bar_small_top_ref = find_uicomponent(core:get_ui_root(), "layout", "radar_holder", "bar_small_top")
+local bar_small_top_ref_W, bar_small_top_ref_H = bar_small_top_ref:Bounds()
 local savedEntry = tonumber(core:svr_load_string("svr_battleSpeed")) or 1 --:number
+out("sm0/Battle_savedEntry: "..tostring(savedEntry))
 
 --v function(uic: CA_UIC)
 local function deleteUIC(uic)
@@ -34,16 +37,18 @@ local function deleteSpeedUI()
         core:remove_listener("sm0_loadButton")
         loadButton = nil
     end
+    bar_small_top_ref:Resize(bar_small_top_ref_W, bar_small_top_ref_H)
 end
 
 --v function()
 local function createSpeedUI()
+    deleteSpeedUI()
     local speed_buttons = find_uicomponent(core:get_ui_root(), "layout", "radar_holder", "speed_controls", "speed_buttons")
     local referenceButton = find_uicomponent(speed_buttons, "pause")
     local referenceButtonW, referenceButtonH = referenceButton:Bounds()
     local referenceButtonX, referenceButtonY = referenceButton:Position()
-
-    deleteSpeedUI()
+    local bar_small_top = find_uicomponent(core:get_ui_root(), "layout", "radar_holder", "bar_small_top")
+    local bar_small_top_W, bar_small_top_H = bar_small_top:Bounds()
 
     speed_buttons:CreateComponent("speedBox", "ui/common ui/text_box")
     speedBox = UIComponent(speed_buttons:Find("speedBox"))
@@ -54,20 +59,27 @@ local function createSpeedUI()
     speedBox:Resize(1.5*referenceButtonW, referenceButtonH)
     speedBox:SetCanResizeHeight(false)
     speedBox:SetCanResizeWidth(false)
-    speedBox:MoveTo(referenceButtonX - 1.5*referenceButtonW, referenceButtonY)
+    speedBox:MoveTo(referenceButtonX - 2.5*referenceButtonW, referenceButtonY)
 
     speed_buttons:CreateComponent("applyButton", "ui/templates/square_medium_button")
     applyButton = UIComponent(speed_buttons:Find("applyButton"))
     speed_buttons:Adopt(applyButton:Address())
     applyButton:PropagatePriority(referenceButton:Priority())
-    if (core:svr_load_bool("primary_defender_is_player") and string.find(core:svr_load_string("primary_defender_subculture"), "wh_")) or 
-            (core:svr_load_bool("primary_attacker_is_player") and string.find(core:svr_load_string("primary_attacker_subculture"), "wh_")) then
-        applyButton:SetImage("ui/skins/default/icon_check.png") 
+    --if (core:svr_load_bool("primary_defender_is_player") and string.find(core:svr_load_string("primary_defender_subculture"), "wh_")) or 
+    --        (core:svr_load_bool("primary_attacker_is_player") and string.find(core:svr_load_string("primary_attacker_subculture"), "wh_")) then
+    --    applyButton:SetImagePath("ui/skins/default/icon_check.png") 
+    --else
+    --    applyButton:SetImagePath("ui/skins/warhammer2/icon_check.png") 
+    --end
+    local reference_imagepath = referenceButton:GetImagePath()
+    out("sm0/reference_imagepath: "..tostring(reference_imagepath))
+    if string.find(reference_imagepath, "warhammer2") then 
+        applyButton:SetImagePath("ui/skins/warhammer2/icon_check.png") 
     else
-        applyButton:SetImage("ui/skins/warhammer2/icon_check.png") 
+        applyButton:SetImagePath("ui/skins/default/icon_check.png")
     end
     applyButton:Resize(referenceButtonW, referenceButtonH)
-    applyButton:MoveTo(referenceButtonX - 1.5*referenceButtonW, referenceButtonY + referenceButtonH)
+    applyButton:MoveTo(referenceButtonX - referenceButtonW, referenceButtonY)
     applyButton:SetState("hover")
     applyButton:SetTooltipText("apply speed")
     applyButton:SetState("active")
@@ -119,14 +131,19 @@ local function createSpeedUI()
         saveButton = UIComponent(speed_buttons:Find("saveButton"))
         speed_buttons:Adopt(saveButton:Address())
         saveButton:PropagatePriority(referenceButton:Priority())
-        if (core:svr_load_bool("primary_defender_is_player") and string.find(core:svr_load_string("primary_defender_subculture"), "wh_")) or 
-        (core:svr_load_bool("primary_attacker_is_player") and string.find(core:svr_load_string("primary_attacker_subculture"), "wh_")) then
-            saveButton:SetImage("ui/icon_quick_save.png") 
+        --if (core:svr_load_bool("primary_defender_is_player") and string.find(core:svr_load_string("primary_defender_subculture"), "wh_")) or 
+        --(core:svr_load_bool("primary_attacker_is_player") and string.find(core:svr_load_string("primary_attacker_subculture"), "wh_")) then
+        --    saveButton:SetImagePath("ui/icon_quick_save.png") 
+        --else
+        --    saveButton:SetImagePath("ui/icon_quick_save2.png") 
+        --end
+        if string.find(reference_imagepath, "warhammer2") then 
+            saveButton:SetImagePath("ui/icon_quick_save2.png") 
         else
-            saveButton:SetImage("ui/icon_quick_save2.png") 
+            saveButton:SetImagePath("ui/icon_quick_save.png")
         end
         saveButton:Resize(referenceButtonW, referenceButtonH)
-        saveButton:MoveTo(referenceButtonX - 1.5*referenceButtonW - referenceButtonW, referenceButtonY)
+        saveButton:MoveTo(referenceButtonX - 3.5*referenceButtonW, referenceButtonY)
         saveButton:SetState("hover")
         saveButton:SetTooltipText("save prefered speed")
         saveButton:SetState("active")
@@ -149,6 +166,9 @@ local function createSpeedUI()
                     core:svr_save_string("svr_battleSpeed", tostring(number))
                     loadButton:SetDisabled(false)
                     loadButton:SetOpacity(255)
+                    loadButton:SetState("hover")
+                    loadButton:SetTooltipText("load prefered speed: "..tostring(number))
+                    loadButton:SetState("active")
                 end
             end,
             true
@@ -158,18 +178,27 @@ local function createSpeedUI()
         loadButton = UIComponent(speed_buttons:Find("loadButton"))
         speed_buttons:Adopt(loadButton:Address())
         loadButton:PropagatePriority(referenceButton:Priority())
-        if (core:svr_load_bool("primary_defender_is_player") and string.find(core:svr_load_string("primary_defender_subculture"), "wh_")) or 
-        (core:svr_load_bool("primary_attacker_is_player") and string.find(core:svr_load_string("primary_attacker_subculture"), "wh_")) then
-            loadButton:SetImage("ui/icon_load.png") 
+        --if (core:svr_load_bool("primary_defender_is_player") and string.find(core:svr_load_string("primary_defender_subculture"), "wh_")) or 
+        --(core:svr_load_bool("primary_attacker_is_player") and string.find(core:svr_load_string("primary_attacker_subculture"), "wh_")) then
+        --    loadButton:SetImagePath("ui/icon_load.png") 
+        --else
+        --    loadButton:SetImagePath("ui/icon_load2.png") 
+        --end
+        if string.find(reference_imagepath, "warhammer2") then 
+            loadButton:SetImagePath("ui/icon_load2.png") 
         else
-            loadButton:SetImage("ui/icon_load2.png") 
+            loadButton:SetImagePath("ui/icon_load.png")
         end
         loadButton:Resize(referenceButtonW, referenceButtonH)
-        loadButton:MoveTo(referenceButtonX - 1.5*referenceButtonW - referenceButtonW, referenceButtonY + referenceButtonH)
+        loadButton:MoveTo(referenceButtonX - 4.5*referenceButtonW, referenceButtonY)
         loadButton:SetState("hover")
         loadButton:SetTooltipText("load prefered speed")
         loadButton:SetState("active")
-        if not tonumber(core:svr_load_string("svr_battleSpeed")) then 
+        if tonumber(core:svr_load_string("svr_battleSpeed")) then 
+            loadButton:SetState("hover")
+            loadButton:SetTooltipText("load prefered speed: "..tostring(core:svr_load_string("svr_battleSpeed")))
+            loadButton:SetState("active")
+        else
             loadButton:SetDisabled(true)
             loadButton:SetTooltipText("no prefered speed found")
             loadButton:SetOpacity(50)
@@ -185,15 +214,18 @@ local function createSpeedUI()
             end,
             true
         )
+        bar_small_top:Resize(bar_small_top_W + 4.5*referenceButtonW, bar_small_top_H)
+    else
+        bar_small_top:Resize(bar_small_top_W + 2.5*referenceButtonW, bar_small_top_H)
     end
 end
 
 core:add_listener(
-    "sm0_battleStart",
+    "sm0_battleStart_ComponentLClickUp",
     "ComponentLClickUp",
     function(context)
         return context.string == "pause" or context.string == "slow_mo" or context.string == "play" 
-        or context.string == "fwd" or context.string == "ffwd" or context.string == "button_battle_start"
+        or context.string == "fwd" or context.string == "ffwd" or (context.string == "button_battle_start" and not string.find(core:svr_load_string("battle_type"), "ambush"))
 	end,
     function(context)
         createSpeedUI()
@@ -202,7 +234,7 @@ core:add_listener(
 )
 
 core:add_listener(
-    "sm0_speedButtons",
+    "sm0_speedButtons_ComponentLClickUp",
     "ComponentLClickUp",
     true,
     function(context)
@@ -221,7 +253,7 @@ core:add_listener(
     true
 )
 core:add_listener(
-    "sm0_tactical_map",
+    "sm0_tactical_map_ComponentLClickUp",
     "ComponentLClickUp",
     function(context)
         return context.string == "button_tactical_map"
@@ -233,7 +265,7 @@ core:add_listener(
 )
 
 core:add_listener(
-    "sm0_unselectAll",
+    "sm0_toggle_ui_ShortcutTriggered",
     "ShortcutTriggered",
     function(context)
         return context.string == "toggle_ui_with_borders" or context.string == "toggle_ui" or context.string == "show_tactical_map"

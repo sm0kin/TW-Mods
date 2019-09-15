@@ -12,7 +12,8 @@ local OccupationOptionID = {
 	["1913039137"] = "wh2_sm0_sc_hef_high_elves_occupation_decision_confederate",
 	["1913039138"] = "wh2_sm0_sc_wef_wood_elves_occupation_decision_confederate",
 	["1913039139"] = "wh2_sm0_sc_vmp_vampire_counts_occupation_decision_confederate",
-	["1913039140"] = "wh2_sm0_sc_tmb_tomb_kings_occupation_decision_confederate"
+	["1913039140"] = "wh2_sm0_sc_tmb_tomb_kings_occupation_decision_confederate",
+	["1913039141"] = "wh2_sm0_sc_teb_teb_occupation_decision_confederate"
 } --: map<string, string>
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -22,6 +23,10 @@ local function initMCMconfed()
 	if not confed_option_tmb or confed_option_tmb == "yield" then
 		cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
 	end
+	local confed_option_teb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") -- no teb / kislev subculture?
+	if (not confed_option_tmb or confed_option_tmb == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
+        cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
+    end
 	local mcm = _G.mcm
 	if not not mcm then
 		local confed = mcm:register_mod("force_confederation", "Force Confederation", "Adds Force Confederation as occupation option.")
@@ -176,6 +181,11 @@ function sm0_confed()
 						option.enable_payment = false
 					end
 				end	
+				if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then 
+					option.offer = true
+					option.accept = true
+					option.enable_payment = false            
+				end
 			elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh_dlc05_sc_wef_wood_elves" then
 				option.accept = false
 				option.enable_payment = false        	
@@ -194,7 +204,7 @@ function sm0_confed()
 						cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
 						cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
 					end
-					if (confed_option == "yield" or confed_option == nil) and subculture == "wh_main_sc_brt_bretonnia" then
+					if (confed_option == "yield" or confed_option == nil) and subculture == "wh_main_sc_brt_bretonnia" and cm:get_faction(faction_name):is_human() then
 						local bret_confederation_tech = {
 							{tech = "tech_dlc07_brt_heraldry_artois", faction = "wh_main_brt_artois"},
 							{tech = "tech_dlc07_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
@@ -243,7 +253,7 @@ function sm0_confed()
 					local frame = find_uicomponent(core:get_ui_root(), "settlement_captured", tostring(currentID))
 					if frame then
 						icon = find_uicomponent(core:get_ui_root(), "settlement_captured", "button_parent", tostring(currentID), "frame", "icon_parent", "icon_vassals")
-						icon:SetImage("UI/skins/default/treaty_confederation.png")
+						icon:SetImagePath("UI/skins/default/treaty_confederation.png")
 						icon:SetTooltipText("Forces the enemy faction to accept Confederation. All their armies will be disbanded and their legendary lords will be forced to serve under your rule.", true)
 						local button = find_uicomponent(core:get_ui_root(), "settlement_captured", tostring(currentID), "option_button")
 						if FACTION_GARRISON_ATTACKED == nil then

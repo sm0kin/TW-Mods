@@ -64,7 +64,7 @@ local function setupRankListener(quests, subtype)
 					cm:set_saved_value(current_saved_name, true)
 					
 					-- give the ancillary to the character
-					cm:force_add_ancillary(cm:char_lookup_str(character), current_ancillary_key)
+					cm:force_add_ancillary(character, current_ancillary_key, true, false)
 				end,
 				false
 			)

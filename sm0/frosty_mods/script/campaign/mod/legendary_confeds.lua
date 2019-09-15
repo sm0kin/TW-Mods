@@ -7,13 +7,13 @@ local alastar_quests = {
 -- factions with legendary lords
 local subcultures_factions = {
     ["wh2_main_sc_hef_high_elves"] = {"wh2_main_hef_eataine", "wh2_main_hef_order_of_loremasters", "wh2_main_hef_avelorn", "wh2_main_hef_nagarythe"},
-    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_tlaqua"},
+    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_tlaqua", "wh2_main_lzd_itza"}, --, "wh2_dlc13_lzd_spirits_of_the_jungle"},
     ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_naggarond", "wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread"},
     ["wh2_main_sc_skv_skaven"] = {"wh2_main_skv_clan_skyre", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus"},
     ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_khemri", "wh2_dlc09_tmb_lybaras", "wh2_dlc09_tmb_exiles_of_nehek"}, --, "wh2_dlc09_tmb_followers_of_nagash"
     --cst
     ["wh_main_sc_nor_norsca"] = {"wh_dlc08_nor_norsca", "wh_dlc08_nor_wintertooth"},
-    ["wh_main_sc_emp_empire"] = {"wh_main_emp_empire", "wh_main_emp_middenland"},
+    ["wh_main_sc_emp_empire"] = {"wh_main_emp_empire", "wh_main_emp_middenland", "wh2_dlc13_emp_golden_order", "wh2_dlc13_emp_the_huntmarshals_expedition"},
     ["wh_main_sc_dwf_dwarfs"] = {"wh_main_dwf_dwarfs", "wh_main_dwf_karak_kadrin", "wh_main_dwf_karak_izor"},
     ["wh_main_sc_brt_bretonnia"] = {"wh_main_brt_bretonnia", "wh_main_brt_bordeleaux", "wh_main_brt_carcassonne"},
     ["wh_dlc05_sc_wef_wood_elves"] = {"wh_dlc05_wef_wood_elves", "wh_dlc05_wef_argwylon"},
@@ -39,7 +39,7 @@ local mixu1_subcultures_factions = {
 
 local mixu2_subcultures_factions = {
     ["wh2_main_sc_hef_high_elves"] = {"wh2_main_hef_saphery", "wh2_main_hef_caledor", "wh2_main_hef_chrace"},
-    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_xlanhuapec", "wh2_main_lzd_itza", "wh2_main_lzd_tlaxtlan", "wh2_main_lzd_tlaqua"},
+    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_xlanhuapec", "wh2_main_lzd_tlaxtlan", "wh2_main_lzd_tlaqua"},
     ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_scourge_of_khaine"},
     ["wh2_main_sc_skv_skaven"] = {},
     ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_numas"},
@@ -66,7 +66,7 @@ local function ancillaryOnRankUp(quests, subtype)
                 return context:character():character_subtype(subtype) and context:character():rank() >= rank 
             end,
             function(context)
-                cm:force_add_ancillary(cm:char_lookup_str(context:character()), ancillary)
+                cm:force_add_ancillary(context:character(), ancillary, true, false)
             end,
             false
         )
@@ -103,7 +103,7 @@ end
 local function spamLords(subtype, faction)
 	local factionCA = cm:get_faction(faction)
     local x, y
-    if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction, factionCA:home_region():name(), false, false, 9) end
+    if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction, factionCA:home_region():name(), false, true, 5) end
     for i = 1, 20 do
         cm:create_force(
             faction,
@@ -147,25 +147,25 @@ local function spawnMissingLords(faction)
     end
 end
 
---v function(faction: string, regionList: CA_REGION_LIST, x: number, y: number, army: string)
-local function reviveFaction(faction, regionList, x, y, army)
+--v function(faction: string, home_region: CA_REGION, regionList: CA_REGION_LIST, x: number, y: number, army: string)
+local function reviveFaction(faction, home_region, regionList, x, y, army)
     local subculture = cm:get_faction(faction):subculture()
-    local startRegion = regionList:item_at(0)
     cm:create_force(
         faction,
         army,
-        startRegion:name(),
+        home_region:name(),
         x,
         y,
         true,
         function(cqi)
-            cm:callback(function()
-                for i = 0, regionList:num_items() - 1 do
-                    local currentRegion = regionList:item_at(i)
-                    cm:transfer_region_to_faction(currentRegion:name(), faction)
-                end
-                end, 1
-            )
+            if regionList then
+                cm:callback(function()
+                    for i = 0, regionList:num_items() - 1 do
+                        local currentRegion = regionList:item_at(i)
+                        cm:transfer_region_to_faction(currentRegion:name(), faction)
+                    end
+                end, 1)
+            end
         end
     )
 end
@@ -195,8 +195,15 @@ local function confed(subcultures_factions_table)
                     local factionCA = cm:get_faction(faction)
                     if factionCA and not factionCA:is_human() and cm:get_saved_value("mcm_tweaker_frostyConfed_player"..i.."|"..faction.."_value") ~= "disable" then
                         local regionList = factionCA:region_list()
+                        local home_region 
+                        if factionCA:has_home_region() then 
+                            home_region = factionCA:home_region()
+                        else
+                            home_region = factionCA:military_force_list():item_at(0):general_character():region() 
+                        end
                         local xPos, yPos
                         local army = ""
+                        local char_cqi_table = {} --:vector<CA_CQI>
                         if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" then
                             local mfList = factionCA:military_force_list()
                             for j = 0, mfList:num_items() - 1 do
@@ -217,8 +224,27 @@ local function confed(subcultures_factions_table)
                             for l = 0, charList:num_items() - 1 do
                                 local char = charList:item_at(l)
                                 local cqi = char:command_queue_index()
-                                cm:kill_character(cqi, true, false)
+                                if not wh_faction_is_horde(factionCA) then
+                                    cm:kill_character(cqi, true, false)
+                                else
+                                    table.insert(char_cqi_table, cqi)
+                                end
                             end
+                        end
+                        if wh_faction_is_horde(factionCA) then
+                            core:add_listener(
+                                "frosty_horde_FactionJoinsConfederation",
+                                "FactionJoinsConfederation",
+                                function(context)
+                                    return context:confederation():name() == humanFactions[i] and context:faction():name() == faction
+                                end,
+                                function(context)
+                                    for _, char_cqi in ipairs(char_cqi_table) do
+                                        cm:kill_character(char_cqi, true, false) 
+                                    end        
+                                end,
+                                false
+                            )
                         end
                         if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then 
                             if not not mcm or (humanFactions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" and faction ~= "wh2_dlc09_tmb_khemri" and faction ~= "wh2_dlc09_tmb_followers_of_nagash") then 
@@ -238,10 +264,11 @@ local function confed(subcultures_factions_table)
                         else
                             cm:force_confederation(humanFactions[i], faction)
                         end
-                        if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" then
+                        if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" and not faction == "wh2_dlc13_lzd_spirits_of_the_jungle" then
                             cm:callback(function()
-                                reviveFaction(faction, regionList, xPos, yPos, army)
+                                reviveFaction(faction, home_region, regionList, xPos, yPos, army)
                                 local charList =  humanFaction:character_list()
+                                local spawn_offset = 3
                                 for o = 0, charList:num_items() - 1 do
                                     local char = charList:item_at(o)
                                     local cqi = char:command_queue_index()
@@ -260,19 +287,20 @@ local function confed(subcultures_factions_table)
                                                 end
                                             end
                                         end
-                                        local spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], x, y, false)
-                                        local valid = false
-                                        while not valid do
-                                            if spawnX ~= -1 then
-                                                valid = true
-                                                break
-                                            end
-                                            local square = {x - 5, x + 5, y - 5, y + 5}
-                                            spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], cm:random_number(square[2], square[1]), cm:random_number(square[4], square[3]), false)
-                                        end
-                                        if valid then
+                                        local spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], x, y, true, spawn_offset)
+                                        spawn_offset = spawn_offset + 1
+                                        --local valid = false
+                                        --while not valid do
+                                        --    if spawnX ~= -1 then
+                                        --        valid = true
+                                        --        break
+                                        --    end
+                                        --    local square = {x - 5, x + 5, y - 5, y + 5}
+                                        --    spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], cm:random_number(square[2], square[1]), cm:random_number(square[4], square[3]), true)
+                                        --end
+                                        --if valid then
                                             cm:teleport_to(cm:char_lookup_str(cqi), spawnX, spawnY, true)
-                                        end
+                                        --end
                                     end
                                 end
                             end, 1)
@@ -331,7 +359,9 @@ local function remove_confed_penalties(subcultures_factions_table)
         "wh_main_bundle_confederation_dwf",
         "wh_main_bundle_confederation_emp",
         "wh_main_bundle_confederation_brt",
-        "wh_main_bundle_confederation_wef"
+        "wh_main_bundle_confederation_wef",
+        "wh_dlc03_beastmen_confederation_help",
+        "wh2_main_bundle_confederation_tmb"
     } --:vector<string>
     for i = 1, #bundles do
         for _, factions in pairs(subcultures_factions_table) do

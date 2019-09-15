@@ -12,7 +12,7 @@ require("sm0/sm0_abandon/script/campaign/mod/sm0_abandon")
 -- SAVE CAMERA SETTINGS
 require("sm0/sm0_save_cam_settings/script/table_save")
 require("sm0/sm0_save_cam_settings/script/campaign/mod/sm0_save_cam")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_save_cam")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_save_cam")
 --require("sm0/sm0_save_cam_settings/script/export_helpers_sm0_save_cam")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_save_cam")
 
@@ -57,13 +57,14 @@ require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 
 
 -- ADJUSTABLE BATTLE SPEED
---require("sm0/sm0_battle_speed/script/battle/mod/battle_speed")
+require("sm0/sm0_battle_speed/script/battle/mod/battle_speed")
 require("sm0/sm0_battle_speed/script/campaign/mod/sm0_battle_speed")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/battle/battle_speed")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/battle/mod/battle_speed")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_battle_speed")
 
-
+--log
 --require("sm0/ml_log")
-
+require("sm0/!!!sm0_log/script/mod/sm0_log")
 
 -- BETTER FACTION SELECTION
 --require("sm0/sm0_frontend/script/frontend/mod/sm0_faction_selection")
@@ -80,14 +81,18 @@ require("sm0/grant independance/script/campaign/mod/sm0_revive")
 
 require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
---require("sm0/wec_one_button_respec/script/export_helpers__obr")
+require("sm0/wec_one_button_respec/script/export_helpers__obr")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__mcm_ui")
 
 --frostydemise
+require("sm0/frosty_mods/script/campaign/mod/frosty_horde")
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
 require("sm0/frosty_mods/script/campaign/mod/legendary_confeds")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/frosty_horde")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/frosty_tiers")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/make_karl_great_again")
 
 --ships
 require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_lokhir")
@@ -113,3 +118,10 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 
 --ai exp
 require("sm0/sm0_ai_exp/script/campaign/mod/sm0_ai_exp")
+
+--difficulty
+--require("sm0/difficulty/script/campaign/mod/difficulty")
+
+--slann options
+require("sm0/sm0_slann_options/script/campaign/mod/sm0_slann_options")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_slann_options")

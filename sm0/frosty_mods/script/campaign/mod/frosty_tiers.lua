@@ -19,6 +19,9 @@ local regions_table = {
     "wh_main_southern_oblast_kislev", 
     "wh_main_talabecland_talabheim", 
     "wh_main_tilea_miragliano", 
+    "wh2_main_solland_pfeildorf",  --(Gelt ME)
+    "wh2_main_the_creeping_jungle_temple_of_kara",  --(Markus ME)
+    "wh2_main_vor_scorpion_coast_temple_of_tlencan",  --(Markus Vor)
     -- VAMPIRE COUNTS
     "wh_main_eastern_sylvania_castle_drakenhof", 
     "wh_main_northern_grey_mountains_blackstone_post", 
@@ -73,7 +76,8 @@ local regions_table = {
     "wh2_main_vor_straits_of_lothern_lothern", 
     "wh2_main_volcanic_islands_the_star_tower", 
     "wh2_main_vor_the_turtle_isles_great_turtle_isle", 
-    "wh2_main_avelorn_gaean_vale", 
+    "wh2_main_avelorn_gaean_vale",
+    "wh2_main_vor_avelorn_gaean_vale", 
     "wh2_main_vor_the_broken_land_black_creek_spire", 
     "wh2_main_the_black_coast_arnheim", 
     -- VAMPIRE COAST
@@ -93,12 +97,9 @@ local function upgrade_capitals(tier, ownerScope, settlementScope)
     local function upgrade(currentRegion)
         local regionCA = cm:get_region(currentRegion)
         if regionCA and not regionCA:is_abandoned() then
-            local slots = regionCA:slot_list()
-            currentSlot = slots:item_at(0)
-            local currentBuilding = currentSlot:building():name()
-            currentBuilding = string.gsub(currentBuilding, "_%d", "_"..tier)
+            local settlement = regionCA:settlement()
             if (ownerScope == "playersOnly" and regionCA and regionCA:owning_faction():is_human()) or (ownerScope == "aiOnly" and regionCA and not regionCA:owning_faction():is_human()) or ownerScope == "both" then
-                cm:instantly_upgrade_building_in_region(currentRegion, 0, currentBuilding)
+                cm:instantly_set_settlement_primary_slot_level(settlement, tonumber(tier))
             end
         end
     end
@@ -145,6 +146,15 @@ local function upgrade_horde(tier, scope)
                     if currentChar and currentChar:has_military_force() then
                         local mfCQI = currentChar:military_force():command_queue_index()
                         cm:add_building_to_force(mfCQI, "wh2_dlc11_vampirecoast_ship_captains_cabin_"..tier) 
+                    end
+                end
+            elseif currentFaction and currentFaction:culture() == "wh2_main_lzd_lizardmen" then
+                local characterList = currentFaction:character_list()
+                for j = 0, characterList:num_items() - 1 do
+                    local currentChar = characterList:item_at(j)
+                    if currentChar and currentChar:has_military_force() then
+                        local mfCQI = currentChar:military_force():command_queue_index()
+                        cm:add_building_to_force(mfCQI, "wh2_dlc13_horde_lizardmen_ziggurat_"..tier) 
                     end
                 end
             end
