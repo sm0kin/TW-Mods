@@ -30,8 +30,9 @@ require("sm0/@hidden_legendaries/script/campaign/mod/sm0_hidden_legendaries")
 -- MIXED LORES
 require("sm0/sm0_mixedlores/script/export_helpers_sm0_mixedLores")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_mixedLores")
+require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_sm0_lzd_slann_mage_priest_mixed")
+require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_sm0_lzd_slann_mage_priest_mixed_horde")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_main_lzd_lord_mazdamundi")
-require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_main_lzd_slann_mage_priest")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_main_def_morathi")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_main_hef_teclis")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_dlc10_hef_alarielle")
@@ -125,3 +126,14 @@ require("sm0/sm0_ai_exp/script/campaign/mod/sm0_ai_exp")
 --slann options
 require("sm0/sm0_slann_options/script/campaign/mod/sm0_slann_options")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_slann_options")
+
+--delete lord button
+require("sm0/sm0_delete/script/campaign/mod/sm0_delete")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_delete")
+
+--cbf
+require("sm0/cbf/script/campaign/mod/sm0_missing_anc")
+require("sm0/cbf/script/campaign/mod/sm0_horde")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_missing_anc")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_horde")
+

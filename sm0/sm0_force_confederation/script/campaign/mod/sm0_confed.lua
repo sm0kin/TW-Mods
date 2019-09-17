@@ -215,8 +215,8 @@ function sm0_confed()
 							{tech = "tech_dlc07_brt_heraldry_parravon", faction = "wh_main_brt_parravon"}
 						} --:vector<map<string, string>>
 						for i = 1, #bret_confederation_tech do
-							local has_tech = faction:has_technology(bret_confederation_tech[i].tech);
-							cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true);
+							local has_tech = faction:has_technology(bret_confederation_tech[i].tech)
+							cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true)
 						end
 					end
 				end, 1, "changeDiplomacyOptions"

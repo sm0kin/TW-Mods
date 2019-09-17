@@ -426,7 +426,7 @@
 --# assume CM.modify_next_autoresolve_battle: method(attacker_win_chance: number, defender_win_chance: number, attacker_losses_modifier: number, defender_losses_modifier: number, wipe_out_loser: boolean)
 --events
 --# assume CM.trigger_incident_with_targets: method(owning_faction_cqi: CA_CQI, incident_key: string, faction_cqi: CA_CQI | 0, secondary_faction_cqi: CA_CQI | 0, character_cqi: CA_CQI | 0, military_force_cqi: CA_CQI | 0, region_cqi: CA_CQI | 0, settlement_cqi: CA_CQI | 0)
---# assume CM.trigger_dilemma: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean?, whitelist: boolean?)
+--# assume CM.trigger_dilemma: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean?) --> boolean
 --# assume CM.trigger_incident: method(factionName: string, incidentKey: string, fireImmediately: boolean?, whitelist: boolean?)
 --# assume CM.trigger_mission: method(faction_key: string, mission_key: string, trigger_immediately: boolean)
 --# assume CM.cancel_custom_mission: method(faction_key: string, mission_key: string)
@@ -616,6 +616,10 @@
 --# assume CA_MILITARY_FORCE.is_armed_citizenry: method() --> boolean
 --# assume CA_MILITARY_FORCE.morale: method() --> number
 --# assume CA_MILITARY_FORCE.active_stance: method() --> string
+--# assume CA_MILITARY_FORCE.faction: method() --> CA_FACTION
+----# assume CA_MILITARY_FORCE.force_type: method() --> FORCE_TYPE
+
+
 
 -- MILITARY FORCE LIST
 --# assume CA_MILITARY_FORCE_LIST.num_items: method() --> number
@@ -764,6 +768,7 @@
 --# assume CA_FACTION.imperium_level: method() --> number
 --# assume CA_FACTION.factions_of_same_subculture: method() --> CA_FACTION_LIST
 --# assume CA_FACTION.foreign_slot_managers: method() --> CA_FOREIGN_SLOT_LIST
+--# assume CA_FACTION.ancillary_exists: method(ancillary: string) --> boolean
 
 -- FACTION LIST
 --# assume CA_FACTION_LIST.num_items: method() --> number

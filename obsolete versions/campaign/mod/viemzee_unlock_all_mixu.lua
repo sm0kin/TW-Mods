@@ -1,1 +1,0 @@
--- main script checks if this file exist (vfs.exists("script/campaign/mod/viemzee_unlock_all_mixu.lua"))

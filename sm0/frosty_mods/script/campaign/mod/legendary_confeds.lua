@@ -7,7 +7,7 @@ local alastar_quests = {
 -- factions with legendary lords
 local subcultures_factions = {
     ["wh2_main_sc_hef_high_elves"] = {"wh2_main_hef_eataine", "wh2_main_hef_order_of_loremasters", "wh2_main_hef_avelorn", "wh2_main_hef_nagarythe"},
-    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_tlaqua", "wh2_main_lzd_itza"}, --, "wh2_dlc13_lzd_spirits_of_the_jungle"},
+    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_tlaqua", "wh2_main_lzd_itza", "wh2_dlc13_lzd_spirits_of_the_jungle"},
     ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_naggarond", "wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread"},
     ["wh2_main_sc_skv_skaven"] = {"wh2_main_skv_clan_skyre", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus"},
     ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_khemri", "wh2_dlc09_tmb_lybaras", "wh2_dlc09_tmb_exiles_of_nehek"}, --, "wh2_dlc09_tmb_followers_of_nagash"
@@ -39,7 +39,7 @@ local mixu1_subcultures_factions = {
 
 local mixu2_subcultures_factions = {
     ["wh2_main_sc_hef_high_elves"] = {"wh2_main_hef_saphery", "wh2_main_hef_caledor", "wh2_main_hef_chrace"},
-    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_xlanhuapec", "wh2_main_lzd_tlaxtlan", "wh2_main_lzd_tlaqua"},
+    ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_xlanhuapec", "wh2_main_lzd_tlaxtlan"},
     ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_scourge_of_khaine"},
     ["wh2_main_sc_skv_skaven"] = {},
     ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_numas"},
@@ -130,10 +130,11 @@ end
 --v function(faction: string)
 local function spawnMissingLords(faction)
     local ai_starting_generals = {
-		{["id"] = "2140784160",	["forename"] = "names_name_2147358917",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "pro01_dwf_grombrindal"},			            -- Grombrindal
-		{["id"] = "2140783606",	["forename"] = "names_name_2147345906",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_azhag_the_slaughterer"},		        -- Azhag the Slaughterer
-		{["id"] = "2140784146",	["forename"] = "names_name_2147358044",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "dlc04_vmp_helman_ghorst"},	        -- Helman Ghorst
-        {["id"] = "2140784202",	["forename"] = "names_name_2147345124",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "pro02_vmp_isabella_von_carstein"}    -- Isabella von Carstein
+        {["id"] = "2140784160",	["forename"] = "names_name_2147358917",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "pro01_dwf_grombrindal"},                 -- Grombrindal
+		{["id"] = "2140784136",	["forename"] = "names_name_2147358013",	["faction"] = "wh_main_emp_empire", ["subtype"] = "dlc04_emp_volkmar"},                     -- Volkmar the Grim
+		{["id"] = "2140783606",	["forename"] = "names_name_2147345906",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_azhag_the_slaughterer"},         -- Azhag the Slaughterer
+        {["id"] = "2140784146",	["forename"] = "names_name_2147358044",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "dlc04_vmp_helman_ghorst"},       -- Helman Ghorst
+        {["id"] = "2140784202",	["forename"] = "names_name_2147345124",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "pro02_vmp_isabella_von_carstein"} -- Isabella von Carstein
     } --:vector<map<string, string>>
 
 	for i = 1, #ai_starting_generals do
@@ -193,7 +194,7 @@ local function confed(subcultures_factions_table)
             for _, faction in ipairs(subcultures_factions_table[subculture]) do
                 if faction then
                     local factionCA = cm:get_faction(faction)
-                    if factionCA and not factionCA:is_human() and cm:get_saved_value("mcm_tweaker_frostyConfed_player"..i.."|"..faction.."_value") ~= "disable" then
+                    if factionCA and not factionCA:is_dead() and not factionCA:is_human() and cm:get_saved_value("mcm_tweaker_frostyConfed_player"..i.."|"..faction.."_value") ~= "disable" then
                         local regionList = factionCA:region_list()
                         local home_region 
                         if factionCA:has_home_region() then 
@@ -241,7 +242,7 @@ local function confed(subcultures_factions_table)
                                 function(context)
                                     for _, char_cqi in ipairs(char_cqi_table) do
                                         cm:kill_character(char_cqi, true, false) 
-                                    end        
+                                    end  
                                 end,
                                 false
                             )
@@ -264,9 +265,9 @@ local function confed(subcultures_factions_table)
                         else
                             cm:force_confederation(humanFactions[i], faction)
                         end
-                        if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" and not faction == "wh2_dlc13_lzd_spirits_of_the_jungle" then
+                        if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") ~= "enable" then
                             cm:callback(function()
-                                reviveFaction(faction, home_region, regionList, xPos, yPos, army)
+                                if faction ~= "wh2_dlc13_lzd_spirits_of_the_jungle" then reviveFaction(faction, home_region, regionList, xPos, yPos, army) end
                                 local charList =  humanFaction:character_list()
                                 local spawn_offset = 3
                                 for o = 0, charList:num_items() - 1 do
@@ -393,7 +394,8 @@ function legendary_confeds()
             if subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" or (vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") and subculture == "wh2_dlc09_sc_tmb_tomb_kings") then 
                 if subcultures_factions[subculture]  then 
                     for _, faction in ipairs(subcultures_factions[subculture]) do
-                        if faction and not cm:get_faction(faction):is_human() then 
+                        local faction_CA = cm:get_faction(faction)
+                        if faction_CA and not faction_CA:is_dead() and not faction_CA:is_human() then 
                             local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
                             if (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture())
                             or (humanFactions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (humanFactions[2] == "wh2_dlc09_tmb_followers_of_nagash")
@@ -409,19 +411,21 @@ function legendary_confeds()
                 end
                 if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") and mixu1_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 1 (script path might change)
                     for _, faction in ipairs(mixu1_subcultures_factions[subculture]) do
-                        if faction and not cm:get_faction(faction):is_human() then
+                        local faction_CA = cm:get_faction(faction)
+                        if faction_CA and not faction_CA:is_dead() and not faction_CA:is_human() then
                             local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
-                            playerConfederations:add_option("disable", "Disable", "")
                             playerConfederations:add_option("enable", "Enable", "")
+                            playerConfederations:add_option("disable", "Disable", "")
                         end
                     end
                 end
                 if vfs.exists("script/campaign/mod/mixu_darkhand.lua") and mixu2_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 2 (script path might change)
                     for _, faction in ipairs(mixu2_subcultures_factions[subculture]) do
-                        if faction and not cm:get_faction(faction):is_human() then 
+                        local faction_CA = cm:get_faction(faction)
+                        if faction_CA and not faction_CA:is_dead() and not faction_CA:is_human() then 
                             local playerConfederations = frostyConfed:add_tweaker("player"..i.."|"..faction, "Player-"..i.." Confederation with "..effect.get_localised_string("factions_screen_name_"..faction), "")
-                            playerConfederations:add_option("disable", "Disable", "")
                             playerConfederations:add_option("enable", "Enable", "")
+                            playerConfederations:add_option("disable", "Disable", "")
                         end
                     end
                 end
@@ -449,7 +453,41 @@ function legendary_confeds()
             cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
         end
         if cm:is_new_game() then
-            if not cm:is_multiplayer() or (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture()) then
+            if not cm:is_multiplayer() then
+                cm:disable_event_feed_events(true, "all", "", "")
+                confed(subcultures_factions)
+                cm:callback(function() remove_confed_penalties(subcultures_factions) end, 1)
+                cm:callback(function() cm:disable_event_feed_events(false, "all", "", "") end, 2)
+                core:progress_on_loading_screen_dismissed(
+                function()
+                    cm:callback(function() 
+                        if cm:is_any_cutscene_running() then 
+                            core:add_listener(
+                                "sm0_delayed_trigger",
+                                "ScriptEventCampaignCutsceneCompleted",
+                                function(context)
+                                    return cm:model():turn_number() <= 1 and not cm:is_multiplayer()
+                                end,
+                                function(context)
+                                    cm:disable_event_feed_events(true, "all", "", "")
+                                    if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
+                                    if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then confed(mixu2_subcultures_factions) end -- compatibility for mixu's legendary lords 2 (script path might change)
+                                    cm:callback(function() remove_confed_penalties(subcultures_factions) end, 1)
+                                    cm:callback(function() cm:disable_event_feed_events(false, "all", "", "") end, 2)
+                                end,
+                                false
+                            );
+                        else
+                            cm:disable_event_feed_events(true, "all", "", "")
+                            if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
+                            if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then confed(mixu2_subcultures_factions) end -- compatibility for mixu's legendary lords 2 (script path might change)
+                            cm:callback(function() remove_confed_penalties(subcultures_factions) end, 1)
+                            cm:callback(function() cm:disable_event_feed_events(false, "all", "", "") end, 2)
+                        end   
+                    end, 0.1)
+                end
+            )
+            elseif (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture()) then
                 cm:disable_event_feed_events(true, "all", "", "")
                 confed(subcultures_factions)
                 if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
@@ -507,6 +545,23 @@ function legendary_confeds()
                     cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option.offer, option.accept, option.enable_payment)
                 end, 1, "changeDiplomacyOptions"
             )
+        end,
+        true
+    )
+
+    core:add_listener(
+        "frosty_horde_FactionJoinsConfederation",
+        "FactionJoinsConfederation",
+        function(context)
+            return cm:turn_number() == 1 and context:confederation():name() == "wh2_dlc13_lzd_spirits_of_the_jungle"
+        end,
+        function(context)
+            cm:callback(function()
+                local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
+                if defender_faction and not defender_faction:is_dead() then    
+                    cm:kill_all_armies_for_faction(defender_faction)
+                end
+            end, 2)      
         end,
         true
     )

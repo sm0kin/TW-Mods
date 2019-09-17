@@ -1,5 +1,5 @@
 local legacy_option = false
-
+--# assume global handover_nakai_region: function()
 --v function()
 local function RDLOG_reset()
 	if not __write_output_to_logfile then
@@ -469,15 +469,15 @@ local alastar_quests = {
 } --:vector<{string, number}>
 
 local locked_ai_generals = {
-    {["id"] = "2140784160",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "pro01_dwf_grombrindal"},			             -- Grombrindal
-    {["id"] = "2140783606",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_azhag_the_slaughterer"},		         -- Azhag the Slaughterer
-    {["id"] = "2140784146",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "dlc04_vmp_helman_ghorst"},	         -- Helman Ghorst
-    {["id"] = "2140784202",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "pro02_vmp_isabella_von_carstein"},     -- Isabella von Carstein
-    --{["id"] = "2140783648",	["faction"] = "wh2_dlc13_emp_golden_order", ["subtype"] = "emp_balthasar_gelt"},             -- Balthasar Gelt
-    {["id"] = "2140784136",	["faction"] = "wh_main_emp_empire", ["subtype"] = "dlc04_emp_volkmar"} ,                         -- Volkmar the Grim
-    --{["id"] = "",	["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar"},			             -- Alastar
-    {["id"] = "2140784127",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc03_bst_malagor"}, 		                 -- Malagor
-    {["id"] = "2140784189",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc05_bst_morghur"}			             -- Morghur
+    {["id"] = "2140784160",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "pro01_dwf_grombrindal"},                         -- Grombrindal
+    {["id"] = "2140783606",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_azhag_the_slaughterer"},                 -- Azhag the Slaughterer
+    {["id"] = "2140784146",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "dlc04_vmp_helman_ghorst"},               -- Helman Ghorst
+    {["id"] = "2140784202",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "pro02_vmp_isabella_von_carstein"},        -- Isabella von Carstein
+    --{["id"] = "2140783648",	["faction"] = "wh2_dlc13_emp_golden_order", ["subtype"] = "emp_balthasar_gelt"},                -- Balthasar Gelt
+    {["id"] = "2140784136",	["faction"] = "wh_main_emp_empire", ["subtype"] = "dlc04_emp_volkmar"},                             -- Volkmar the Grim
+    --{["id"] = "",	["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar"},                         -- Alastar
+    {["id"] = "2140784127",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc03_bst_malagor"},                          -- Malagor
+    {["id"] = "2140784189",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc05_bst_morghur"}                           -- Morghur
 } --:vector<map<string, string>> 
 
 --v function(quests: vector<{string, number}>, subtype: string)
@@ -528,12 +528,12 @@ end
 local function is_valid_spawn_coordinate(x, y)
     local is_valid = true
     if is_number(x) and is_number(y) and x ~= -1 and y ~= -1 then
-        local faction_list = cm:model():world():faction_list();
+        local faction_list = cm:model():world():faction_list()
         for i = 0, faction_list:num_items() - 1 do
-            local current_faction = faction_list:item_at(i);
-            local char_list = current_faction:character_list();
+            local current_faction = faction_list:item_at(i)
+            local char_list = current_faction:character_list()
             for j = 0, char_list:num_items() - 1 do
-                local current_char = char_list:item_at(j);
+                local current_char = char_list:item_at(j)
                 if current_char:logical_position_x() == x and current_char:logical_position_y() == y then
                     is_valid = false
                     --RDLOG("char_list/is_valid: false")
@@ -543,7 +543,7 @@ local function is_valid_spawn_coordinate(x, y)
             if is_valid then
                 local region_list = current_faction:region_list()
                 for j = 0, region_list:num_items() - 1 do
-                    local current_region = region_list:item_at(j);
+                    local current_region = region_list:item_at(j)
                     if current_region:settlement():logical_position_x() == x and current_region:settlement():logical_position_y() == y then
                         is_valid = false
                         --RDLOG("current_region/is_valid: false")
@@ -851,8 +851,8 @@ local function apply_diplomacy(faction_name)
                         {tech = "tech_dlc07_brt_heraldry_parravon", faction = "wh_main_brt_parravon"}
                     } --:vector<map<string, string>>
                     for i = 1, #bret_confederation_tech do
-                        local has_tech = faction:has_technology(bret_confederation_tech[i].tech);
-                        cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true);
+                        local has_tech = faction:has_technology(bret_confederation_tech[i].tech)
+                        cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true)
                     end
                 end
             end, 1, "changeDiplomacyOptions"
@@ -959,6 +959,7 @@ local function confed_revived(confederator, confederated)
                         end
                     end
                 end
+                if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", true) end
                 --cm:callback(function() 
                     cm:force_confederation(confederator:name(), confederated:name()) 
                 --end, 1)   
@@ -1190,7 +1191,7 @@ local function init()
                                 if ai_confederation_count <= 10 and prefered_faction  and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") 
                                 or cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "all" or (cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "lorefriendly" 
                                 and prefered_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() ~= "wh2_dlc09_tmb_the_sentinels")) 
-                                and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" then -- disabled for beatmen because they respawn all the time anyways
+                                and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" then -- disabled for beastmen/savage orcs because they are able to respawn anyways
                                     if are_lords_missing(current_faction) then
                                         RDLOG("["..ai_confederation_count.."] AI: "..current_faction:name().." intents to spawn missing lords!")
                                         spawn_missing_lords(prefered_faction, current_faction)
@@ -1269,7 +1270,7 @@ local function init()
         end,
         true
     )
-    --re-enable karl franz lock
+    --re-enable karl franz lock (data.pack script/campaign/main_campaign/wh_legendary_lords.lua)
     if faction_P1:name() == "wh_main_emp_empire" or (cm:is_multiplayer() and faction_P2:name() == "wh_main_emp_empire") then    
         core:remove_listener("2140783388" .. "_listener")
         core:add_listener(
@@ -1288,6 +1289,98 @@ local function init()
             false
         )
     end
+    -- nakai confed override (data.pack script/campaign/wh_campaign_setup.lua)
+    core:remove_listener("confederation_listener")
+    core:add_listener(
+		"confederation_listener",
+		"FactionJoinsConfederation",
+		true,
+		function(context)
+			local faction = context:confederation()
+			local faction_name = faction:name()
+			local faction_culture = faction:culture()
+			local faction_subculture = faction:subculture()
+			
+			-- exclude Empire, Beastmen, Norsca and Bretonnia - they can confederate as often as they like
+			if faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and faction_culture ~= "wh_main_brt_bretonnia" and faction_subculture ~= "wh_main_sc_nor_norsca" then
+				
+				out("Restricting confederation between [faction:" .. faction_name .. "] and [subculture:" .. faction_subculture .. "]")
+				cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. faction_subculture, "form confederation", false, true, false)
+				cm:add_turn_countdown_event(faction_name, 5, "ScriptEventConfederationExpired", faction_name)
+			end
+			
+			local source_faction = context:faction()
+			local source_faction_name = source_faction:name()
+			
+			-- remove deathhag after confederating/being confedrated with cult of pleasure
+			if source_faction:culture() == "wh2_main_def_dark_elves" and faction_name == "wh2_main_def_cult_of_pleasure" then
+				local char_list = faction:character_list()
+				
+				for i = 0, char_list:num_items() - 1 do
+					local current_char = char_list:item_at(i)
+					
+					if current_char:has_skill("wh2_main_skill_all_dummy_agent_actions_def_death_hag") then
+						cm:kill_character(current_char:command_queue_index(), true, true)
+					end
+				end
+			elseif faction_culture == "wh2_main_def_dark_elves" and source_faction_name == "wh2_main_def_cult_of_pleasure" then
+				local char_list = faction:character_list()
+				
+				for i = 0, char_list:num_items() - 1 do
+					local current_char = char_list:item_at(i)
+					
+					if current_char:has_skill("wh2_main_skill_all_dummy_agent_actions_def_death_hag_chs") then
+						cm:kill_character(current_char:command_queue_index(), true, true)
+					end
+				end
+			elseif faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
+				local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
+
+				if defender_faction:is_null_interface() == false then
+					if defender_faction:is_dead() == true and faction:has_home_region() == true then
+						local home_region = faction:home_region():name()
+
+						local x, y = cm:find_valid_spawn_location_for_character_from_settlement(
+							"wh2_dlc13_lzd_defenders_of_the_great_plan",
+							home_region,
+							false,
+							true
+						)
+
+						cm:create_force(
+							"wh2_dlc13_lzd_defenders_of_the_great_plan",
+							"wh2_main_lzd_inf_skink_cohort_0",
+							home_region,
+							x, y,
+							true,
+							function(char_cqi, force_cqi)
+								handover_nakai_region()
+								cm:kill_character(char_cqi, true, true)
+							end
+						)
+					else
+						handover_nakai_region()
+					end
+					
+					if defender_faction:is_vassal() == false then
+						cm:force_make_vassal("wh2_dlc13_lzd_spirits_of_the_jungle", "wh2_dlc13_lzd_defenders_of_the_great_plan")
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "all", false, false, false)
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "war", false, false, true)
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "break vassal", false, false, true)
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "war", false, true, false)
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "peace", false, true, false)
+					end
+				end
+            elseif source_faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
+                if not cm:get_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle") then
+                    cm:force_confederation(faction_name, "wh2_dlc13_lzd_defenders_of_the_great_plan")
+                else
+                    cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", false)
+                end
+			end
+		end,
+		true
+	)
 end
 
 function sm0_recruit_defeated()
