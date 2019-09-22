@@ -332,6 +332,7 @@
 --# assume CM.pending_battle_cache_is_quest_battle: method() --> boolean
 --# assume CM.add_first_tick_callback: method(function)
 --# assume CM.force_rebellion_in_region: method(region: string, unitsize: number, unit_list: string, xpos: number, ypos: number, suppress_message: boolean)
+--# assume CM.set_public_order_of_province_for_region: method(region: string, public_order: number)
 --# assume CM.spawn_unique_agent: method(faction_CQI: CA_CQI, agent_record: string, force: boolean)
 --# assume CM.spawn_unique_agent_at_region: method(faction_CQI: CA_CQI, agent_record: string, region_cqi: CA_CQI, force: boolean)
 --# assume CM.spawn_unique_agent_at_character: method(faction_CQI: CA_CQI, agent_record: string, character_cqi: CA_CQI, force: boolean)
@@ -351,6 +352,7 @@
 --# assume CM.save_named_value: method(name: string, value: any, context: WHATEVER?)
 --# assume CM.load_named_value: method(name: string, default: any, context: WHATEVER?) --> WHATEVER
 --# assume CM.disable_saving_game: method(opt: boolean)
+--# assume CM.autosave_at_next_opportunity: method()
 --serialisation
 --# assume CM.load_values_from_string: method(datastring: string) --> table
 --# assume CM.process_table_save: method(savetable: table, prev_string: string?) --> string

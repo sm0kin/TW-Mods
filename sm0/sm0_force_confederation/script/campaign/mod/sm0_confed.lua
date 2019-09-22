@@ -108,7 +108,6 @@ function sm0_confed()
 		true,
 		function(context)
 			local subculture_confed_disabled = {
-				--"wh2_dlc11_sc_cst_vampire_coast"
 				-- by default
 				"wh_main_sc_chs_chaos",
 				"wh_main_sc_grn_savage_orcs",
@@ -144,7 +143,8 @@ function sm0_confed()
 				"wh2_main_rogue_vashnaar",
 				"wh2_main_rogue_vauls_expedition",
 				"wh2_main_rogue_worldroot_rangers",
-				"wh2_main_rogue_wrath_of_nature"
+				"wh2_main_rogue_wrath_of_nature",
+				--"wh2_dlc11_sc_cst_vampire_coast"
 			} --:vector<string>
 			local faction_name = context.string
 			local faction = cm:get_faction(faction_name)
@@ -186,6 +186,11 @@ function sm0_confed()
 					option.accept = true
 					option.enable_payment = false            
 				end
+				if faction:has_pooled_resource("emp_loyalty") == true then
+					option.offer = false
+					option.accept = false
+					option.enable_payment = false
+				end
 			elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh_dlc05_sc_wef_wood_elves" then
 				option.accept = false
 				option.enable_payment = false        	
@@ -218,6 +223,10 @@ function sm0_confed()
 							local has_tech = faction:has_technology(bret_confederation_tech[i].tech)
 							cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true)
 						end
+					end
+					if faction:is_human() and faction:has_pooled_resource("emp_loyalty") == true then
+						cm:force_diplomacy("faction:"..faction_name, "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false)
+						cm:force_diplomacy("faction:"..faction_name, "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false)
 					end
 				end, 1, "changeDiplomacyOptions"
 			)
