@@ -29,7 +29,7 @@ require("sm0/@hidden_legendaries/script/campaign/mod/sm0_hidden_legendaries")
 
 -- MIXED LORES
 require("sm0/sm0_mixedlores/script/export_helpers_sm0_mixedLores")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_mixedLores")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_mixedLores")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_sm0_lzd_slann_mage_priest_mixed")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_sm0_lzd_slann_mage_priest_mixed_horde")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_wh2_main_lzd_lord_mazdamundi")
@@ -91,6 +91,7 @@ require("sm0/frosty_mods/script/campaign/mod/frosty_horde")
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
 require("sm0/frosty_mods/script/campaign/mod/legendary_confeds")
 require("sm0/frosty_mods/script/campaign/main_warhammer/wh_quests")
+require("sm0/frosty_mods/script/campaign/mod/add_mounts_experiment")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/frosty_horde")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds")

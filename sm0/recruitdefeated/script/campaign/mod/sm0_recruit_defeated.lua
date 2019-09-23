@@ -463,7 +463,10 @@ local lost_factions_agents = {
     --{["faction"] = "", ["subtype"] = "Sultan_Jaffar"},
     --{["faction"] = "", ["subtype"] = "morgan_bernhardt"}
 } --:vector<map<string, string>> 
-
+--Empire Master Engineer
+local zf_agents = {
+    {["faction"] = "", ["subtype"] = "wh_main_emp_jubal_falk"}
+} --:vector<map<string, string>> 
 local alastar_quests = {
     { "wh2_main_anc_armour_lions_pelt", 1}
 } --:vector<{string, number}>
@@ -1212,6 +1215,7 @@ local function confed_revived(confederator, confederated)
                         if vfs.exists("script/export_helpers_why_grudge.lua") then lord_event(confederator:name(), char, wsf_agents) end
                         if vfs.exists("script/export_helpers_ordo_draconis_why.lua") then lord_event(confederator:name(), char, ordo_agents) end
                         if vfs.exists("script/export_helpers_why_strigoi_camp.lua") then lord_event(confederator:name(), char, strigoi_agents) end
+                        if vfs.exists("script/campaign/mod/@zf_master_engineer_setup_vandy") then lord_event(confederator:name(), char, zf_agents) end 
                         --if vfs.exists("script/campaign/mod/ovn_rogue.lua") then lord_event(confederator:name(), char, second_start_agents) end
                         --if vfs.exists("script/campaign/mod/sr_chaos.lua") then lord_event(confederator:name(), char, lost_factions_agents) end
                         --RDLOG("Faction: "..confederated:name().." | ".."Character | Forename: "..effect.get_localised_string(char:get_forename()).." | Surname: "..effect.get_localised_string(char:get_surname()))

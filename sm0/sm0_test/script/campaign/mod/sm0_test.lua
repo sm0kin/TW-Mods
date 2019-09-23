@@ -35,7 +35,7 @@ local function expCheat()
 		cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
 		--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
 	end
-	if cm:is_new_game() then
+	--if cm:is_new_game() then
 		local factionList = cm:model():world():faction_list()
 		for i = 0, factionList:num_items() - 1 do
 			local faction = factionList:item_at(i)
@@ -43,11 +43,11 @@ local function expCheat()
 			for i = 0, characterList:num_items() - 1 do
 				local currentChar = characterList:item_at(i)	
 				local cqi = currentChar:command_queue_index()
-				--cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
-				cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
+				cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
+				--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
 			end
 		end
-	end
+	--end
 end
 
 --v function()
@@ -238,7 +238,7 @@ local function deletePlayerSubcultureFactions()
 	local factionList = cm:model():world():faction_list()
 	for i = 0, factionList2:num_items() - 1 do
 		local faction = factionList2:item_at(i)
-		if faction and not faction:is_dead() and not faction:is_human() and cm:turn_number() == 2 then
+		if faction and not faction:is_dead() and not faction:is_human() and cm:turn_number() == 3 then
 			if faction:name() == "wh_main_teb_tilea" or faction:name() == "wh2_dlc09_tmb_followers_of_nagash" or faction:name() == "wh2_dlc11_cst_noctilus" or faction:name() == "wh_main_grn_greenskins" 	
 			--or faction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" 
 			or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh2_dlc11_cst_vampire_coast"
@@ -375,9 +375,18 @@ function sm0_test()
 			return context:faction():name() == human_factions[1]
 		end,
 		function(context)
-			--cm:trigger_incident("wh2_main_hef_eataine", "sm0_hef_add_influence", true)
-
+			cm:trigger_incident("wh2_main_hef_eataine", "sm0_hef_add_influence", true)
+			local human_factions = cm:get_human_factions()
 			deletePlayerSubcultureFactions()
+			--item test
+			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then
+			--	cm:transfer_region_to_faction("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", human_factions[1])
+			--	local x, y = cm:find_valid_spawn_location_for_character_from_settlement(human_factions[1], "wh2_main_vor_kingdom_of_beasts_temple_of_skulls", false, true, 5)
+			--	testLOG("x = "..x.." | y = "..y)
+			--	--cm:force_rebellion_in_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", 1, "wh2_main_hef_inf_spearmen_0", x, y, false)
+			--	cm:set_public_order_of_province_for_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):public_order() - 300)
+			--end
+			--cm:force_confederation(human_factions[1],"wh2_main_lzd_last_defenders")
 		end,
 		true
 	)

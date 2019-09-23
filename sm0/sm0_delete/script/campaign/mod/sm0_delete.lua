@@ -202,7 +202,7 @@ local blacklisted_subtypes = {
     "helsnicht",
     "konrad",
     "mallobaude",
-    --{["faction"] = "", ["subtype"] = "sycamo"},
+    --"sycamo",
     "zacharias",
     --Ordo Draconis - Templehof Expanded--
 	"abhorash",
@@ -219,7 +219,9 @@ local blacklisted_subtypes = {
     "ovn_hlf_ll",
     "ovn_araby_ll",
     "Sultan_Jaffar",
-    "morgan_bernhardt"
+	"morgan_bernhardt",
+	--Empire Master Engineer
+	"wh_main_emp_jubal_falk"
 } --:vector<string>
 
 --v function(uic: CA_UIC)
@@ -471,9 +473,9 @@ local function create_trash_ui()
 								--#assume cqi: CA_CQI
 								local char_lookup = cm:char_lookup_str(cqi)
 								local char = cm:get_character_by_cqi(cqi)
-								if char:has_skill("wh2_main_skill_all_immortality_lord") or char:has_skill("wh2_main_skill_all_immortality_hero") 
-								or char:has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") or char:has_skill("wh_main_effect_ability_enable_immortal_will") then cm:force_reset_skills(char_lookup) end
-								if char:character_subtype("wh2_dlc09_tmb_tomb_king") then cm:set_character_immortality(char_lookup, false) end
+								--if char:has_skill("wh2_main_skill_all_immortality_lord") or char:has_skill("wh2_main_skill_all_immortality_hero") 
+								--or char:has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") or char:has_skill("wh_main_effect_ability_enable_immortal_will") then cm:force_reset_skills(char_lookup) end
+								--if char:character_subtype("wh2_dlc09_tmb_tomb_king") then  end
 								local is_blacklisted = false
 								for _, subtype in ipairs(blacklisted_subtypes) do
 									if char:character_subtype(subtype) then
@@ -481,7 +483,6 @@ local function create_trash_ui()
 										break
 									end
 								end
-								
 								if not is_blacklisted then CampaignUI.TriggerCampaignScriptEvent(cqi, "sm0_delete|") end
 							end
 						end
@@ -576,6 +577,8 @@ function sm0_delete()
             return context:trigger():starts_with("sm0_delete|")
         end,
 		function(context)
+			local char_lookup = cm:char_lookup_str(context:faction_cqi())
+			cm:set_character_immortality(char_lookup, false)
             cm:kill_character(context:faction_cqi(), false, true)
         end,
         true
@@ -658,10 +661,10 @@ function sm0_delete()
 			return context:character():faction():name() == "wh2_dlc13_lzd_spirits_of_the_jungle" or context:character():faction():subculture() == "wh_main_sc_nor_norsca"
 		end,
 		function(context)
-			if cm:char_is_agent(context:character()) and (context:faction():has_technology("tech_dlc08_nor_nw_03") or context:faction():has_technology("tech_dlc13_lzd_vassal_2")) then	
+			if cm:char_is_agent(context:character()) and (context:character():faction():has_technology("tech_dlc08_nor_nw_03") or context:character():faction():has_technology("tech_dlc13_lzd_vassal_2")) then	
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
-			if cm:char_is_general(context:character()) and context:faction():has_technology("tech_dlc08_nor_nw_11") then	
+			if cm:char_is_general(context:character()) and context:character():faction():has_technology("tech_dlc08_nor_nw_11") then	
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
 		end,
