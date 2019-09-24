@@ -444,10 +444,10 @@ local function CreatePanel()
                 false
             )
         end
-            --create close button
-            local CloseButton = TextButton.new(UIPANELNAME.."_CLOSE_BUTTON", core:get_ui_root(), "TEXT", "Finalize")
-            CloseButton:Resize(300, 45)
-            CloseButton:RegisterForClick(function()
+        --create close button
+        local CloseButton = TextButton.new(UIPANELNAME.."_CLOSE_BUTTON", core:get_ui_root(), "TEXT", "Finalize")
+        CloseButton:Resize(300, 45)
+        CloseButton:RegisterForClick(function()
             CloseButton:SetVisible(false)
             local existingMods = Util.getComponentWithName(UIPANELNAME.."_MOD_LIST_HEADER_TEXT")
             local existingList = Util.getComponentWithName(UIPANELNAME.."_MOD_OPTIONS_LISTVIEW")

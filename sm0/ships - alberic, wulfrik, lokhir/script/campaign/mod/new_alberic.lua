@@ -75,7 +75,7 @@ end
 function new_alberic()
     mcm = _G.mcm
     if cm:is_new_game() and not not mcm then
-        mcm:add_post_process_callback(
+        mcm:add_new_game_only_callback(
             function()
                 repair_the_ship()
             end

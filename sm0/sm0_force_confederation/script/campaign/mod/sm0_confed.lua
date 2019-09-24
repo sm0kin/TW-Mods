@@ -1,6 +1,6 @@
 local playerFaction = nil
 --# assume playerFaction: CA_FACTION
-local restrictTKconfed --:bool
+local restriction_value
 local OccupationOptionID = {
 	["1913039130"] = "wh2_sm0_sc_brt_bretonnia_occupation_decision_confederate",
 	["1913039131"] = "wh2_sm0_sc_lzd_lizardmen_occupation_decision_confederate",
@@ -26,34 +26,20 @@ local function initMCMconfed()
 	local confed_option_teb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") -- no teb / kislev subculture?
 	if (not confed_option_tmb or confed_option_tmb == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
         cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
-    end
+	end
+	restriction_value = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value")
+	if restriction_value ~= "unrestricted" then restriction_value = "restricted" end
 	local mcm = _G.mcm
 	if not not mcm then
 		local confed = mcm:register_mod("force_confederation", "Force Confederation", "Adds Force Confederation as occupation option.")
 		local restriction = confed:add_tweaker("restriction", "Tomb Kings - Restrictions", "Set your prefered rules for Tomb Kings Force Confederation!")
 		restriction:add_option("restricted", "Lorefriendly", "Lore based limitations, e.g. Settra can confederate any Tomb Kings faction aside from The Followers of Nagash and The Sentinels.")
 		restriction:add_option("unrestricted", "No restrictions", "Completely unrestricted!")
-		mcm:add_post_process_callback(
+		mcm:add_new_game_only_callback(
 			function()
-				restriction = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value")
-				if restriction == "restricted" then
-					restrictTKconfed = true
-				elseif restriction == "unrestricted" then
-					restrictTKconfed = false
-				end
-				local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
-				if not confed_option_tmb or confed_option_tmb == "yield" then
-					cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
-				end
+				restriction_value = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value")
 			end
 		)
-	else
-		local restriction_value = cm:get_saved_value("mcm_tweaker_force_confederation_restriction_value")
-		if restriction_value == "unrestricted" then
-			restrictTKconfed = false
-		else
-			restrictTKconfed = true
-		end
 	end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -268,7 +254,7 @@ function sm0_confed()
 						if FACTION_GARRISON_ATTACKED == nil then
 							FACTION_GARRISON_ATTACKED = cm:get_saved_value("faction_garrison_attacked")
 						end				
-						if restrictTKconfed and playerFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
+						if restriction_value ~= "unrestricted" and playerFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
 							if FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_khemri" then
 								button:SetDisabled(true)
 								button:SetOpacity(50)

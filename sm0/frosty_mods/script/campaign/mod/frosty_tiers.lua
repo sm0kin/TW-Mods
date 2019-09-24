@@ -188,12 +188,10 @@ function frosty_tiers()
 		hordeTier:add_option("2", "Tier II", "Sets the Horde Starting Tier to II.")
         hordeTier:add_option("3", "Tier III", "Sets the Horde Starting Tier to III.")
         hordeTier:add_option("5", "Tier V", "Sets the Horde Starting Tier to V.")
-		mcm:add_post_process_callback(
+		mcm:add_new_game_only_callback(
             function()
-                if cm:is_new_game() then 
-                    upgrade_capitals(cm:get_saved_value("mcm_tweaker_frostyTiers_settlementTier_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_ownerScope_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_settlementScope_value")) 
-                    upgrade_horde(cm:get_saved_value("mcm_tweaker_frostyTiers_hordeTier_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_hordeScope_value"))
-                end
+                upgrade_capitals(cm:get_saved_value("mcm_tweaker_frostyTiers_settlementTier_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_ownerScope_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_settlementScope_value")) 
+                upgrade_horde(cm:get_saved_value("mcm_tweaker_frostyTiers_hordeTier_value"), cm:get_saved_value("mcm_tweaker_frostyTiers_hordeScope_value"))
 			end
         )
     else

@@ -379,6 +379,10 @@ end
 --v function()
 function legendary_confeds()
     local humanFactions = cm:get_human_factions()
+    local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
+    if not confed_option_tmb or confed_option_tmb == "yield" then
+        cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+    end
     mcm = _G.mcm
 	if not not mcm then
         local frostyConfed = mcm:register_mod("frostyConfed", "Legendary Confederations", "This is the Civ-style checkbox that lets you start the campaign with the legendary lords already rallied to your side.")
@@ -431,43 +435,33 @@ function legendary_confeds()
                 end
             end
         end
-		mcm:add_post_process_callback(
+		mcm:add_new_game_only_callback(
             function()
-                local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
-                if not confed_option_tmb or confed_option_tmb == "yield" then
-                    cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
-                end
-                if cm:is_new_game() then 
-                    cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
-                    cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
-                    cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
-                    cm:disable_event_feed_events(true, "", "", "conquest_province_secured")
-                    cm:disable_event_feed_events(true, "", "", "conquest_province_contested")
-                    cm:disable_event_feed_events(true, "", "", "faction_resource_lost")
-                    cm:disable_event_feed_events(true, "", "", "conquest_sea_region_controlled")
-                    cm:disable_event_feed_events(true, "", "", "conquest_sea_region_contested") 
-                    cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")                   
-                    confed(subcultures_factions)
-                    if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
-                    if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then confed(mixu2_subcultures_factions) end -- compatibility for mixu's legendary lords 2 (script path might change)
-                    cm:callback(function() remove_confed_penalties(subcultures_factions) end, 1)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "faction_joins_confederation") end, 3)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered") end, 3)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing") end, 3)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "conquest_province_secured") end, 3)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "conquest_province_contested") end, 3)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "faction_resource_lost") end, 3)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "conquest_sea_region_controlled") end, 3)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "conquest_sea_region_contested") end, 3)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "") end, 3)
-                end
+                cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
+                cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
+                cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
+                cm:disable_event_feed_events(true, "", "", "conquest_province_secured")
+                cm:disable_event_feed_events(true, "", "", "conquest_province_contested")
+                cm:disable_event_feed_events(true, "", "", "faction_resource_lost")
+                cm:disable_event_feed_events(true, "", "", "conquest_sea_region_controlled")
+                cm:disable_event_feed_events(true, "", "", "conquest_sea_region_contested") 
+                cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")                   
+                confed(subcultures_factions)
+                if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
+                if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then confed(mixu2_subcultures_factions) end -- compatibility for mixu's legendary lords 2 (script path might change)
+                cm:callback(function() remove_confed_penalties(subcultures_factions) end, 1)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "", "faction_joins_confederation") end, 3)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered") end, 3)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing") end, 3)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "", "conquest_province_secured") end, 3)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "", "conquest_province_contested") end, 3)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "", "faction_resource_lost") end, 3)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "", "conquest_sea_region_controlled") end, 3)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "", "conquest_sea_region_contested") end, 3)
+                cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "") end, 3)
 			end
         )
     else
-        local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
-		if not confed_option_tmb or confed_option_tmb == "yield" then
-            cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
-        end
         if cm:is_new_game() then
             if not cm:is_multiplayer() then
                 cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
@@ -557,49 +551,131 @@ function legendary_confeds()
     core:add_listener(
         "frosty_confed_expired",
         "ScriptEventConfederationExpired",
+        true,
         function(context)
-            local faction_name = context.string
-            local faction = cm:get_faction(faction_name)
-            return faction:is_human()
-        end,
-        function(context)
-            local faction_name = context.string
-            local faction = cm:get_faction(faction_name)
-            local subculture = faction:subculture()
-            local culture = faction:culture()
-            local confed_option = cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value")
-            local option = {}
-            if confed_option == "enabled" or confed_option == "player_only" then
-                option.offer = true
-                option.accept = true
-                option.enable_payment = true
-            elseif confed_option == "disabled" then
-                option.offer = false
-                option.accept = false
-                option.enable_payment = false				
-            elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh2_dlc09_sc_tmb_tomb_kings" then
-                option.offer = false
-                option.accept = false
-                option.enable_payment = false	
-            elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh_dlc05_sc_wef_wood_elves" then
-                option.accept = false
-                option.enable_payment = false	
-                oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
-                if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") then
-                    option.offer = true
-                else
-                    option.offer = false
-                end
-            elseif (confed_option == "yield" or confed_option == nil) and subculture ~= "wh_dlc05_sc_wef_wood_elves" and subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" then
-                option.offer = true
-                option.accept = true
-                option.enable_payment = false
-            end
-            cm:callback(
-                function(context)
-                    cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option.offer, option.accept, option.enable_payment)
-                end, 1, "changeDiplomacyOptions"
-            )
+            local subculture_confed_disabled = {
+				-- by default
+				"wh_main_sc_chs_chaos",
+				"wh_main_sc_grn_savage_orcs",
+				"wh_main_sc_ksl_kislev",
+				"wh_main_sc_teb_teb",
+				"wh2_dlc09_sc_tmb_tomb_kings",
+				"wh2_main_rogue_abominations",
+				"wh2_main_rogue_beastcatchas",
+				"wh2_main_rogue_bernhoffs_brigands",
+				"wh2_main_rogue_black_spider_tribe",
+				"wh2_main_rogue_boneclubbers_tribe",
+				"wh2_main_rogue_celestial_storm",
+				"wh2_main_rogue_college_of_pyrotechnics",
+				"wh2_main_rogue_doomseekers",
+				"wh2_main_rogue_gerhardts_mercenaries",
+				"wh2_main_rogue_heirs_of_mourkain",
+				"wh2_main_rogue_hung_warband",
+				"wh2_main_rogue_hunters_of_kurnous",
+				"wh2_main_rogue_jerrods_errantry",
+				"wh2_main_rogue_mangy_houndz",
+				"wh2_main_rogue_mengils_manflayers",
+				"wh2_main_rogue_morrsliebs_howlers",
+				"wh2_main_rogue_pirates_of_the_far_sea",
+				"wh2_main_rogue_pirates_of_the_southern_ocean",
+				"wh2_main_rogue_pirates_of_trantio",
+				"wh2_main_rogue_scions_of_tesseninck",
+				"wh2_main_rogue_scourge_of_aquitaine",
+				"wh2_main_rogue_stuff_snatchers",
+				"wh2_main_rogue_teef_snatchaz",
+				"wh2_main_rogue_the_wandering_dead",
+				"wh2_main_rogue_tor_elithis",
+				"wh2_main_rogue_troll_skullz",
+				"wh2_main_rogue_vashnaar",
+				"wh2_main_rogue_vauls_expedition",
+				"wh2_main_rogue_worldroot_rangers",
+				"wh2_main_rogue_wrath_of_nature",
+				--"wh2_dlc11_sc_cst_vampire_coast"
+			} --:vector<string>
+			local faction_name = context.string
+			local faction = cm:get_faction(faction_name)
+			local subculture = faction:subculture()
+			local culture = faction:culture()
+			local confed_option = cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value")
+			local option = {}
+			if confed_option == "enabled" then
+				option.offer = true
+				option.accept = true
+				option.enable_payment = false
+			elseif confed_option == "player_only" then
+				if faction:is_human() then
+					option.offer = true
+					option.accept = true
+					option.enable_payment = false
+				else
+					option.offer = false
+					option.accept = true
+					option.enable_payment = false	
+				end
+			elseif confed_option == "disabled" then
+				option.offer = false
+				option.accept = false
+				option.enable_payment = false				
+			elseif confed_option == "yield" or confed_option == nil then
+				option.offer = true
+				option.accept = true
+				option.enable_payment = false
+				for i, subculture_confed in ipairs(subculture_confed_disabled) do
+					if subculture == subculture_confed then
+						option.offer = false
+						option.accept = false
+						option.enable_payment = false
+					end
+				end	
+				if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then 
+					option.offer = true
+					option.accept = true
+					option.enable_payment = false            
+				end
+				if faction:has_pooled_resource("emp_loyalty") == true then
+					option.offer = false
+					option.accept = false
+					option.enable_payment = false
+				end
+			elseif (confed_option == "yield" or confed_option == nil) and subculture == "wh_dlc05_sc_wef_wood_elves" then
+				option.accept = false
+				option.enable_payment = false        	
+				oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
+				if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
+					option.offer = true
+				else
+					option.offer = false
+				end  
+			end
+			cm:callback(
+				function(context)
+					cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option.offer, option.accept, option.enable_payment)
+		
+					if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
+						cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
+						cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
+					end
+					if (confed_option == "yield" or confed_option == nil) and subculture == "wh_main_sc_brt_bretonnia" and cm:get_faction(faction_name):is_human() then
+						local bret_confederation_tech = {
+							{tech = "tech_dlc07_brt_heraldry_artois", faction = "wh_main_brt_artois"},
+							{tech = "tech_dlc07_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
+							{tech = "tech_dlc07_brt_heraldry_bordeleaux", faction = "wh_main_brt_bordeleaux"},
+							{tech = "tech_dlc07_brt_heraldry_bretonnia", faction = "wh_main_brt_bretonnia"},
+							{tech = "tech_dlc07_brt_heraldry_carcassonne", faction = "wh_main_brt_carcassonne"},
+							{tech = "tech_dlc07_brt_heraldry_lyonesse", faction = "wh_main_brt_lyonesse"},
+							{tech = "tech_dlc07_brt_heraldry_parravon", faction = "wh_main_brt_parravon"}
+						} --:vector<map<string, string>>
+						for i = 1, #bret_confederation_tech do
+							local has_tech = faction:has_technology(bret_confederation_tech[i].tech)
+							cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true)
+						end
+					end
+					if faction:is_human() and faction:has_pooled_resource("emp_loyalty") == true then
+						cm:force_diplomacy("faction:"..faction_name, "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false)
+						cm:force_diplomacy("faction:"..faction_name, "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false)
+					end
+				end, 1, "changeDiplomacyOptions"
+			)
         end,
         true
     )

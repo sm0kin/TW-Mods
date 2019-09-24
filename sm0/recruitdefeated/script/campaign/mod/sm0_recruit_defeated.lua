@@ -390,7 +390,8 @@ local mixu2_agents = {
     {["faction"] = "", ["subtype"] = "lzd_chakax"}, -- "wh2_main_lzd_xlanhuapec" "wh2_main_lzd_hexoatl"
     {["faction"] = "wh2_main_brt_knights_of_origo", ["subtype"] = "brt_donna_don_domingio"},
     {["faction"] = "wh2_dlc09_tmb_numas", ["subtype"] = "tmb_ramhotep"},
-    {["faction"] = "wh2_main_bst_ripper_horn", ["subtype"] = "bst_ghorros_warhoof"}
+    {["faction"] = "wh2_main_bst_ripper_horn", ["subtype"] = "bst_ghorros_warhoof"},
+    {["faction"] = "wh2_main_skv_clan_mordkin", ["subtype"] = "skv_feskit"}
 } --:vector<map<string, string>> 
     --XOUDAD High Elves Expanded--
 local xoudad_agents = {

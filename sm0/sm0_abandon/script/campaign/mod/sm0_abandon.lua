@@ -13,7 +13,7 @@ local confirmButtonTooltipHover2 = "nets you"
 local confirmButtonTooltipHover3 = "will be abandoned at the beginning of the next turn."
 local confirmButtonTooltipDisabled = "Besieged Settlements can't be abandoned!"
 local abandonButtonTooltip = "Abandon selected settlement"
-local penaltyEnable = true --:bool                    
+local penalty_value                  
 local iconPath = "ui/icon_raze.png"
 local id_from_subculture = {
     ["wh_dlc03_sc_bst_beastmen"] = 19130,
@@ -39,6 +39,8 @@ local id_from_subculture = {
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --v function()
 local function initMCMabandon()
+    penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value")
+    if penalty_value ~= "penalty" then penalty_value = "nopenalty" end
     local mcm = _G.mcm
     if not not mcm then
         local abandon = mcm:register_mod("abandon_region", "Abandon Region", "Adds the possibility to abandon a settlement.")
@@ -48,23 +50,11 @@ local function initMCMabandon()
         local delay = abandon:add_tweaker("delay", "Turns until Regions are abandoned", "Choose between instant and single turn delay until Regions are abandoned.")
         delay:add_option("instant", "Instant", "Regions can be abandoned instantly.")
         delay:add_option("oneTurn", "One Turn", "Abandoning a region takes one turn.")
-        mcm:add_post_process_callback(
+        mcm:add_new_game_only_callback(
             function()
-                penalty = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value")
-                if penalty == "penalty" then
-                    penaltyEnable = true
-                elseif penalty == "nopenalty" then
-                    penaltyEnable = false
-                end
+                penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value")
             end
         )
-    else
-        local penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value")
-        if penalty_value == "nopenalty" then
-            penaltyEnable = false
-        else
-            penaltyEnable = true
-        end
     end
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -151,7 +141,7 @@ local function createAbandonFrame(abandonRegionStr)
             local regionToSend = regionStr
             local moneyToSend = calcCost(cm:get_region(regionToSend))
             if cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") ~= "oneTurn" then
-                CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable).."~")
+                CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..penalty_value.."~")
                 abandonFrame:Delete()
                 abandonFrame = nil
                 abandonButton:SetDisabled(true)
@@ -159,10 +149,10 @@ local function createAbandonFrame(abandonRegionStr)
                 if not cm:get_saved_value("abandon_"..regionStr.."_"..regionOwner:name()) then
                     confirmButton:SetState("selected_hover")
                     confirmButton.uic:SetTooltipText(regionOnscreenName.." "..confirmButtonTooltipHover3)
-                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable).."~")
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..penalty_value.."~")
                 else
                     confirmButton:SetState("active")
-                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..tostring(penaltyEnable).."~remove")
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..penalty_value.."~remove")
                 end
             end
         end 
@@ -318,7 +308,7 @@ function sm0_abandon()
                 )
                 cm:set_region_abandoned(regionName)
                 cm:treasury_mod(faction, cash)
-                if penalty == "true" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5) end
+                if penalty ~= "nopenalty" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5) end
             else
                 if remove == "remove" then
                     core:remove_listener("Abandon_"..regionName.."_"..faction)
@@ -345,7 +335,7 @@ function sm0_abandon()
                                 )
                                 cm:set_region_abandoned(regionName)
                                 cm:treasury_mod(faction, cash)
-                                if penalty == "true" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5) end
+                                if penalty ~= "nopenalty" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5) end
                                 cm:set_saved_value("abandon_"..regionName.."_"..regionOwner:name(), false)
                             end
                         end,
