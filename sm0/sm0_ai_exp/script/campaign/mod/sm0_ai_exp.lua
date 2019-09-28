@@ -31,7 +31,7 @@ function sm0_ai_exp()
         "CharactersGetEXP",
         "CharacterTurnStart",
         function(context)
-            return not context:character():faction():is_human()
+            return not context:character():faction():is_human() and not context:character():faction():is_rebel() and not context:character():faction():is_quest_battle_faction()
         end,
         function(context)
             local char = context:character()

@@ -2,7 +2,7 @@
 --All credits to Drunk Flamingo
 
 --v function()
-function sm0_LOG_reset()
+local function sm0_LOG_reset()
     if not __write_output_to_logfile then
         --return
     end
@@ -17,7 +17,7 @@ function sm0_LOG_reset()
 end
 
 --v function(text: string | number | boolean | CA_CQI)
-function sm0_LOG(text)
+local function sm0_LOG(text)
 	if not __write_output_to_logfile then
 		--return
 	end
@@ -32,7 +32,7 @@ function sm0_LOG(text)
 end
 
 --v function()
-function sm0_DEBUG()
+local function sm0_DEBUG()
 	--Vanish's PCaller
 	--All credits to vanish
 	--v function(func: function) --> any

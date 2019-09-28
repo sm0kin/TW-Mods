@@ -215,7 +215,7 @@ function sm0_abandon()
     initMCMabandon()
 
     core:add_listener(
-        "AbandonSettlementPanelOpened",
+        "AbandonSettlement_PanelOpenedCampaign",
         "PanelOpenedCampaign",
         function(context)
             return context.string == "settlement_panel"
@@ -235,7 +235,7 @@ function sm0_abandon()
     )
 
     core:add_listener(
-        "AbandonSettlementPanelOpened",
+        "AbandonSettlement_PanelClosedCampaign",
         "PanelClosedCampaign",
         function(context)
             return context.string == "settlement_panel"

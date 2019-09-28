@@ -784,6 +784,7 @@
 --# assume CA_EFFECT.get_localised_string: function(key: string) --> string
 
 -- PENDING BATTLE
+--# assume CA_PENDING_BATTLE.is_null_interface: method() --> boolean
 --# assume CA_PENDING_BATTLE.attacker: method() --> CA_CHAR
 --# assume CA_PENDING_BATTLE.defender: method() --> CA_CHAR
 --# assume CA_PENDING_BATTLE.secondary_attackers: method() --> CA_CHAR_LIST

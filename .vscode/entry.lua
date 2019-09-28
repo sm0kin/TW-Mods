@@ -65,7 +65,11 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 
 --log
 --require("sm0/ml_log")
-require("sm0/!!!sm0_log/script/mod/sm0_log")
+require("sm0/!!!sm0_log/script/export_helpers_log")
+require("sm0/!!!sm0_log/script/frontend/mod/sm0_f_log")
+require("sm0/!!!sm0_log/script/battle/mod/sm0_b_log")
+require("sm0/!!!sm0_log/script/campaign/mod/sm0_c_log")
+
 
 -- BETTER FACTION SELECTION
 --require("sm0/sm0_frontend/script/frontend/mod/sm0_faction_selection")
@@ -128,10 +132,13 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 require("sm0/sm0_ai_exp/script/campaign/mod/sm0_ai_exp")
 
 --difficulty
---require("sm0/difficulty/script/campaign/mod/difficulty")
+require("sm0/sm0_difficulty/script/campaign/mod/sm0_difficulty")
+require("sm0/sm0_difficulty/script/export_helpers_sm0_difficulty")
+
 
 --slann options
 require("sm0/sm0_slann_options/script/campaign/mod/sm0_slann_options")
+require("sm0/sm0_slann_options/script/campaign/wh2_slann_selection")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_slann_options")
 
 --delete lord button

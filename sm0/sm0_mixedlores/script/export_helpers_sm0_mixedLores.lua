@@ -1,7 +1,7 @@
 --Drunk Flamingo's log script
 --All credits to Drunk Flamingo
 --v function()
-function mlLOG_reset()
+local function mlLOG_reset()
 	if not __write_output_to_logfile then
 		return
 	end
@@ -16,7 +16,7 @@ function mlLOG_reset()
 end
 
 --v function(text: string | number | boolean | CA_CQI)
-function mlLOG(text)
+local function mlLOG(text)
 	if not __write_output_to_logfile then
 		return
 	end
@@ -31,11 +31,11 @@ function mlLOG(text)
 end
 
 --v function()
-function mlDEBUG()
+local function mlDEBUG()
 	--Vanish's PCaller
 	--All credits to vanish
 	--v function(func: function) --> any
-	function safeCall(func)
+	local function safeCall(func)
 		--out("safeCall start")
 		local status, result = pcall(func)
 		if not status then
@@ -50,12 +50,12 @@ function mlDEBUG()
 	--local oldTriggerEvent = core.trigger_event
 
 	--v [NO_CHECK] function(...: any)
-	function pack2(...) return {n=select('#', ...), ...} end
+	local function pack2(...) return {n=select('#', ...), ...} end
 	--v [NO_CHECK] function(t: vector<WHATEVER>) --> vector<WHATEVER>
-	function unpack2(t) return unpack(t, 1, t.n) end
+	local function unpack2(t) return unpack(t, 1, t.n) end
 
 	--v [NO_CHECK] function(f: function(), argProcessor: function()) --> function()
-	function wrapFunction(f, argProcessor)
+	local function wrapFunction(f, argProcessor)
 		return function(...)
 			--out("start wrap ")
 			local someArguments = pack2(...)
@@ -77,7 +77,7 @@ function mlDEBUG()
 	-- end
 
 	--v [NO_CHECK] function(fileName: string)
-	function tryRequire(fileName)
+	local function tryRequire(fileName)
 		local loaded_file = loadfile(fileName)
 		if not loaded_file then
 			out("Failed to find mod file with name " .. fileName)
@@ -92,7 +92,7 @@ function mlDEBUG()
 	end
 
 	--v [NO_CHECK] function(f: function(), name: string)
-	function logFunctionCall(f, name)
+	local function logFunctionCall(f, name)
 		return function(...)
 			out("function called: " .. name)
 			return f(...)
@@ -100,7 +100,7 @@ function mlDEBUG()
 	end
 
 	--v [NO_CHECK] function(object: any)
-	function logAllObjectCalls(object)
+	local function logAllObjectCalls(object)
 		local metatable = getmetatable(object)
 		for name,f in pairs(getmetatable(object)) do
 			if is_function(f) then
@@ -150,7 +150,7 @@ function mlDEBUG()
 
 	local currentAddListener = core.add_listener
 	--v [NO_CHECK] function(core: any, listenerName: any, eventName: any, conditionFunc: (function(context: WHATEVER?) --> boolean) | boolean, listenerFunc: function(context: WHATEVER?), persistent: any)
-	function myAddListener(core, listenerName, eventName, conditionFunc, listenerFunc, persistent)
+	local function myAddListener(core, listenerName, eventName, conditionFunc, listenerFunc, persistent)
 		local wrappedCondition = nil
 		if is_function(conditionFunc) then
 			--wrappedCondition =  wrapFunction(conditionFunc, function(arg) out("Callback condition called: " .. listenerName .. ", for event: " .. eventName) end)
@@ -208,7 +208,8 @@ local createSpellSlotButtonContainer --:function(char: CA_CHAR, spellSlots: vect
 
 --v function(char: CA_CHAR) --> bool
 local function is_mlChar(char)
-	if char ~= nil and not char:is_null_interface() and string.find(file_str, char:character_subtype_key()) then
+	if is_character(char) and string.find(file_str, char:character_subtype_key()) then
+		--mlLOG("is_mlChar = "..char:character_subtype_key())
 		return true
 	else
 		return false
@@ -275,14 +276,14 @@ end
 
 --v function() --> CA_CHAR
 local function getmlChar()
-	local char = nil --:CA_CHAR
+	local char --:CA_CHAR
 	local pb = cm:model():pending_battle()
-	if not pb:is_active() then
+	if not pb:is_null_interface() and not pb:is_active() then
 		selectedChar = getSelectedCharacter()
-		if selectedChar and is_mlChar(selectedChar) then
+		if is_character(selectedChar) and is_mlChar(selectedChar) then
 			char = selectedChar
 		end
-		if not char then
+		if not is_character(char) then
 			local focusButton = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "header", "button_focus", "dy_txt") 
 			local charByUnitPanel = getCharByStateText(focusButton)
 			local namePanel = find_uicomponent(core:get_ui_root(), "character_details_panel", "character_name")
@@ -293,7 +294,7 @@ local function getmlChar()
 				char = charByCharPanel
 			end
 		end
-	elseif not char and is_mlChar(pb:attacker()) and pb:attacker():faction():is_human() then
+	elseif not is_character(char) and not pb:is_null_interface() and is_mlChar(pb:attacker()) and pb:attacker():faction():is_human() then
 		char = pb:attacker()
 		if not is_mlChar(char) and pb:secondary_attackers():num_items() >= 1 then 
 			local attackers = pb:secondary_attackers()
@@ -303,7 +304,7 @@ local function getmlChar()
 				end
 			end
 		end
-	elseif not char and is_mlChar(pb:defender()) and pb:defender():faction():is_human() then
+	elseif not is_character(char) and not not pb:is_null_interface() and is_mlChar(pb:defender()) and pb:defender():faction():is_human() then
 		char = pb:defender()
 		if not is_mlChar(char) and pb:secondary_defenders():num_items() >= 1 then
 			local defenders = pb:secondary_defenders()
@@ -313,6 +314,11 @@ local function getmlChar()
 				end
 			end
 		end
+	end
+	if is_character(char) then
+		mlLOG("getmlChar: "..char:character_subtype_key())
+	else
+		mlLOG("getmlChar: "..tostring(char))
 	end
 	return char
 end
@@ -1507,9 +1513,10 @@ core:add_listener(
 	"ml_agentCreatedListener",
 	"CharacterCreated", 
 	function(context)		
-		return is_mlChar(context:character()) 
+		return is_mlChar(context:character()) and not context:character():character_subtype("chs_archaon") 
 	end,
 	function(context)
+		mlLOG("ml_agentCreatedListener: "..context:character():character_subtype_key())
 		local char = context:character()
 		ml_tables = ml_force_require(char)
 		local ownerFaction = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."ownerFaction")
@@ -1523,6 +1530,7 @@ core:add_listener(
 	end,
 	true
 )
+
 
 if buttonLocation_charPanel then
 	core:add_listener(
@@ -1639,7 +1647,7 @@ if buttonLocation_preBattle then
 		end,
 		function(context)
 			local pb = cm:model():pending_battle()
-			if getmlChar() then
+			if not pb:is_null_interface() and getmlChar() then
 				createloreButton_preBattle(pb:battle_type())
 			end
 		end,
@@ -1650,7 +1658,8 @@ if buttonLocation_preBattle then
 		"ml_preBattleCharacterPanelOpened",
 		"PanelOpenedCampaign", 
 		function(context) 
-			return context.string == "character_details_panel" and cm:model():pending_battle():is_active()
+			local pb = cm:model():pending_battle()
+			return context.string == "character_details_panel" and not pb:is_null_interface() and pb:is_active()
 		end,
 		function(context)
 			deleteLoreFrame()
@@ -1743,6 +1752,7 @@ local function ml_setup()
 		for j = 0, characterList:num_items() - 1 do
 			local currentChar = characterList:item_at(j)
 			if is_mlChar(currentChar) then
+				mlLOG("ml_setup: "..currentChar:character_subtype_key())
 				ml_tables = ml_force_require(currentChar)
 				setupSavedOptions(currentChar)
 				if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" or currentFaction:is_human() then setupInnateSpells(currentChar) end
@@ -1756,7 +1766,7 @@ if cm:is_new_game() then
 	ml_setup() 
 else
 	local pb = cm:model():pending_battle()
-	if find_uicomponent(core:get_ui_root(), "popup_pre_battle") and pb and getmlChar() then
+	if find_uicomponent(core:get_ui_root(), "popup_pre_battle") and not pb:is_null_interface() and buttonLocation_preBattle and getmlChar() then
 		createloreButton_preBattle(pb:battle_type())
 	end
 end

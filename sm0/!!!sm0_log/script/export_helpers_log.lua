@@ -2,7 +2,7 @@
 --All credits to Drunk Flamingo
 
 --v function()
-function sm0_LOG_reset()
+local function sm0_LOG_reset()
     if not __write_output_to_logfile then
         --return
     end
@@ -17,7 +17,7 @@ function sm0_LOG_reset()
 end
 
 --v function(text: string | number | boolean | CA_CQI)
-function sm0_LOG(text)
+local function sm0_LOG(text)
 	if not __write_output_to_logfile then
 		--return
 	end
@@ -26,13 +26,17 @@ function sm0_LOG(text)
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	local popLog = io.open("sm0_log.txt","a")
 	--# assume logTimeStamp: string
-	popLog :write("sm0|export_helpers:  [".. logTimeStamp .. "]:  "..logText .. "  \n") --"]:  [Turn: ".. tostring(cm:turn_number()) ..
+	if core:is_campaign() then
+		popLog :write("sm0|export_helpers:  [".. logTimeStamp .. "]:  [Turn: ".. tostring(cm:turn_number()) .. "(" .. cm:whose_turn_is_it() .. ")]:  "..logText .. "  \n")
+	else
+		popLog :write("sm0|export_helpers:  [".. logTimeStamp .. "]:  "..logText .. "  \n") 
+	end
 	popLog :flush()
 	popLog :close()
 end
 
 --v function()
-function sm0_DEBUG()
+local function sm0_DEBUG()
 	--Vanish's PCaller
 	--All credits to vanish
 	--v function(func: function) --> any
