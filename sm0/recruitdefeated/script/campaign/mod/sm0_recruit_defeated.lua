@@ -468,6 +468,11 @@ local lost_factions_agents = {
 local zf_agents = {
     {["faction"] = "", ["subtype"] = "wh_main_emp_jubal_falk"}
 } --:vector<map<string, string>> 
+--Cataph's High Elf Sea Patrol
+local seahelm_agents = {
+    {["faction"] = "", ["subtype"] = "AK_aislinn"}
+} --:vector<map<string, string>> 
+
 local alastar_quests = {
     { "wh2_main_anc_armour_lions_pelt", 1}
 } --:vector<{string, number}>
@@ -812,30 +817,30 @@ end
 local function is_valid_spawn_coordinate(x, y)
     local is_valid = true
     if is_number(x) and is_number(y) and x ~= -1 and y ~= -1 then
-        local faction_list = cm:model():world():faction_list()
-        for i = 0, faction_list:num_items() - 1 do
-            local current_faction = faction_list:item_at(i)
-            local char_list = current_faction:character_list()
-            for j = 0, char_list:num_items() - 1 do
-                local current_char = char_list:item_at(j)
-                if current_char:logical_position_x() == x and current_char:logical_position_y() == y then
-                    is_valid = false
-                    --RDLOG("char_list/is_valid: false")
-                    break
-                end
-            end
-            if is_valid then
-                local region_list = current_faction:region_list()
-                for j = 0, region_list:num_items() - 1 do
-                    local current_region = region_list:item_at(j)
-                    if current_region:settlement():logical_position_x() == x and current_region:settlement():logical_position_y() == y then
-                        is_valid = false
-                        --RDLOG("current_region/is_valid: false")
-                        break
-                    end
-                end
-            end
-        end
+        --local faction_list = cm:model():world():faction_list()
+        --for i = 0, faction_list:num_items() - 1 do
+        --    local current_faction = faction_list:item_at(i)
+        --    local char_list = current_faction:character_list()
+        --    for j = 0, char_list:num_items() - 1 do
+        --        local current_char = char_list:item_at(j)
+        --        if current_char:logical_position_x() == x and current_char:logical_position_y() == y then
+        --            is_valid = false
+        --            --RDLOG("char_list/is_valid: false")
+        --            break
+        --        end
+        --    end
+        --    if is_valid then
+        --        local region_list = current_faction:region_list()
+        --        for j = 0, region_list:num_items() - 1 do
+        --            local current_region = region_list:item_at(j)
+        --            if current_region:settlement():logical_position_x() == x and current_region:settlement():logical_position_y() == y then
+        --                is_valid = false
+        --                --RDLOG("current_region/is_valid: false")
+        --                break
+        --            end
+        --        end
+        --    end
+        --end
     else
         is_valid = false
     end
@@ -891,10 +896,13 @@ local function spawn_missing_lords(confederator, confederated)
         --    --RDLOG("Backup coordinates: x="..tostring(x)..", y="..tostring(y))
         --end
     end
-    --x, y = find_valid_spawn_coordinates(confederator:name(), x, y)
-    --RDLOG("find_valid_spawn_coordinates: x="..tostring(x)..", y="..tostring(y))
+    if not is_valid_spawn_coordinate(x, y) then 
+        -- CA's method did not provide a valid position, try Vandy's method instead
+        x, y = find_valid_spawn_coordinates(confederator:name(), x, y)
+        --RDLOG("find_valid_spawn_coordinates: x="..tostring(x)..", y="..tostring(y))
+    end
     --RDLOG("Trying to revive Faction: "..confederated:name().." | Region: "..start_region:name())
-    --if is_valid_spawn_coordinate(x, y) then 
+    if is_valid_spawn_coordinate(x, y) then 
         local char_cqi
         cm:create_force(
             confederated:name(),
@@ -925,34 +933,38 @@ local function spawn_missing_lords(confederator, confederated)
                     if locked_ai_generals[i].id ~= "" then cm:unlock_starting_general_recruitment(locked_ai_generals[i].id, locked_ai_generals[i].faction) end
                     for n = 1, 10 do
                         if not cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then
-                            --x, y = find_valid_spawn_coordinates(confederated:name(), x, y)
                             x, y = cm:find_valid_spawn_location_for_character_from_position(confederated:name(), x, y, true)
-                            cm:create_force(
-                                confederated:name(),
-                                "wh2_main_hef_inf_spearmen_0",
-                                start_region:name(),
-                                x,
-                                y,
-                                false,
-                                function(cqi)
-                                    local char = cm:get_character_by_cqi(cqi)
-                                    --RDLOG("["..n..".] spawn_lord|subtype: "..char:character_subtype_key().." |Forename: "..char:get_forename().." |Surname: "..char:get_surname())
-                                    for k = 1, #locked_ai_generals do
-                                        if char:character_subtype(locked_ai_generals[k].subtype) and not cm:get_saved_value(locked_ai_generals[k].subtype.."_spawned") then
-                                            --cm:set_character_immortality(cm:char_lookup_str(cqi), true)
-                                            RDLOG("["..n..".] spawn_missing_lords: "..char:character_subtype_key().." spawned!")
-                                            cm:set_saved_value(locked_ai_generals[k].subtype.."_spawned", confederated:name()) 
+                            if not is_valid_spawn_coordinate(x, y) then 
+                                x, y = find_valid_spawn_coordinates(confederated:name(), x, y)
+                            end
+                            if is_valid_spawn_coordinate(x, y) then 
+                                cm:create_force(
+                                    confederated:name(),
+                                    "wh2_main_hef_inf_spearmen_0",
+                                    start_region:name(),
+                                    x,
+                                    y,
+                                    false,
+                                    function(cqi)
+                                        local char = cm:get_character_by_cqi(cqi)
+                                        --RDLOG("["..n..".] spawn_lord|subtype: "..char:character_subtype_key().." |Forename: "..char:get_forename().." |Surname: "..char:get_surname())
+                                        for k = 1, #locked_ai_generals do
+                                            if char:character_subtype(locked_ai_generals[k].subtype) and not cm:get_saved_value(locked_ai_generals[k].subtype.."_spawned") then
+                                                --cm:set_character_immortality(cm:char_lookup_str(cqi), true)
+                                                RDLOG("["..n..".] spawn_missing_lords: "..char:character_subtype_key().." spawned!")
+                                                cm:set_saved_value(locked_ai_generals[k].subtype.."_spawned", confederated:name()) 
+                                            end
                                         end
+                                        if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(cqi), true) end 
+                                        cm:kill_character(cqi, true, false)
+                                        --if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(cqi), false) end
+                                        --cm:callback(function()
+                                            --if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                                        --end, 0.5)
+                                        if n >= 10 or cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then cm:kill_character(char_cqi, true, false) end
                                     end
-                                    if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(cqi), true) end 
-                                    cm:kill_character(cqi, true, false)
-                                    --if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(cqi), false) end
-                                    --cm:callback(function()
-                                        --if char:is_wounded() then cm:stop_character_convalescing(cqi) end
-                                    --end, 0.5)
-                                    if n >= 10 or cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then cm:kill_character(char_cqi, true, false) end
-                                end
-                            )
+                                )
+                            end
                         end
                     end
                 end
@@ -968,7 +980,9 @@ local function spawn_missing_lords(confederator, confederated)
                 if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) end 
             end   
         end, 2)
-    --end
+    else
+        RDLOG("ERROR: Could not find valid spawn position!")
+    end
 end
 
 --v function(faction: CA_FACTION) --> string
@@ -1165,7 +1179,7 @@ local function confed_revived(confederator, confederated)
         --RDLOG("find_valid_spawn_location_for_character_from_settlement: x="..tostring(x)..", y="..tostring(y))
     else
         if not confederator:military_force_list():item_at(0):general_character():is_at_sea() and confederator:military_force_list():item_at(0):general_character():has_region() then
-            	start_region = confederator:military_force_list():item_at(0):general_character():region() 
+            start_region = confederator:military_force_list():item_at(0):general_character():region() 
         else
             RDLOG("ERROR: Could not find valid region!")
             return
@@ -1182,11 +1196,14 @@ local function confed_revived(confederator, confederated)
         --    --RDLOG("Backup coordinates: x="..tostring(x)..", y="..tostring(y))
         --end
     end
-    --x, y = find_valid_spawn_coordinates(confederator:name(), x, y)
-    --RDLOG("find_valid_spawn_coordinates: x="..tostring(x)..", y="..tostring(y))
+    if not is_valid_spawn_coordinate(x, y) then 
+        -- CA's method did not provide a valid position, try Vandy's method instead
+        x, y = find_valid_spawn_coordinates(confederator:name(), x, y)
+        --RDLOG("find_valid_spawn_coordinates: x="..tostring(x)..", y="..tostring(y))
+    end
     --RDLOG("Trying to revive Faction: "..confederated:name().." | Region: "..start_region:name())
     --RDLOG("confed_revived: x="..tostring(x)..", y="..tostring(y))
-    --if is_valid_spawn_coordinate(x, y) then 
+    if is_valid_spawn_coordinate(x, y) and start_region then 
         cm:create_force(
             confederated:name(),
             "wh2_main_hef_inf_spearmen_0",
@@ -1217,6 +1234,7 @@ local function confed_revived(confederator, confederated)
                         if vfs.exists("script/export_helpers_ordo_draconis_why.lua") then lord_event(confederator:name(), char, ordo_agents) end
                         if vfs.exists("script/export_helpers_why_strigoi_camp.lua") then lord_event(confederator:name(), char, strigoi_agents) end
                         if vfs.exists("script/campaign/mod/@zf_master_engineer_setup_vandy") then lord_event(confederator:name(), char, zf_agents) end 
+                        if vfs.exists("script/campaign/mod/cataph_aislinn") then lord_event(confederator:name(), char, seahelm_agents) end
                         --if vfs.exists("script/campaign/mod/ovn_rogue.lua") then lord_event(confederator:name(), char, second_start_agents) end
                         --if vfs.exists("script/campaign/mod/sr_chaos.lua") then lord_event(confederator:name(), char, lost_factions_agents) end
                         --RDLOG("Faction: "..confederated:name().." | ".."Character | Forename: "..effect.get_localised_string(char:get_forename()).." | Surname: "..effect.get_localised_string(char:get_surname()))
@@ -1255,10 +1273,6 @@ local function confed_revived(confederator, confederated)
                         end
                     end
                 end
-                if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", true) end
-                --cm:callback(function() 
-                    cm:force_confederation(confederator:name(), confederated:name()) 
-                --end, 1)   
                 core:add_listener(
                     "sm0_confed_revived_FactionJoinsConfederation",
                     "FactionJoinsConfederation",
@@ -1277,7 +1291,7 @@ local function confed_revived(confederator, confederated)
                             cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), true) 
                         end
                         cm:kill_character(cqi, true, false) 
-                        cm:kill_character(faction_leader_cqi, true, false)                   
+                        cm:kill_character(faction_leader_cqi, true, false)        
                         apply_diplomacy(confederator:name())
                         local char_list = context:confederation():character_list()
                         for i = 0, char_list:num_items() - 1 do 
@@ -1287,9 +1301,15 @@ local function confed_revived(confederator, confederated)
                     end,
                     false
                 )
+                if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", true) end
+                --cm:callback(function() 
+                    cm:force_confederation(confederator:name(), confederated:name()) 
+                --end, 0.5)   
             end
         )
-    --end
+    else
+        RDLOG("ERROR: Could not find valid spawn position! ["..confederator:name().."]")
+    end
 end
 
 --v function()
@@ -1336,7 +1356,7 @@ local function init()
                         if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
                         and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
                         and not current_faction:name():find("_blood_voyage") and not current_faction:name():find("_encounters") and not current_faction:name():find("rebel") 
-                        and not current_faction:name():find("_intervention") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
+                        and not current_faction:name():find("_intervention") and not current_faction:name():find("_invasion") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
                             cm:set_saved_value("delayed_spawn_"..current_faction:name(), true)
                             RDLOG("Faction will spawn delayed: "..current_faction:name())
                         end
@@ -1365,7 +1385,7 @@ local function init()
                         if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
                         and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
                         and not current_faction:name():find("_blood_voyage") and not current_faction:name():find("_encounters") and not current_faction:name():find("rebel") 
-                        and not current_faction:name():find("_intervention") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
+                        and not current_faction:name():find("_intervention") and not current_faction:name():find("_invasion") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
                             cm:set_saved_value("delayed_spawn_"..current_faction:name(), true)
                             RDLOG("Faction will spawn delayed: "..current_faction:name())
                         end
@@ -1410,13 +1430,17 @@ local function init()
                     if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
                     and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
                     and not current_faction:name():find("_blood_voyage") and not current_faction:name():find("_encounters") and not current_faction:name():find("rebel") 
-                    and not current_faction:name():find("_intervention") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
+                    and not current_faction:name():find("_intervention") and not current_faction:name():find("_invasion") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
                         local ai_remaining
                         if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "ai" then
                             local subculture_faction_list = current_faction:factions_of_same_subculture()
                             for j = 0, subculture_faction_list:num_items() - 1 do
                                 local subculture_faction = subculture_faction_list:item_at(j)
-                                if not subculture_faction:is_dead() and not subculture_faction:is_human() then 
+                                if not subculture_faction:is_dead() and not subculture_faction:is_human()
+                                and not subculture_faction:name():find("_waaagh") and not subculture_faction:name():find("_brayherd") 
+                                and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
+                                and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
+                                and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
                                     ai_remaining = subculture_faction
                                     break
                                 end
@@ -1428,7 +1452,11 @@ local function init()
                             local subculture_faction_list = current_faction:factions_of_same_subculture()
                             for j = 0, subculture_faction_list:num_items() - 1 do
                                 local subculture_faction = subculture_faction_list:item_at(j)
-                                if not subculture_faction:is_dead() then 
+                                if not subculture_faction:is_dead() 
+                                and not subculture_faction:name():find("_waaagh") and not subculture_faction:name():find("_brayherd") 
+                                and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
+                                and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
+                                and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
                                     local standing = current_faction:diplomatic_standing_with(subculture_faction:name())
                                     if not is_number(saved_standing) or standing > saved_standing then
                                         saved_standing = standing
@@ -1450,10 +1478,13 @@ local function init()
                             and faction_P1:name() ~= "wh2_dlc09_tmb_followers_of_nagash")) then
                                 if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                 if are_lords_missing(current_faction) then
-                                    RDLOG("["..player_confederation_count.."] Player 1 intents to intents to spawn missing lords for: "..current_faction:name())
+                                    RDLOG("["..player_confederation_count.."] Player 1 intends to intends to spawn missing lords for: "..current_faction:name())
                                     spawn_missing_lords(faction_P1, current_faction)
+                                    --making sure there are no further confederations happening during the spawn_missing_lords loop
+                                    player_confederation_count = player_confederation_count + 10
+                                    ai_confederation_count = ai_confederation_count + 10
                                 else
-                                    RDLOG("["..player_confederation_count.."] Player 1 intents to confederated: "..current_faction:name())
+                                    RDLOG("["..player_confederation_count.."] Player 1 intends to confederated: "..current_faction:name())
                                     confed_revived(faction_P1, current_faction)
                                     if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
                                         cm:set_saved_value("faction_P1", true)
@@ -1473,10 +1504,13 @@ local function init()
                             and faction_P2:name() ~= "wh2_dlc09_tmb_followers_of_nagash")) then
                                 if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                 if are_lords_missing(current_faction) then
-                                    RDLOG("["..player_confederation_count.."] Player 2 intents to intents to spawn missing lords for: "..current_faction:name())
+                                    RDLOG("["..player_confederation_count.."] Player 2 intends to intends to spawn missing lords for: "..current_faction:name())
                                     spawn_missing_lords(faction_P2, current_faction)
+                                    --making sure there are no further confederations happening during the spawn_missing_lords loop
+                                    player_confederation_count = player_confederation_count + 10
+                                    ai_confederation_count = ai_confederation_count + 10
                                 else
-                                    RDLOG("["..player_confederation_count.."] Player 2 intents to confederated: "..current_faction:name())
+                                    RDLOG("["..player_confederation_count.."] Player 2 intends to confederated: "..current_faction:name())
                                     confed_revived(faction_P2, current_faction)
                                     if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
                                         cm:set_saved_value("faction_P2", true)
@@ -1488,15 +1522,18 @@ local function init()
                         else --ai
                             if not cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") == "player_ai" 
                             or cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") == "ai" then 
-                                if ai_confederation_count <= 10 and prefered_faction  and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") 
+                                if ai_confederation_count <= 10 and prefered_faction and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") 
                                 or cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "all" or (cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "lorefriendly" 
                                 and prefered_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() ~= "wh2_dlc09_tmb_the_sentinels")) 
                                 and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" then -- disabled for beastmen/savage orcs because they are able to respawn anyways
                                     if are_lords_missing(current_faction) then
-                                        RDLOG("["..ai_confederation_count.."] AI: "..current_faction:name().." intents to spawn missing lords!")
+                                        RDLOG("["..ai_confederation_count.."] AI: "..current_faction:name().." intends to spawn missing lords!")
                                         spawn_missing_lords(prefered_faction, current_faction)
+                                        --making sure there are no further confederations happening during the spawn_missing_lords loop
+                                        player_confederation_count = player_confederation_count + 10
+                                        ai_confederation_count = ai_confederation_count + 10
                                     else
-                                        RDLOG("["..ai_confederation_count.."] AI: "..prefered_faction:name().." intents to confederated: "..current_faction:name())
+                                        RDLOG("["..ai_confederation_count.."] AI: "..prefered_faction:name().." intends to confederated: "..current_faction:name())
                                         confed_revived(prefered_faction, current_faction)
                                     end
                                     ai_confederation_count = ai_confederation_count + 1

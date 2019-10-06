@@ -34,11 +34,18 @@ function sm0_ai_exp()
             return not context:character():faction():is_human() and not context:character():faction():is_rebel() and not context:character():faction():is_quest_battle_faction()
         end,
         function(context)
-            local char = context:character()
-            if cm:char_is_general(char) and 
-            ((char:has_military_force() and not char:military_force():is_armed_citizenry() and char:rank() < 20) or (char:is_faction_leader() and char:rank() <= 30)) then
-                cm:add_agent_experience(cm:char_lookup_str(char:command_queue_index()), 500, false)
-                XPLOG("Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
+			local char = context:character()
+			local character_subtype = char:character_subtype_key()
+            if cm:char_is_general(char) and character_subtype ~= "wh2_main_def_black_ark" and character_subtype ~= "wh2_main_skv_plague_priest_ritual" and character_subtype ~= "wh2_main_skv_warlock_engineer_ritual" 
+            and ((char:has_military_force() and not char:military_force():is_armed_citizenry() and char:rank() < 20) or (char:is_faction_leader() and char:rank() <= 30)) then
+				cm:add_agent_experience(cm:char_lookup_str(char:command_queue_index()), 500)
+				if char:is_faction_leader() then
+					XPLOG("EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Faction Leader | Char Rank: "..tostring(char:rank()))
+				else
+					XPLOG("EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
+				end
+			else
+				XPLOG("NO_EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
             end
         end,
         true

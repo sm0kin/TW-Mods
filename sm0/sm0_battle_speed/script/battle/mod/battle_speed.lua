@@ -94,6 +94,7 @@ local function createSpeedUI()
             local stateText = speedBox:GetStateText()
             stateText = string.gsub(stateText, "%[%[col:green%]%]", "")
             stateText = string.gsub(stateText, "%[%[/col%]%]", "")
+            stateText = string.gsub(stateText, ",", ".")
             local number = stateText
             if not tonumber(number) then
                 speedButton = find_uicomponent(speed_buttons, "pause")
@@ -158,6 +159,7 @@ local function createSpeedUI()
                 local stateText = speedBox:GetStateText()
                 stateText = string.gsub(stateText, "%[%[col:green%]%]", "")
                 stateText = string.gsub(stateText, "%[%[/col%]%]", "")
+                stateText = string.gsub(stateText, ",", ".")
                 local number = stateText
                 if not tonumber(number) then
                     speedBox:SetStateText("[[col:red]]Invalid![[/col]]")

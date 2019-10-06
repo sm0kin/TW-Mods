@@ -1,3 +1,30 @@
+--v function()
+local function testLOG_reset()
+	if not __write_output_to_logfile then
+		--return
+	end
+	local logTimeStamp = os.date("%d, %m %Y %X")
+	--# assume logTimeStamp: string
+	local popLog = io.open("test_log.txt","w+")
+	popLog :write("NEW LOG ["..logTimeStamp.."] \n")
+	popLog :flush()
+	popLog :close()
+end
+
+--v function(text: string | number | boolean | CA_CQI)
+local function testLOG(text)
+	if not __write_output_to_logfile then
+		--return
+	end
+	local logText = tostring(text)
+	local logTimeStamp = os.date("%d, %m %Y %X")
+	local popLog = io.open("test_log.txt","a")
+	--# assume logTimeStamp: string
+	popLog :write("TEST:  [".. logTimeStamp .. "]:  [Turn: ".. tostring(cm:turn_number()) .. "]:  "..logText .. "  \n")
+	popLog :flush()
+	popLog :close()
+end
+
 local blacklisted_subtypes = {
 	"brt_louen_leoncouer",
 	"chs_archaon",
@@ -578,6 +605,7 @@ function sm0_delete()
         end,
 		function(context)
 			local char_lookup = cm:char_lookup_str(context:faction_cqi())
+			testLOG("UITriggerScriptEvent | set_character_immortality = false | "..char_lookup)
 			cm:set_character_immortality(char_lookup, false)
             cm:kill_character(context:faction_cqi(), false, true)
         end,
@@ -595,6 +623,7 @@ function sm0_delete()
 			or context:skill_point_spent_on() == "wh_main_skill_dwf_slayer_self_immortality"
 		end,
 		function(context)
+			testLOG("CharacterSkillPointAllocated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 		end,
 		true
@@ -610,6 +639,7 @@ function sm0_delete()
 			or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
 		end,
 		function(context)
+			testLOG("CharacterTurnStart | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 		end,
 		true
@@ -625,6 +655,7 @@ function sm0_delete()
 			or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
 		end,
 		function(context)
+			testLOG("CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 		end,
 		true
@@ -712,9 +743,10 @@ function sm0_delete()
 		true,
 		function(context)
 			local character = context:character()
-			if character:faction():is_human() == false and character:faction():culture() == "wh_main_brt_bretonnia" then
+			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
-					if character:rank() == 10 then
+					if character:rank() >= 10 then
+						testLOG("CharacterRankUp | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(character), true)
 					end
 				end
@@ -722,4 +754,35 @@ function sm0_delete()
 		end,
 		true
 	)
+	core:add_listener(
+		"sm0_immortal_character_created_bret_ai",
+		"CharacterCreated",
+		true,
+		function(context)
+			local character = context:character()
+			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
+				if character:character_type("general") == true then
+					if character:rank() >= 10 then
+						testLOG("CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+						cm:set_character_immortality(cm:char_lookup_str(character), true)
+					end
+				end
+			end
+		end,
+		true
+	)
+	-- ex faction leader after confederation
+	--core:add_listener(
+	--	"sm0_immortal_FactionLeader_FactionJoinsConfederation",
+	--	"FactionJoinsConfederation",
+	--	true,
+	--	function(context)
+	--		local char_list = context:confederation():character_list()
+	--		for i = 0, char_list:num_items() - 1 do
+	--			local char = char_list:item_at(i)
+	--			if cm:char_is_agent(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
+	--		end
+	--	end,
+	--	true
+	--)	
 end

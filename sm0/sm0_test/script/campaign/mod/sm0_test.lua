@@ -263,7 +263,7 @@ local function deletePlayerSubcultureFactions()
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:turn_number() <= 3) then
 				--if playerFaction:subculture() == faction:subculture() and cm:turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else		
-				if cm:random_number(2, 1) == 1 then --playerFaction:subculture() == faction:subculture() 
+				if cm:random_number(5, 1) == 1 then --playerFaction:subculture() == faction:subculture() 
 					--testLOG("deleted Faction: "..faction:name())
 					local regionList = faction:region_list()
 					for i = 0, regionList:num_items() - 1 do
@@ -350,7 +350,7 @@ function sm0_test()
 								for k = 0, unit_list:num_items() - 1 do
 									local unit = unit_list:item_at(k)	
 									if unit:unit_key() == "wh2_main_hef_inf_spearmen_0" then
-										testLOG("wh2_main_hef_inf_spearmen_0 found!!! Faction: "..faction:name())
+										testLOG("wh2_main_hef_inf_spearmen_0 found! | Faction: "..faction:name().." | CQI: "..tostring(military_force:general_character():command_queue_index()))
 									end
 								end
 							end					
@@ -375,7 +375,7 @@ function sm0_test()
 			return context:faction():name() == human_factions[1]
 		end,
 		function(context)
-			cm:trigger_incident("wh2_main_hef_eataine", "sm0_hef_add_influence", true)
+			--cm:trigger_incident("wh2_main_hef_eataine", "sm0_hef_add_influence", true)
 			local human_factions = cm:get_human_factions()
 			deletePlayerSubcultureFactions()
 			--item test
@@ -398,6 +398,7 @@ function sm0_test()
 		end,
 		function(context)
 			cm:show_shroud(false)
+			--expCheat()
 			--if cm:turn_number() == 2 then expCheat() end
 			--testLOG("Faction: "..context:faction():name().." /is_dead: "..tostring(context:faction():is_dead()))
 			--[[
@@ -440,4 +441,19 @@ function sm0_test()
         end,
         true
 	)
+	--core:add_listener(
+    --    "test_CharacterConvalescedOrKilled",
+    --    "CharacterConvalescedOrKilled",
+    --    function(context)
+    --        return true
+    --    end,
+	--	function(context)
+	--		if not context:character():is_null_interface() and context:character():is_wouned() then
+	--			testLOG("CharacterConvalescedOrKilled | "..context:character():faction():name().." | "..context:character():character_subtype_key().." | immortal")
+	--		else
+	--			testLOG("CharacterConvalescedOrKilled | dead")
+	--		end
+    --    end,
+    --    true
+	--)
 end

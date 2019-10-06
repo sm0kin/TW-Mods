@@ -130,10 +130,11 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 
 --ai exp
 require("sm0/sm0_ai_exp/script/campaign/mod/sm0_ai_exp")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_ai_exp")
 
 --difficulty
 require("sm0/sm0_difficulty/script/campaign/mod/sm0_difficulty")
-require("sm0/sm0_difficulty/script/export_helpers_sm0_difficulty")
+--require("sm0/sm0_difficulty/script/export_helpers_sm0_difficulty")
 
 
 --slann options

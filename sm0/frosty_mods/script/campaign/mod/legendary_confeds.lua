@@ -10,7 +10,7 @@ local subcultures_factions = {
     ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_tlaqua", "wh2_main_lzd_itza", "wh2_dlc13_lzd_spirits_of_the_jungle"},
     ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_naggarond", "wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread"},
     ["wh2_main_sc_skv_skaven"] = {"wh2_main_skv_clan_skyre", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus"},
-    ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_khemri", "wh2_dlc09_tmb_lybaras", "wh2_dlc09_tmb_exiles_of_nehek"}, --, "wh2_dlc09_tmb_followers_of_nagash"
+    ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_khemri", "wh2_dlc09_tmb_lybaras", "wh2_dlc09_tmb_exiles_of_nehek", "wh2_dlc09_tmb_followers_of_nagash"},
     --cst
     ["wh_main_sc_nor_norsca"] = {"wh_dlc08_nor_norsca", "wh_dlc08_nor_wintertooth"},
     ["wh_main_sc_emp_empire"] = {"wh_main_emp_empire", "wh_main_emp_middenland", "wh2_dlc13_emp_golden_order", "wh2_dlc13_emp_the_huntmarshals_expedition"},
@@ -248,7 +248,8 @@ local function confed(subcultures_factions_table)
                             )
                         end
                         if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then 
-                            if not not mcm or (humanFactions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" and faction ~= "wh2_dlc09_tmb_khemri" and faction ~= "wh2_dlc09_tmb_followers_of_nagash") then 
+                            if (not not mcm and cm:get_saved_value("mcm_tweaker_frostyConfed_restriction_value") ~= "restricted") or (humanFactions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" and faction ~= "wh2_dlc09_tmb_khemri" and faction ~= "wh2_dlc09_tmb_followers_of_nagash") 
+                            or cm:get_saved_value("mcm_tweaker_frostyConfed_restriction_value") == "unrestricted" then 
                                 if vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") then 
                                     local charList = factionCA:character_list()
                                     for n = 0, charList:num_items() - 1 do
@@ -326,7 +327,8 @@ local function confed(subcultures_factions_table)
                     (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture and cm:get_faction(humanFactions[2]):subculture() ~= subculture) then
                     if factions[1] and cm:get_faction(factions[1]) then spawnMissingLords(factions[1]) end
                     for i = 1, #factions do
-                        if factions[i] and subcultures_factions[subculture][1] ~= factions[i] then 
+                        if factions[i] and subcultures_factions[subculture][1] ~= factions[i] and (cm:get_saved_value("mcm_tweaker_frostyConfed_restriction_value") == "unrestricted"
+                        or (factions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" and factions[i] ~= "wh2_dlc09_tmb_the_sentinels")) then 
                             if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then 
                                 local factionCA = cm:get_faction(factions[i])
                                 local charList = factionCA:character_list()
@@ -340,6 +342,71 @@ local function confed(subcultures_factions_table)
                                 end
                             end
                             cm:force_confederation(subcultures_factions[subculture][1], factions[i])
+                        end
+                    end
+                end
+            end
+        end
+    end
+    if cm:get_saved_value("mcm_tweaker_frostyConfed_deadlyAlliances_value") == "worldwar" then
+        for subculture, factions in pairs(subcultures_factions_table) do
+            if subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" or (vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") and subculture == "wh2_dlc09_sc_tmb_tomb_kings") then 
+                if (not cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture) or
+                    (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture and cm:get_faction(humanFactions[2]):subculture() ~= subculture) then
+                    if factions[1] and cm:get_faction(factions[1]) then 
+                        spawnMissingLords(factions[1])
+                        local faction1 = cm:get_faction(factions[1])
+                        local factions_of_same_subculture = faction1:factions_of_same_subculture()
+                        for i = 0, factions_of_same_subculture:num_items() - 1 do
+                            local faction_of_same_subculture = factions_of_same_subculture:item_at(i)
+                            --if factions[i] and subcultures_factions[subculture][1] ~= factions[i] then 
+                                if cm:get_saved_value("mcm_tweaker_frostyConfed_restriction_value") == "unrestricted" or (faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_the_sentinels") then
+                                    if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then 
+                                        local charList = faction_of_same_subculture:character_list()
+                                        for j = 0, charList:num_items() - 1 do
+                                            local char = charList:item_at(j)
+                                            local cqi = char:command_queue_index()
+                                            cm:kill_character(cqi, true, false)
+                                            --cm:callback(function()
+                                                if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                                            --end, 0.5)
+                                        end
+                                    end
+                                    cm:force_confederation(subcultures_factions[subculture][1], faction_of_same_subculture:name())
+                                end
+                            --end
+                        end
+                    end
+                end
+            end
+        end
+        if cm:get_saved_value("mcm_tweaker_frostyConfed_theatre_value") == "enable" then
+            for i = 1, #humanFactions do
+                local humanFaction = cm:get_faction(humanFactions[i])
+                if humanFaction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" or (vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") and humanFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") then 
+                    if not cm:is_multiplayer() 
+                    or cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture() then
+                        local factions_of_same_subculture = humanFaction:factions_of_same_subculture()
+                        for j = 0, factions_of_same_subculture:num_items() - 1 do
+                            local faction_of_same_subculture = factions_of_same_subculture:item_at(j)
+                            if (humanFaction:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction_of_same_subculture:name() == "wh2_dlc09_tmb_the_sentinels") 
+                            or (humanFaction:name() == "wh2_dlc09_tmb_the_sentinels" and faction_of_same_subculture:name() == "wh2_dlc09_tmb_followers_of_nagash") or
+                            (humanFaction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and humanFaction:name() ~= "wh2_dlc09_tmb_the_sentinels" 
+                            and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_the_sentinels") 
+                            or cm:get_saved_value("mcm_tweaker_frostyConfed_restriction_value") == "unrestricted" then
+                                if humanFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then 
+                                    local charList = faction_of_same_subculture:character_list()
+                                    for k = 0, charList:num_items() - 1 do
+                                        local char = charList:item_at(k)
+                                        local cqi = char:command_queue_index()
+                                        cm:kill_character(cqi, true, false)
+                                        --cm:callback(function()
+                                            if char:is_wounded() then cm:stop_character_convalescing(cqi) end
+                                        --end, 0.5)
+                                    end
+                                end
+                                cm:force_confederation(humanFactions[i], faction_of_same_subculture:name())
+                            end
                         end
                     end
                 end
@@ -392,6 +459,12 @@ function legendary_confeds()
         local deadlyAlliances = frostyConfed:add_tweaker("deadlyAlliances", "Deadly Alliances", "All playable AI factions with legendary lords confederate and form large factions.")
         deadlyAlliances:add_option("disable", "Disable", "")
         deadlyAlliances:add_option("enable", "Enable", "")
+        deadlyAlliances:add_option("worldwar", "World War", "All AI factions of the same subculture form factions.")
+        if vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") then
+            local restriction = frostyConfed:add_tweaker("restriction", "Tomb Kings - Restrictions", "Set your prefered rules for Tomb Kings Confederation!")
+            restriction:add_option("restricted", "Lorefriendly", "Lore based limitations, e.g. Settra can confederate any Tomb Kings faction aside from The Followers of Nagash and The Sentinels.")
+            restriction:add_option("unrestricted", "No restrictions", "Completely unrestricted!")
+        end
         for i = 1, #humanFactions do
             local humanFaction = cm:get_faction(humanFactions[i])
             local subculture = humanFaction:subculture()
