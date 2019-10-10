@@ -875,11 +875,11 @@ local function spawn_missing_lords(confederator, confederated)
     if confederator:has_home_region() then 
         start_region = confederator:home_region()
         --if start_region then RDLOG("spawn_missing_lords 2: "..confederator:name().." | Region: "..start_region:name()) end
-        x, y = cm:find_valid_spawn_location_for_character_from_settlement(confederator:name(), start_region:name(), false, true)
+        x, y = cm:find_valid_spawn_location_for_character_from_settlement(confederator:name(), start_region:name(), false, true, 9)
         --RDLOG("find_valid_spawn_location_for_character_from_settlement: x="..tostring(x)..", y="..tostring(y))
     else
         if not confederator:military_force_list():item_at(0):general_character():is_at_sea() and confederator:military_force_list():item_at(0):general_character():has_region() then
-            	start_region = confederator:military_force_list():item_at(0):general_character():region() 
+            start_region = confederator:military_force_list():item_at(0):general_character():region() 
         else
             RDLOG("ERROR: Could not find valid region!")
             return
@@ -888,17 +888,20 @@ local function spawn_missing_lords(confederator, confederated)
     if not is_valid_spawn_coordinate(x, y) or not confederator:has_home_region() then
         --x, y = cm:find_valid_spawn_location_for_character_from_position(confederator:name(), confederator:military_force_list():item_at(0):general_character():logical_position_x() + 1, confederator:military_force_list():item_at(0):general_character():logical_position_y(), true)
         local char_lookup = cm:char_lookup_str(confederator:military_force_list():item_at(0):general_character())
-        x, y = cm:find_valid_spawn_location_for_character_from_character(confederator:name(), char_lookup, true)
+        x, y = cm:find_valid_spawn_location_for_character_from_character(confederator:name(), char_lookup, true, 9)
         --RDLOG("find_valid_spawn_location_for_character_from_position: x="..tostring(x)..", y="..tostring(y))
-        --if not is_valid_spawn_coordinate(x, y) then
-        --    x = confederator:military_force_list():item_at(0):general_character():logical_position_x()
-        --    y = confederator:military_force_list():item_at(0):general_character():logical_position_y()
-        --    --RDLOG("Backup coordinates: x="..tostring(x)..", y="..tostring(y))
-        --end
     end
     if not is_valid_spawn_coordinate(x, y) then 
         -- CA's method did not provide a valid position, try Vandy's method instead
-        x, y = find_valid_spawn_coordinates(confederator:name(), x, y)
+        local spawn_x, spawn_y
+        if confederator:has_home_region() then 
+            spawn_x = confederator:home_region():settlement():logical_position_x()
+            spawn_y = confederator:home_region():settlement():logical_position_y()
+        else
+            spawn_x = confederator:military_force_list():item_at(0):general_character():logical_position_x()
+            spawn_y = confederator:military_force_list():item_at(0):general_character():logical_position_y()
+        end
+        if is_valid_spawn_coordinate(spawn_x, spawn_y) then x, y = find_valid_spawn_coordinates(confederator:name(), spawn_x, spawn_y) end
         --RDLOG("find_valid_spawn_coordinates: x="..tostring(x)..", y="..tostring(y))
     end
     --RDLOG("Trying to revive Faction: "..confederated:name().." | Region: "..start_region:name())
@@ -933,9 +936,20 @@ local function spawn_missing_lords(confederator, confederated)
                     if locked_ai_generals[i].id ~= "" then cm:unlock_starting_general_recruitment(locked_ai_generals[i].id, locked_ai_generals[i].faction) end
                     for n = 1, 10 do
                         if not cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then
-                            x, y = cm:find_valid_spawn_location_for_character_from_position(confederated:name(), x, y, true)
+                            x, y = cm:find_valid_spawn_location_for_character_from_position(confederated:name(), x, y, true, 7)
+                            -- backup
                             if not is_valid_spawn_coordinate(x, y) then 
-                                x, y = find_valid_spawn_coordinates(confederated:name(), x, y)
+                                -- CA's method did not provide a valid position, try Vandy's method instead
+                                local spawn_x, spawn_y
+                                if confederator:has_home_region() then 
+                                    spawn_x = confederator:home_region():settlement():logical_position_x()
+                                    spawn_y = confederator:home_region():settlement():logical_position_y()
+                                else
+                                    spawn_x = confederator:military_force_list():item_at(0):general_character():logical_position_x()
+                                    spawn_y = confederator:military_force_list():item_at(0):general_character():logical_position_y()
+                                end
+                                if is_valid_spawn_coordinate(spawn_x, spawn_y) then x, y = find_valid_spawn_coordinates(confederator:name(), spawn_x, spawn_y) end        
+                                --RDLOG("find_valid_spawn_coordinates: x="..tostring(x)..", y="..tostring(y))
                             end
                             if is_valid_spawn_coordinate(x, y) then 
                                 cm:create_force(
@@ -1175,7 +1189,7 @@ local function confed_revived(confederator, confederated)
     if confederator:has_home_region() then 
         start_region = confederator:home_region()
         --if start_region then RDLOG("spawn_missing_lords 2: "..confederator:name().." | Region: "..start_region:name()) end
-        x, y = cm:find_valid_spawn_location_for_character_from_settlement(confederator:name(), start_region:name(), false, true)
+        x, y = cm:find_valid_spawn_location_for_character_from_settlement(confederator:name(), start_region:name(), false, true, 9)
         --RDLOG("find_valid_spawn_location_for_character_from_settlement: x="..tostring(x)..", y="..tostring(y))
     else
         if not confederator:military_force_list():item_at(0):general_character():is_at_sea() and confederator:military_force_list():item_at(0):general_character():has_region() then
@@ -1188,17 +1202,21 @@ local function confed_revived(confederator, confederated)
     if not is_valid_spawn_coordinate(x, y) or not confederator:has_home_region() then
         --x, y = cm:find_valid_spawn_location_for_character_from_position(confederator:name(), confederator:military_force_list():item_at(0):general_character():logical_position_x() + 1, confederator:military_force_list():item_at(0):general_character():logical_position_y(), true)
         local char_lookup = cm:char_lookup_str(confederator:military_force_list():item_at(0):general_character())
-        x, y = cm:find_valid_spawn_location_for_character_from_character(confederator:name(), char_lookup, true)
+        x, y = cm:find_valid_spawn_location_for_character_from_character(confederator:name(), char_lookup, true, 9)
         --RDLOG("find_valid_spawn_location_for_character_from_position: x="..tostring(x)..", y="..tostring(y))
-        --if not is_valid_spawn_coordinate(x, y) then
-        --    x = confederator:military_force_list():item_at(0):general_character():logical_position_x()
-        --    y = confederator:military_force_list():item_at(0):general_character():logical_position_y()
-        --    --RDLOG("Backup coordinates: x="..tostring(x)..", y="..tostring(y))
-        --end
     end
+    -- backup
     if not is_valid_spawn_coordinate(x, y) then 
         -- CA's method did not provide a valid position, try Vandy's method instead
-        x, y = find_valid_spawn_coordinates(confederator:name(), x, y)
+        local spawn_x, spawn_y
+        if confederator:has_home_region() then 
+            spawn_x = confederator:home_region():settlement():logical_position_x()
+            spawn_y = confederator:home_region():settlement():logical_position_y()
+        else
+            spawn_x = confederator:military_force_list():item_at(0):general_character():logical_position_x()
+            spawn_y = confederator:military_force_list():item_at(0):general_character():logical_position_y()
+        end
+        if is_valid_spawn_coordinate(spawn_x, spawn_y) then x, y = find_valid_spawn_coordinates(confederator:name(), spawn_x, spawn_y) end        
         --RDLOG("find_valid_spawn_coordinates: x="..tostring(x)..", y="..tostring(y))
     end
     --RDLOG("Trying to revive Faction: "..confederated:name().." | Region: "..start_region:name())

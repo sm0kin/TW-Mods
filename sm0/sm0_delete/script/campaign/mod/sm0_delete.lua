@@ -248,7 +248,9 @@ local blacklisted_subtypes = {
     "Sultan_Jaffar",
 	"morgan_bernhardt",
 	--Empire Master Engineer
-	"wh_main_emp_jubal_falk"
+	"wh_main_emp_jubal_falk",
+	--Cataph Sea Patrol
+	"AK_aislinn"
 } --:vector<string>
 
 --v function(uic: CA_UIC)
@@ -309,7 +311,7 @@ local function create_trash_ui()
 		local character_row = UIComponent(list_box:Find(i))
 		local character_row_len = string.len("character_row_")
 		local cqi_string = string.sub(character_row:Id(), character_row_len + 1) 
-		out("sm0/cqi: "..tostring(cqi_string))
+		testLOG("sm0/cqi: "..tostring(cqi_string))
 		local reference_uic = find_uicomponent(character_row, "indent_parent", "icon_wounded")
 		local reference_uic_W, reference_uic_H = reference_uic:Bounds()
 		local reference_uic_X, reference_uic_Y = reference_uic:Position()
@@ -495,7 +497,7 @@ local function create_trash_ui()
 							local cqi_string = string.sub(character_row:Id(), character_row_len + 1)
 							local checkbox_toggle = UIComponent(character_row:Find("checkbox_toggle_"..cqi_string))
 							if checkbox_toggle:CurrentState() == "selected" then												
-								out("sm0/cqi: "..cqi_string)
+								testLOG("sm0/cqi: "..cqi_string)
 								local cqi = tonumber(cqi_string)
 								--#assume cqi: CA_CQI
 								local char_lookup = cm:char_lookup_str(cqi)
@@ -541,15 +543,15 @@ function sm0_delete()
 			return true --appoint_new_general
 		end,
 		function(context)
-			out("sm0/PanelOpenedCampaign: "..context.string)
+			testLOG("sm0/PanelOpenedCampaign: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down" 
 				or tab_units:CurrentState() == "down") then 
-					out("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					testLOG("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					out("sm0/tab_units|state: disabled")
+					testLOG("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 						
 		end,
@@ -562,15 +564,15 @@ function sm0_delete()
 			return true --appoint_new_general
 		end,
 		function(context)
-			out("sm0/PanelClosedCampaign: "..context.string)
+			testLOG("sm0/PanelClosedCampaign: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down"
 				or tab_units:CurrentState() == "down") then 
-					out("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					testLOG("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					out("sm0/tab_units|state: disabled")
+					testLOG("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 						
 		end,
@@ -583,14 +585,14 @@ function sm0_delete()
 			return context.string == "tab_units"
 		end,
 		function(context)
-			out("sm0/ComponentLClickUp: "..context.string)
+			testLOG("sm0/ComponentLClickUp: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down") then 
-					out("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					testLOG("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					out("sm0/tab_units|state: disabled")
+					testLOG("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 	
 		end,
@@ -605,7 +607,7 @@ function sm0_delete()
         end,
 		function(context)
 			local char_lookup = cm:char_lookup_str(context:faction_cqi())
-			testLOG("UITriggerScriptEvent | set_character_immortality = false | "..char_lookup)
+			testLOG("sm0_delete_UITriggerScriptEvent | set_character_immortality = false | "..char_lookup)
 			cm:set_character_immortality(char_lookup, false)
             cm:kill_character(context:faction_cqi(), false, true)
         end,
@@ -623,86 +625,94 @@ function sm0_delete()
 			or context:skill_point_spent_on() == "wh_main_skill_dwf_slayer_self_immortality"
 		end,
 		function(context)
-			testLOG("CharacterSkillPointAllocated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+			testLOG("sm0_immortal_CharacterSkillPointAllocated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 		end,
 		true
 	)
-	core:add_listener(
-		"sm0_immortal_CharacterTurnStart",
-		"CharacterTurnStart",
-		function(context)
-			return context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
-			or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
-			or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
-			or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
-			or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
-		end,
-		function(context)
-			testLOG("CharacterTurnStart | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
-			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-		end,
-		true
-	)
-	core:add_listener(
-		"sm0_immortal_skill_CharacterCreated",
-		"CharacterCreated",
-		function(context)
-			return context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
-			or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
-			or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
-			or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
-			or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
-		end,
-		function(context)
-			testLOG("CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
-			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-		end,
-		true
-	)
+	--core:add_listener(
+	--	"sm0_immortal_CharacterTurnStart",
+	--	"CharacterTurnStart",
+	--	function(context)
+	--		return context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
+	--		or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
+	--		or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
+	--		or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
+	--		or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
+	--	end,
+	--	function(context)
+	--		testLOG("sm0_immortal_CharacterTurnStart | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+	--		cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+	--	end,
+	--	true
+	--)
+	--core:add_listener(
+	--	"sm0_immortal_skill_CharacterCreated",
+	--	"CharacterCreated",
+	--	function(context)
+	--		return context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
+	--		or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
+	--		or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
+	--		or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
+	--		or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
+	--	end,
+	--	function(context)
+	--		testLOG("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+	--		cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+	--	end,
+	--	true
+	--)
 	-- immortality tech
 	core:add_listener(
-		"sm0_immortal_FactionTurnStart",
-		"FactionTurnStart",
+		"sm0_immortal_tech_ResearchCompleted",
+		"ResearchCompleted",
 		function(context)
 			return context:faction():name() == "wh2_dlc13_lzd_spirits_of_the_jungle" or context:faction():subculture() == "wh_main_sc_nor_norsca"
 		end,
 		function(context)
-			if context:faction():has_technology("tech_dlc08_nor_nw_03") or context:faction():has_technology("tech_dlc13_lzd_vassal_2") then	
+			if context:technology() == "tech_dlc08_nor_nw_03" or context:technology() == "tech_dlc13_lzd_vassal_2" then	
 				local char_list = context:faction():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if cm:char_is_agent(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
+					if cm:char_is_agent(char) then 
+						testLOG("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key())
+						cm:set_character_immortality(cm:char_lookup_str(char), true) 	
+					end
 				end
 			end
-			if context:faction():has_technology("tech_dlc08_nor_nw_11") then	
+			if context:technology() == "tech_dlc08_nor_nw_11" then	
 				local char_list = context:faction():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if cm:char_is_general(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
+					if cm:char_is_general(char) then 
+						testLOG("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key())
+						cm:set_character_immortality(cm:char_lookup_str(char), true) 
+					end
 				end			
 			end
 		end,
 		true
 	)
 	core:add_listener(
-		"sm0_immortal_CharacterCreated",
+		"sm0_immortal_tech_CharacterCreated",
 		"CharacterCreated",
 		function(context)
 			return context:character():faction():name() == "wh2_dlc13_lzd_spirits_of_the_jungle" or context:character():faction():subculture() == "wh_main_sc_nor_norsca"
 		end,
 		function(context)
 			if cm:char_is_agent(context:character()) and (context:character():faction():has_technology("tech_dlc08_nor_nw_03") or context:character():faction():has_technology("tech_dlc13_lzd_vassal_2")) then	
+				testLOG("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
 			if cm:char_is_general(context:character()) and context:character():faction():has_technology("tech_dlc08_nor_nw_11") then	
+				testLOG("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
 		end,
 		true
 	)
 	core:add_listener(
-		"sm0_immortal_FactionJoinsConfederation",
+		"sm0_immortal_tech_FactionJoinsConfederation",
 		"FactionJoinsConfederation",
 		function(context)
 			return context:confederation():name() == "wh2_dlc13_lzd_spirits_of_the_jungle" or context:confederation():subculture() == "wh_main_sc_nor_norsca"
@@ -712,14 +722,20 @@ function sm0_delete()
 				local char_list = context:confederation():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if cm:char_is_agent(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
+					if cm:char_is_agent(char) then 
+						testLOG("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key())
+						cm:set_character_immortality(cm:char_lookup_str(char), true) 
+					end
 				end
 			end
 			if context:confederation():has_technology("tech_dlc08_nor_nw_11") then	
 				local char_list = context:confederation():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if cm:char_is_general(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
+					if cm:char_is_general(char) then 
+						testLOG("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key())
+						cm:set_character_immortality(cm:char_lookup_str(char), true) 
+					end
 				end			
 			end
 		end,
@@ -732,6 +748,7 @@ function sm0_delete()
 		true,
 		function(context)
 			if cm:char_is_general(context:character()) and context:character():faction():is_human() then	
+				testLOG("sm0_immortal_ScriptEventBretonniaGrailVowCompleted | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
 		end,
@@ -746,7 +763,7 @@ function sm0_delete()
 			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
 					if character:rank() >= 10 then
-						testLOG("CharacterRankUp | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+						testLOG("sm0_immortal_character_rank_up_vows_per_level_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(character), true)
 					end
 				end
@@ -763,7 +780,7 @@ function sm0_delete()
 			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
 					if character:rank() >= 10 then
-						testLOG("CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+						testLOG("sm0_immortal_character_created_bret_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(character), true)
 					end
 				end

@@ -96,6 +96,7 @@ require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
 require("sm0/frosty_mods/script/campaign/mod/legendary_confeds")
 require("sm0/frosty_mods/script/campaign/main_warhammer/wh_quests")
 require("sm0/frosty_mods/script/campaign/mod/add_mounts_experiment")
+require("sm0/frosty_mods/script/campaign/mod/hostile_pirates")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/frosty_horde")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds")
