@@ -1,26 +1,26 @@
 --v function()
-local function testLOG_reset()
+local function sm0_log_reset()
 	if not __write_output_to_logfile then
 		--return
 	end
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	--# assume logTimeStamp: string
-	local popLog = io.open("test_log.txt","w+")
+	local popLog = io.open("sm0_log.txt","w+")
 	popLog :write("NEW LOG ["..logTimeStamp.."] \n")
 	popLog :flush()
 	popLog :close()
 end
 
 --v function(text: string | number | boolean | CA_CQI)
-local function testLOG(text)
+local function sm0_log(text)
 	if not __write_output_to_logfile then
 		--return
 	end
 	local logText = tostring(text)
 	local logTimeStamp = os.date("%d, %m %Y %X")
-	local popLog = io.open("test_log.txt","a")
+	local popLog = io.open("sm0_log.txt","a")
 	--# assume logTimeStamp: string
-	popLog :write("TEST:  [".. logTimeStamp .. "]:  [Turn: ".. tostring(cm:turn_number()) .. "]:  "..logText .. "  \n")
+	popLog :write("TEST:  [".. logTimeStamp .. "] [Turn: ".. tostring(cm:turn_number()) .. "(" .. cm:whose_turn_is_it() .. ")]:  "..logText .. "  \n")
 	popLog :flush()
 	popLog :close()
 end
@@ -136,7 +136,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_dlc09_tmb_settra") then
 				cm:remove_all_units_from_general(currentChar)
-				testLOG("remove_all_units_from_general/wh2_dlc09_tmb_settra")
+				sm0_log("remove_all_units_from_general/wh2_dlc09_tmb_settra")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(TKunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -149,7 +149,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_dlc09_tmb_arkhan") then
 				cm:remove_all_units_from_general(currentChar)
-				testLOG("remove_all_units_from_general/wh2_dlc09_tmb_arkhan")
+				sm0_log("remove_all_units_from_general/wh2_dlc09_tmb_arkhan")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(TKunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -162,7 +162,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_dlc09_tmb_khalida") then
 				cm:remove_all_units_from_general(currentChar)
-				testLOG("remove_all_units_from_general/wh2_dlc09_tmb_khalida")
+				sm0_log("remove_all_units_from_general/wh2_dlc09_tmb_khalida")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(TKunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -175,7 +175,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_main_def_malekith") then
 				cm:remove_all_units_from_general(currentChar)
-				testLOG("remove_all_units_from_general/wh2_main_def_malekith")
+				sm0_log("remove_all_units_from_general/wh2_main_def_malekith")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(DEFunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -189,7 +189,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("wh2_main_def_morathi") then
 				cm:remove_all_units_from_general(currentChar)
-				testLOG("remove_all_units_from_general/wh2_main_def_morathi")
+				sm0_log("remove_all_units_from_general/wh2_main_def_morathi")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(DEFunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -203,7 +203,7 @@ local function unitCheat()
 			local currentChar = characterList:item_at(i)	
 			if currentChar:character_subtype("vmp_mannfred_von_carstein") then
 				cm:remove_all_units_from_general(currentChar)
-				testLOG("remove_all_units_from_general/vmp_mannfred_von_carstein")
+				sm0_log("remove_all_units_from_general/vmp_mannfred_von_carstein")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(VMPunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -219,7 +219,7 @@ local function unitCheat()
 			if currentChar:character_subtype("wh2_dlc12_lzd_tehenhauin") or currentChar:character_subtype("wh2_dlc13_lzd_nakai") 
 			or currentChar:character_subtype("wh2_main_lzd_lord_mazdamundi") then
 				cm:remove_all_units_from_general(currentChar)
-				testLOG("remove_all_units_from_general/wh2_dlc12_lzd_tehenhauin")
+				sm0_log("remove_all_units_from_general/wh2_dlc12_lzd_tehenhauin")
 				local cqi = currentChar:command_queue_index()
 				for k, v in pairs(LZDunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
@@ -264,7 +264,7 @@ local function deletePlayerSubcultureFactions()
 				--if playerFaction:subculture() == faction:subculture() and cm:turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else		
 				if cm:random_number(5, 1) == 1 then --playerFaction:subculture() == faction:subculture() 
-					--testLOG("deleted Faction: "..faction:name())
+					--sm0_log("deleted Faction: "..faction:name())
 					local regionList = faction:region_list()
 					for i = 0, regionList:num_items() - 1 do
 						local currentRegion = regionList:item_at(i)
@@ -275,13 +275,13 @@ local function deletePlayerSubcultureFactions()
 					--for i = 0, charList:num_items() - 1 do
 					--	local currentChar = charList:item_at(i)
 					--	if currentChar and not currentChar:is_null_interface() then 
-					--		--testLOG("kill_character/character_type = "..currentChar:character_type_key()) 
+					--		--sm0_log("kill_character/character_type = "..currentChar:character_type_key()) 
 					--	end
 					--	--if not currentChar:character_type("colonel") then cm:kill_character(currentChar:command_queue_index(), true, false) end
 					--	cm:kill_character(currentChar:command_queue_index(), true, false)
 					--end
 				else
-					--testLOG("No luck deleting Faction: "..faction:name())
+					--sm0_log("No luck deleting Faction: "..faction:name())
 				end
 			end
 		end
@@ -331,7 +331,7 @@ end
 -- init
 --v function()
 function sm0_test()
-	if cm:is_new_game() then testLOG_reset() end
+	if cm:is_new_game() then sm0_log_reset() end
 	core:add_listener(
 		"refugee_FactionTurnStart",
 		"FactionTurnStart",
@@ -350,7 +350,7 @@ function sm0_test()
 								for k = 0, unit_list:num_items() - 1 do
 									local unit = unit_list:item_at(k)	
 									if unit:unit_key() == "wh2_main_hef_inf_spearmen_0" then
-										testLOG("wh2_main_hef_inf_spearmen_0 found! | Faction: "..faction:name().." | CQI: "..tostring(military_force:general_character():command_queue_index()))
+										sm0_log("wh2_main_hef_inf_spearmen_0 found! | Faction: "..faction:name().." | CQI: "..tostring(military_force:general_character():command_queue_index()))
 									end
 								end
 							end					
@@ -358,7 +358,7 @@ function sm0_test()
 					end
 				end
 			end
-			--testLOG("sm0/faction = "..context:faction():name())
+			--sm0_log("sm0/faction = "..context:faction():name())
 		end,
 		true
 	)
@@ -382,7 +382,7 @@ function sm0_test()
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then
 			--	cm:transfer_region_to_faction("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", human_factions[1])
 			--	local x, y = cm:find_valid_spawn_location_for_character_from_settlement(human_factions[1], "wh2_main_vor_kingdom_of_beasts_temple_of_skulls", false, true, 5)
-			--	testLOG("x = "..x.." | y = "..y)
+			--	sm0_log("x = "..x.." | y = "..y)
 			--	--cm:force_rebellion_in_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", 1, "wh2_main_hef_inf_spearmen_0", x, y, false)
 			--	cm:set_public_order_of_province_for_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):public_order() - 300)
 			--end
@@ -400,7 +400,7 @@ function sm0_test()
 			cm:show_shroud(false)
 			--expCheat()
 			--if cm:turn_number() == 2 then expCheat() end
-			--testLOG("Faction: "..context:faction():name().." /is_dead: "..tostring(context:faction():is_dead()))
+			--sm0_log("Faction: "..context:faction():name().." /is_dead: "..tostring(context:faction():is_dead()))
 			--[[
 			if cm:turn_number() >= 3 then
 				local human_factions = cm:get_human_factions()
@@ -408,7 +408,7 @@ function sm0_test()
 				local home_region = player_1:home_region()
 				local x, y = cm:find_valid_spawn_location_for_character_from_settlement(player_1:name(), home_region:name(), false, true)
 				if cm:model():world():ancillary_exists("wh2_dlc12_anc_weapon_blade_of_the_serpents_tongue") then
-					testLOG("ITEM EXISTS: wh2_dlc12_anc_weapon_blade_of_the_serpents_tongue")
+					sm0_log("ITEM EXISTS: wh2_dlc12_anc_weapon_blade_of_the_serpents_tongue")
 				end
 				cm:create_force(
 					"wh2_dlc12_lzd_cult_of_sotek",
@@ -449,9 +449,9 @@ function sm0_test()
     --    end,
 	--	function(context)
 	--		if not context:character():is_null_interface() and context:character():is_wouned() then
-	--			testLOG("CharacterConvalescedOrKilled | "..context:character():faction():name().." | "..context:character():character_subtype_key().." | immortal")
+	--			sm0_log("CharacterConvalescedOrKilled | "..context:character():faction():name().." | "..context:character():character_subtype_key().." | immortal")
 	--		else
-	--			testLOG("CharacterConvalescedOrKilled | dead")
+	--			sm0_log("CharacterConvalescedOrKilled | dead")
 	--		end
     --    end,
     --    true

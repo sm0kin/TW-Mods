@@ -1,26 +1,26 @@
 --v function()
-local function testLOG_reset()
+local function sm0_log_reset()
 	if not __write_output_to_logfile then
 		--return
 	end
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	--# assume logTimeStamp: string
-	local popLog = io.open("test_log.txt","w+")
+	local popLog = io.open("sm0_log.txt","w+")
 	popLog :write("NEW LOG ["..logTimeStamp.."] \n")
 	popLog :flush()
 	popLog :close()
 end
 
 --v function(text: string | number | boolean | CA_CQI)
-local function testLOG(text)
+local function sm0_log(text)
 	if not __write_output_to_logfile then
 		--return
 	end
 	local logText = tostring(text)
 	local logTimeStamp = os.date("%d, %m %Y %X")
-	local popLog = io.open("test_log.txt","a")
+	local popLog = io.open("sm0_log.txt","a")
 	--# assume logTimeStamp: string
-	popLog :write("TEST:  [".. logTimeStamp .. "]:  [Turn: ".. tostring(cm:turn_number()) .. "]:  "..logText .. "  \n")
+	popLog :write("DEL:  [".. logTimeStamp .. "] [Turn: ".. tostring(cm:turn_number()) .. "(" .. cm:whose_turn_is_it() .. ")]:  "..logText .. "  \n")
 	popLog :flush()
 	popLog :close()
 end
@@ -311,7 +311,7 @@ local function create_trash_ui()
 		local character_row = UIComponent(list_box:Find(i))
 		local character_row_len = string.len("character_row_")
 		local cqi_string = string.sub(character_row:Id(), character_row_len + 1) 
-		testLOG("sm0/cqi: "..tostring(cqi_string))
+		sm0_log("sm0/cqi: "..tostring(cqi_string))
 		local reference_uic = find_uicomponent(character_row, "indent_parent", "icon_wounded")
 		local reference_uic_W, reference_uic_H = reference_uic:Bounds()
 		local reference_uic_X, reference_uic_Y = reference_uic:Position()
@@ -497,7 +497,7 @@ local function create_trash_ui()
 							local cqi_string = string.sub(character_row:Id(), character_row_len + 1)
 							local checkbox_toggle = UIComponent(character_row:Find("checkbox_toggle_"..cqi_string))
 							if checkbox_toggle:CurrentState() == "selected" then												
-								testLOG("sm0/cqi: "..cqi_string)
+								sm0_log("sm0/cqi: "..cqi_string)
 								local cqi = tonumber(cqi_string)
 								--#assume cqi: CA_CQI
 								local char_lookup = cm:char_lookup_str(cqi)
@@ -543,15 +543,15 @@ function sm0_delete()
 			return true --appoint_new_general
 		end,
 		function(context)
-			testLOG("sm0/PanelOpenedCampaign: "..context.string)
+			sm0_log("sm0/PanelOpenedCampaign: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down" 
 				or tab_units:CurrentState() == "down") then 
-					testLOG("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					testLOG("sm0/tab_units|state: disabled")
+					sm0_log("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 						
 		end,
@@ -564,15 +564,15 @@ function sm0_delete()
 			return true --appoint_new_general
 		end,
 		function(context)
-			testLOG("sm0/PanelClosedCampaign: "..context.string)
+			sm0_log("sm0/PanelClosedCampaign: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down"
 				or tab_units:CurrentState() == "down") then 
-					testLOG("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					testLOG("sm0/tab_units|state: disabled")
+					sm0_log("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 						
 		end,
@@ -585,14 +585,14 @@ function sm0_delete()
 			return context.string == "tab_units"
 		end,
 		function(context)
-			testLOG("sm0/ComponentLClickUp: "..context.string)
+			sm0_log("sm0/ComponentLClickUp: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down") then 
-					testLOG("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					testLOG("sm0/tab_units|state: disabled")
+					sm0_log("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 	
 		end,
@@ -607,7 +607,7 @@ function sm0_delete()
         end,
 		function(context)
 			local char_lookup = cm:char_lookup_str(context:faction_cqi())
-			testLOG("sm0_delete_UITriggerScriptEvent | set_character_immortality = false | "..char_lookup)
+			sm0_log("sm0_delete_UITriggerScriptEvent | set_character_immortality = false | "..char_lookup)
 			cm:set_character_immortality(char_lookup, false)
             cm:kill_character(context:faction_cqi(), false, true)
         end,
@@ -625,7 +625,7 @@ function sm0_delete()
 			or context:skill_point_spent_on() == "wh_main_skill_dwf_slayer_self_immortality"
 		end,
 		function(context)
-			testLOG("sm0_immortal_CharacterSkillPointAllocated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+			sm0_log("sm0_immortal_CharacterSkillPointAllocated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 		end,
 		true
@@ -641,7 +641,7 @@ function sm0_delete()
 	--		or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
 	--	end,
 	--	function(context)
-	--		testLOG("sm0_immortal_CharacterTurnStart | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+	--		sm0_log("sm0_immortal_CharacterTurnStart | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 	--		cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 	--	end,
 	--	true
@@ -657,7 +657,7 @@ function sm0_delete()
 	--		or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
 	--	end,
 	--	function(context)
-	--		testLOG("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+	--		sm0_log("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 	--		cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 	--	end,
 	--	true
@@ -675,7 +675,7 @@ function sm0_delete()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
 					if cm:char_is_agent(char) then 
-						testLOG("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key())
+						sm0_log("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(char), true) 	
 					end
 				end
@@ -685,7 +685,7 @@ function sm0_delete()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
 					if cm:char_is_general(char) then 
-						testLOG("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key())
+						sm0_log("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(char), true) 
 					end
 				end			
@@ -701,11 +701,11 @@ function sm0_delete()
 		end,
 		function(context)
 			if cm:char_is_agent(context:character()) and (context:character():faction():has_technology("tech_dlc08_nor_nw_03") or context:character():faction():has_technology("tech_dlc13_lzd_vassal_2")) then	
-				testLOG("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+				sm0_log("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
 			if cm:char_is_general(context:character()) and context:character():faction():has_technology("tech_dlc08_nor_nw_11") then	
-				testLOG("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+				sm0_log("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
 		end,
@@ -723,7 +723,7 @@ function sm0_delete()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
 					if cm:char_is_agent(char) then 
-						testLOG("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key())
+						sm0_log("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(char), true) 
 					end
 				end
@@ -733,7 +733,7 @@ function sm0_delete()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
 					if cm:char_is_general(char) then 
-						testLOG("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key())
+						sm0_log("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(char), true) 
 					end
 				end			
@@ -748,7 +748,7 @@ function sm0_delete()
 		true,
 		function(context)
 			if cm:char_is_general(context:character()) and context:character():faction():is_human() then	
-				testLOG("sm0_immortal_ScriptEventBretonniaGrailVowCompleted | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+				sm0_log("sm0_immortal_ScriptEventBretonniaGrailVowCompleted | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
 		end,
@@ -763,7 +763,7 @@ function sm0_delete()
 			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
 					if character:rank() >= 10 then
-						testLOG("sm0_immortal_character_rank_up_vows_per_level_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+						sm0_log("sm0_immortal_character_rank_up_vows_per_level_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(character), true)
 					end
 				end
@@ -780,7 +780,7 @@ function sm0_delete()
 			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
 					if character:rank() >= 10 then
-						testLOG("sm0_immortal_character_created_bret_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+						sm0_log("sm0_immortal_character_created_bret_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(character), true)
 					end
 				end

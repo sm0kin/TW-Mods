@@ -1,31 +1,31 @@
 --Drunk Flamingo's log script
 --All credits to Drunk Flamingo
 --v function()
-local function mlLOG_reset()
+local function sm0_log_reset()
 	if not __write_output_to_logfile then
-		return
+		--return
 	end
 	
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	--# assume logTimeStamp: string
 	
-	local popLog = io.open("ml_log.txt","w+")
+	local popLog = io.open("sm0_log.txt","w+")
 	popLog :write("NEW LOG ["..logTimeStamp.."] \n")
 	popLog :flush()
 	popLog :close()
 end
 
 --v function(text: string | number | boolean | CA_CQI)
-local function mlLOG(text)
+local function sm0_log(text)
 	if not __write_output_to_logfile then
-		return
+		--return
 	end
 
 	local logText = tostring(text)
 	local logTimeStamp = os.date("%d, %m %Y %X")
-	local popLog = io.open("ml_log.txt","a")
+	local popLog = io.open("sm0_log.txt","a")
 	--# assume logTimeStamp: string
-	popLog :write("ML:  [".. logTimeStamp .. "]:  "..logText .. "  \n")
+	popLog :write("ML: [".. logTimeStamp .. "] [Turn: ".. tostring(cm:turn_number()) .. "(" .. cm:whose_turn_is_it() .. ")]:  "..logText .. "  \n")
 	popLog :flush()
 	popLog :close()
 end
@@ -39,9 +39,9 @@ local function mlDEBUG()
 		--out("safeCall start")
 		local status, result = pcall(func)
 		if not status then
-			mlLOG("ERROR")
-			mlLOG(tostring(result))
-			mlLOG(debug.traceback())
+			sm0_log("ERROR")
+			sm0_log(tostring(result))
+			sm0_log(debug.traceback())
 		end
 		--out("safeCall end")
 		return result
@@ -209,7 +209,7 @@ local createSpellSlotButtonContainer --:function(char: CA_CHAR, spellSlots: vect
 --v function(char: CA_CHAR) --> bool
 local function is_mlChar(char)
 	if is_character(char) and string.find(file_str, char:character_subtype_key()) then
-		--mlLOG("is_mlChar = "..char:character_subtype_key())
+		--sm0_log("is_mlChar = "..char:character_subtype_key())
 		return true
 	else
 		return false
@@ -316,9 +316,9 @@ local function getmlChar()
 		end
 	end
 	if is_character(char) then
-		mlLOG("getmlChar: "..char:character_subtype_key())
+		sm0_log("getmlChar: "..char:character_subtype_key())
 	else
-		mlLOG("getmlChar: "..tostring(char))
+		sm0_log("getmlChar: "..tostring(char))
 	end
 	return char
 end
@@ -360,6 +360,10 @@ end
 
 --v function(char: CA_CHAR, spellSlots: vector<string>)					
 local function applySpellDisableEffect(char, spellSlots)
+	if not char then
+		sm0_log("ERROR | applySpellDisableEffect: nil char")
+		return
+	end
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 	local charCqi = char:command_queue_index()
 	CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|"..tostring(charCqi))
@@ -367,6 +371,10 @@ end
 
 --v [NO_CHECK] function(spellName: any, selectedSpellSlot: any, char: CA_CHAR) --> vector<string>
 local function updateSaveTable(spellName, selectedSpellSlot, char)
+	if not char then
+		sm0_log("ERROR | updateSaveTable: nil char")
+		return
+	end
 	local savedValue = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_spellSlots")
 	if not savedValue then
 		resetSaveTable(char)
@@ -410,28 +418,31 @@ core:add_listener(
 			local charCqi = tonumber(info)
 			--# assume charCqi: CA_CQI
 			local char = cm:get_character_by_cqi(charCqi)
-			local spellSlots = updateSaveTable(false, false, char)
-
-			local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
-			ml_tables = ml_force_require(char)
-			if ml_tables then
-				--mlLOG("CHAR: "..char:character_subtype_key())
-				if savedOption == "Spells for free" and char:has_military_force() and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
-					CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."apply".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
-					cm:apply_effect_bundle_to_characters_force(ml_tables.enableAllBundle, charCqi, -1, false)
-				elseif savedOption ~= "Spells for free" and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
-					CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
-					cm:remove_effect_bundle_from_characters_force(ml_tables.enableAllBundle, charCqi)
-				end
-				for _, effectBundle in pairs(ml_tables.effectBundles) do
-					if char:has_military_force() and not char:military_force():has_effect_bundle(effectBundle) then
-						cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false)
+			if not char then
+				sm0_log("ERROR | MixedLoresMultiplayer: nil char")
+			else
+				local spellSlots = updateSaveTable(false, false, char)
+				local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
+				ml_tables = ml_force_require(char)
+				if ml_tables then
+					--sm0_log("CHAR: "..char:character_subtype_key())
+					if savedOption == "Spells for free" and char:has_military_force() and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
+						CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."apply".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
+						cm:apply_effect_bundle_to_characters_force(ml_tables.enableAllBundle, charCqi, -1, false)
+					elseif savedOption ~= "Spells for free" and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
+						CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
+						cm:remove_effect_bundle_from_characters_force(ml_tables.enableAllBundle, charCqi)
 					end
-				end
-				for _, spell in ipairs(spellSlots) do 
-					if ml_tables.effectBundles[spell] and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
-						cm:remove_effect_bundle_from_characters_force(ml_tables.effectBundles[spell], charCqi)
-						--mlLOG("applySpellDisableEffect / effectBundle = "..ml_tables.effectBundles[spell].." / cqi = "..tostring(charCqi).." / command = ".."remove")
+					for _, effectBundle in pairs(ml_tables.effectBundles) do
+						if char:has_military_force() and not char:military_force():has_effect_bundle(effectBundle) then
+							cm:apply_effect_bundle_to_characters_force(effectBundle, charCqi, -1, false)
+						end
+					end
+					for _, spell in ipairs(spellSlots) do 
+						if ml_tables.effectBundles[spell] and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.effectBundles[spell]) then
+							cm:remove_effect_bundle_from_characters_force(ml_tables.effectBundles[spell], charCqi)
+							--sm0_log("applySpellDisableEffect / effectBundle = "..ml_tables.effectBundles[spell].." / cqi = "..tostring(charCqi).." / command = ".."remove")
+						end
 					end
 				end
 			end
@@ -1516,7 +1527,7 @@ core:add_listener(
 		return is_mlChar(context:character()) and not context:character():character_subtype("chs_archaon") 
 	end,
 	function(context)
-		mlLOG("ml_agentCreatedListener: "..context:character():character_subtype_key())
+		sm0_log("ml_agentCreatedListener: "..context:character():character_subtype_key())
 		local char = context:character()
 		ml_tables = ml_force_require(char)
 		local ownerFaction = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."ownerFaction")
@@ -1752,7 +1763,7 @@ local function ml_setup()
 		for j = 0, characterList:num_items() - 1 do
 			local currentChar = characterList:item_at(j)
 			if is_mlChar(currentChar) then
-				mlLOG("ml_setup: "..currentChar:character_subtype_key())
+				sm0_log("ml_setup: "..currentChar:character_subtype_key())
 				ml_tables = ml_force_require(currentChar)
 				setupSavedOptions(currentChar)
 				if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" or currentFaction:is_human() then setupInnateSpells(currentChar) end
@@ -1762,7 +1773,7 @@ local function ml_setup()
 end
 
 if cm:is_new_game() then 
-	mlLOG_reset()
+	sm0_log_reset()
 	ml_setup() 
 else
 	local pb = cm:model():pending_battle()
