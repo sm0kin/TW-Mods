@@ -13,23 +13,22 @@ local pirate_factions = {
 
 local function apply_diplomacy()
     local faction_list = cm:model():world():faction_list()
-        for i = 0, faction_list:num_items() - 1 do
-            local current_target_faction = faction_list:item_at(i)
-            local current_target_faction_culture = current_target_faction:culture()
+    for i = 0, faction_list:num_items() - 1 do
+        local current_target_faction = faction_list:item_at(i)
+        local current_target_faction_culture = current_target_faction:culture()
 
-            if not current_target_faction:is_dead() and not pirate_factions then
-                local current_target_faction_name = current_target_faction:name()
-                out(" Forcing war between [" .. pirate_factions .. "] and [" .. hates_pirates_cultures .. "]")
-                cm:force_declare_war(pirate_factions, hates_pirates_cultures, false, false)
-                cm:force_diplomacy(
-                    "faction:" .. pirate_factions,
-                    "faction:" .. hates_pirates_cultures,
-                    "peace",
-                    false,
-                    false,
-                    true
-                )
-            end
+        if not current_target_faction:is_dead() and not pirate_factions then
+            local current_target_faction_name = current_target_faction:name()
+            out(" Forcing war between [" .. pirate_factions .. "] and [" .. hates_pirates_cultures .. "]")
+            cm:force_declare_war(pirate_factions, hates_pirates_cultures, false, false)
+            cm:force_diplomacy(
+                "faction:" .. pirate_factions,
+                "faction:" .. hates_pirates_cultures,
+                "peace",
+                false,
+                false,
+                true
+            )
         end
     end
 end
@@ -55,3 +54,13 @@ function hostile_pirates()
 end
 
 cm:get_saved_value("hostile_pirates")
+
+local player_faction = cm:get_faction(cm:get_local_faction(true))
+local character_list = player_faction:character_list()
+local queek_headtaker_subtype = "wh2_main_skv_queek_headtaker";
+for i = 0, character_list:num_items() - 1 do
+    local current_char = character_list:item_at(i)
+    if current_char:character_subtype_key() == "wh2_main_skv_queek_headtaker" then
+      cm:force_add_ancillary(current_char, "frosty_red_guard_banner", true, true);
+    end
+end

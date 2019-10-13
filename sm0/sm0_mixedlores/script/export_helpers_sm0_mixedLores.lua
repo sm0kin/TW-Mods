@@ -3,7 +3,7 @@
 --v function()
 local function sm0_log_reset()
 	if not __write_output_to_logfile then
-		--return
+		return
 	end
 	
 	local logTimeStamp = os.date("%d, %m %Y %X")
@@ -18,7 +18,7 @@ end
 --v function(text: string | number | boolean | CA_CQI)
 local function sm0_log(text)
 	if not __write_output_to_logfile then
-		--return
+		return
 	end
 
 	local logText = tostring(text)
@@ -316,9 +316,9 @@ local function getmlChar()
 		end
 	end
 	if is_character(char) then
-		sm0_log("getmlChar: "..char:character_subtype_key())
+		--sm0_log("getmlChar: "..char:character_subtype_key())
 	else
-		sm0_log("getmlChar: "..tostring(char))
+		--sm0_log("getmlChar: "..tostring(char))
 	end
 	return char
 end

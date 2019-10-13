@@ -1639,7 +1639,7 @@ local function init()
             return subtype_anc[context:character():character_subtype_key()] ~= nil
         end,
         function(context)
-            local character = context:character()
+            local character = context:character()--:CA_CHAR
             local quests = subtype_anc[character:character_subtype_key()]
             for i = 1, #quests do
                 local current_quest_record = quests[i]
@@ -1654,25 +1654,25 @@ local function init()
                     and cm:get_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key) >= n then
                     --is_human check for quest ui
                         if character:faction():is_human() and current_mission_key ~= "" then 
-                            local mission_found = false
-                            local mission_button = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_missions")
-                            mission_button:SimulateLClick()
-                            local list_box = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "missions_dropdown", "panel", "panel_clip", "list_view", "list_clip", "list_box")
-                            if list_box and mission_button then
-                                for i = 0, list_box:ChildCount() - 1 do
-                                    local quest_uic = UIComponent(list_box:Find(i))
-                                    local quest_title = find_uicomponent(quest_uic, "name")
-                                    --sm0_log("mission_title = "..mission_title) 
-                                    if quest_title and mission_title == quest_title:GetStateText() then
-                                        --sm0_log("UI mission_title = "..quest_title:GetStateText())
-                                        mission_found = true 
-                                    end  
-                                end
-                                if not mission_found then
-                                    --sm0_log("force_add_ancillary: "..current_ancillary_key) 
-                                    cm:disable_event_feed_events(true, "", "", "character_ancillary_gained")
-                                    cm:force_add_ancillary(character, current_ancillary_key, true, false) 
-                                    cm:disable_event_feed_events(false, "", "", "character_ancillary_gained")
+                            if cm:whose_turn_is_it() == character:faction():name() then
+                                local mission_found = false
+                                local mission_button = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_missions")
+                                mission_button:SimulateLClick()
+                                local list_box = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "missions_dropdown", "panel", "panel_clip", "list_view", "list_clip", "list_box")
+                                if list_box and mission_button then
+                                    for i = 0, list_box:ChildCount() - 1 do
+                                        local quest_uic = UIComponent(list_box:Find(i))
+                                        local quest_title = find_uicomponent(quest_uic, "name")
+                                        --sm0_log("mission_title = "..mission_title) 
+                                        if quest_title and mission_title == quest_title:GetStateText() then
+                                            --sm0_log("UI mission_title = "..quest_title:GetStateText())
+                                            mission_found = true 
+                                        end  
+                                    end
+                                    if not mission_found then
+                                        --sm0_log("force_add_ancillary: "..current_ancillary_key) 
+                                        CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "RD|"..tostring(character:command_queue_index())..":"..current_ancillary_key)
+                                    end
                                 end
                             end
                         else
@@ -1693,6 +1693,27 @@ local function init()
                     --sm0_log("ancillary_exists: "..current_ancillary_key)
                 end
             end 
+        end,
+        true
+    )
+    --Multiplayer listener
+    core:add_listener(
+        "sm0_rd_UITriggerScriptEvent",
+        "UITriggerScriptEvent",
+        function(context)
+            return context:trigger():starts_with("RD|")
+        end,
+        function(context)
+            local str = context:trigger() --:string
+            local info = string.gsub(str, "RD|", "")
+            local cqi_end = string.find(info, ":")
+            local cqi = string.sub(info, 1, cqi_end - 1) 
+            local anc = string.sub(info, cqi_end + 1)
+            --# assume cqi: CA_CQI
+            local character = cm:get_character_by_cqi(cqi)
+            cm:disable_event_feed_events(true, "", "", "character_ancillary_gained")
+            cm:force_add_ancillary(character, anc, true, false) 
+            cm:disable_event_feed_events(false, "", "", "character_ancillary_gained")
         end,
         true
     )

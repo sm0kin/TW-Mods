@@ -28,7 +28,7 @@ end
 function sm0_ai_exp()
     if cm:is_new_game() then sm0_log_reset() end
     core:add_listener (
-        "CharactersGetEXP",
+        "ai_exp_CharacterTurnStart",
         "CharacterTurnStart",
         function(context)
             return not context:character():faction():is_human() and not context:character():faction():is_rebel() and not context:character():faction():is_quest_battle_faction()
@@ -40,12 +40,12 @@ function sm0_ai_exp()
             and ((char:has_military_force() and not char:military_force():is_armed_citizenry() and char:rank() < 20) or (char:is_faction_leader() and char:rank() <= 30)) then
 				cm:add_agent_experience(cm:char_lookup_str(char:command_queue_index()), 500)
 				if char:is_faction_leader() then
-					sm0_log("EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Faction Leader | Char Rank: "..tostring(char:rank()))
+					--sm0_log("EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Faction Leader | Char Rank: "..tostring(char:rank()))
 				else
-					sm0_log("EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
+					--sm0_log("EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
 				end
 			else
-				sm0_log("NO_EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
+				--sm0_log("NO_EXP | Faction: "..context:character():faction():name().." | Char Subtype: "..char:character_subtype_key().." | Char Rank: "..tostring(char:rank()))
             end
         end,
         true

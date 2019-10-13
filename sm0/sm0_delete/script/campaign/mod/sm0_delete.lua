@@ -1,7 +1,7 @@
 --v function()
 local function sm0_log_reset()
 	if not __write_output_to_logfile then
-		--return
+		return
 	end
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	--# assume logTimeStamp: string
@@ -14,7 +14,7 @@ end
 --v function(text: string | number | boolean | CA_CQI)
 local function sm0_log(text)
 	if not __write_output_to_logfile then
-		--return
+		return
 	end
 	local logText = tostring(text)
 	local logTimeStamp = os.date("%d, %m %Y %X")
@@ -197,7 +197,9 @@ local blacklisted_subtypes = {
 	"bst_gorehoof",
 	"skv_feskit",
 	--XOUDAD High Elves Expanded--
-    "wh2_main_hef_eltharion",
+	"wh2_main_hef_eltharion",
+	--XOUDAD Valten
+	"wax_emp_valten",
     --CATAPH TEB--
     "teb_borgio_the_besiege",
     "teb_tilea",
@@ -208,7 +210,11 @@ local blacklisted_subtypes = {
     "teb_new_world_colonies",
     "teb_colombo",
     --CATAPH Kraka Drak--
-    "dwf_kraka_drak",
+	"dwf_kraka_drak",
+	--CATAPH Hobo--
+	"AK_hobo_nameless",
+	"AK_hobo_draesca",
+	"AK_hobo_priestess",
     --Project Resurrection - Parte Legendary Lords--
     "def_rakarth",
     "skv_skweel_gnawtooth",
@@ -311,7 +317,7 @@ local function create_trash_ui()
 		local character_row = UIComponent(list_box:Find(i))
 		local character_row_len = string.len("character_row_")
 		local cqi_string = string.sub(character_row:Id(), character_row_len + 1) 
-		sm0_log("sm0/cqi: "..tostring(cqi_string))
+		--sm0_log("sm0/cqi: "..tostring(cqi_string))
 		local reference_uic = find_uicomponent(character_row, "indent_parent", "icon_wounded")
 		local reference_uic_W, reference_uic_H = reference_uic:Bounds()
 		local reference_uic_X, reference_uic_Y = reference_uic:Position()
@@ -497,14 +503,11 @@ local function create_trash_ui()
 							local cqi_string = string.sub(character_row:Id(), character_row_len + 1)
 							local checkbox_toggle = UIComponent(character_row:Find("checkbox_toggle_"..cqi_string))
 							if checkbox_toggle:CurrentState() == "selected" then												
-								sm0_log("sm0/cqi: "..cqi_string)
+								--sm0_log("sm0/cqi: "..cqi_string)
 								local cqi = tonumber(cqi_string)
 								--#assume cqi: CA_CQI
 								local char_lookup = cm:char_lookup_str(cqi)
 								local char = cm:get_character_by_cqi(cqi)
-								--if char:has_skill("wh2_main_skill_all_immortality_lord") or char:has_skill("wh2_main_skill_all_immortality_hero") 
-								--or char:has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") or char:has_skill("wh_main_effect_ability_enable_immortal_will") then cm:force_reset_skills(char_lookup) end
-								--if char:character_subtype("wh2_dlc09_tmb_tomb_king") then  end
 								local is_blacklisted = false
 								for _, subtype in ipairs(blacklisted_subtypes) do
 									if char:character_subtype(subtype) then
@@ -543,15 +546,15 @@ function sm0_delete()
 			return true --appoint_new_general
 		end,
 		function(context)
-			sm0_log("sm0/PanelOpenedCampaign: "..context.string)
+			--sm0_log("sm0/PanelOpenedCampaign: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down" 
 				or tab_units:CurrentState() == "down") then 
-					sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					sm0_log("sm0/tab_units|state: disabled")
+					--sm0_log("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 						
 		end,
@@ -564,15 +567,15 @@ function sm0_delete()
 			return true --appoint_new_general
 		end,
 		function(context)
-			sm0_log("sm0/PanelClosedCampaign: "..context.string)
+			--sm0_log("sm0/PanelClosedCampaign: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down"
 				or tab_units:CurrentState() == "down") then 
-					sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					sm0_log("sm0/tab_units|state: disabled")
+					--sm0_log("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 						
 		end,
@@ -585,14 +588,14 @@ function sm0_delete()
 			return context.string == "tab_units"
 		end,
 		function(context)
-			sm0_log("sm0/ComponentLClickUp: "..context.string)
+			--sm0_log("sm0/ComponentLClickUp: "..context.string)
 			cm:callback(function() 
 				local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
 				if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down") then 
-					sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+					--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
 					create_trash_ui()
 				else
-					sm0_log("sm0/tab_units|state: disabled")
+					--sm0_log("sm0/tab_units|state: disabled")
 				end	
 			end, 0.1) 	
 		end,

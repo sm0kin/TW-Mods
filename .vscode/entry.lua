@@ -97,6 +97,8 @@ require("sm0/frosty_mods/script/campaign/mod/legendary_confeds")
 require("sm0/frosty_mods/script/campaign/main_warhammer/wh_quests")
 require("sm0/frosty_mods/script/campaign/mod/add_mounts_experiment")
 require("sm0/frosty_mods/script/campaign/mod/hostile_pirates")
+require("sm0/frosty_mods/script/campaign/mod/frosty_banners")
+
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/frosty_horde")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds")
@@ -152,4 +154,8 @@ require("sm0/cbf/script/campaign/mod/sm0_missing_anc")
 require("sm0/cbf/script/campaign/mod/sm0_horde")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_missing_anc")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_horde")
+
+--hide flag
+require("sm0/sm0_hide_flag/script/campaign/mod/sm0_hide_flag")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_hide_flag")
 
