@@ -24,15 +24,18 @@ local function deleteSpeedUI()
     if speedBox then
         deleteUIC(speedBox)
         speedBox = nil
-    elseif applyButton then
+    end
+    if applyButton then
         deleteUIC(applyButton)
         core:remove_listener("sm0_applyButton")
         applyButton = nil
-    elseif saveButton then
+    end
+    if saveButton then
         deleteUIC(saveButton)
         core:remove_listener("sm0_saveButton")
         saveButton = nil
-    elseif loadButton then
+    end
+    if loadButton then
         deleteUIC(loadButton)
         core:remove_listener("sm0_loadButton")
         loadButton = nil

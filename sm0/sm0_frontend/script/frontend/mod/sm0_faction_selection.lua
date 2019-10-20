@@ -393,7 +393,8 @@ local function deleteSelectUI()
     if textBox then
         deleteUIC(textBox)
         textBox = nil
-    elseif applyButton then
+	end
+	if applyButton then
         deleteUIC(applyButton)
         core:remove_listener("sm0_applyButton")
         applyButton = nil

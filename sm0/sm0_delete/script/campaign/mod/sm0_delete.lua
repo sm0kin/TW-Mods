@@ -108,7 +108,7 @@ local blacklisted_subtypes = {
 	--"wh2_dlc11_vmp_bloodline_necrarch",
 	--"wh2_dlc11_vmp_bloodline_strigoi",
 	--"wh2_dlc11_vmp_bloodline_von_carstein",
-	--"wh2_dlc12_lzd_lord_kroak",
+	"wh2_dlc12_lzd_lord_kroak",
 	--"wh2_dlc12_lzd_lord_kroak_boss",
 	"wh2_dlc12_lzd_red_crested_skink_chief_legendary",
 	"wh2_dlc12_lzd_tehenhauin",
@@ -271,7 +271,35 @@ end
 
 --v function()
 local function create_trash_ui()
-	local player_Faction = cm:get_faction(cm:get_local_faction(true)) 
+	local player_faction = cm:get_faction(cm:get_local_faction(true)) 
+
+	local trash_bin_button_disabled = effect.get_localised_string("trash_bin_button_disabled_"..player_faction:culture()) 
+	if not trash_bin_button_disabled then trash_bin_button_disabled = "No Lords or Heroes selected for execution." end
+	local trash_bin_button_hover_1 = effect.get_localised_string("trash_bin_button_hover_1_"..player_faction:culture()) 
+	if not trash_bin_button_hover_1 then trash_bin_button_hover_1 = "Are you sure you want to execute all (" end
+	local trash_bin_button_hover_2 = effect.get_localised_string("trash_bin_button_hover_2_"..player_faction:culture()) 
+	if not trash_bin_button_hover_2 then trash_bin_button_hover_2 = ") selected Lords/Heroes?" end
+	local check_trash_button_hover_1 = effect.get_localised_string("check_trash_button_hover_1_"..player_faction:culture()) 
+	if not check_trash_button_hover_1 then check_trash_button_hover_1 = "Execute all (" end
+	local check_trash_button_hover_2 = effect.get_localised_string("check_trash_button_hover_2_"..player_faction:culture()) 
+	if not check_trash_button_hover_2 then check_trash_button_hover_2 = ") selected Lords/Heroes!" end
+	local check_trash_button_disabled = effect.get_localised_string("check_trash_button_disabled_"..player_faction:culture()) 
+	if not check_trash_button_disabled then check_trash_button_disabled = "No Lords or Heroes selected." end
+	local checkbox_toggle_lord_hover = effect.get_localised_string("checkbox_toggle_lord_hover_"..player_faction:culture()) 
+	if not checkbox_toggle_lord_hover then checkbox_toggle_lord_hover = "Select Lord for Execution." end
+	local checkbox_toggle_lord_selected_hover = effect.get_localised_string("checkbox_toggle_lord_selected_hover_"..player_faction:culture()) 
+	if not checkbox_toggle_lord_selected_hover then checkbox_toggle_lord_selected_hover = "Lord selected for Execution." end
+	local checkbox_toggle_hero_hover = effect.get_localised_string("checkbox_toggle_hero_hover_"..player_faction:culture()) 
+	if not checkbox_toggle_hero_hover then checkbox_toggle_hero_hover = "Select Hero for Execution." end
+	local checkbox_toggle_hero_selected_hover = effect.get_localised_string("checkbox_toggle_hero_selected_hover_"..player_faction:culture()) 
+	if not checkbox_toggle_hero_selected_hover then checkbox_toggle_hero_selected_hover = "Hero selected for Execution." end
+	local checkbox_toggle_lord_disabled = effect.get_localised_string("checkbox_toggle_lord_disabled_"..player_faction:culture()) 
+	if not checkbox_toggle_lord_disabled then checkbox_toggle_lord_disabled = "This Lord can't be executed." end
+	local checkbox_toggle_hero_disabled = effect.get_localised_string("checkbox_toggle_hero_disabled_"..player_faction:culture())
+	if not checkbox_toggle_hero_disabled then checkbox_toggle_hero_disabled = "This Hero can't be executed." end
+	local cross_trash_button_hover = effect.get_localised_string("cross_trash_button_hover_"..player_faction:culture()) 
+	if not cross_trash_button_hover then cross_trash_button_hover = "Cancel." end
+
 	local list_box = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "units_dropdown", "panel", "panel_clip", "sortable_list_units", "list_clip", "list_box")
 	local units_dropdown = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "units_dropdown")
 	if units_dropdown:Find("trash_bin_button") then 
@@ -300,7 +328,7 @@ local function create_trash_ui()
 	trash_bin_button:Resize(sort_type_W * 1.5, sort_type_W * 1.5)
 	local trash_bin_button_W, trash_bin_button_H = trash_bin_button:Bounds()
 	trash_bin_button:MoveTo(sort_type_X + sort_type_W / 2 - trash_bin_button_W / 2, sort_type_Y + sort_type_H / 2 - trash_bin_button_H - trash_bin_button_H / 2 - 4)
-	if string.find(player_Faction:culture(), "wh2_") then 
+	if string.find(player_faction:culture(), "wh2_") then 
 		trash_bin_button:SetImagePath("ui/skins/warhammer2/icon_delete.png") 
 	else
 		trash_bin_button:SetImagePath("ui/skins/default/icon_delete.png")
@@ -311,7 +339,7 @@ local function create_trash_ui()
 	--trash_bin_button:SetState("active")
 	trash_bin_button:SetDisabled(true)
 	trash_bin_button:SetOpacity(50)
-	trash_bin_button:SetTooltipText("No Lords or Heroes selected for execution.")
+	trash_bin_button:SetTooltipText(trash_bin_button_disabled)
 
 	for i = 0, list_box:ChildCount() - 1 do
 		local character_row = UIComponent(list_box:Find(i))
@@ -359,12 +387,12 @@ local function create_trash_ui()
 						check_trash_button:SetDisabled(false)
 						check_trash_button:SetOpacity(255)
 						check_trash_button:SetState("hover")
-						check_trash_button:SetTooltipText("Execute all ("..chars_selected..") selected Lords/Heroes!")
+						check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2)
 						check_trash_button:SetState("active")
 					else
 						check_trash_button:SetDisabled(true)
 						check_trash_button:SetOpacity(50)
-						check_trash_button:SetTooltipText("No Lords or Heroes selected.")
+						check_trash_button:SetTooltipText(check_trash_button_disabled)
 					end
 				end
 				if units_dropdown:Find("trash_bin_button") then 
@@ -373,12 +401,12 @@ local function create_trash_ui()
 						trash_bin_button:SetDisabled(false)
 						trash_bin_button:SetOpacity(255)
 						trash_bin_button:SetState("hover")
-						trash_bin_button:SetTooltipText("Are you sure you want to execute all ("..chars_selected..") selected Lords/Heroes?")
+						trash_bin_button:SetTooltipText(trash_bin_button_hover_1..chars_selected..trash_bin_button_hover_2)
 						trash_bin_button:SetState("active")
 					else
 						trash_bin_button:SetDisabled(true)
 						trash_bin_button:SetOpacity(50)
-						trash_bin_button:SetTooltipText("No Lords or Heroes selected for execution.")
+						trash_bin_button:SetTooltipText(trash_bin_button_disabled)
 					end
 				end
 			end,
@@ -388,13 +416,13 @@ local function create_trash_ui()
 		local char = cm:get_character_by_cqi(cqi_string)
 		checkbox_toggle:SetState("hover")
 		if cm:char_is_general(char) then 
-			checkbox_toggle:SetTooltipText("Select Lord for Execution.") 
+			checkbox_toggle:SetTooltipText(checkbox_toggle_lord_hover) 
 			checkbox_toggle:SetState("selected_hover")
-			checkbox_toggle:SetTooltipText("Lord selected for Execution.")
+			checkbox_toggle:SetTooltipText(checkbox_toggle_lord_selected_hover)
 		else
-			checkbox_toggle:SetTooltipText("Select Hero for Execution.") 
+			checkbox_toggle:SetTooltipText(checkbox_toggle_hero_hover) 
 			checkbox_toggle:SetState("selected_hover")
-			checkbox_toggle:SetTooltipText("Hero selected for Execution.")
+			checkbox_toggle:SetTooltipText(checkbox_toggle_hero_selected_hover)
 		end
 		checkbox_toggle:SetState("active")
 		checkbox_toggle:SetDisabled(false)
@@ -404,9 +432,9 @@ local function create_trash_ui()
 				checkbox_toggle:SetDisabled(true)
 				checkbox_toggle:SetOpacity(150)
 				if cm:char_is_general(char) then 
-					checkbox_toggle:SetTooltipText("This Lord can't be executed.")
+					checkbox_toggle:SetTooltipText(checkbox_toggle_lord_disabled)
 				else
-					checkbox_toggle:SetTooltipText("This Hero can't be executed.")
+					checkbox_toggle:SetTooltipText(checkbox_toggle_hero_disabled)
 				end
 			end
 		end
@@ -427,13 +455,13 @@ local function create_trash_ui()
 				cross_trash_button:PropagatePriority(units_dropdown:Priority())
 				cross_trash_button:Resize(trash_bin_button_W, trash_bin_button_H)
 				cross_trash_button:MoveTo(trash_bin_button_X, trash_bin_button_Y)
-				if string.find(player_Faction:culture(), "wh2_") then 
+				if string.find(player_faction:culture(), "wh2_") then 
 					cross_trash_button:SetImagePath("ui/skins/warhammer2/icon_cross.png") 
 				else
 					cross_trash_button:SetImagePath("ui/skins/default/icon_cross.png")
 				end
 				cross_trash_button:SetState("hover")
-				cross_trash_button:SetTooltipText("Cancel.")
+				cross_trash_button:SetTooltipText(cross_trash_button_hover)
 				cross_trash_button:SetState("active")
 				core:add_listener(
 					"sm0_cross_trash_button",
@@ -460,7 +488,7 @@ local function create_trash_ui()
 				check_trash_button:Resize(trash_bin_button_W, trash_bin_button_H)
 				local check_trash_button_X, check_trash_button_Y = check_trash_button:Bounds()
 				check_trash_button:MoveTo(trash_bin_button_X + trash_bin_button_W + 2, trash_bin_button_Y)
-				if string.find(player_Faction:culture(), "wh2_") then 
+				if string.find(player_faction:culture(), "wh2_") then 
 					check_trash_button:SetImagePath("ui/skins/warhammer2/icon_check.png") 
 				else
 					check_trash_button:SetImagePath("ui/skins/default/icon_check.png")
@@ -480,12 +508,12 @@ local function create_trash_ui()
 					check_trash_button:SetDisabled(false)
 					check_trash_button:SetOpacity(255)
 					check_trash_button:SetState("hover")
-					check_trash_button:SetTooltipText("Execute all ("..chars_selected..") selected Lords/Heroes!")
+					check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2)
 					check_trash_button:SetState("active")
 				else
 					check_trash_button:SetDisabled(true)
 					check_trash_button:SetOpacity(50)
-					check_trash_button:SetTooltipText("No Lords or Heroes selected.")
+					check_trash_button:SetTooltipText(check_trash_button_disabled)
 				end
 
 				core:add_listener(
