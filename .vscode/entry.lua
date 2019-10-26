@@ -87,7 +87,9 @@ require("sm0/grant independance/script/campaign/mod/sm0_revive")
 require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
 require("sm0/wec_one_button_respec/script/export_helpers__obr")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")
+require("sm0/mcm/script/export_helpers__mcm_ui")
+
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__mcm_ui")
 
 --frostydemise
@@ -152,6 +154,8 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --cbf
 require("sm0/cbf/script/campaign/mod/sm0_missing_anc")
 require("sm0/cbf/script/campaign/mod/sm0_horde")
+require("sm0/cbf/script/campaign/mod/sm0_liberate_missing_anc")
+
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_missing_anc")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_horde")
 

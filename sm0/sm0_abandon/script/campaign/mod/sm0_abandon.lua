@@ -40,7 +40,7 @@ local id_from_subculture = {
 --v function()
 local function initMCMabandon()
     penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value")
-    if penalty_value ~= "penalty" then penalty_value = "nopenalty" end
+    if penalty_value ~= "nopenalty" then penalty_value = "penalty" end
     local mcm = _G.mcm
     if not not mcm then
         local abandon = mcm:register_mod("abandon_region", "Abandon Region", "Adds the possibility to abandon a settlement.")

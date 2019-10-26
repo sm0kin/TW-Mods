@@ -21,6 +21,22 @@ local function show_mcm(hide)
     end
 end
 
+--https://www.lua.org/pil/19.3.html
+--v function(t: vector<WHATEVER>, f: WHATEVER?) --> (WHATEVER, WHATEVER?)
+local function pairsByKeys (t, f)
+    local a = {} --:vector<WHATEVER>
+    for n in pairs(t) do table.insert(a, n) end
+    table.sort(a, f)
+    local i = 0      -- iterator variable
+    local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+    end
+    return iter
+end
+
 
 --called multiple times during runtime
 --v function(MCMMainFrame: FRAME)
@@ -91,7 +107,7 @@ local function PopulateModOptions(MCMMainFrame)
     local ModOptionListBuffer = Container.new(FlowLayout.VERTICAL)
     ModOptionListBuffer:AddGap(10)
     ModOptionListView:AddContainer(ModOptionListBuffer)
-    for key, tweaker in pairs(mod:tweakers()) do
+    for key, tweaker in pairsByKeys(mod:tweakers()) do
        if not not tweaker:selected_option() then
             local num_slots = tweaker:num_options()
             local TweakerContainer = Container.new(FlowLayout.HORIZONTAL)
@@ -132,7 +148,7 @@ local function PopulateModOptions(MCMMainFrame)
             TweakerContainer:AddGap(gap)
             TweakerContainer:AddComponent(ResetBuffer)
             local processed = 0 
-            for option_name, option in pairs(tweaker:options()) do
+            for option_name, option in pairsByKeys(tweaker:options()) do
                 local OptionButtonContainer
                 local OptionButton = TextButton.new(mod:name().."_"..key.."_option_button_"..option_name, MCMMainFrame, "TEXT_TOGGLE", option:ui_name())
                 OptionButton:Resize(300, 45)
@@ -177,7 +193,7 @@ local function PopulateModOptions(MCMMainFrame)
             TweakerContainer:Reposition()
         end
     end
-    for key, variable in pairs(mod:variables()) do
+    for key, variable in pairsByKeys(mod:variables()) do
         local VariableTopContainer = Container.new(FlowLayout.HORIZONTAL)
         local VariableBotContainer = Container.new(FlowLayout.HORIZONTAL)
         local VariableTextBuffer = Container.new(FlowLayout.VERTICAL)
@@ -292,7 +308,7 @@ local function PopulateList(MCMMainFrame)
         ModHeaderListView:AddComponent(modTextButton)   
         mcm:make_mod_with_key_selected(MCMBASIC)  
     end
-    for key, mod in pairs(mcm:get_mods()) do
+    for key, mod in pairsByKeys(mcm:get_mods()) do
         if key ~= "mcm_basic" then
             local modTextButton = TextButton.new(UIPANELNAME.."_MOD_HEADER_BUTTON_"..key, MCMMainFrame, "TEXT_TOGGLE", mod:ui_name())
             modTextButton:Resize(300, 45)

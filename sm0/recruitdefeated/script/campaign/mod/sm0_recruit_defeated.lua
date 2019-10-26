@@ -1632,7 +1632,7 @@ local function init()
     )
 
     -- Let's say AI Morathi ranks up to level 6 and gets her item. Her faction gets wiped out later on, but she comes back via liberation/rebel/script. 
-    -- The AI recruits her again but decides to not equip the item. Later the player confederates her faction but morathi's item is still part of her (now "dead" faction).
+    -- The AI recruits her again but decides to not equip the item. Later the player confederates her faction but morathi's item is still part of her (now "dead") faction.
     core:add_listener(
         "sm0_backup_CharacterRankUp",
         "CharacterTurnStart",

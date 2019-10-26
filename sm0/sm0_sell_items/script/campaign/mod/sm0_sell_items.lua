@@ -64,3 +64,4 @@ end
 -- spawn a character, cm:force_add_ancillary(character), cm:force_remove_ancillary() or delete character
 
 -- use export helpers ancillary_list to determine rarity of a given item
+-- rare 10%, uncommon 29%, common 61% | ~ 1:3:6 | hef crafted items and unique items : rare = 1:2 | disable selling specific unique items, e.g. runefangs

@@ -428,6 +428,7 @@
 --# assume CM.modify_next_autoresolve_battle: method(attacker_win_chance: number, defender_win_chance: number, attacker_losses_modifier: number, defender_losses_modifier: number, wipe_out_loser: boolean)
 --events
 --# assume CM.trigger_incident_with_targets: method(owning_faction_cqi: CA_CQI, incident_key: string, faction_cqi: CA_CQI | 0, secondary_faction_cqi: CA_CQI | 0, character_cqi: CA_CQI | 0, military_force_cqi: CA_CQI | 0, region_cqi: CA_CQI | 0, settlement_cqi: CA_CQI | 0)
+--# assume CM.trigger_custom_incident: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean?, payload: string) --> boolean
 --# assume CM.trigger_dilemma: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean?) --> boolean
 --# assume CM.trigger_incident: method(factionName: string, incidentKey: string, fireImmediately: boolean?, whitelist: boolean?)
 --# assume CM.trigger_mission: method(faction_key: string, mission_key: string, trigger_immediately: boolean)
