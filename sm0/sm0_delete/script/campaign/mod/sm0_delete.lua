@@ -650,6 +650,7 @@ function sm0_delete()
 		"CharacterSkillPointAllocated",
 		function(context)
 			return context:skill_point_spent_on() == "wh2_dlc09_skill_tmb_hidden_king_title"
+			or context:skill_point_spent_on() == "mixu_tmb_liche_high_priest_hidden_title"
 			or context:skill_point_spent_on() == "wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality"
 			or context:skill_point_spent_on() == "wh2_main_skill_all_immortality_hero"
 			or context:skill_point_spent_on() == "wh2_main_skill_all_immortality_lord"
@@ -661,38 +662,43 @@ function sm0_delete()
 		end,
 		true
 	)
-	--core:add_listener(
-	--	"sm0_immortal_CharacterTurnStart",
-	--	"CharacterTurnStart",
-	--	function(context)
-	--		return context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
-	--		or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
-	--		or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
-	--		or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
-	--		or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
-	--	end,
-	--	function(context)
-	--		sm0_log("sm0_immortal_CharacterTurnStart | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
-	--		cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-	--	end,
-	--	true
-	--)
-	--core:add_listener(
-	--	"sm0_immortal_skill_CharacterCreated",
-	--	"CharacterCreated",
-	--	function(context)
-	--		return context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
-	--		or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
-	--		or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
-	--		or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
-	--		or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
-	--	end,
-	--	function(context)
-	--		sm0_log("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
-	--		cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-	--	end,
-	--	true
-	--)
+	--tmb king immortality
+	core:add_listener(
+		"sm0_immortal_CharacterTurnStart",
+		"CharacterTurnStart",
+		function(context)
+			return (context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
+			or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
+			or context:character():has_skill("mixu_tmb_liche_high_priest_hidden_title")
+			--or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
+			--or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
+			--or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
+			) and context:character():faction():subculture() == "wh2_dlc09_sc_tmb_tomb_kings"
+		end,
+		function(context)
+			sm0_log("sm0_immortal_CharacterTurnStart | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+		end,
+		true
+	)
+	core:add_listener(
+		"sm0_immortal_skill_CharacterCreated",
+		"CharacterCreated",
+		function(context)
+			return (context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
+			or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
+			or context:character():has_skill("mixu_tmb_liche_high_priest_hidden_title")
+			--or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
+			--or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
+			--or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
+			) and context:character():faction():subculture() == "wh2_dlc09_sc_tmb_tomb_kings"
+		end,
+		function(context)
+			sm0_log("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+		end,
+		true
+	)
 	-- immortality tech
 	core:add_listener(
 		"sm0_immortal_tech_ResearchCompleted",

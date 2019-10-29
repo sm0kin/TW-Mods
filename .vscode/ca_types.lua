@@ -1,3 +1,6 @@
+--# assume math.clamp: function(number, number, number)
+--# type global CA_CQI = number | int
+
 -- CLASS DECLARATION
 --# assume global class BM
 --# assume global class CM
@@ -9,7 +12,7 @@
 --# assume global class CA_UIContext
 --# assume global class CA_CHAR_CONTEXT
 --# assume global class CA_SETTLEMENT_CONTEXT
---# assume global class CA_CQI
+----# assume global class CA_CQI
 --# assume global class CA_CHAR
 --# assume global class CA_CHAR_LIST
 --# assume global class CA_MILITARY_FORCE
@@ -55,11 +58,13 @@
 --# assume global class CA_GENERATED_ARMY
 --# assume global class CA_GENERATED_BATTLE
 --# assume global class CA_GENERATED_CUTSCENE
-
+--# assume global class CA_CAMERA
 --# assume global class IM
 --# assume global class CORE
 --# assume global class _G
-
+--# assume global class CA_SCRIPT_MESSAGER
+--# assume global class CAM_VECTOR
+--# assume global class VECTOR
 
 -- TYPES
 --# type global CA_EventName = 
@@ -70,7 +75,10 @@
 --# type global BUTTON_STATE = 
 --# "active" | "hover" | "down" | 
 --# "selected" | "selected_hover" | "selected_down" |
---# "drop_down" | "inactive"
+--# "drop_down" | "inactive" |
+--# "custom_state_1" | "custom_state_2" | "custom_state_3" |
+--# "custom_state_4" | "custom_state_5"
+
 
 --# type global BATTLE_SIDE =
 --# "Attacker" | "Defender" 
@@ -84,6 +92,57 @@
 
 -- BATTLE
 --# assume BM.modify_battle_speed: method(gamespeed: number)
+
+-- CAMERA
+--# assume CA_CAMERA.fade: method(UNKNOWN: bool, duration: number|int)
+--# assume CA_CAMERA.move_to: method(v1: VECTOR, v2: VECTOR, UNKNOWN: number, UNKNOWN1: boolean, UNKNOWN2: number)
+
+-- BATTLE_MANAGER
+--# assume CA_BATTLE_MANAGER.new: method(EMPIRE_BATTLE) --> CA_BATTLE_MANAGER
+--# assume EMPIRE_BATTLE.new: method() --> EMPIRE_BATTLE
+
+--# assume CA_BATTLE_MANAGER.camera: method() --> CA_CAMERA
+--# assume CA_BATTLE_MANAGER.register_phase_change_callback: method(phase: string, callback: function())
+--# assume CA_BATTLE_MANAGER.callback: method(callback: function(), time_delay: number | int, key: string?)
+--# assume CA_BATTLE_MANAGER.repeat_callback: method(callback: function(), time_delay: number | int, key: string?)
+--# assume CA_BATTLE_MANAGER.cache_camera: method()
+
+--# assume CA_BATTLE_MANAGER.get_cached_camera_pos: method() --> CAM_VECTOR
+--# assume CA_BATTLE_MANAGER.get_cached_camera_targ: method() --> CAM_VECTOR
+
+--# assume CAM_VECTOR.get_x: method() --> number|int
+--# assume CAM_VECTOR.get_y: method() --> number|int
+--# assume CAM_VECTOR.get_z: method() --> number|int
+
+-- SCRIPT MESSAGER
+--# assume CA_SCRIPT_MESSAGER.add_listener: method(phase: string, callback: function())
+--# assume CA_SCRIPT_MESSAGER.trigger_message: method(message: string)
+
+-- GENERATED ARMY
+--# assume CA_GENERATED_ARMY.message_on_rout_proportion: method(message_to_send: string, rout_proportion: number)
+--# assume CA_GENERATED_ARMY.message_on_casualties: method(message_to_send: string, casualty_percent: number)
+
+--# assume CA_GENERATED_ARMY.reinforce_on_message: method(on_message: string)
+--# assume CA_GENERATED_ARMY.attack_on_message: method(on_message: string, wait_offset: number?)
+--# assume CA_GENERATED_ARMY.message_on_victory: method(message: string)
+--# assume CA_GENERATED_ARMY.force_victory_on_message: method(on_message: string, UNKNOWN1: number|int)
+--# assume CA_GENERATED_ARMY.release_on_message: method(on_message: string)
+--# assume CA_GENERATED_ARMY.teleport_to_start_location_offset_on_message: method(on_message: string, x: number|int, y: number|int)
+
+-- GENERATED BATTLE
+--# assume CA_GENERATED_BATTLE.new: method(screen_starts_black: boolean?, prevent_deployment_for_player: boolean?, prevent_deployment_for_ai: boolean?, intro_cutscene: function?, is_debug: boolean?) --> CA_GENERATED_BATTLE
+--# assume CA_GENERATED_BATTLE.get_player_alliance_num: method() --> number
+--# assume CA_GENERATED_BATTLE.get_non_player_alliance_num: method() --> number
+--# assume CA_GENERATED_BATTLE.get_army: method(alliance_num: number, army_number: number?, script_name: string?) --> CA_GENERATED_ARMY
+
+--# assume CA_GENERATED_BATTLE.set_objective_on_message: method(on_message: string, objective_key: string, wait_offset: number?, objective_param_1: number?, objective_param_2: number?)
+--# assume CA_GENERATED_BATTLE.complete_objective_on_message: method(on_message: string, objective_key: string, wait_offset: number?)
+--# assume CA_GENERATED_BATTLE.queue_help_on_message: method(on_message: string, help: string, UNKNOWN1: number|int, UNKNOWN2: number|int, UNKNOWN3: number|int)
+--# assume CA_GENERATED_BATTLE.sm: CA_SCRIPT_MESSAGER
+
+-- GENERATED CUTSCENE
+--# assume CA_GENERATED_CUTSCENE.new: method(is_debug: boolean?, disable_outro_camera: boolean?, ignore_last_camera_index: boolean?) --> CA_GENERATED_CUTSCENE
+--# assume CA_GENERATED_CUTSCENE.add_element: method(sfx_name: string, subtitle: string, camera: string, min_length: number, wait_for_vo: boolean, wait_for_camera: boolean, play_taunt_at_start: boolean, message_on_start: string?)
 
 -- CONTEXT
 --# assume CA_UIContext.component: CA_Component
@@ -113,8 +172,10 @@
 --# assume CA_UIC.SetStateText: method(text: string)
 --# assume CA_UIC.SetVisible: method(visible: boolean)
 --# assume CA_UIC.SetDisabled: method(disabled: boolean)
+--# assume CA_UIC.SetDockingPoint: method(dock_point: number)
 --# assume CA_UIC.ShaderTechniqueSet: method(technique: string | number, unknown: boolean)
 --# assume CA_UIC.ShaderVarsSet: method(p1: number, p2: number, p3: number, p4: number, unknown: boolean)
+--# assume CA_UIC.SimulateClick: method()
 --# assume CA_UIC.SimulateMouseOn: method()
 --# assume CA_UIC.SimulateMouseOff: method()
 --# assume CA_UIC.SimulateMouseMove: method(x: number?, y: number?)
@@ -186,6 +247,7 @@
 --# assume CM.scroll_camera_from_current: WHATEVER
 --# assume CM.get_camera_position: method() --> (number, number, number, number)
 --# assume CM.fade_scene: method(unknown: number, unknown2: number)
+--# assume CM.set_camera_position: method(x: number, y: number, d: number, b: number, h: number)
 --callbacks
 --# assume CM.first_tick_callbacks: vector<(function(context: WHATEVER?))>
 --# assume CM.add_pre_first_tick_callback: method(callback: function)
@@ -203,6 +265,7 @@
 --#     name: string
 --# )
 --# assume CM.add_turn_countdown_event: method(faction_name: string, turn_offset: number, event_name: string, context_str: string?)
+--# assume CM.load_global_script: method(script_name: string)
 --random number
 --# assume CM.random_number: method(max: number | int, min: number? | int?) --> number | int
 --message events
@@ -224,7 +287,10 @@
 --#    primary_detail_loc_key: string,
 --#    secondary_detail_loc_key: string,
 --#    show_immediately: boolean,
---#    event_picture_id: number
+--#    event_picture_id: number,
+--#    callback: function?,
+--#    callback_delay: number?,
+--#    dont_whitelist: boolean?
 --#)
 --traits, ancillaries & skills
 --# assume CM.force_add_trait: method(lookup: string, trait_key: string, showMessage: boolean)
@@ -396,6 +462,7 @@
 --# assume CM.pending_battle_cache_get_attacker: method(pos: int) --> (CA_CQI, CA_CQI, string)
 --# assume CM.pending_battle_cache_get_enemies_of_char: method(char: CA_CHAR) --> vector<CA_CHAR>
 --# assume CM.pending_battle_cache_attacker_victory: method() --> boolean
+--# assume CM.pending_battle_cache_defender_victory: method() --> boolean
 --# assume CM.pending_battle_cache_faction_is_involved: method(faction_key: string) --> boolean
 --# assume CM.pending_battle_cache_num_attackers: method() --> int
 --# assume CM.pending_battle_cache_num_defenders: method() --> int
@@ -515,6 +582,10 @@
 --#    subcultureKey: string?
 --# )
 
+--# assume CM.start_faction_region_change_monitor: method(faction_name: string)
+--# assume CM.add_foreign_slot_set_to_region_for_faction: method(faction_cqi: CA_CQI, region_cqi: CA_CQI, slot_set: string)
+--# assume CM.remove_faction_foreign_slots_from_region: method(faction_cqi: CA_CQI, region_cqi: CA_CQI)
+
 -- CAMPAIGN UI MANAGER
 --# assume CUIM.get_char_selected: method() --> string
 --# assume CUIM.settlement_selected: string -- format = "settlement:"..regionname
@@ -605,6 +676,9 @@
 --# assume CA_CHAR.turns_in_enemy_regions: method() --> int
 --# assume CA_CHAR.is_at_sea: method() --> boolean
 --# assume CA_CHAR.is_embedded_in_military_force: method() --> boolean
+--# assume CA_CHAR.action_points_remaining_percent: method() --> (number | integer)
+
+
 -- CHARACTER LIST
 --# assume CA_CHAR_LIST.num_items: method() --> number
 --# assume CA_CHAR_LIST.item_at: method(index: number) --> CA_CHAR
@@ -683,7 +757,10 @@
 --# assume CA_SETTLEMENT.slot_list: method() --> CA_SLOT_LIST
 --# assume CA_SETTLEMENT.is_port: method() --> boolean
 --# assume CA_SETTLEMENT.region: method() --> CA_REGION
---# assume CA_SETTLEMENT.primary_slot: method() --> CA_SLOT 
+--# assume CA_SETTLEMENT.primary_slot: method() --> CA_SLOT
+--# assume CA_SETTLEMENT.port_slot: method() --> CA_SLOT
+--# assume CA_SETTLEMENT.active_secondary_slots: method() --> CA_SLOT_LIST
+--# assume CA_SETTLEMENT.first_empty_active_secondary_slot: method() --> CA_SLOT
 
 -- SLOT LIST
 --# assume CA_SLOT_LIST.num_items: method() --> number
@@ -702,6 +779,7 @@
 --# assume CA_BUILDING.superchain: method() --> string
 --# assume CA_BUILDING.faction: method() --> CA_FACTION
 --# assume CA_BUILDING.region: method() --> CA_REGION
+--# assume CA_BUILDING.percent_health: method() --> number | int
 
 -- GARRISON RESIDENCE
 --# assume CA_GARRISON_RESIDENCE.region: method() --> CA_REGION
@@ -801,6 +879,9 @@
 --# assume CA_PENDING_BATTLE.has_defender: method() --> boolean
 --# assume CA_PENDING_BATTLE.attacker_battle_result: method() --> string
 --# assume CA_PENDING_BATTLE.defender_battle_result: method() --> string
+--# assume CA_PENDING_BATTLE.percentage_of_defender_killed: method() --> number
+--# assume CA_PENDING_BATTLE.percentage_of_attacker_killed: method() --> number
+
 
 -- CORE
 --# assume CORE.get_ui_root: method() --> CA_UIC
@@ -842,6 +923,7 @@
 --# assume CA_POOLED.active_effect: method() --> WHATEVER
 --# assume CA_POOLED.minimum_value: method() --> number
 --# assume CA_POOLED.percentage_of_capacity: method() --> number
+--# assume CA_POOLED.factors: method() --> CA_POOLED_FACTOR_LIST
 
 -- FACTION RITUALS
 --# assume CA_FACTION_RITUALS.active_rituals: method() --> CA_RITUAL_LIST
@@ -878,11 +960,12 @@
 --# assume global output_uicomponent: function(uic: CA_UIC, omit_children: boolean?)
 --# assume global wh_faction_is_horde: function(faction: CA_FACTION) --> boolean
 --# assume global uicomponent_to_str: function(component: CA_UIC) --> string
---# assume global is_string: function(arg: string) --> boolean
---# assume global is_table: function(arg: table) --> boolean
---# assume global is_number: function(arg: number) --> boolean
---# assume global is_function: function(arg: function) --> boolean
---# assume global is_boolean: function(arg: boolean) --> boolean
+--# assume global is_string: function(arg: any) --> boolean
+--# assume global is_table: function(arg: any) --> boolean
+--# assume global is_number: function(arg: any) --> boolean
+--# assume global is_function: function(arg: any) --> boolean
+--# assume global is_boolean: function(arg: any) --> boolean
+--# assume global is_nil: function(arg: any) --> boolean
 --# assume global get_timestamp: function() --> string
 --# assume global script_error: function(msg: string)
 ----# assume global to_number: function(n: any) --> number
@@ -1191,71 +1274,22 @@
 
 --# assume math.clamp: function(number, number, number)
 
-
--- BATTLE_MANAGER
---# assume CA_BATTLE_MANAGER.new: method(EMPIRE_BATTLE)
---# assume EMPIRE_BATTLE.new: method() --> EMPIRE_BATTLE
-
--- GENERATED ARMY
---# assume CA_GENERATED_ARMY.message_on_rout_proportion: method(message_to_send: string, rout_proportion: number)
---# assume CA_GENERATED_ARMY.message_on_casualties: method(message_to_send: string, casualty_percent: number)
-
---# assume CA_GENERATED_ARMY.reinforce_on_message: method(on_message: string)
---# assume CA_GENERATED_ARMY.attack_on_message: method(on_message: string, wait_offset: number?)
-
--- GENERATED BATTLE
---# assume CA_GENERATED_BATTLE.new: method(screen_starts_black: boolean?, prevent_deployment_for_player: boolean?, prevent_deployment_for_ai: boolean?, intro_cutscene: function?, is_debug: boolean?) --> CA_GENERATED_BATTLE
---# assume CA_GENERATED_BATTLE.get_player_alliance_num: method() --> number
---# assume CA_GENERATED_BATTLE.get_non_player_alliance_num: method() --> number
---# assume CA_GENERATED_BATTLE.get_army: method(alliance_num: number, army_number: number?, script_name: string?) --> CA_GENERATED_ARMY
-
---# assume CA_GENERATED_BATTLE.set_objective_on_message: method(on_message: string, objective_key: string, wait_offset: number?, objective_param_1: number?, objective_param_2: number?)
---# assume CA_GENERATED_BATTLE.complete_objective_on_message: method(on_message: string, objective_key: string, wait_offset: number?)
-
--- GENERATED CUTSCENE
---# assume CA_GENERATED_CUTSCENE.new: method(is_debug: boolean?, disable_outro_camera: boolean?, ignore_last_camera_index: boolean?) --> CA_GENERATED_CUTSCENE
---# assume CA_GENERATED_CUTSCENE.add_element: method(sfx_name: string, subtitle: string, camera: string, min_length: number, wait_for_vo: boolean, wait_for_camera: boolean, play_taunt_at_start: boolean, message_on_start: string?)
-
-
---# assume CA_UIC.SetDockingPoint: method(dock_point: number)
-
-
-
-
-
 --# assume CA_UIC.TextDimensions: method() --> (number, number, number)
 --# assume CA_UIC.SetProperty: method(key: string, value: string)
 
 
---# assume CM.load_global_script: method(script_name: string)
-
 --# assume CM.move_character: method(char_cqi: CA_CQI, move_x: number, move_y: number, replenish_ap: boolean?, allow_post_movement: boolean?, success_callback: function?, failure_callback: function?)
-
-
 --# assume CM.set_advice_enabled: method(advice_enabled: boolean?)
 --# assume CM.show_advice: method(advice_key: string)
 --# assume CM.modify_advice: method(boolean)
-
-
---# assume CM.pending_battle_cache_defender_victory: method() --> boolean
-
 --# assume CM.pending_battle_cache_attacker_value: method() --> int
 --# assume CM.pending_battle_cache_defender_value: method() --> int 
-
 
 --# assume CA_EFFECT.tweaker_value: function(tweaker_key: string) --> number
 --# assume CA_EFFECT.clear_advice_session_history: function()
 
-
---# assume CA_PENDING_BATTLE.percentage_of_defender_killed: method() --> number
---# assume CA_PENDING_BATTLE.percentage_of_attacker_killed: method() --> number
-
-
---
 --# assume CORE.get_or_create_component: method(key: string, template: string, parent: CA_UIC) --> CA_UIC
-
 --# assume CORE.get_static_object: method(key: string) --> WHATEVER
-
 --# assume CORE.is_battle: method() --> boolean 
 --# assume CORE.is_frontend: method() --> boolean
 
@@ -1269,40 +1303,12 @@
 --# assume CA_POOLED_FACTOR.maximum_value: method() --> number
 --# assume CA_POOLED_FACTOR.minimum_value: method() --> number
 
-
---# assume CA_POOLED.factors: method() --> CA_POOLED_FACTOR_LIST
-
-
-
-
 -- GLOBAL FUNCTIONS
 -- COMMON
 --# assume global is_nil: function(arg: any) --> boolean
 
-
 -- CAMPAIGN
 --# assume global get_tm: function() --> CA_TIMER_MANAGER
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- GLOBAL VARIABLES
 --leave at the bottom of this file

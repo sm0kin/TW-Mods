@@ -107,160 +107,318 @@ local function PopulateModOptions(MCMMainFrame)
     local ModOptionListBuffer = Container.new(FlowLayout.VERTICAL)
     ModOptionListBuffer:AddGap(10)
     ModOptionListView:AddContainer(ModOptionListBuffer)
-    for key, tweaker in pairsByKeys(mod:tweakers()) do
-       if not not tweaker:selected_option() then
-            local num_slots = tweaker:num_options()
-            local TweakerContainer = Container.new(FlowLayout.HORIZONTAL)
-            local TweakerRowTwo  --:CONTAINER
-            local TweakerRowThree --: CONTAINER
-            local has_row_two = (num_slots >= 1)
-            local has_row_three = (num_slots >= 5)
-            TweakerRowTwo = Container.new(FlowLayout.HORIZONTAL)
-            if has_row_three then
-                TweakerRowThree = Container.new(FlowLayout.HORIZONTAL)
+    if not cm:is_multiplayer() then
+        for key, tweaker in pairsByKeys(mod:tweakers()) do
+            if not not tweaker:selected_option() then
+                 local num_slots = tweaker:num_options()
+                 local TweakerContainer = Container.new(FlowLayout.HORIZONTAL)
+                 local TweakerRowTwo  --:CONTAINER
+                 local TweakerRowThree --: CONTAINER
+                 local has_row_two = (num_slots >= 1)
+                 local has_row_three = (num_slots >= 5)
+                 TweakerRowTwo = Container.new(FlowLayout.HORIZONTAL)
+                 if has_row_three then
+                     TweakerRowThree = Container.new(FlowLayout.HORIZONTAL)
+                 end
+                 local TweakerTextBuffer = Container.new(FlowLayout.VERTICAL)
+                 TweakerTextBuffer:AddGap(20)
+                 local TweakerText = Text.new(mod:name().."_"..key.."_tweaker_title", MCMMainFrame, "HEADER", tweaker:ui_name()..":")
+                 TweakerText:Resize(600, 35)
+                 TweakerText:GetContentComponent():SetTooltipText(tweaker:ui_tooltip(), true)
+                 TweakerTextBuffer:AddComponent(TweakerText)
+                 local ResetBuffer = Container.new(FlowLayout.VERTICAL)
+                 ResetBuffer:AddGap(15)
+                 local resetButton = Button.new(mod:name().."_"..key.."_tweaker_reset", MCMMainFrame, "CIRCULAR", "ui/skins/warhammer2/icon_home.png")
+                 resetButton:Resize(35, 35)
+                 resetButton:GetContentComponent():SetTooltipText("Reset this tweaker to it's default option", true)
+                 resetButton:RegisterForClick(function() 
+                     reset_to_default_confirmation(mod, tweaker)
+                 end)
+                 ResetBuffer:AddComponent(resetButton)
+                 TweakerContainer:AddComponent(TweakerTextBuffer)
+                 local gap = 10 --:number
+                 if num_slots > 2 then
+                     local i --:number
+                     if num_slots > 4 then
+                         i = num_slots - 6
+                     else
+                         i = num_slots - 2
+                     end
+                     gap = gap + (i * 310)
+                 end
+                 TweakerContainer:AddGap(gap)
+                 TweakerContainer:AddComponent(ResetBuffer)
+                 local processed = 0 
+                 for option_name, option in pairsByKeys(tweaker:options()) do
+                     local OptionButtonContainer
+                     local OptionButton = TextButton.new(mod:name().."_"..key.."_option_button_"..option_name, MCMMainFrame, "TEXT_TOGGLE", option:ui_name())
+                     OptionButton:Resize(300, 45)
+                     OptionButton:GetContentComponent():SetTooltipText(option:ui_tooltip(), true)
+                     if option_name == tweaker:selected_option():name() then
+                         OptionButton:SetState("selected")
+                     end
+                     OptionButton:RegisterForClick(function()
+                         if tweaker:selected_option() == option then
+                             OptionButton:SetState("selected")
+                         else
+                             local old_option = tweaker:selected_option():name()
+                             local OtherButton = Util.getComponentWithName(mod:name().."_"..key.."_option_button_"..old_option)
+                             if not not OtherButton then
+                                 --# assume OtherButton:BUTTON
+                                 OtherButton:SetState("active")
+                             end
+                             tweaker:set_selected_option(option)
+                             OptionButton:SetState("selected")
+                         end
+                     end)
+                     if processed < 4 then
+                         TweakerRowTwo:AddComponent(OptionButton)
+                         TweakerRowTwo:AddGap(10)
+                     elseif processed < 8 then
+                         TweakerRowThree:AddComponent(OptionButton)
+                         TweakerRowThree:AddGap(10)
+                     else
+                         mcm:log("UI: More than 8 options on tweaker ["..key.."], not showing the extras!")
+                     end
+                     processed = processed + 1 
+                 end
+                 ModOptionListView:AddContainer(TweakerContainer)
+                 if has_row_two then
+                     ModOptionListView:AddContainer(TweakerRowTwo)
+                     TweakerRowTwo:Reposition()
+                     if has_row_three then
+                         ModOptionListView:AddContainer(TweakerRowThree)
+                         TweakerRowTwo:Reposition()
+                     end
+                 end
+                 TweakerContainer:Reposition()
+             end
+         end
+         for key, variable in pairsByKeys(mod:variables()) do
+             local VariableTopContainer = Container.new(FlowLayout.HORIZONTAL)
+             local VariableBotContainer = Container.new(FlowLayout.HORIZONTAL)
+             local VariableTextBuffer = Container.new(FlowLayout.VERTICAL)
+             VariableTextBuffer:AddGap(20)
+             local VariableText = Text.new(mod:name().."_"..key.."_variable_title", MCMMainFrame, "HEADER", variable:ui_name())
+             VariableText:GetContentComponent():SetTooltipText(variable:ui_tooltip(), true)
+             VariableText:Resize(600, 35)
+             VariableTextBuffer:AddComponent(VariableText)
+             local ResetBuffer = Container.new(FlowLayout.VERTICAL)
+             ResetBuffer:AddGap(15)
+             local resetButton = Button.new(mod:name().."_"..key.."_tweaker_reset", MCMMainFrame, "CIRCULAR", "ui/skins/warhammer2/icon_home.png")
+             resetButton:Resize(35, 35)
+             resetButton:GetContentComponent():SetTooltipText("Reset this tweaker to it's default option", true)
+             resetButton:RegisterForClick(function() 
+                 reset_to_default_confirmation(mod, variable)
+             end)
+             ResetBuffer:AddComponent(resetButton)
+             local valueTextContainer = Container.new(FlowLayout.VERTICAL)
+             local ValueText = Text.new(mod:name().."_"..key.."_variable_value", MCMMainFrame, "HEADER", tostring(variable:current_value()))
+             ValueText:Resize(100, 45)
+             ValueText:GetContentComponent():SetTooltipText("Current Value of this variable. \n This variable has a maximum of "..variable:maximum().." and a minimum of "..variable:minimum()..".", true)
+             valueTextContainer:AddGap(10)
+             valueTextContainer:AddComponent(ValueText)
+             local IncrementButton = TextButton.new(mod:name().."_"..key.."_variable_up", MCMMainFrame, "TEXT", "+");
+             IncrementButton:GetContentComponent():SetTooltipText("Increment this variable.", true)
+             IncrementButton:Resize(140, 45);
+             IncrementButton:RegisterForClick(function()
+                 variable:increment_value()
+                 ValueText:SetText(tostring(variable:current_value()))
+             end)
+             local DecrementButton = TextButton.new(mod:name().."_"..key.."_variable_down", MCMMainFrame, "TEXT", "-");
+             DecrementButton:GetContentComponent():SetTooltipText("Decrement this variable.", true)
+             DecrementButton:Resize(140, 45);
+             DecrementButton:RegisterForClick(function()
+                 variable:decrement_value()
+                 ValueText:SetText(tostring(variable:current_value()))
+             end)
+             local MaxButton = TextButton.new(mod:name().."_"..key.."_variable_max", MCMMainFrame, "TEXT", "Max");
+             MaxButton:GetContentComponent():SetTooltipText("Increase this variable to it's maximum value.", true)
+             MaxButton:Resize(140, 45);
+             MaxButton:RegisterForClick(function()
+                 variable:set_current_value(variable:maximum())
+                 ValueText:SetText(tostring(variable:maximum()))
+             end)
+             local MinButton = TextButton.new(mod:name().."_"..key.."_variable_min", MCMMainFrame, "TEXT", "Min");
+             MinButton:GetContentComponent():SetTooltipText("Increase this variable to it's minimu, value.", true)
+             MinButton:Resize(140, 45);
+             MinButton:RegisterForClick(function()
+                 variable:set_current_value(variable:minimum())
+                 ValueText:SetText(tostring(variable:minimum()))
+             end)
+     
+             -----assemble
+             VariableTopContainer:AddComponent(VariableTextBuffer)
+             VariableTopContainer:AddGap(10) 
+             VariableTopContainer:AddComponent(ResetBuffer)
+             VariableBotContainer:AddComponent(MinButton)
+             VariableBotContainer:AddGap(10) 
+             VariableBotContainer:AddComponent(DecrementButton) 
+             VariableBotContainer:AddGap(40) 
+             VariableBotContainer:AddComponent(valueTextContainer) 
+             VariableBotContainer:AddGap(5)
+             VariableBotContainer:AddComponent(IncrementButton) 
+             VariableBotContainer:AddGap(10) 
+             VariableBotContainer:AddComponent(MaxButton)
+             ModOptionListView:AddContainer(VariableTopContainer)
+             ModOptionListView:AddContainer(VariableBotContainer)
+         end
+    else --multiplayer
+        for key, tweaker in pairs(mod:tweakers()) do
+        if not not tweaker:selected_option() then
+                local num_slots = tweaker:num_options()
+                local TweakerContainer = Container.new(FlowLayout.HORIZONTAL)
+                local TweakerRowTwo  --:CONTAINER
+                local TweakerRowThree --: CONTAINER
+                local has_row_two = (num_slots >= 1)
+                local has_row_three = (num_slots >= 5)
+                TweakerRowTwo = Container.new(FlowLayout.HORIZONTAL)
+                if has_row_three then
+                    TweakerRowThree = Container.new(FlowLayout.HORIZONTAL)
+                end
+                local TweakerTextBuffer = Container.new(FlowLayout.VERTICAL)
+                TweakerTextBuffer:AddGap(20)
+                local TweakerText = Text.new(mod:name().."_"..key.."_tweaker_title", MCMMainFrame, "HEADER", tweaker:ui_name()..":")
+                TweakerText:Resize(600, 35)
+                TweakerText:GetContentComponent():SetTooltipText(tweaker:ui_tooltip(), true)
+                TweakerTextBuffer:AddComponent(TweakerText)
+                local ResetBuffer = Container.new(FlowLayout.VERTICAL)
+                ResetBuffer:AddGap(15)
+                local resetButton = Button.new(mod:name().."_"..key.."_tweaker_reset", MCMMainFrame, "CIRCULAR", "ui/skins/warhammer2/icon_home.png")
+                resetButton:Resize(35, 35)
+                resetButton:GetContentComponent():SetTooltipText("Reset this tweaker to it's default option", true)
+                resetButton:RegisterForClick(function() 
+                    reset_to_default_confirmation(mod, tweaker)
+                end)
+                ResetBuffer:AddComponent(resetButton)
+                TweakerContainer:AddComponent(TweakerTextBuffer)
+                local gap = 10 --:number
+                if num_slots > 2 then
+                    local i --:number
+                    if num_slots > 4 then
+                        i = num_slots - 6
+                    else
+                        i = num_slots - 2
+                    end
+                    gap = gap + (i * 310)
+                end
+                TweakerContainer:AddGap(gap)
+                TweakerContainer:AddComponent(ResetBuffer)
+                local processed = 0 
+                for option_name, option in pairs(tweaker:options()) do
+                    local OptionButtonContainer
+                    local OptionButton = TextButton.new(mod:name().."_"..key.."_option_button_"..option_name, MCMMainFrame, "TEXT_TOGGLE", option:ui_name())
+                    OptionButton:Resize(300, 45)
+                    OptionButton:GetContentComponent():SetTooltipText(option:ui_tooltip(), true)
+                    if option_name == tweaker:selected_option():name() then
+                        OptionButton:SetState("selected")
+                    end
+                    OptionButton:RegisterForClick(function()
+                        if tweaker:selected_option() == option then
+                            OptionButton:SetState("selected")
+                        else
+                            local old_option = tweaker:selected_option():name()
+                            local OtherButton = Util.getComponentWithName(mod:name().."_"..key.."_option_button_"..old_option)
+                            if not not OtherButton then
+                                --# assume OtherButton:BUTTON
+                                OtherButton:SetState("active")
+                            end
+                            tweaker:set_selected_option(option)
+                            OptionButton:SetState("selected")
+                        end
+                    end)
+                    if processed < 4 then
+                        TweakerRowTwo:AddComponent(OptionButton)
+                        TweakerRowTwo:AddGap(10)
+                    elseif processed < 8 then
+                        TweakerRowThree:AddComponent(OptionButton)
+                        TweakerRowThree:AddGap(10)
+                    else
+                        mcm:log("UI: More than 8 options on tweaker ["..key.."], not showing the extras!")
+                    end
+                    processed = processed + 1 
+                end
+                ModOptionListView:AddContainer(TweakerContainer)
+                if has_row_two then
+                    ModOptionListView:AddContainer(TweakerRowTwo)
+                    TweakerRowTwo:Reposition()
+                    if has_row_three then
+                        ModOptionListView:AddContainer(TweakerRowThree)
+                        TweakerRowTwo:Reposition()
+                    end
+                end
+                TweakerContainer:Reposition()
             end
-            local TweakerTextBuffer = Container.new(FlowLayout.VERTICAL)
-            TweakerTextBuffer:AddGap(20)
-            local TweakerText = Text.new(mod:name().."_"..key.."_tweaker_title", MCMMainFrame, "HEADER", tweaker:ui_name()..":")
-            TweakerText:Resize(600, 35)
-            TweakerText:GetContentComponent():SetTooltipText(tweaker:ui_tooltip(), true)
-            TweakerTextBuffer:AddComponent(TweakerText)
+        end
+        for key, variable in pairs(mod:variables()) do
+            local VariableTopContainer = Container.new(FlowLayout.HORIZONTAL)
+            local VariableBotContainer = Container.new(FlowLayout.HORIZONTAL)
+            local VariableTextBuffer = Container.new(FlowLayout.VERTICAL)
+            VariableTextBuffer:AddGap(20)
+            local VariableText = Text.new(mod:name().."_"..key.."_variable_title", MCMMainFrame, "HEADER", variable:ui_name())
+            VariableText:GetContentComponent():SetTooltipText(variable:ui_tooltip(), true)
+            VariableText:Resize(600, 35)
+            VariableTextBuffer:AddComponent(VariableText)
             local ResetBuffer = Container.new(FlowLayout.VERTICAL)
             ResetBuffer:AddGap(15)
             local resetButton = Button.new(mod:name().."_"..key.."_tweaker_reset", MCMMainFrame, "CIRCULAR", "ui/skins/warhammer2/icon_home.png")
             resetButton:Resize(35, 35)
             resetButton:GetContentComponent():SetTooltipText("Reset this tweaker to it's default option", true)
             resetButton:RegisterForClick(function() 
-                reset_to_default_confirmation(mod, tweaker)
+                reset_to_default_confirmation(mod, variable)
             end)
             ResetBuffer:AddComponent(resetButton)
-            TweakerContainer:AddComponent(TweakerTextBuffer)
-            local gap = 10 --:number
-            if num_slots > 2 then
-                local i --:number
-                if num_slots > 4 then
-                    i = num_slots - 6
-                else
-                    i = num_slots - 2
-                end
-                gap = gap + (i * 310)
-            end
-            TweakerContainer:AddGap(gap)
-            TweakerContainer:AddComponent(ResetBuffer)
-            local processed = 0 
-            for option_name, option in pairsByKeys(tweaker:options()) do
-                local OptionButtonContainer
-                local OptionButton = TextButton.new(mod:name().."_"..key.."_option_button_"..option_name, MCMMainFrame, "TEXT_TOGGLE", option:ui_name())
-                OptionButton:Resize(300, 45)
-                OptionButton:GetContentComponent():SetTooltipText(option:ui_tooltip(), true)
-                if option_name == tweaker:selected_option():name() then
-                    OptionButton:SetState("selected")
-                end
-                OptionButton:RegisterForClick(function()
-                    if tweaker:selected_option() == option then
-                        OptionButton:SetState("selected")
-                    else
-                        local old_option = tweaker:selected_option():name()
-                        local OtherButton = Util.getComponentWithName(mod:name().."_"..key.."_option_button_"..old_option)
-                        if not not OtherButton then
-                            --# assume OtherButton:BUTTON
-                            OtherButton:SetState("active")
-                        end
-                        tweaker:set_selected_option(option)
-                        OptionButton:SetState("selected")
-                    end
-                end)
-                if processed < 4 then
-                    TweakerRowTwo:AddComponent(OptionButton)
-                    TweakerRowTwo:AddGap(10)
-                elseif processed < 8 then
-                    TweakerRowThree:AddComponent(OptionButton)
-                    TweakerRowThree:AddGap(10)
-                else
-                    mcm:log("UI: More than 8 options on tweaker ["..key.."], not showing the extras!")
-                end
-                processed = processed + 1 
-            end
-            ModOptionListView:AddContainer(TweakerContainer)
-            if has_row_two then
-                ModOptionListView:AddContainer(TweakerRowTwo)
-                TweakerRowTwo:Reposition()
-                if has_row_three then
-                    ModOptionListView:AddContainer(TweakerRowThree)
-                    TweakerRowTwo:Reposition()
-                end
-            end
-            TweakerContainer:Reposition()
-        end
-    end
-    for key, variable in pairsByKeys(mod:variables()) do
-        local VariableTopContainer = Container.new(FlowLayout.HORIZONTAL)
-        local VariableBotContainer = Container.new(FlowLayout.HORIZONTAL)
-        local VariableTextBuffer = Container.new(FlowLayout.VERTICAL)
-        VariableTextBuffer:AddGap(20)
-        local VariableText = Text.new(mod:name().."_"..key.."_variable_title", MCMMainFrame, "HEADER", variable:ui_name())
-        VariableText:GetContentComponent():SetTooltipText(variable:ui_tooltip(), true)
-        VariableText:Resize(600, 35)
-        VariableTextBuffer:AddComponent(VariableText)
-        local ResetBuffer = Container.new(FlowLayout.VERTICAL)
-        ResetBuffer:AddGap(15)
-        local resetButton = Button.new(mod:name().."_"..key.."_tweaker_reset", MCMMainFrame, "CIRCULAR", "ui/skins/warhammer2/icon_home.png")
-        resetButton:Resize(35, 35)
-        resetButton:GetContentComponent():SetTooltipText("Reset this tweaker to it's default option", true)
-        resetButton:RegisterForClick(function() 
-            reset_to_default_confirmation(mod, variable)
-        end)
-        ResetBuffer:AddComponent(resetButton)
-        local valueTextContainer = Container.new(FlowLayout.VERTICAL)
-        local ValueText = Text.new(mod:name().."_"..key.."_variable_value", MCMMainFrame, "HEADER", tostring(variable:current_value()))
-        ValueText:Resize(100, 45)
-        ValueText:GetContentComponent():SetTooltipText("Current Value of this variable. \n This variable has a maximum of "..variable:maximum().." and a minimum of "..variable:minimum()..".", true)
-        valueTextContainer:AddGap(10)
-        valueTextContainer:AddComponent(ValueText)
-        local IncrementButton = TextButton.new(mod:name().."_"..key.."_variable_up", MCMMainFrame, "TEXT", "+");
-        IncrementButton:GetContentComponent():SetTooltipText("Increment this variable.", true)
-        IncrementButton:Resize(140, 45);
-        IncrementButton:RegisterForClick(function()
-            variable:increment_value()
-            ValueText:SetText(tostring(variable:current_value()))
-        end)
-        local DecrementButton = TextButton.new(mod:name().."_"..key.."_variable_down", MCMMainFrame, "TEXT", "-");
-        DecrementButton:GetContentComponent():SetTooltipText("Decrement this variable.", true)
-        DecrementButton:Resize(140, 45);
-        DecrementButton:RegisterForClick(function()
-            variable:decrement_value()
-            ValueText:SetText(tostring(variable:current_value()))
-        end)
-        local MaxButton = TextButton.new(mod:name().."_"..key.."_variable_max", MCMMainFrame, "TEXT", "Max");
-        MaxButton:GetContentComponent():SetTooltipText("Increase this variable to it's maximum value.", true)
-        MaxButton:Resize(140, 45);
-        MaxButton:RegisterForClick(function()
-            variable:set_current_value(variable:maximum())
-            ValueText:SetText(tostring(variable:maximum()))
-        end)
-        local MinButton = TextButton.new(mod:name().."_"..key.."_variable_min", MCMMainFrame, "TEXT", "Min");
-        MinButton:GetContentComponent():SetTooltipText("Increase this variable to it's minimu, value.", true)
-        MinButton:Resize(140, 45);
-        MinButton:RegisterForClick(function()
-            variable:set_current_value(variable:minimum())
-            ValueText:SetText(tostring(variable:minimum()))
-        end)
+            local valueTextContainer = Container.new(FlowLayout.VERTICAL)
+            local ValueText = Text.new(mod:name().."_"..key.."_variable_value", MCMMainFrame, "HEADER", tostring(variable:current_value()))
+            ValueText:Resize(100, 45)
+            ValueText:GetContentComponent():SetTooltipText("Current Value of this variable. \n This variable has a maximum of "..variable:maximum().." and a minimum of "..variable:minimum()..".", true)
+            valueTextContainer:AddGap(10)
+            valueTextContainer:AddComponent(ValueText)
+            local IncrementButton = TextButton.new(mod:name().."_"..key.."_variable_up", MCMMainFrame, "TEXT", "+");
+            IncrementButton:GetContentComponent():SetTooltipText("Increment this variable.", true)
+            IncrementButton:Resize(140, 45);
+            IncrementButton:RegisterForClick(function()
+                variable:increment_value()
+                ValueText:SetText(tostring(variable:current_value()))
+            end)
+            local DecrementButton = TextButton.new(mod:name().."_"..key.."_variable_down", MCMMainFrame, "TEXT", "-");
+            DecrementButton:GetContentComponent():SetTooltipText("Decrement this variable.", true)
+            DecrementButton:Resize(140, 45);
+            DecrementButton:RegisterForClick(function()
+                variable:decrement_value()
+                ValueText:SetText(tostring(variable:current_value()))
+            end)
+            local MaxButton = TextButton.new(mod:name().."_"..key.."_variable_max", MCMMainFrame, "TEXT", "Max");
+            MaxButton:GetContentComponent():SetTooltipText("Increase this variable to it's maximum value.", true)
+            MaxButton:Resize(140, 45);
+            MaxButton:RegisterForClick(function()
+                variable:set_current_value(variable:maximum())
+                ValueText:SetText(tostring(variable:maximum()))
+            end)
+            local MinButton = TextButton.new(mod:name().."_"..key.."_variable_min", MCMMainFrame, "TEXT", "Min");
+            MinButton:GetContentComponent():SetTooltipText("Increase this variable to it's minimu, value.", true)
+            MinButton:Resize(140, 45);
+            MinButton:RegisterForClick(function()
+                variable:set_current_value(variable:minimum())
+                ValueText:SetText(tostring(variable:minimum()))
+            end)
 
-        -----assemble
-        VariableTopContainer:AddComponent(VariableTextBuffer)
-        VariableTopContainer:AddGap(10) 
-        VariableTopContainer:AddComponent(ResetBuffer)
-        VariableBotContainer:AddComponent(MinButton)
-        VariableBotContainer:AddGap(10) 
-        VariableBotContainer:AddComponent(DecrementButton) 
-        VariableBotContainer:AddGap(40) 
-        VariableBotContainer:AddComponent(valueTextContainer) 
-        VariableBotContainer:AddGap(5)
-        VariableBotContainer:AddComponent(IncrementButton) 
-        VariableBotContainer:AddGap(10) 
-        VariableBotContainer:AddComponent(MaxButton)
-        ModOptionListView:AddContainer(VariableTopContainer)
-        ModOptionListView:AddContainer(VariableBotContainer)
+            -----assemble
+            VariableTopContainer:AddComponent(VariableTextBuffer)
+            VariableTopContainer:AddGap(10) 
+            VariableTopContainer:AddComponent(ResetBuffer)
+            VariableBotContainer:AddComponent(MinButton)
+            VariableBotContainer:AddGap(10) 
+            VariableBotContainer:AddComponent(DecrementButton) 
+            VariableBotContainer:AddGap(40) 
+            VariableBotContainer:AddComponent(valueTextContainer) 
+            VariableBotContainer:AddGap(5)
+            VariableBotContainer:AddComponent(IncrementButton) 
+            VariableBotContainer:AddGap(10) 
+            VariableBotContainer:AddComponent(MaxButton)
+            ModOptionListView:AddContainer(VariableTopContainer)
+            ModOptionListView:AddContainer(VariableBotContainer)
+        end
     end
     ModOptionListView:PositionRelativeTo(MCMMainFrame, fbX*0.04 + 350, fbY*0.04)
     local reX, reY = ModOptionListView:Position()
@@ -308,29 +466,53 @@ local function PopulateList(MCMMainFrame)
         ModHeaderListView:AddComponent(modTextButton)   
         mcm:make_mod_with_key_selected(MCMBASIC)  
     end
-    for key, mod in pairsByKeys(mcm:get_mods()) do
-        if key ~= "mcm_basic" then
-            local modTextButton = TextButton.new(UIPANELNAME.."_MOD_HEADER_BUTTON_"..key, MCMMainFrame, "TEXT_TOGGLE", mod:ui_name())
-            modTextButton:Resize(300, 45)
-            modTextButton:GetContentComponent():SetTooltipText(mod:ui_tooltip(), true)
-            modTextButton:SetState("active")
-            modTextButton:RegisterForClick(function()
-                local old_selected = mcm:get_current_mod():name()
-                if old_selected ~= key then
-                    local OtherButton = Util.getComponentWithName(UIPANELNAME.."_MOD_HEADER_BUTTON_"..old_selected)
-                    if not not OtherButton then
-                        --# assume OtherButton: BUTTON
-                        OtherButton:SetState("active")
+    if not cm:is_multiplayer() then
+        for key, mod in pairsByKeys(mcm:get_mods()) do
+            if key ~= "mcm_basic" then
+                local modTextButton = TextButton.new(UIPANELNAME.."_MOD_HEADER_BUTTON_"..key, MCMMainFrame, "TEXT_TOGGLE", mod:ui_name())
+                modTextButton:Resize(300, 45)
+                modTextButton:GetContentComponent():SetTooltipText(mod:ui_tooltip(), true)
+                modTextButton:SetState("active")
+                modTextButton:RegisterForClick(function()
+                    local old_selected = mcm:get_current_mod():name()
+                    if old_selected ~= key then
+                        local OtherButton = Util.getComponentWithName(UIPANELNAME.."_MOD_HEADER_BUTTON_"..old_selected)
+                        if not not OtherButton then
+                            --# assume OtherButton: BUTTON
+                            OtherButton:SetState("active")
+                        end
+                        mcm:make_mod_with_key_selected(key)
+                        PopulateModOptions(MCMMainFrame)
+                        modTextButton:SetState("selected")
                     end
-                    mcm:make_mod_with_key_selected(key)
-                    PopulateModOptions(MCMMainFrame)
-                    modTextButton:SetState("selected")
-                end
-            end)
-            ModHeaderListView:AddComponent(modTextButton)       
-        end 
+                end)
+                ModHeaderListView:AddComponent(modTextButton)       
+            end 
+        end
+    else --multiplayer
+        for key, mod in pairs (mcm:get_mods()) do
+            if key ~= "mcm_basic" then
+                local modTextButton = TextButton.new(UIPANELNAME.."_MOD_HEADER_BUTTON_"..key, MCMMainFrame, "TEXT_TOGGLE", mod:ui_name())
+                modTextButton:Resize(300, 45)
+                modTextButton:GetContentComponent():SetTooltipText(mod:ui_tooltip(), true)
+                modTextButton:SetState("active")
+                modTextButton:RegisterForClick(function()
+                    local old_selected = mcm:get_current_mod():name()
+                    if old_selected ~= key then
+                        local OtherButton = Util.getComponentWithName(UIPANELNAME.."_MOD_HEADER_BUTTON_"..old_selected)
+                        if not not OtherButton then
+                            --# assume OtherButton: BUTTON
+                            OtherButton:SetState("active")
+                        end
+                        mcm:make_mod_with_key_selected(key)
+                        PopulateModOptions(MCMMainFrame)
+                        modTextButton:SetState("selected")
+                    end
+                end)
+                ModHeaderListView:AddComponent(modTextButton)       
+            end 
+        end
     end
-    
     ModHeaderListHolder:AddComponent(ModHeaderListView)
     ModHeaderListHolder:PositionRelativeTo(ModListHeader, -20, 50)
 end
@@ -495,7 +677,7 @@ local function CreatePanel()
 end;
 
 if cm:get_saved_value("mcm_finalized") == nil then
-    if cm:is_new_game() then 
+    if cm:is_new_game() and not cm:is_multiplayer() then 
         core:progress_on_loading_screen_dismissed(
             function()
                 cm:callback(function() 

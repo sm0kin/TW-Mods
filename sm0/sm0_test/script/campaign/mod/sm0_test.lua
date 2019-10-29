@@ -211,6 +211,20 @@ local function unitCheat()
 				cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force", cqi, 0, true)
 			end
 		end
+	elseif playerFaction:name() == "wh_main_vmp_schwartzhafen" then
+		local characterList = playerFaction:character_list()
+		for i = 0, characterList:num_items() - 1 do
+			local currentChar = characterList:item_at(i)	
+			if currentChar:character_subtype("dlc04_vmp_vlad_con_carstein") then
+				cm:remove_all_units_from_general(currentChar)
+				sm0_log("remove_all_units_from_general/dlc04_vmp_vlad_con_carstein")
+				local cqi = currentChar:command_queue_index()
+				for k, v in pairs(VMPunitstring) do 
+					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
+				end
+				cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force", cqi, 0, true)
+			end
+		end
 	elseif playerFaction:name() == "wh2_dlc12_lzd_cult_of_sotek" or playerFaction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle"
 	or playerFaction:name() == "wh2_main_lzd_hexoatl" then
 		local characterList = playerFaction:character_list()
@@ -377,7 +391,7 @@ function sm0_test()
 		function(context)
 			--cm:trigger_incident("wh2_main_hef_eataine", "sm0_hef_add_influence", true)
 			local human_factions = cm:get_human_factions()
-			deletePlayerSubcultureFactions()
+			--deletePlayerSubcultureFactions()
 			--item test
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then
 			--	cm:transfer_region_to_faction("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", human_factions[1])
