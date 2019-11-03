@@ -395,7 +395,8 @@ local mixu2_agents = {
 } --:vector<map<string, string>> 
     --XOUDAD High Elves Expanded--
 local xoudad_agents = {
-    {["faction"] = "wh2_main_hef_yvresse", ["subtype"] = "wh2_main_hef_eltharion"}
+    {["faction"] = "wh2_main_hef_yvresse", ["subtype"] = "wh2_main_hef_eltharion"},
+    {["faction"] = "", ["subtype"] = "wax_emp_valten"}
 } --:vector<map<string, string>> 
     --CATAPH TEB--
 local teb_agents = {
@@ -558,7 +559,6 @@ local subtype_anc = {
         {"mission", "wh_main_anc_talisman_the_eye_of_sheerian", "wh_dlc01_chs_archaon_eye_of_sheerian_stage_1", 18,"wh_dlc01_chs_archaon_eye_of_sheerian_stage_2_mpc"},
         {"mission", "wh_main_anc_enchanted_item_the_crown_of_domination", "wh_dlc01_chs_archaon_crown_of_domination_stage_1", 23,"wh_dlc01_chs_archaon_crown_of_domination_stage_2a_mpc"}
     },
-    
     ["chs_prince_sigvald"] = {
         {"mission", "wh_main_anc_weapon_sliverslash", "wh_dlc01_chs_prince_sigvald_sliverslash_stage_1", 8,"wh_dlc01_chs_prince_sigvald_sliverslash_stage_4a_mpc"},
         {"mission", "wh_main_anc_armour_auric_armour", "wh_dlc01_chs_prince_sigvald_auric_armour_stage_1", 13,"wh_dlc01_chs_prince_sigvald_auric_armour_stage_3a_mpc"}

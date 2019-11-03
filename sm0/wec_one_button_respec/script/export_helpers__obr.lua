@@ -111,9 +111,11 @@ function llr.create_button(cqi)
         if llr.button then
             llr.button:Delete()
         end
+        local char = cm:get_character_by_cqi(cqi)
         local icon_path = "ui/skins/warhammer2/icon_home.png" 
-        if string.find(cm:get_local_faction(true), "wh_") then 
-            local icon_path = "ui/skins/default/icon_home.png"
+        local player_culture = char:faction():culture()
+        if string.find(player_culture, "wh_") then 
+            icon_path = "ui/skins/default/icon_home.png"
         end
         llr.button = Button.new("RespecButtonLLR", character_details_panel, "CIRCULAR", icon_path)
         local button_ok = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_ok")

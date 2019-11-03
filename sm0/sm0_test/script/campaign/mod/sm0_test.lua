@@ -391,7 +391,7 @@ function sm0_test()
 		function(context)
 			--cm:trigger_incident("wh2_main_hef_eataine", "sm0_hef_add_influence", true)
 			local human_factions = cm:get_human_factions()
-			--deletePlayerSubcultureFactions()
+			deletePlayerSubcultureFactions()
 			--item test
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then
 			--	cm:transfer_region_to_faction("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", human_factions[1])
