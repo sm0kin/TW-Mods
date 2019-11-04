@@ -629,7 +629,7 @@ function sm0_delete()
 		end,
 		true
 	)
-	--Multiplayer listener
+	-- Multiplayer listener
     core:add_listener(
         "sm0_delete_UITriggerScriptEvent",
         "UITriggerScriptEvent",
@@ -662,40 +662,49 @@ function sm0_delete()
 		end,
 		true
 	)
-	--tmb king immortality
-	core:add_listener(
-		"sm0_immortal_CharacterTurnStart",
-		"CharacterTurnStart",
-		function(context)
-			return (context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
-			or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
-			or context:character():has_skill("mixu_tmb_liche_high_priest_hidden_title")
-			--or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
-			--or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
-			--or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
-			) and context:character():faction():subculture() == "wh2_dlc09_sc_tmb_tomb_kings"
-		end,
-		function(context)
-			sm0_log("sm0_immortal_CharacterTurnStart | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
-			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-		end,
-		true
-	)
 	core:add_listener(
 		"sm0_immortal_skill_CharacterCreated",
 		"CharacterCreated",
 		function(context)
-			return (context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
+			return context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
 			or context:character():has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
 			or context:character():has_skill("mixu_tmb_liche_high_priest_hidden_title")
-			--or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
-			--or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
-			--or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
-			) and context:character():faction():subculture() == "wh2_dlc09_sc_tmb_tomb_kings"
+			or context:character():has_skill("wh2_main_skill_all_immortality_hero") 
+			or context:character():has_skill("wh2_main_skill_all_immortality_lord") 
+			or context:character():has_skill("wh_main_skill_dwf_slayer_self_immortality") 
 		end,
 		function(context)
 			sm0_log("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+		end,
+		true
+	)
+	-- turn 1 immortality
+	core:add_listener(
+		"sm0_immortal_CharacterTurnStart",
+		"FactionTurnStart",
+		function(context)
+			local human_factions = cm:get_human_factions()
+			return cm:turn_number() == 1 and context:faction():is_human() and human_factions[1] == context:faction():name()
+		end,
+		function(context)
+			local faction_list = cm:model():world():faction_list()
+            for i = 0, faction_list:num_items() - 1 do
+				local current_faction = faction_list:item_at(i)
+				local character_list = current_faction:character_list()
+				for i = 0, character_list:num_items() - 1 do
+					local current_char = character_list:item_at(i)
+					if current_char:has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
+					or current_char:has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
+					or current_char:has_skill("mixu_tmb_liche_high_priest_hidden_title")
+					or current_char:has_skill("wh2_main_skill_all_immortality_hero") 
+					or current_char:has_skill("wh2_main_skill_all_immortality_lord") 
+					or current_char:has_skill("wh_main_skill_dwf_slayer_self_immortality") then
+						sm0_log("sm0_immortal_CharacterTurnStart | set_character_immortality = true | "..current_char:faction():name().." | "..current_char:character_subtype_key())
+						cm:set_character_immortality(cm:char_lookup_str(current_char), true)
+					end
+				end
+			end
 		end,
 		true
 	)

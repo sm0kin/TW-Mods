@@ -26,8 +26,8 @@ local function sm0_log(text)
 end
 
 function sm0_ai_exp()
-    if cm:is_new_game() then sm0_log_reset() end
-    core:add_listener (
+	if cm:is_new_game() then sm0_log_reset() end
+    core:add_listener(
         "ai_exp_CharacterTurnStart",
         "CharacterTurnStart",
         function(context)
