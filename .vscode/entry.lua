@@ -100,6 +100,8 @@ require("sm0/frosty_mods/script/campaign/main_warhammer/wh_quests")
 require("sm0/frosty_mods/script/campaign/mod/add_mounts_experiment")
 require("sm0/frosty_mods/script/campaign/mod/hostile_pirates")
 require("sm0/frosty_mods/script/campaign/mod/frosty_banners")
+require("sm0/frosty_mods/script/campaign/mod/azrik")
+
 
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/frosty_horde")

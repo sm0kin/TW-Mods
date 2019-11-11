@@ -39,7 +39,8 @@ function hostile_pirates()
         "FactionTurnEnd",
         function(context)
             local human_faction = cm:get_faction(cm:get_human_factions()[1])
-            return table_contains(pirate_factions, context:faction():name()) and not context:faction():at_war_with(human_faction)
+            return table_contains(pirate_factions, context:faction():name()) and
+                not context:faction():at_war_with(human_faction)
         end,
         function(context)
             apply_diplomacy(context:faction())
@@ -49,18 +50,16 @@ function hostile_pirates()
     if cm:is_new_game() then
         apply_diplomacy(context:faction())
     end
-    
-
 end
 
 cm:get_saved_value("hostile_pirates")
 
 local player_faction = cm:get_faction(cm:get_local_faction(true))
 local character_list = player_faction:character_list()
-local queek_headtaker_subtype = "wh2_main_skv_queek_headtaker";
+local queek_headtaker_subtype = "wh2_main_skv_queek_headtaker"
 for i = 0, character_list:num_items() - 1 do
     local current_char = character_list:item_at(i)
     if current_char:character_subtype_key() == "wh2_main_skv_queek_headtaker" then
-      cm:force_add_ancillary(current_char, "frosty_red_guard_banner", true, true);
+        cm:force_add_ancillary(current_char, "frosty_red_guard_banner", true, true)
     end
 end

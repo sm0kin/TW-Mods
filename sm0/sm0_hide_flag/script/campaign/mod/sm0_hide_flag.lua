@@ -57,7 +57,7 @@ local function create_checkbox_toggle()
 			return context.string == "sm0_flag_checkbox_toggle"
 		end,
 		function(context)
-			sm0_log("sm0_flag_checkbox_toggle_ComponentLClickUp: "..checkbox_toggle:CurrentState())
+			--sm0_log("sm0_flag_checkbox_toggle_ComponentLClickUp: "..checkbox_toggle:CurrentState())
 			if checkbox_toggle and checkbox_toggle:CurrentState() == "selected_down" then
 				local main_settlement_panel = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel")
 				for i = 0, main_settlement_panel:ChildCount() - 1 do
@@ -87,7 +87,7 @@ function sm0_hide_flag()
 		end,
 		function(context)
 			cm:callback(function() 
-				sm0_log("sm0_flag_checkbox_toggle_PanelOpenedCampaign")
+				--sm0_log("sm0_flag_checkbox_toggle_PanelOpenedCampaign")
 				create_checkbox_toggle()
 			end, 0.1) 	
 		end,
