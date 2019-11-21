@@ -302,7 +302,7 @@
 --# assume CM.force_reset_skills: method(lookup: string)
 --# assume CM.force_add_ancillary: method(character: CA_CHAR, ancillary: string, force_equip: boolean, suppress_event_feed: boolean)
 --# assume CM.force_remove_ancillary: method(character: CA_CHAR, ancillary: string, remove_to_pool: boolean, suppress_event_feed: boolean)
---# assume CM.force_remove_ancillary_from_faction: method(factionKey: string, ancillary: string)
+--# assume CM.force_remove_ancillary_from_faction: method(faction: CA_FACTION, ancillary: string)
 --# assume CM.add_ancillary_to_faction: method(faction: CA_FACTION, ancillary: string, suppress_event_feed: boolean)
 --More character commands
 --# assume CM.add_experience_to_units_commanded_by_character: method(char_lookup_str: string, level: int) --add_experience_to_units_commanded_by_character("faction:f,type:t,ability:a,surname:s,forename:f,garrison:g,x:1,y:2,r:3", level)
@@ -677,7 +677,7 @@
 --# assume CA_CHAR.is_at_sea: method() --> boolean
 --# assume CA_CHAR.is_embedded_in_military_force: method() --> boolean
 --# assume CA_CHAR.action_points_remaining_percent: method() --> (number | integer)
-
+--# assume CA_CHAR.has_ancillary: method(ancillary: string) --> boolean
 
 -- CHARACTER LIST
 --# assume CA_CHAR_LIST.num_items: method() --> number

@@ -100,7 +100,8 @@ require("sm0/frosty_mods/script/campaign/main_warhammer/wh_quests")
 require("sm0/frosty_mods/script/campaign/mod/add_mounts_experiment")
 require("sm0/frosty_mods/script/campaign/mod/hostile_pirates")
 require("sm0/frosty_mods/script/campaign/mod/frosty_banners")
-require("sm0/frosty_mods/script/campaign/mod/azrik")
+require("sm0/frosty_mods/script/campaign/mod/lords_of_change")
+require("sm0/frosty_mods/script/campaign/mod/frosty_temp")
 
 
 
@@ -156,7 +157,8 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --cbf
 require("sm0/cbf/script/campaign/mod/sm0_missing_anc")
 require("sm0/cbf/script/campaign/mod/sm0_horde")
-require("sm0/cbf/script/campaign/mod/sm0_liberate_missing_anc")
+
+require("sm0/sm0_liberate/script/campaign/mod/sm0_liberate_missing_anc")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_missing_anc")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_horde")

@@ -264,7 +264,7 @@ function sm0_confed()
 								if playerFaction:name() == "wh2_dlc09_tmb_followers_of_nagash" and FACTION_GARRISON_ATTACKED ~= "wh2_dlc09_tmb_the_sentinels" or playerFaction:name() == "wh2_dlc09_tmb_the_sentinels" and FACTION_GARRISON_ATTACKED ~= "wh2_dlc09_tmb_followers_of_nagash" then
 									button:SetDisabled(true)
 									button:SetOpacity(50)
-									button:SetTooltipText("They would rather desintegrate than follow Nagash!")
+									button:SetTooltipText("They would rather disintegrate than follow Nagash!")
 								elseif playerFaction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_the_sentinels" or playerFaction:name() ~= "wh2_dlc09_tmb_the_sentinels" and FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_followers_of_nagash" then
 									button:SetDisabled(true)
 									button:SetOpacity(50)
