@@ -336,7 +336,8 @@
 --#    xp_level: number,
 --#    faction_restricted_record: string?,
 --#    subculture_restricted_record: string?,
---#    tech_restricted_record: string?
+--#    tech_restricted_record: string?,
+--#    partial_replenishment: bool
 --#)
 --spawning
 --# assume CM.create_force_with_general: method(
@@ -1309,6 +1310,84 @@
 
 -- CAMPAIGN
 --# assume global get_tm: function() --> CA_TIMER_MANAGER
+
+--SaB
+--[[
+new
+cm:add_agent_experience_through_family_member(FAMILY_MEMBER_SCRIPT_INTERFACE character, number points)
+cm:move_to_queued(string character lookup, number x, number y)
+cm:attack_queued(string character lookup, string target character lookup, boolean lay siege)
+cm:set_army_trespass_disabled(boolean should disable)
+cm:change_custom_faction_name(string faction key, string name)
+cm:change_custom_settlement_name(SETTLEMENT_SCRIPT_INTERFACE settlement, string name key)
+cm:change_localised_settlement_name(SETTLEMENT_SCRIPT_INTERFACE settlement, string name)
+cm:change_custom_region_name(REGION_SCRIPT_INTERFACE region, string name key)
+cm:change_localised_region_name(REGION_SCRIPT_INTERFACE region, string name)
+cm:change_custom_unit_name(UNIT_SCRIPT_INTERFACE unit, string name key)
+cm:change_localised_unit_name(UNIT_SCRIPT_INTERFACE unit, string name)
+cm:create_new_ritual_setup(FACTION_SCRIPT_INTERFACE performing faction, string ritual key)
+cm:perform_ritual_with_setup(RITUAL_SETUP_SCRIPT_INTERFACE interface ritual setup)
+cm:lock_ritual(FACTION_SCRIPT_INTERFACE faction, string ritual key)
+cm:unlock_ritual(FACTION_SCRIPT_INTERFACE faction, string ritual key, number duration)
+cm:lock_ritual_chain(FACTION_SCRIPT_INTERFACE faction, string ritual_chain_key)
+cm:unlock_ritual_chain(FACTION_SCRIPT_INTERFACE faction, string ritual chain key, number duration)
+cm:lock_rituals_in_category(FACTION_SCRIPT_INTERFACE faction, string ritual_category_key)
+cm:unlock_rituals_in_category(
+  FACTION_SCRIPT_INTERFACE faction,
+  string ritual_category_key,
+  number duration
+)
+cm:apply_active_ritual(FACTION_SCRIPT_INTERFACE faction, ACTIVE_RITUAL_SCRIPT_INTERFACE ritual)
+cm:apply_active_rituals(FACTION_SCRIPT_INTERFACE faction)
+cm:spawn_plague_at_settlement(SETTLEMENT_SCRIPT_INTERFACE settlement, string plague key)
+cm:spawn_plague_at_region(REGION_SCRIPT_INTERFACE region, string plague key)
+cm:spawn_plague_at_military_force(MILITARY_FORCE_SCRIPT_INTERFACE military force, string plague key)
+cm:set_unit_hp_to_unary_of_maximum(UNIT_SCRIPT_INTERFACE unit, number unary hp)
+campaign_manager:get_border_regions_of_faction(
+  faction faction,
+  boolean outside_border True returns regions bordering the faction that do not belong to the faction,
+  [boolean return_unique_list]
+)
+campaign_manager:get_factions_that_border_faction(faction faction, [boolean return_unique_list])
+campaign_manager:get_regions_within_distance_of_character(
+  character character interface,
+  number distance,
+  boolean not razed,
+  [boolean return_unique_list]
+)
+random_army_manager:set_faction(force_key, faction_key)
+math.normalize(value, vmin, vmax)
+kill_faction(faction_key)
+unique_table:new()
+unique_table:insert(item)
+unique_table:remove(item)
+unique_table:contains(item)
+unique_table:index_of(item)
+unique_table:to_table()
+unique_table:table_to_unique_table(tab)
+unique_table:faction_list_to_unique_table(faction_list, cqi_list)
+unique_table:character_list_to_unique_table(character_list)
+unique_table:region_list_to_unique_table(region_list, cqi_list)
+
+Changed:
+cm:add_unit_to_faction_mercenary_pool(
+  FACTION_SCRIPT_INTERFACE faction,
+  string unit,
+  number count,
+  number replenishment chance,
+  number max units,
+  number max per turn,
+  number xp,
+  string faction restriction,
+  string subculture restriction,
+  string tech restriction,
+  boolean partial replenishment
+)
+
+Removed:
+set_ritual_unlocked
+set_ritual_chain_unlocked
+--]]
 
 -- GLOBAL VARIABLES
 --leave at the bottom of this file

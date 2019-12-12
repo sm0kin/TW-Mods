@@ -822,7 +822,7 @@ function sm0_delete()
 		"ScriptEventBretonniaGrailVowCompleted",
 		true,
 		function(context)
-			if cm:char_is_general(context:character()) and context:character():faction():is_human() then	
+			if context:character():faction():is_human() then	
 				sm0_log("sm0_immortal_ScriptEventBretonniaGrailVowCompleted | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
