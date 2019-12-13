@@ -117,6 +117,9 @@ local subtype_anc = {
         {"incident", "wh_main_anc_weapon_the_sword_of_couronne", "wh_dlc07_qb_brt_louen_sword_of_couronne_stage_0", 9},
         {"mission", "wh2_dlc12_anc_armour_brt_armour_of_brilliance", "wh2_dlc12_brt_louen_armour_of_brilliance", 12}
     },
+    ["wh2_dlc14_brt_repanse"] = {
+        {"mission", "wh2_dlc14_anc_weapon_sword_of_lyonesse", "wh2_dlc14_main_brt_repanse_sword_of_lyonesse_stage_1", 5}
+    },
     ["wh2_main_hef_tyrion"] = {
         {"mission", "wh2_main_anc_weapon_sunfang", "wh2_main_hef_tyrion_sunfang_stage_1", 10},
         {"mission", "wh2_main_anc_armour_dragon_armour_of_aenarion", "wh2_main_hef_tyrion_dragon_armour_of_aenarion_stage_1", 6},
@@ -150,6 +153,9 @@ local subtype_anc = {
     ["wh2_dlc10_def_crone_hellebron"] = {
         {"mission", "wh2_dlc10_anc_weapon_deathsword_and_the_cursed_blade", "wh2_dlc10_def_hellebron_deathsword_and_the_cursed_blade_stage_1", 8},
         {"mission", "wh2_dlc10_anc_talisman_amulet_of_dark_fire", "wh2_dlc10_def_hellebron_amulet_of_dark_fire_stage_1", 2}
+    },
+    ["wh2_dlc14_def_malus_darkblade"] = {
+		{"mission", "wh2_dlc14_anc_weapon_warpsword_of_khaine", "wh2_dlc14_main_def_malus_warpsword_of_khaine_stage_1", 5}
     },
     ["wh2_main_lzd_lord_mazdamundi"] = {
         {"mission", "wh2_main_anc_weapon_cobra_mace_of_mazdamundi", "wh2_main_lzd_mazdamundi_cobra_mace_of_mazdamundi_stage_1", 10},
@@ -186,6 +192,10 @@ local subtype_anc = {
     },
     ["wh2_dlc12_skv_ikit_claw"] = {
         {"mission", "wh2_dlc12_anc_weapon_storm_daemon", "wh2_dlc12_ikit_claw_storm_daemon_stage_1", 8, "wh2_dlc12_ikit_claw_storm_daemon_mp"}
+    },
+    ["wh2_dlc14_skv_deathmaster_snikch"] = {
+        {"mission", "wh2_dlc14_anc_armour_the_cloak_of_shadows", "wh2_dlc14_main_skv_snikch_the_cloak_of_shadows_stage_1", 5},
+        {"mission", "wh2_dlc14_anc_weapon_whirl_of_weeping_blades", "wh2_dlc14_main_skv_snikch_whirl_of_weeping_blades_stage_1", 3}
     },
     ["wh2_dlc09_tmb_settra"] = {
         {"mission", "wh2_dlc09_anc_enchanted_item_the_crown_of_nehekhara", "wh2_dlc09_tmb_settra_the_crown_of_nehekhara_stage_1", 6},
@@ -300,7 +310,7 @@ local missing_anc = {
     {["faction"] = "wh2_dlc11_cst_vampire_coast", ["subtype"] = "wh2_dlc11_cst_harkon", ["key"] = "wh2_dlc11_anc_follower_captain_drekla"}
 } --:vector<map<string, string>>
 
-function sm0_liberate_missing_anc()
+function sm0_liberate_missing_anc_me()
     -- Let's say AI Morathi ranks up to level 6 and gets her item. Her faction gets wiped out later on, but she comes back via liberation/rebel/script. 
     -- The AI recruits her again but decides to not equip the item. Later the player confederates her faction but morathi's item is still part of her (now "dead") faction.
     core:add_listener(
