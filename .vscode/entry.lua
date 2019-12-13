@@ -122,6 +122,8 @@ require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_wulfrik")
 require("sm0/recruitdefeated/script/campaign/mod/viemzee_unlock_all_ll")
 --require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
 require("sm0/recruitdefeated/script/campaign/mod/sm0_recruit_defeated")
+require("sm0/recruitdefeated/script/campaign/mod/sm0_horde")
+require("sm0/recruitdefeated/script/campaign/mod/sm0_liberate_missing_anc")
 require("sm0/recruitdefeated/script/campaign/mod/sm0_quest_backup")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_quest_backup")
 

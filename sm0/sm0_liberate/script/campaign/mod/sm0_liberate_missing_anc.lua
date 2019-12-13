@@ -119,11 +119,14 @@ local subtype_anc = {
     },
     ["wh2_main_hef_tyrion"] = {
         {"mission", "wh2_main_anc_weapon_sunfang", "wh2_main_hef_tyrion_sunfang_stage_1", 10},
-        {"mission", "wh2_main_anc_armour_dragon_armour_of_aenarion", "wh2_main_hef_tyrion_dragon_armour_of_aenarion_stage_1", 6}
+        {"mission", "wh2_main_anc_armour_dragon_armour_of_aenarion", "wh2_main_hef_tyrion_dragon_armour_of_aenarion_stage_1", 6},
+        {"mission", "wh2_main_anc_enchanted_item_heart_of_avelorn", "wh2_dlc14_hef_me_anc_enchanted_item_heart_of_avelorn", 2}
     },
     ["wh2_main_hef_teclis"] = {
         {"mission", "wh2_main_anc_weapon_sword_of_teclis", "wh2_main_hef_teclis_sword_of_teclis_stage_1", 10},
-        {"mission", "wh2_main_anc_arcane_item_war_crown_of_saphery", "wh2_main_hef_teclis_war_crown_of_saphery_stage_1", 6}
+        {"mission", "wh2_main_anc_arcane_item_war_crown_of_saphery", "wh2_main_hef_teclis_war_crown_of_saphery_stage_1", 6},
+        {"mission", "wh2_main_anc_arcane_item_scroll_of_hoeth", "wh2_main_vortex_narrative_hef_the_lies_of_the_druchii", 2},
+		{"mission", "wh2_main_anc_arcane_item_moon_staff_of_lileath", "wh2_main_vortex_narrative_hef_the_vermin_of_hruddithi", 4}
     },
     ["wh2_dlc10_hef_alarielle"] = {
         {"mission", "wh2_dlc10_anc_talisman_shieldstone_of_isha", "wh2_dlc10_alarielle_shieldstone_of_isha_1", 2},
@@ -136,10 +139,13 @@ local subtype_anc = {
     ["wh2_main_def_malekith"] = {
         {"mission", "wh2_main_anc_weapon_destroyer", "wh2_main_def_malekith_destroyer_stage_1", 10},
         {"mission", "wh2_main_anc_arcane_item_circlet_of_iron", "wh2_main_def_malekith_circlet_of_iron_stage_1", 6},
-        {"mission", "wh2_main_anc_armour_supreme_spellshield", "wh2_main_def_malekith_supreme_spellshield_stage_1", 14}
+        {"mission", "wh2_main_anc_armour_supreme_spellshield", "wh2_main_def_malekith_supreme_spellshield_stage_1", 14},
+        {"mission", "wh2_main_anc_armour_armour_of_midnight", "wh2_main_vortex_narrative_def_hoteks_levy", 2}
     },
     ["wh2_main_def_morathi"] = {
-        {"mission", "wh2_main_anc_weapon_heartrender_and_the_darksword", "wh2_main_def_morathi_heartrender_and_the_darksword_stage_1", 6}
+        {"mission", "wh2_main_anc_weapon_heartrender_and_the_darksword", "wh2_main_def_morathi_heartrender_and_the_darksword_stage_1", 6},
+        {"mission", "wh2_main_anc_arcane_item_wand_of_the_kharaidon", "wh2_dlc14_def_wand_of_kharaidon", 4},
+		{"mission", "wh2_main_anc_talisman_amber_amulet", "wh2_dlc14_def_amber_amulet", 2}
     },
     ["wh2_dlc10_def_crone_hellebron"] = {
         {"mission", "wh2_dlc10_anc_weapon_deathsword_and_the_cursed_blade", "wh2_dlc10_def_hellebron_deathsword_and_the_cursed_blade_stage_1", 8},
@@ -164,7 +170,8 @@ local subtype_anc = {
         {"mission", "wh2_dlc13_talisman_the_ogham_shard", "wh2_dlc13_lzd_nakai_the_ogham_shard_stage_1", 8}
     },
     ["wh2_dlc13_lzd_gor_rok"] = {
-        {"mission", "wh2_dlc13_anc_armour_the_shield_of_aeons", "wh2_dlc13_gorrok_the_shield_of_aeons_stage_1", 8}
+        {"mission", "wh2_dlc13_anc_armour_the_shield_of_aeons", "wh2_dlc13_gorrok_the_shield_of_aeons_stage_1", 8},
+        {"mission", "wh2_dlc13_anc_weapon_mace_of_ulumak", "wh2_dlc14_lzd_the_mace_of_ulumak", 2}
     },
     ["wh2_main_skv_lord_skrolk"] = {
         {"mission", "wh2_main_anc_weapon_rod_of_corruption", "wh2_main_skv_skrolk_rod_of_corruption_stage_1", 10},
@@ -278,11 +285,26 @@ local subtype_anc = {
     }
 } --: map<string, vector<vector<WHATEVER>>>
 
+local missing_anc = {
+    {["faction"] = "wh2_main_hef_avelorn", ["subtype"] = "wh2_dlc10_hef_alarielle", ["key"] = "wh2_dlc10_anc_magic_standard_banner_of_avelorn"},
+    {["faction"] = "wh2_main_hef_avelorn", ["subtype"] = "wh2_dlc10_hef_alarielle", ["key"] = "wh2_dlc10_anc_arcane_item_stave_of_avelorn"},
+    {["faction"] = "wh2_main_skv_clan_skyre", ["subtype"] = "wh2_dlc12_skv_ikit_claw", ["key"] = "wh2_dlc12_anc_armour_iron_frame"},
+    {["faction"] = "wh_main_grn_crooked_moon", ["subtype"] = "dlc06_grn_skarsnik", ["key"] = "wh_dlc06_anc_magic_standard_skarsniks_boyz"},
+    {["faction"] = "wh2_dlc12_lzd_cult_of_sotek", ["subtype"] = "wh2_dlc12_lzd_tehenhauin", ["key"] = "wh2_dlc12_anc_weapon_blade_of_the_serpents_tongue"},
+    {["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_grimgor_ironhide", ["key"] = "wh_main_anc_magic_standard_da_immortulz"},
+    {["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar", ["key"] = "wh2_main_anc_armour_lions_pelt"},
+    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "dlc03_emp_boris_todbringer", ["key"] = "wh_main_anc_talisman_the_white_cloak_of_ulric"},
+    {["faction"] = "wh2_main_hef_nagarythe", ["subtype"] = "wh2_dlc10_hef_alith_anar", ["key"] = "wh2_dlc10_anc_talisman_stone_of_midnight"},
+    {["faction"] = "wh2_dlc11_vmp_the_barrow_legion", ["subtype"] = "vmp_heinrich_kemmler", ["key"] = "wh2_dlc11_anc_follower_vmp_the_ravenous_dead"},
+    {["faction"] = "wh2_main_lzd_tlaqua", ["subtype"] = "wh2_dlc12_lzd_tiktaqto", ["key"] = "wh2_dlc12_anc_weapon_the_blade_of_ancient_skies"},
+    {["faction"] = "wh2_dlc11_cst_vampire_coast", ["subtype"] = "wh2_dlc11_cst_harkon", ["key"] = "wh2_dlc11_anc_follower_captain_drekla"}
+} --:vector<map<string, string>>
+
 function sm0_liberate_missing_anc()
     -- Let's say AI Morathi ranks up to level 6 and gets her item. Her faction gets wiped out later on, but she comes back via liberation/rebel/script. 
     -- The AI recruits her again but decides to not equip the item. Later the player confederates her faction but morathi's item is still part of her (now "dead") faction.
     core:add_listener(
-        "sm0_backup_CharacterTurnStart",
+        "sm0_backup_CharacterRankUp",
         "CharacterTurnStart",
         function(context)
             return subtype_anc[context:character():character_subtype_key()] ~= nil
@@ -366,44 +388,58 @@ function sm0_liberate_missing_anc()
         end,
         true
     )
-    --AI (untested)
+
+    -- Fix for missing Turn 1 ancillary
+    --
+    -- this method won't add the item before the factions turn (important for ai)
+    --core:add_listener(
+    --	"sm0_missing_anc_CharacterTurnStart",
+    --	"CharacterTurnStart",
+    --	function(context)
+    --		return context:character():character_subtype("wh2_dlc13_lzd_gor_rok") and context:character():rank() >= 1 
+    --		and not cm:model():world():ancillary_exists("wh2_dlc13_anc_weapon_mace_of_ulumak")
+    --	end,
+    --	function(context)
+    --		cm:force_add_ancillary(context:character(), "wh2_dlc13_anc_weapon_mace_of_ulumak", true, true)
+    --	end,
+    --	false
+    --)
+
+    -- this method is better because it behaves the same way starting items are added to Tehenhauin and Tiktaq'to
     core:add_listener(
-        "sm0_AI_backup_CharacterTurnStart",
-        "CharacterTurnStart",
+        "sm0_missing_anc_FactionTurnStart",
+        "FactionTurnStart",
+        true,
         function(context)
-            return not context:character():faction():is_human() and subtype_anc[context:character():character_subtype_key()] ~= nil
-        end,
-        function(context)
-            local character = context:character()--:CA_CHAR
-            local quests = subtype_anc[character:character_subtype_key()]
-            for i = 1, #quests do
-                local current_quest_record = quests[i]
-                local current_ancillary_key = current_quest_record[2]
-                local current_rank_req = current_quest_record[4]
-                if character:rank() >= current_rank_req and character:faction():ancillary_exists(current_ancillary_key) and not character:has_ancillary(current_ancillary_key) then
-                    cm:force_remove_ancillary_from_faction(character:faction(), current_ancillary_key)
-                    cm:force_add_ancillary(character, current_ancillary_key, true, false)
-                end
-            end
-        end,
-        true
-    )
-    core:add_listener(
-        "sm0_AI_backup_CharacterCreated",
-        "CharacterCreated",
-        function(context)
-            return not context:character():faction():is_human() and subtype_anc[context:character():character_subtype_key()] ~= nil
-        end,
-        function(context)
-            local character = context:character()--:CA_CHAR
-            local quests = subtype_anc[character:character_subtype_key()]
-            for i = 1, #quests do
-                local current_quest_record = quests[i]
-                local current_ancillary_key = current_quest_record[2]
-                local current_rank_req = current_quest_record[4]
-                if character:rank() >= current_rank_req and character:faction():ancillary_exists(current_ancillary_key) and not character:has_ancillary(current_ancillary_key) then
-                    cm:force_remove_ancillary_from_faction(character:faction(), current_ancillary_key)
-                    cm:force_add_ancillary(character, current_ancillary_key, true, false)
+            for _, anc in ipairs(missing_anc) do
+                if not cm:model():world():ancillary_exists(anc.key) then
+                    local faction = cm:get_faction(anc.faction)
+                    local not_found = true
+                    if faction then
+                        local character_list = faction:character_list()
+                        for i = 0, character_list:num_items() - 1 do
+                            local character = character_list:item_at(i)
+                            if character:character_subtype(anc.subtype) and character:rank() >= 1 then
+                                cm:force_add_ancillary(character, anc.key, true, true)
+                                not_found = false
+                                break
+                            end
+                        end
+                        if not_found then
+                            local faction_list = faction:factions_of_same_subculture()
+                            for i = 0, faction_list:num_items() - 1 do
+                                local subc_faction = faction_list:item_at(i)
+                                local character_list = subc_faction:character_list()
+                                for j = 0, character_list:num_items() - 1 do
+                                    local character = character_list:item_at(j)
+                                    if character:character_subtype(anc.subtype) and character:rank() >= 1 then
+                                        cm:force_add_ancillary(character, anc.key, true, true)
+                                        break
+                                    end
+                                end
+                            end
+                        end
+                    end
                 end
             end
         end,

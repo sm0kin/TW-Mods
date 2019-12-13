@@ -25,12 +25,41 @@ local function sm0_log(text)
 	popLog :close()
 end
 
+--v function(hide: bool)
+local function toggle_flag(hide)
+	local main_settlement_panel = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel")
+	if hide then
+		for i = 0, main_settlement_panel:ChildCount() - 1 do
+			local settlement = UIComponent(main_settlement_panel:Find(i))
+			local dy_flag = find_uicomponent(settlement, "dy_flag")
+			dy_flag:SetVisible(false)
+			cm:set_saved_value("sm0_hide_flag_toggle", true)
+		end
+	else
+		for i = 0, main_settlement_panel:ChildCount() - 1 do
+			local settlement = UIComponent(main_settlement_panel:Find(i))
+			local dy_flag = find_uicomponent(settlement, "dy_flag")
+			dy_flag:SetVisible(true)
+			cm:set_saved_value("sm0_hide_flag_toggle", false)
+		end
+	end
+end
+
 local function create_checkbox_toggle()
-	local info_holder = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel_header", "info_holder")
+	local info_holder = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel_header", "info_holder")	
 	local reference_uic = find_uicomponent(info_holder, "button_info")
+	if cm:get_local_faction(true) == "wh2_main_skv_clan_eshin" then reference_uic = find_uicomponent(core:get_ui_root(), "settlement_panel", "target_shadowy_dealings_button") end
 	local reference_uic_W, reference_uic_H = reference_uic:Bounds()
 	local reference_uic_X, reference_uic_Y = reference_uic:Position()
 	if info_holder:Find("sm0_flag_checkbox_toggle") then 
+		local checkbox_toggle = UIComponent(info_holder:Find("sm0_flag_checkbox_toggle"))
+		if cm:get_saved_value("sm0_hide_flag_toggle") then
+			toggle_flag(true)
+			checkbox_toggle:SetState("active")
+		else
+			toggle_flag(false)
+			checkbox_toggle:SetState("selected")
+		end
 		return
 	end
 	info_holder:CreateComponent("sm0_flag_checkbox_toggle", "ui/templates/checkbox_toggle")
@@ -49,7 +78,13 @@ local function create_checkbox_toggle()
 	checkbox_toggle:SetTooltipText("Select to show Faction Flags.") 
 	checkbox_toggle:SetState("selected_hover")
 	checkbox_toggle:SetTooltipText("Unselect to hide Faction Flags.")
-	checkbox_toggle:SetState("selected")
+	if cm:get_saved_value("sm0_hide_flag_toggle") then
+		toggle_flag(true)
+		checkbox_toggle:SetState("active")
+	else
+		toggle_flag(false)
+		checkbox_toggle:SetState("selected")
+	end
 	core:add_listener(
 		"sm0_flag_checkbox_toggle_ComponentLClickUp",
 		"ComponentLClickUp",
@@ -59,19 +94,9 @@ local function create_checkbox_toggle()
 		function(context)
 			--sm0_log("sm0_flag_checkbox_toggle_ComponentLClickUp: "..checkbox_toggle:CurrentState())
 			if checkbox_toggle and checkbox_toggle:CurrentState() == "selected_down" then
-				local main_settlement_panel = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel")
-				for i = 0, main_settlement_panel:ChildCount() - 1 do
-					local settlement = UIComponent(main_settlement_panel:Find(i))
-					local dy_flag = find_uicomponent(settlement, "dy_flag")
-					dy_flag:SetVisible(false)
-				end
+				toggle_flag(true)
 			elseif checkbox_toggle and checkbox_toggle:CurrentState() == "down" then
-				local main_settlement_panel = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel")
-				for i = 0, main_settlement_panel:ChildCount() - 1 do
-					local settlement = UIComponent(main_settlement_panel:Find(i))
-					local dy_flag = find_uicomponent(settlement, "dy_flag")
-					dy_flag:SetVisible(true)
-				end
+				toggle_flag(false)
 			end
 		end,
 		true
@@ -89,6 +114,22 @@ function sm0_hide_flag()
 			cm:callback(function() 
 				--sm0_log("sm0_flag_checkbox_toggle_PanelOpenedCampaign")
 				create_checkbox_toggle()
+			end, 0.1) 	
+		end,
+		true
+	)
+	core:add_listener(
+		"sm0_flag_checkbox_toggle_SettlementSelected",
+		"SettlementSelected",
+		true,
+		function()
+			cm:callback(function() 
+				--sm0_log("sm0_flag_checkbox_toggle_SettlementSelected")
+				if cm:get_saved_value("sm0_hide_flag_toggle") then
+					toggle_flag(true)
+				else
+					toggle_flag(false)
+				end
 			end, 0.1) 	
 		end,
 		true

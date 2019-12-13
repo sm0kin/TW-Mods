@@ -10,8 +10,7 @@ local missing_anc = {
 	{["faction"] = "wh2_main_hef_nagarythe", ["subtype"] = "wh2_dlc10_hef_alith_anar", ["key"] = "wh2_dlc10_anc_talisman_stone_of_midnight"},
 	{["faction"] = "wh2_dlc11_vmp_the_barrow_legion", ["subtype"] = "vmp_heinrich_kemmler", ["key"] = "wh2_dlc11_anc_follower_vmp_the_ravenous_dead"},
 	{["faction"] = "wh2_main_lzd_tlaqua", ["subtype"] = "wh2_dlc12_lzd_tiktaqto", ["key"] = "wh2_dlc12_anc_weapon_the_blade_of_ancient_skies"},
-	{["faction"] = "wh2_dlc11_cst_vampire_coast", ["subtype"] = "wh2_dlc11_cst_harkon", ["key"] = "wh2_dlc11_anc_follower_captain_drekla"},
-	{["faction"] = "wh2_main_lzd_itza", ["subtype"] = "wh2_dlc13_lzd_gor_rok", ["key"] = "wh2_dlc13_anc_weapon_mace_of_ulumak"}
+	{["faction"] = "wh2_dlc11_cst_vampire_coast", ["subtype"] = "wh2_dlc11_cst_harkon", ["key"] = "wh2_dlc11_anc_follower_captain_drekla"}
 } --:vector<map<string, string>>
 
 function sm0_missing_anc()
@@ -66,20 +65,7 @@ function sm0_missing_anc()
 					end
 				end
 			end
-			-- mace of ulumak oversight
-			--local faction_list = cm:model():world():faction_list()
-			--for i = 0, faction_list:num_items() - 1 do
-			--	local faction = faction_list:item_at(i)
-			--	local character_list = faction:character_list()
-			--	for j = 0, character_list:num_items() - 1 do
-			--		local character = character_list:item_at(j)
-			--		if character:character_subtype("wh2_dlc13_lzd_gor_rok") and character:rank() >= 1 then
-			--			cm:force_add_ancillary(character, "wh2_dlc13_anc_weapon_mace_of_ulumak", true, true)
-			--		end
-			--	end
-			--end
 		end,
 		true
 	)
 end
-
