@@ -210,6 +210,9 @@ local faction_event_picture = {
     ["wh2_dlc11_cst_the_drowned"] = 784,
     ["wh2_dlc13_lzd_spirits_of_the_jungle"] = 775,
     ["wh2_dlc13_emp_the_huntmarshals_expedition"] = 591,
+    ["wh2_dlc14_brt_chevaliers_de_lyonesse"] = 751,
+    ["wh2_main_skv_clan_eshin"] = 778,
+    ["wh2_main_def_hag_graef"] = 773,
 	
 	--MIXU Part 1--
 	["wh_main_brt_artois"] = 751,
@@ -339,7 +342,11 @@ local wh_agents = {
     {["faction"] = "wh2_main_lzd_itza", ["subtype"] = "wh2_dlc13_lzd_gor_rok"},
     {["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc03_bst_khazrak", ["dlc"] = "TW_WH_BEASTMEN"},
     {["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc03_bst_malagor", ["dlc"] = "TW_WH_BEASTMEN"},
-    {["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc05_bst_morghur", ["dlc"] = "TW_WH_BEASTMEN"}
+    {["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc05_bst_morghur", ["dlc"] = "TW_WH_BEASTMEN"},
+    {["faction"] = "wh2_dlc14_brt_chevaliers_de_lyonesse", ["subtype"] = "wh2_dlc14_brt_repanse"},
+    {["faction"] = "wh2_dlc14_brt_chevaliers_de_lyonesse", ["subtype"] = "wh2_dlc14_brt_henri_le_massif"},
+    {["faction"] = "wh2_main_skv_clan_eshin", ["subtype"] = "wh2_dlc14_skv_deathmaster_snikch", ["dlc"] = "TW_WH2_DLC14_SHADOW"},
+    {["faction"] = "wh2_main_def_hag_graef", ["subtype"] = "wh2_dlc14_def_malus_darkblade", ["dlc"] = "TW_WH2_DLC14_SHADOW"},
 } --:vector<map<string, string>> 
     --MIXU Part 1--
 local mixu1_agents = {
@@ -373,10 +380,10 @@ local mixu2_agents = {
     {["faction"] = "wh2_main_brt_knights_of_origo", ["subtype"] = "brt_john_tyreweld"},
     --{["faction"] = "", wh_main_chs_chaos_separatists ["subtype"] = chs_egrimm_van_horstmann"}, --player unlock
     {["faction"] = "wh2_main_def_scourge_of_khaine", ["subtype"] = "def_tullaris_dreadbringer"},
-    --{["faction"] = "wh_main_dwf_zhufbar", ["subtype"] = "dwf_grimm_burloksson"}, --player unlock
+    --{["faction"] = "wh_main_dwf_zhufbar", ["subtype"] = "dwf_bloodline_grimm_burloksson"}, --player unlock
     {["faction"] = "wh_main_grn_red_fangs", ["subtype"] = "grn_gorfang_rotgut"},
     {["faction"] = "wh2_main_hef_saphery", ["subtype"] = "hef_belannaer"},
-    --{["faction"] = "wh2_main_hef_eataine", ["subtype"] = "hef_caradryan"}, --player unlock
+    --{["faction"] = "wh2_main_hef_eataine", ["subtype"] = "hef_bloodline_caradryan"}, --player unlock
     {["faction"] = "wh2_main_hef_chrace", ["subtype"] = "hef_korhil"},
     {["faction"] = "wh2_main_hef_caledor", ["subtype"] = "hef_prince_imrik"},
     --{["faction"] = "wh2_main_lzd_itza", ["subtype"] = "lzd_gor_rok"}, --dlc

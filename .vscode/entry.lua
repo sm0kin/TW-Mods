@@ -123,8 +123,8 @@ require("sm0/recruitdefeated/script/campaign/mod/viemzee_unlock_all_ll")
 --require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
 require("sm0/recruitdefeated/script/campaign/mod/sm0_recruit_defeated")
 require("sm0/recruitdefeated/script/campaign/mod/sm0_horde")
-require("sm0/recruitdefeated/script/campaign/mod/sm0_liberate_missing_anc")
-require("sm0/recruitdefeated/script/campaign/mod/sm0_quest_backup")
+require("sm0/recruitdefeated/script/campaign/main_warhammer/mod/sm0_liberate_missing_anc_me")
+require("sm0/recruitdefeated/script/campaign/wh2_main_great_vortex/mod/sm0_liberate_missing_anc_vor")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_quest_backup")
 
 
