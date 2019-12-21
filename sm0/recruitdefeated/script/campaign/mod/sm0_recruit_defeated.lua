@@ -643,11 +643,12 @@ local function spawn_missing_lords(confederator, confederated)
             y,
             true,
             function(cqi)
-                --sm0_log("spawn_missing_lords | Faction revived: "..confederated:name().." | Region: "..start_region:name())
+                --sm0_log("spawn_missing_lords | Faction revived: "..confederated:name().." | Region: "..start_region:name().." | CQI: "..cqi)
                 char_cqi = cqi
                 local char = cm:get_character_by_cqi(char_cqi)
                 if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(char_cqi), true) end 
-            end
+            end,
+            true
         )
         --spawn lords
         for i = 1, #locked_ai_generals do
@@ -689,7 +690,7 @@ local function spawn_missing_lords(confederator, confederated)
                                     false,
                                     function(cqi)
                                         local char = cm:get_character_by_cqi(cqi)
-                                        --sm0_log("["..n..".] spawn_lord|subtype: "..char:character_subtype_key().." |Forename: "..char:get_forename().." |Surname: "..char:get_surname())
+                                        --sm0_log("["..n..".] spawn_lord|subtype: "..char:character_subtype_key().." |Forename: "..char:get_forename().." |Surname: "..char:get_surname().." | CQI: "..cqi)
                                         for k = 1, #locked_ai_generals do
                                             if char:character_subtype(locked_ai_generals[k].subtype) and not cm:get_saved_value(locked_ai_generals[k].subtype.."_spawned") then
                                                 --cm:set_character_immortality(cm:char_lookup_str(cqi), true)
@@ -704,7 +705,8 @@ local function spawn_missing_lords(confederator, confederated)
                                             --if char:is_wounded() then cm:stop_character_convalescing(cqi) end
                                         --end, 0.5)
                                         if n >= 10 or cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then cm:kill_character(char_cqi, true, false) end
-                                    end
+                                    end,
+                                    false
                                 )
                             end
                         end
@@ -713,12 +715,14 @@ local function spawn_missing_lords(confederator, confederated)
             end
         end
         cm:callback(function() 
-            cm:kill_all_armies_for_faction(confederated) --backup
-            --cm:kill_character(char_cqi, true, false)
+            kill_faction(confederated:name()) --backup
+            --cm:kill_all_armies_for_faction(confederated) --backup
+            cm:kill_character(char_cqi, true, false)
             local char_list = confederated:character_list()
             for i = 0, char_list:num_items() - 1 do
                 local char = char_list:item_at(i)
                 --if char then sm0_log("DEAD FACTION char: "..char:character_subtype_key()) end
+                cm:kill_character(char:command_queue_index(), true, true)
                 if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) end 
             end   
         end, 2)
@@ -959,7 +963,7 @@ local function confed_revived(confederator, confederated)
             y,
             true,
             function(cqi)
-                --sm0_log("Faction revived: "..confederated:name().." | Region: "..start_region:name())
+                --sm0_log("Faction revived: "..confederated:name().." | Region: "..start_region:name().." | CQI: "..cqi)
                 local faction_leader_cqi = confederated:faction_leader():command_queue_index()
                 local char_list = confederated:character_list()
                 for i = 0, char_list:num_items() - 1 do 
@@ -1027,7 +1031,7 @@ local function confed_revived(confederator, confederated)
                         return context:confederation():name() == confederator:name() and context:faction():name() == confederated:name()
                     end,
                     function(context)
-                        sm0_log("Faction: "..confederator:name().." :confederated: "..confederated:name())
+                        sm0_log("Faction: "..confederator:name().." :confederated: "..confederated:name().." | CQI: "..cqi)
                         cm:callback(function() 
                             if confed_penalty(confederator) ~= "" then cm:remove_effect_bundle(confed_penalty(confederator), confederator:name()) end 
                         end, 0.5)
@@ -1037,6 +1041,7 @@ local function confed_revived(confederator, confederated)
                         or char:character_subtype("wh2_dlc11_cst_aranessa") or char:character_subtype("wh2_dlc11_cst_cylostra") or char:character_subtype("wh2_dlc11_cst_harkon") or char:character_subtype("wh2_dlc11_cst_noctilus") then
                             cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), true) 
                         end
+                        cm:kill_character(cqi, true, false) 
                         cm:kill_character(cqi, true, false) 
                         cm:kill_character(faction_leader_cqi, true, false)        
                         apply_diplomacy(confederator:name())
@@ -1052,11 +1057,16 @@ local function confed_revived(confederator, confederated)
                 --cm:callback(function() 
                     cm:force_confederation(confederator:name(), confederated:name()) 
                 --end, 0.5)   
-            end
+            end,
+            true
         )
     else
         sm0_log("ERROR: Could not find valid spawn position! ["..confederator:name().."]")
     end
+end
+--v function(faction: CA_FACTION) --> bool -- obsolete if colonels are dealt with
+local function faked_death(faction)
+    return not faction:is_dead() and not faction:military_force_list():item_at(0) and not faction:region_list():item_at(0)
 end
 
 --v function()
@@ -1153,13 +1163,15 @@ local function init()
             return cm:model():turn_number() >= 2 and context:faction():is_human() --and (not cm:is_multiplayer() or (cm:is_multiplayer() and (cm:model():turn_number() % 5) == 0))
         end,
         function(context)
+            local ai_delay = 50
+            if cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") then ai_delay = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") end
             if cm:model():difficulty_level() == -3 then cm:disable_saving_game(true) end
             cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
             cm:disable_event_feed_events(true, "", "", "diplomacy_faction_destroyed")
             cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
             cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
             cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
-
+            
             local ai_confederation_count = 1 -- limit:10 (limits turn start lag)
             local player_confederation_count = 1 -- limit:10
             local faction_list = cm:model():world():faction_list() --context:faction():factions_of_same_subculture() --cm:model():world():faction_list()
@@ -1229,9 +1241,10 @@ local function init()
                                     spawn_missing_lords(faction_P1, current_faction)
                                     --making sure there are no further confederations happening during the spawn_missing_lords loop
                                     player_confederation_count = player_confederation_count + 10
-                                    ai_confederation_count = ai_confederation_count + 10
+                                    ai_confederation_count = ai_confederation_count + 10                                  
                                 else
                                     sm0_log("["..player_confederation_count.."] Player 1 intends to confederated: "..current_faction:name())
+                                    --cm:trigger_dilemma(faction_P1:name(), "wh2_sm0_rd_emp")
                                     confed_revived(faction_P1, current_faction)
                                     if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
                                         cm:set_saved_value("faction_P1", true)
@@ -1273,17 +1286,28 @@ local function init()
                                 or cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "all" or (cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "lorefriendly" 
                                 and prefered_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() ~= "wh2_dlc09_tmb_the_sentinels")) 
                                 and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" then -- disabled for beastmen/savage orcs because they are able to respawn anyways
-                                    if are_lords_missing(current_faction) then
-                                        sm0_log("["..ai_confederation_count.."] AI: "..current_faction:name().." intends to spawn missing lords!")
-                                        spawn_missing_lords(prefered_faction, current_faction)
-                                        --making sure there are no further confederations happening during the spawn_missing_lords loop
-                                        player_confederation_count = player_confederation_count + 10
-                                        ai_confederation_count = ai_confederation_count + 10
-                                    else
-                                        sm0_log("["..ai_confederation_count.."] AI: "..prefered_faction:name().." intends to confederated: "..current_faction:name())
-                                        confed_revived(prefered_faction, current_faction)
+                                    if not faked_death(prefered_faction) then
+                                        if ai_delay == 0 or cm:turn_number() > ai_delay then --if ai_delay == 0 or cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) == 0 then
+                                            if are_lords_missing(current_faction) then
+                                                sm0_log("["..ai_confederation_count.."] AI: "..current_faction:name().."(dead: "..tostring(prefered_faction:is_dead())..") intends to spawn missing lords!")
+                                                spawn_missing_lords(prefered_faction, current_faction)
+                                                --making sure there are no further confederations happening during the spawn_missing_lords loop
+                                                player_confederation_count = player_confederation_count + 10
+                                                ai_confederation_count = ai_confederation_count + 10
+                                            else
+                                                sm0_log("["..ai_confederation_count.."] AI: "..prefered_faction:name().."(dead: "..tostring(prefered_faction:is_dead())..") intends to confederated: "..current_faction:name())
+                                                confed_revived(prefered_faction, current_faction)
+                                            end
+                                            ai_confederation_count = ai_confederation_count + 1
+                                        --else
+                                        --    if not cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) then --if not cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) then 
+                                        --        cm:set_saved_value("sm0_rd_delay_"..current_faction:name(), ai_delay - 1) --cm:set_saved_value("sm0_rd_delay_"..current_faction:name(), ai_delay - 1)
+                                        --    else
+                                        --        local turns_delay = cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) - 1 --local turns_delay = cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) - 1
+                                        --        cm:set_saved_value("sm0_rd_delay_"..current_faction:name(), turns_delay) --cm:set_saved_value("sm0_rd_delay_"..current_faction:name(), turns_delay)
+                                        --    end
+                                        end
                                     end
-                                    ai_confederation_count = ai_confederation_count + 1
                                 end
                             end
                         end
@@ -1400,61 +1424,69 @@ local function init()
     end
     -- nakai confed override (data.pack script/campaign/wh_campaign_setup.lua)
     core:remove_listener("confederation_listener")
-    core:add_listener(
+	core:add_listener(
 		"confederation_listener",
 		"FactionJoinsConfederation",
 		true,
 		function(context)
-			local faction = context:confederation()
-			local faction_name = faction:name()
-			local faction_culture = faction:culture()
-			local faction_subculture = faction:subculture()
+			local faction = context:confederation();
+			local faction_name = faction:name();
+			local faction_culture = faction:culture();
+			local faction_subculture = faction:subculture();
+			local faction_human = faction:is_human();
+			local confederation_timeout = 5;
 			
-			-- exclude Empire, Beastmen, Norsca and Bretonnia - they can confederate as often as they like
-			if faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and faction_culture ~= "wh_main_brt_bretonnia" and faction_subculture ~= "wh_main_sc_nor_norsca" then
-				
-				out("Restricting confederation between [faction:" .. faction_name .. "] and [subculture:" .. faction_subculture .. "]")
-				cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. faction_subculture, "form confederation", false, true, false)
-				cm:add_turn_countdown_event(faction_name, 5, "ScriptEventConfederationExpired", faction_name)
+			-- exclude Empire, Beastmen, Norsca and Bretonnia - they can confederate as often as they like but only if they aren't AI
+			if faction_human == false or (faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and faction_culture ~= "wh_main_brt_bretonnia" and faction_subculture ~= "wh_main_sc_nor_norsca") then
+				if faction_human == false then
+					confederation_timeout = 10;
+				end
+
+				out("Restricting confederation between [faction:" .. faction_name .. "] and [subculture:" .. faction_subculture .. "]");
+				cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. faction_subculture, "form confederation", false, true, false);
+				cm:add_turn_countdown_event(faction_name, confederation_timeout, "ScriptEventConfederationExpired", faction_name);
 			end
 			
-			local source_faction = context:faction()
-			local source_faction_name = source_faction:name()
+			local source_faction = context:faction();
+			local source_faction_name = source_faction:name();
 			
 			-- remove deathhag after confederating/being confedrated with cult of pleasure
 			if source_faction:culture() == "wh2_main_def_dark_elves" and faction_name == "wh2_main_def_cult_of_pleasure" then
-				local char_list = faction:character_list()
+				local char_list = faction:character_list();
 				
 				for i = 0, char_list:num_items() - 1 do
-					local current_char = char_list:item_at(i)
+					local current_char = char_list:item_at(i);
 					
 					if current_char:has_skill("wh2_main_skill_all_dummy_agent_actions_def_death_hag") then
-						cm:kill_character(current_char:command_queue_index(), true, true)
+						cm:kill_character(current_char:command_queue_index(), true, true);
 					end
 				end
 			elseif faction_culture == "wh2_main_def_dark_elves" and source_faction_name == "wh2_main_def_cult_of_pleasure" then
-				local char_list = faction:character_list()
+				local char_list = faction:character_list();
 				
 				for i = 0, char_list:num_items() - 1 do
-					local current_char = char_list:item_at(i)
+					local current_char = char_list:item_at(i);
 					
 					if current_char:has_skill("wh2_main_skill_all_dummy_agent_actions_def_death_hag_chs") then
-						cm:kill_character(current_char:command_queue_index(), true, true)
+						cm:kill_character(current_char:command_queue_index(), true, true);
 					end
 				end
 			elseif faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
-				local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
+				local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan");
+				
+				cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
+				cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_negotiated", "");
 
 				if defender_faction:is_null_interface() == false then
 					if defender_faction:is_dead() == true and faction:has_home_region() == true then
-						local home_region = faction:home_region():name()
+						local home_region = faction:home_region():name();
 
 						local x, y = cm:find_valid_spawn_location_for_character_from_settlement(
 							"wh2_dlc13_lzd_defenders_of_the_great_plan",
 							home_region,
 							false,
 							true
-						)
+						);
 
 						cm:create_force(
 							"wh2_dlc13_lzd_defenders_of_the_great_plan",
@@ -1463,33 +1495,42 @@ local function init()
 							x, y,
 							true,
 							function(char_cqi, force_cqi)
-								handover_nakai_region()
-								cm:kill_character(char_cqi, true, true)
+								handover_nakai_region();
+								cm:kill_character(char_cqi, true, true);
 							end
-						)
+						);
 					else
-						handover_nakai_region()
+						handover_nakai_region();
 					end
 					
 					if defender_faction:is_vassal() == false then
-						cm:force_make_vassal("wh2_dlc13_lzd_spirits_of_the_jungle", "wh2_dlc13_lzd_defenders_of_the_great_plan")
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "all", false, false, false)
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "war", false, false, true)
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "break vassal", false, false, true)
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "war", false, true, false)
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "peace", false, true, false)
+						cm:force_make_vassal("wh2_dlc13_lzd_spirits_of_the_jungle", "wh2_dlc13_lzd_defenders_of_the_great_plan");
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "all", false, false, false);
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "war", false, false, true);
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "break vassal", false, false, true);
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "war", false, true, false);
+						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "peace", false, true, false);
 					end
 				end
+	
+				cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1);
+				cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_negotiated", "") end, 1);
             elseif source_faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
                 if not cm:get_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle") then
-                    cm:force_confederation(faction_name, "wh2_dlc13_lzd_defenders_of_the_great_plan")
+                    cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
+                    cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_negotiated", "");
+    
+                    cm:force_confederation(faction_name, "wh2_dlc13_lzd_defenders_of_the_great_plan");
+    
+                    cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1);
+                    cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_negotiated", "") end, 1);                
                 else
                     cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", false)
                 end
 			end
 		end,
 		true
-	)
+	);
 end
 
 function sm0_recruit_defeated()
@@ -1532,6 +1573,7 @@ function sm0_recruit_defeated()
             --local diplo = recruit_defeated:add_tweaker("diplo", "Lords join factions based on diplomatic standing", "Defeated Lords join the faction they have the best diplomatic relations with.") --mcm_tweaker_recruit_defeated_diplo_value
             --diplo:add_option("enable", "Enable", "") 
             --diplo:add_option("disable", "Disable", "")
+            local ai_delay = recruit_defeated:add_variable("ai_delay", 0, 200, 50, 5, "AI Turn Delay", "Determines at which turn the AI starts to get Lords/Heroes from defeated factions.")
             mcm:add_post_process_callback(
                 function()
                     local version = cm:get_saved_value("mcm_tweaker_recruit_defeated_version_value")                    

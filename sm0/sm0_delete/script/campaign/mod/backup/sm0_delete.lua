@@ -273,7 +273,6 @@ local immortal_subtypes = {
 	"wh2_dlc09_tmb_tomb_king_setep",
 	"wh2_dlc09_tmb_tomb_king_thutep",
 	"wh2_dlc09_tmb_tomb_king_wakhaf",
-	"wh2_dlc09_tmb_tomb_king",
 	--"wh2_dlc11_cst_ghost_paladin",
 	"wh2_dlc11_cst_admiral_tech_01",
 	"wh2_dlc11_cst_admiral_tech_02",
@@ -282,12 +281,7 @@ local immortal_subtypes = {
 	--"dlc06_dwf_master_engineer_ghost",
 	--"dlc06_dwf_runesmith_ghost",
 	--"dlc06_dwf_thane_ghost_1",
-	--"dlc06_dwf_thane_ghost_2",
-	--mixu
-	"tmb_liche_high_priest_death",
-	"tmb_liche_high_priest_light",
-	"tmb_liche_high_priest_nehekhara",
-	"tmb_liche_high_priest_shadow"
+	--"dlc06_dwf_thane_ghost_2"
 } --:vector<string>
 
 --v function(uic: CA_UIC)

@@ -362,7 +362,8 @@
 --#     xPos: number,
 --#     yPos: number,
 --#     exclude_named_chars: boolean,
---#     success_callback: (function(CA_CQI))?
+--#     success_callback: (function(CA_CQI))?,
+--#     command_queue: boolean?
 --# )
 --# assume CM.spawn_character_to_pool: method(
 --#    faction_key: string,
@@ -695,6 +696,8 @@
 --# assume CA_MILITARY_FORCE.morale: method() --> number
 --# assume CA_MILITARY_FORCE.active_stance: method() --> string
 --# assume CA_MILITARY_FORCE.faction: method() --> CA_FACTION
+--# assume CA_MILITARY_FORCE.is_null_interface: method() --> boolean
+
 ----# assume CA_MILITARY_FORCE.force_type: method() --> FORCE_TYPE
 
 
@@ -1357,6 +1360,7 @@ campaign_manager:get_regions_within_distance_of_character(
 )
 random_army_manager:set_faction(force_key, faction_key)
 math.normalize(value, vmin, vmax)
+
 kill_faction(faction_key)
 unique_table:new()
 unique_table:insert(item)
@@ -1388,6 +1392,10 @@ Removed:
 set_ritual_unlocked
 set_ritual_chain_unlocked
 --]]
+--# assume global kill_faction: function(faction_key: string)
+
+
+
 
 -- GLOBAL VARIABLES
 --leave at the bottom of this file

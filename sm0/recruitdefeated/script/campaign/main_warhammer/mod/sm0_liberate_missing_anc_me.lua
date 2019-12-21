@@ -414,7 +414,7 @@ function sm0_liberate_missing_anc_me()
     --	false
     --)
 
-    -- this method is better because it behaves the same way starting items are added to Tehenhauin and Tiktaq'to
+    -- this method is better because it behaves the same way starting items are added to Tehenhauin and Tiktaq'to (startpos)
     core:add_listener(
         "sm0_missing_anc_FactionTurnStart",
         "FactionTurnStart",

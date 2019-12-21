@@ -13,7 +13,9 @@ local confirmButtonTooltipHover2 = "nets you"
 local confirmButtonTooltipHover3 = "will be abandoned at the beginning of the next turn."
 local confirmButtonTooltipDisabled = "Besieged Settlements can't be abandoned!"
 local abandonButtonTooltip = "Abandon selected settlement"
-local penalty_value                  
+local penalty_value   
+local penalty_scope_value
+local penalty_tier_value               
 local iconPath = "ui/icon_raze.png"
 local id_from_subculture = {
     ["wh_dlc03_sc_bst_beastmen"] = 19130,
@@ -41,18 +43,30 @@ local id_from_subculture = {
 local function initMCMabandon()
     penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value")
     if penalty_value ~= "nopenalty" then penalty_value = "penalty" end
+    penalty_scope_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_scope_value")
+    if penalty_scope_value ~= "local" then penalty_scope_value = "global" end
+    penalty_tier_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_tier_value")
+    if penalty_tier_value ~= "disabled" then penalty_tier_value = "enabled" end
     local mcm = _G.mcm
     if not not mcm then
         local abandon = mcm:register_mod("abandon_region", "Abandon Region", "Adds the possibility to abandon a settlement.")
         local restriction = abandon:add_tweaker("penalty", "Public Order - Penalty", "Enable/Disable the public order penalty for abandoning one of your regions.")
         restriction:add_option("penalty", "Public Order - Penalty", "If you choose to enact a scorched earth policy you have to suffer the consequences.")
         restriction:add_option("nopenalty", "No Penalty", "Abandoning Regions has no consequences!")
+        local penalty_scope = abandon:add_tweaker("penalty_scope", "Public Order - Penalty Scope", "Local/Global public order penalty for abandoning one of your regions.")
+        penalty_scope:add_option("global", "Global Penalty", "Global Public Order penalty.")
+        penalty_scope:add_option("local", "Local Penalty", "Local Public Order penalty.")
+        local penalty_tier = abandon:add_tweaker("penalty_tier", "Public Order - Penalty settlement tier based", "Public order penalty for abandoning one of your regions based on the settlement tier.")
+        penalty_tier:add_option("enabled", "Enable", "")
+        penalty_tier:add_option("disabled", "Disable", "")
         local delay = abandon:add_tweaker("delay", "Turns until Regions are abandoned", "Choose between instant and single turn delay until Regions are abandoned.")
         delay:add_option("instant", "Instant", "Regions can be abandoned instantly.")
         delay:add_option("oneTurn", "One Turn", "Abandoning a region takes one turn.")
         mcm:add_new_game_only_callback(
             function()
                 penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value")
+                penalty_scope_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_scope_value")
+                penalty_tier_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_tier_value")
             end
         )
     end
@@ -141,7 +155,8 @@ local function createAbandonFrame(abandonRegionStr)
             local regionToSend = regionStr
             local moneyToSend = calcCost(cm:get_region(regionToSend))
             if cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") ~= "oneTurn" then
-                CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..penalty_value.."~")
+                CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
+                ..regionToSend.."<"..moneyToSend..">"..penalty_value.."~".."^"..penalty_scope_value.."°"..penalty_tier_value)
                 abandonFrame:Delete()
                 abandonFrame = nil
                 abandonButton:SetDisabled(true)
@@ -149,10 +164,12 @@ local function createAbandonFrame(abandonRegionStr)
                 if not cm:get_saved_value("abandon_"..regionStr.."_"..regionOwner:name()) then
                     confirmButton:SetState("selected_hover")
                     confirmButton.uic:SetTooltipText(regionOnscreenName.." "..confirmButtonTooltipHover3)
-                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..penalty_value.."~")
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
+                    ..regionToSend.."<"..moneyToSend..">"..penalty_value.."~".."^"..penalty_scope_value.."°"..penalty_tier_value)
                 else
                     confirmButton:SetState("active")
-                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"..regionToSend.."<"..moneyToSend..">"..penalty_value.."~remove")
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
+                    ..regionToSend.."<"..moneyToSend..">"..penalty_value.."~remove".."^"..penalty_scope_value.."°"..penalty_tier_value)
                 end
             end
         end 
@@ -295,7 +312,11 @@ function sm0_abandon()
             local cash = tonumber(string.sub(info, regionNameEnd + 1, cashEnd - 1))
             local penaltyEnd = string.find(info, "~")
             local penalty = string.sub(info, cashEnd + 1, penaltyEnd - 1)
-            local remove = string.sub(info, penaltyEnd + 1)
+            local removeEnd = string.find(info, "^")
+            local remove = string.sub(info, penaltyEnd + 1, removeEnd - 1)
+            local penalty_scope_end  = string.find(info, "°")
+            local penalty_scope = string.sub(info, removeEnd + 1, penalty_scope_end - 1)
+            local penalty_tier = string.sub(info, penalty_scope_end + 1)
             
             if cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") ~= "oneTurn" then
                 cm:show_message_event(
@@ -306,9 +327,31 @@ function sm0_abandon()
                     true,
                     id_from_subculture[cm:get_faction(faction):subculture()]
                 )
+                if penalty ~= "nopenalty" then 
+                    local turns = 5
+                    local effect_bundle = "wh2_sm0_abandon_public_order_down"
+                    if penalty_scope == "local" then effect_bundle = "wh2_sm0_abandon_public_order_down_local" end
+                    local region = cm:get_region(regionName)
+                    if penalty_tier == "enabled" then 
+                        local settlement_building = region:settlement():primary_slot():building():name()
+                        for i = 1, 5 do
+                            if string.match(settlement_building, "ruin") then
+                                effect_bundle = ""
+                            elseif string.match(settlement_building, "_"..i) then
+                                effect_bundle = effect_bundle.."_t"..i
+                            end
+                        end
+                    end
+                    if effect_bundle ~= "" then
+                        if penalty_scope ~= "local" then
+                            cm:apply_effect_bundle(effect_bundle, faction, turns)
+                        else
+                            cm:apply_effect_bundle_to_faction_province(effect_bundle, region, turns)
+                        end
+                    end
+                end
                 cm:set_region_abandoned(regionName)
                 cm:treasury_mod(faction, cash)
-                if penalty ~= "nopenalty" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5) end
             else
                 if remove == "remove" then
                     core:remove_listener("Abandon_"..regionName.."_"..faction)
@@ -333,9 +376,32 @@ function sm0_abandon()
                                     true,
                                     id_from_subculture[cm:get_faction(faction):subculture()]
                                 )
+                                if penalty ~= "nopenalty" then 
+                                    local turns = 5
+                                    local effect_bundle = "wh2_sm0_abandon_public_order_down"
+                                    if penalty_scope == "local" then effect_bundle = "wh2_sm0_abandon_public_order_down_local" end
+                                    local region = cm:get_region(regionName)
+                                    if penalty_tier == "enabled" then 
+                                        turns = 1 
+                                        local settlement_building = region:settlement():primary_slot():building():name()
+                                        for i = 1, 5 do
+                                            if string.match(settlement_building, "ruin") then
+                                                effect_bundle = ""
+                                            elseif string.match(settlement_building, "_"..i) then
+                                                effect_bundle = effect_bundle.."_t"..i
+                                            end
+                                        end
+                                    end
+                                    if effect_bundle ~= "" then
+                                        if penalty_scope ~= "local" then
+                                            cm:apply_effect_bundle(effect_bundle, faction, turns)
+                                        else
+                                            cm:apply_effect_bundle_to_faction_province(effect_bundle, region, turns)
+                                        end
+                                    end
+                                end
                                 cm:set_region_abandoned(regionName)
                                 cm:treasury_mod(faction, cash)
-                                if penalty ~= "nopenalty" then cm:apply_effect_bundle("wh2_sm0_abandon_public_order_down", faction, 5) end
                                 cm:set_saved_value("abandon_"..regionName.."_"..regionOwner:name(), false)
                             end
                         end,

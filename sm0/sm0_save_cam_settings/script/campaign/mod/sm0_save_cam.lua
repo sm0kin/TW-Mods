@@ -289,8 +289,8 @@ core:add_listener(
 --v function()
 function sm0_save_cam()
     local playerFaction = cm:get_faction(cm:get_local_faction(true))
-    local playerFactionStr = playerFaction:name()
-    if string.find(playerFactionStr, "wh2_") then
+    local playerCultureStr = playerFaction:culture()
+    if string.find(playerCultureStr, "wh2_") then
         resetIconPath = "ui/icon_stats_reset_small2.png"
         saveIconPath = "ui/icon_quick_save2.png"
         loadIconPath = "ui/icon_load2.png"

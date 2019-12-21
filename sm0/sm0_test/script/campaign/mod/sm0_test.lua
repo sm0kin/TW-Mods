@@ -259,12 +259,22 @@ local function deletePlayerSubcultureFactions()
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:turn_number() <= 3) then
 				--if playerFaction:subculture() == faction:subculture() and cm:turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else
-				local regionList = faction:region_list()
-				for i = 0, regionList:num_items() - 1 do
-					local currentRegion = regionList:item_at(i)
-					cm:set_region_abandoned(currentRegion:name())
-				end
-				cm:kill_all_armies_for_faction(faction)
+				--local regionList = faction:region_list()
+				--for i = 0, regionList:num_items() - 1 do
+				--	local currentRegion = regionList:item_at(i)
+				--	cm:set_region_abandoned(currentRegion:name())
+				--end
+				--cm:kill_all_armies_for_faction(faction)
+				if not faction:is_dead() then kill_faction(faction:name()) end
+				--local charList = faction:character_list()
+				--for i = 0, charList:num_items() - 1 do
+				--	local currentChar = charList:item_at(i)
+				--	if currentChar and not currentChar:is_null_interface() then 
+				--		--sm0_log("kill_character/character_type = "..currentChar:character_type_key()) 
+				--	end
+				--	--if not currentChar:character_type("colonel") then cm:kill_character(currentChar:command_queue_index(), true, false) end
+				--	cm:kill_character(currentChar:command_queue_index(), true, false)
+				--end
 			end
 		end
 	end
@@ -279,12 +289,13 @@ local function deletePlayerSubcultureFactions()
 			else		
 				if cm:random_number(5, 1) == 1 then --playerFaction:subculture() == faction:subculture() 
 					--sm0_log("deleted Faction: "..faction:name())
-					local regionList = faction:region_list()
-					for i = 0, regionList:num_items() - 1 do
-						local currentRegion = regionList:item_at(i)
-						cm:set_region_abandoned(currentRegion:name())
-					end
-					cm:kill_all_armies_for_faction(faction)
+					--local regionList = faction:region_list()
+					--for i = 0, regionList:num_items() - 1 do
+					--	local currentRegion = regionList:item_at(i)
+					--	cm:set_region_abandoned(currentRegion:name())
+					--end
+					--cm:kill_all_armies_for_faction(faction)
+					if not faction:is_dead() then kill_faction(faction:name()) end
 					--local charList = faction:character_list()
 					--for i = 0, charList:num_items() - 1 do
 					--	local currentChar = charList:item_at(i)

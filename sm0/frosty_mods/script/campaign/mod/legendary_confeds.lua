@@ -8,14 +8,14 @@ local alastar_quests = {
 local subcultures_factions = {
     ["wh2_main_sc_hef_high_elves"] = {"wh2_main_hef_eataine", "wh2_main_hef_order_of_loremasters", "wh2_main_hef_avelorn", "wh2_main_hef_nagarythe"},
     ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_tlaqua", "wh2_main_lzd_itza", "wh2_dlc13_lzd_spirits_of_the_jungle"},
-    ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_naggarond", "wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread"},
-    ["wh2_main_sc_skv_skaven"] = {"wh2_main_skv_clan_skyre", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus"},
+    ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_naggarond", "wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread", "wh2_main_def_hag_graef"},
+    ["wh2_main_sc_skv_skaven"] = {"wh2_main_skv_clan_skyre", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus", "wh2_main_skv_clan_eshin"},
     ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_khemri", "wh2_dlc09_tmb_lybaras", "wh2_dlc09_tmb_exiles_of_nehek", "wh2_dlc09_tmb_followers_of_nagash"},
     --cst
     ["wh_main_sc_nor_norsca"] = {"wh_dlc08_nor_norsca", "wh_dlc08_nor_wintertooth"},
     ["wh_main_sc_emp_empire"] = {"wh_main_emp_empire", "wh_main_emp_middenland", "wh2_dlc13_emp_golden_order", "wh2_dlc13_emp_the_huntmarshals_expedition"},
     ["wh_main_sc_dwf_dwarfs"] = {"wh_main_dwf_dwarfs", "wh_main_dwf_karak_kadrin", "wh_main_dwf_karak_izor"},
-    ["wh_main_sc_brt_bretonnia"] = {"wh_main_brt_bretonnia", "wh_main_brt_bordeleaux", "wh_main_brt_carcassonne"},
+    ["wh_main_sc_brt_bretonnia"] = {"wh_main_brt_bretonnia", "wh_main_brt_bordeleaux", "wh_main_brt_carcassonne", "wh2_dlc14_brt_chevaliers_de_lyonesse"},
     ["wh_dlc05_sc_wef_wood_elves"] = {"wh_dlc05_wef_wood_elves", "wh_dlc05_wef_argwylon"},
     ["wh_main_sc_grn_greenskins"] = {"wh_main_grn_greenskins", "wh_main_grn_crooked_moon", "wh_main_grn_orcs_of_the_bloody_hand"},
     ["wh_main_sc_vmp_vampire_counts"] = {"wh_main_vmp_vampire_counts", "wh_main_vmp_schwartzhafen", "wh2_dlc11_vmp_the_barrow_legion", "wh_main_vmp_mousillon"}
@@ -453,17 +453,17 @@ function legendary_confeds()
     mcm = _G.mcm
 	if not not mcm then
         local frostyConfed = mcm:register_mod("frostyConfed", "Legendary Confederations", "This is the Civ-style checkbox that lets you start the campaign with the legendary lords already rallied to your side.")
-        local theatre = frostyConfed:add_tweaker("theatre", "Theatres of War", "The legendary lords are confederated through regular confederations. You gain control over their settlements, both near and far away. Consider them \"outposts\" to either keep or abandon.")
+        local theatre = frostyConfed:add_tweaker("theatre", "Theatres of War mode (Regular Confederations)", "Factions are confederated through regular confederations. You gain control over their settlements, both near and far away. Consider them \"outposts\" to either keep or abandon.")
         theatre:add_option("disable", "Disable", "")
         theatre:add_option("enable", "Enable", "")
-        local deadlyAlliances = frostyConfed:add_tweaker("deadlyAlliances", "Deadly Alliances", "All playable AI factions with legendary lords confederate and form large factions.")
+        local deadlyAlliances = frostyConfed:add_tweaker("deadlyAlliances", "Deadly Alliances mode (AI Confederations)", "The playable races confederate and form super-factions.")
         deadlyAlliances:add_option("disable", "Disable", "")
-        deadlyAlliances:add_option("enable", "Enable", "")
-        deadlyAlliances:add_option("worldwar", "World War", "All AI factions of the same subculture form factions.")
+        deadlyAlliances:add_option("enable", "Main Factions", "*Takes a few seconds to load!* The legendary lords of each race will join together to form super-factions.")
+        deadlyAlliances:add_option("worldwar", "All Factions", "*Takes a few seconds to load!* All factions, not just the legendary lords, join together to form super-factions.")
         if vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") then
-            local restriction = frostyConfed:add_tweaker("restriction", "Tomb Kings - Restrictions", "Set your prefered rules for Tomb Kings Confederation!")
-            restriction:add_option("restricted", "Lorefriendly", "Lore based limitations, e.g. Settra can confederate any Tomb Kings faction aside from The Followers of Nagash and The Sentinels.")
-            restriction:add_option("unrestricted", "No restrictions", "Completely unrestricted!")
+            local restriction = frostyConfed:add_tweaker("restriction", "Tomb Kings - Lore Restrictions", "Settra does not serve... right?")
+            restriction:add_option("restricted", "No Heresy", "Khemri (Settra) and Followers of Nagash (Arkhan) cannot be confederated in this menu.")
+            restriction:add_option("unrestricted", "Allow Heresy", "Khemri (Settra) and Followers of Nagash (Arkhan) can be confederated in this menu.")
         end
         for i = 1, #humanFactions do
             local humanFaction = cm:get_faction(humanFactions[i])
