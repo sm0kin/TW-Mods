@@ -499,6 +499,7 @@
 --# assume CM.trigger_incident_with_targets: method(owning_faction_cqi: CA_CQI, incident_key: string, faction_cqi: CA_CQI | 0, secondary_faction_cqi: CA_CQI | 0, character_cqi: CA_CQI | 0, military_force_cqi: CA_CQI | 0, region_cqi: CA_CQI | 0, settlement_cqi: CA_CQI | 0)
 --# assume CM.trigger_custom_incident: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean?, payload: string) --> boolean
 --# assume CM.trigger_dilemma: method(faction_key: string, dilemma_key: string, trigger_immediately: boolean?) --> boolean
+--# assume CM.trigger_dilemma_with_targets: method(faction_cqi: CA_CQI, dilemma_key: string, target: CA_CQI?, secondary: CA_CQI?, character: CA_CQI?, military_force: CA_CQI?, region: CA_CQI?, settlement: CA_CQI?, callback: (function(CA_CQI))?) --> boolean
 --# assume CM.trigger_incident: method(factionName: string, incidentKey: string, fireImmediately: boolean?, whitelist: boolean?)
 --# assume CM.trigger_mission: method(faction_key: string, mission_key: string, trigger_immediately: boolean)
 --# assume CM.cancel_custom_mission: method(faction_key: string, mission_key: string)

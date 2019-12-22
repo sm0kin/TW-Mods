@@ -20,7 +20,7 @@ local function sm0_log(text)
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	local popLog = io.open("sm0_log.txt","a")
 	--# assume logTimeStamp: string
-	popLog :write("DEL:  [".. logTimeStamp .. "] [Turn: ".. tostring(cm:turn_number()) .. "(" .. cm:whose_turn_is_it() .. ")]:  "..logText .. "  \n")
+	popLog :write("DEL:  [".. logTimeStamp .. "] [Turn: ".. tostring(cm:model():turn_number()) .. "(" .. cm:whose_turn_is_it() .. ")]:  "..logText .. "  \n")
 	popLog :flush()
 	popLog :close()
 end
@@ -144,6 +144,10 @@ local blacklisted_subtypes = {
 	--"wh2_main_skv_warlock_engineer_ritual",
 	"wh2_pro08_neu_felix",
 	"wh2_pro08_neu_gotrek",
+	"wh2_dlc14_brt_henri_le_massif",
+	"wh2_dlc14_brt_repanse",
+	"wh2_dlc14_def_malus_darkblade",
+	"wh2_dlc14_skv_deathmaster_snikch",
 	--mixu1
 	"brt_almaric_de_gaudaron",
 	"brt_chilfroy",
@@ -720,7 +724,7 @@ function sm0_delete()
 		"FactionTurnStart",
 		function(context)
 			local human_factions = cm:get_human_factions()
-			return cm:turn_number() == 1 and context:faction():is_human() and human_factions[1] == context:faction():name()
+			return cm:model():turn_number() == 1 and context:faction():is_human() and human_factions[1] == context:faction():name()
 		end,
 		function(context)
 			local faction_list = cm:model():world():faction_list()

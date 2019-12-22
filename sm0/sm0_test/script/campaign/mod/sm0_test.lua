@@ -20,7 +20,7 @@ local function sm0_log(text)
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	local popLog = io.open("sm0_log.txt","a")
 	--# assume logTimeStamp: string
-	popLog :write("TEST:  [".. logTimeStamp .. "] [Turn: ".. tostring(cm:turn_number()) .. "(" .. cm:whose_turn_is_it() .. ")]:  "..logText .. "  \n")
+	popLog :write("TEST:  [".. logTimeStamp .. "] [Turn: ".. tostring(cm:model():turn_number()) .. "(" .. cm:whose_turn_is_it() .. ")]:  "..logText .. "  \n")
 	popLog :flush()
 	popLog :close()
 end
@@ -246,18 +246,18 @@ end
 
 --v function()
 local function deletePlayerSubcultureFactions()
-	if cm:turn_number() == 1 then cm:force_confederation("wh2_main_hef_caledor", "wh2_main_hef_avelorn") end
+	if cm:model():turn_number() == 1 then cm:force_confederation("wh2_main_hef_caledor", "wh2_main_hef_avelorn") end
 	local playerFaction = cm:get_faction(cm:get_local_faction(true))
 	local factionList2 = playerFaction:factions_of_same_subculture()
 	local factionList = cm:model():world():faction_list()
 	for i = 0, factionList2:num_items() - 1 do
 		local faction = factionList2:item_at(i)
-		if faction and not faction:is_dead() and not faction:is_human() and cm:turn_number() == 3 then
+		if faction and not faction:is_dead() and not faction:is_human() and cm:model():turn_number() == 3 then
 			if faction:name() == "wh_main_teb_tilea" or faction:name() == "wh2_dlc09_tmb_followers_of_nagash" or faction:name() == "wh2_dlc11_cst_noctilus" or faction:name() == "wh_main_grn_greenskins" 	
 			--or faction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" 
 			or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh2_dlc11_cst_vampire_coast"
-			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:turn_number() <= 3) then
-				--if playerFaction:subculture() == faction:subculture() and cm:turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
+			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
+				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else
 				--local regionList = faction:region_list()
 				--for i = 0, regionList:num_items() - 1 do
@@ -265,7 +265,9 @@ local function deletePlayerSubcultureFactions()
 				--	cm:set_region_abandoned(currentRegion:name())
 				--end
 				--cm:kill_all_armies_for_faction(faction)
-				if not faction:is_dead() then kill_faction(faction:name()) end
+				--if cm:random_number(3, 1) == 1 then 
+					kill_faction(faction:name()) 
+				--end
 				--local charList = faction:character_list()
 				--for i = 0, charList:num_items() - 1 do
 				--	local currentChar = charList:item_at(i)
@@ -284,8 +286,8 @@ local function deletePlayerSubcultureFactions()
 			if faction:name() == "wh_main_teb_tilea" or faction:name() == "wh2_dlc09_tmb_followers_of_nagash" or faction:name() == "wh2_dlc11_cst_noctilus" or faction:name() == "wh_main_grn_greenskins" 	
 			or faction:subculture() == playerFaction:subculture()--or faction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" 
 			or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh2_dlc11_cst_vampire_coast"
-			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:turn_number() <= 3) then
-				--if playerFaction:subculture() == faction:subculture() and cm:turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
+			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
+				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else		
 				if cm:random_number(5, 1) == 1 then --playerFaction:subculture() == faction:subculture() 
 					--sm0_log("deleted Faction: "..faction:name())
@@ -412,6 +414,7 @@ function sm0_test()
 			--	cm:set_public_order_of_province_for_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):public_order() - 300)
 			--end
 			--cm:force_confederation(human_factions[1],"wh2_main_lzd_last_defenders")
+			--cm:show_shroud(true)
 		end,
 		true
 	)
@@ -424,10 +427,10 @@ function sm0_test()
 		function(context)
 			cm:show_shroud(false)
 			--expCheat()
-			--if cm:turn_number() == 2 then expCheat() end
+			--if cm:model():turn_number() == 2 then expCheat() end
 			--sm0_log("Faction: "..context:faction():name().." /is_dead: "..tostring(context:faction():is_dead()))
 			--[[
-			if cm:turn_number() >= 3 then
+			if cm:model():turn_number() >= 3 then
 				local human_factions = cm:get_human_factions()
 				local player_1 = cm:get_faction(human_factions[1]) 
 				local home_region = player_1:home_region()

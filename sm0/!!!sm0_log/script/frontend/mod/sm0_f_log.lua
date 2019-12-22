@@ -26,7 +26,7 @@ local function sm0_LOG(text)
 	local logTimeStamp = os.date("%d, %m %Y %X")
 	local popLog = io.open("sm0_log.txt","a")
 	--# assume logTimeStamp: string
-	popLog :write("sm0|frontend:  [".. logTimeStamp .. "]:  "..logText .. "  \n") --"]:  [Turn: ".. tostring(cm:turn_number()) ..
+	popLog :write("sm0|frontend:  [".. logTimeStamp .. "]:  "..logText .. "  \n") --"]:  [Turn: ".. tostring(cm:model():turn_number()) ..
 	popLog :flush()
 	popLog :close()
 end
