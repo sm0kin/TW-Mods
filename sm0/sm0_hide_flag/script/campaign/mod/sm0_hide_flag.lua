@@ -28,19 +28,21 @@ end
 --v function(hide: bool)
 local function toggle_flag(hide)
 	local main_settlement_panel = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel")
-	if hide then
-		for i = 0, main_settlement_panel:ChildCount() - 1 do
-			local settlement = UIComponent(main_settlement_panel:Find(i))
-			local dy_flag = find_uicomponent(settlement, "dy_flag")
-			dy_flag:SetVisible(false)
-			cm:set_saved_value("sm0_hide_flag_toggle", true)
-		end
-	else
-		for i = 0, main_settlement_panel:ChildCount() - 1 do
-			local settlement = UIComponent(main_settlement_panel:Find(i))
-			local dy_flag = find_uicomponent(settlement, "dy_flag")
-			dy_flag:SetVisible(true)
-			cm:set_saved_value("sm0_hide_flag_toggle", false)
+	if main_settlement_panel then
+		if hide then
+			for i = 0, main_settlement_panel:ChildCount() - 1 do
+				local settlement = UIComponent(main_settlement_panel:Find(i))
+				local dy_flag = find_uicomponent(settlement, "dy_flag")
+				dy_flag:SetVisible(false)
+				cm:set_saved_value("sm0_hide_flag_toggle", true)
+			end
+		else
+			for i = 0, main_settlement_panel:ChildCount() - 1 do
+				local settlement = UIComponent(main_settlement_panel:Find(i))
+				local dy_flag = find_uicomponent(settlement, "dy_flag")
+				dy_flag:SetVisible(true)
+				cm:set_saved_value("sm0_hide_flag_toggle", false)
+			end
 		end
 	end
 end

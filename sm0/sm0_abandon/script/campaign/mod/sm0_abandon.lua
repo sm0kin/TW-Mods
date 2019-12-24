@@ -89,7 +89,7 @@ local function calcCost(region)
                 local building = currentSlot:building()
                 local buildingName = building:name()
                 for k, cost in ipairs(buildingCost) do
-                    if string.match(buildingName, "ruin") then
+                    if string.match(buildingName, "ruin") and penalty_value ~= "nopenalty" and penalty_scope_value ~= "local" and penalty_tier_value ~= "enabled" then
                         money = 0.6 * 400 
                     elseif string.match(buildingName, "_"..k) then
                         money = 0.6 * cost

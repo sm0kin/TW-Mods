@@ -212,8 +212,8 @@ function sm0_liberate_missing_anc_vor()
                     if cm:get_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key)
                     and cm:get_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key) >= n then
                     --is_human check for quest ui
-                        if character:faction():is_human() and current_mission_key ~= "" then 
-                            if cm:whose_turn_is_it() == character:faction():name() then
+                        if character:faction():is_human() and current_mission_key ~= "" and cm:is_local_players_turn() then 
+                            --if cm:get_local_faction(true) == character:faction():name() then
                                 local mission_found = false
                                 local mission_button = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_missions")
                                 mission_button:SimulateLClick()
@@ -233,7 +233,7 @@ function sm0_liberate_missing_anc_vor()
                                         CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "RD|"..tostring(character:command_queue_index())..":"..current_ancillary_key)
                                     end
                                 end
-                            end
+                            --end
                         else
                             --sm0_log("force_add_ancillary: "..current_ancillary_key)
                             cm:disable_event_feed_events(true, "", "", "character_ancillary_gained")
