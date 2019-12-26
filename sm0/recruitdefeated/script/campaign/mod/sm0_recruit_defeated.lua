@@ -638,8 +638,8 @@ local function spawn_missing_lords(confederator, confederated)
             confederated:name(),
             "wh2_main_hef_inf_spearmen_0",
             start_region:name(),
-            x,
-            y,
+            1000, --x
+            700, --y
             true,
             function(cqi)
                 --sm0_log("spawn_missing_lords | Faction revived: "..confederated:name().." | Region: "..start_region:name().." | CQI: "..cqi)
@@ -684,8 +684,8 @@ local function spawn_missing_lords(confederator, confederated)
                                     confederated:name(),
                                     "wh2_main_hef_inf_spearmen_0",
                                     start_region:name(),
-                                    x,
-                                    y,
+                                    1000, --x
+                                    700, --y
                                     false,
                                     function(cqi)
                                         local char = cm:get_character_by_cqi(cqi)
@@ -1100,8 +1100,10 @@ local function rd_dilemma(confederator, confederated)
     )
     if is_number(sc_string_start) then
         local sc_string = string.sub(subculture, sc_string_start, sc_string_start + 5) -- e.g.: "sc_emp"
+        --sm0_log("trigger_dilemma_with_targets:".."wh2_sm0_rd_"..sc_string)
         cm:trigger_dilemma_with_targets(confederator:command_queue_index(), "wh2_sm0_rd_"..sc_string, confederated:command_queue_index())
     elseif string.find(subculture, "_rogue_") then
+        --sm0_log("trigger_dilemma_with_targets:".."wh2_sm0_rd_rogue")
         cm:trigger_dilemma_with_targets(confederator:command_queue_index(), "wh2_sm0_rd_rogue", confederated:command_queue_index())
     else  
         sm0_log("ERROR: Subculture string resolving failed! ["..subculture.."]")
@@ -1216,9 +1218,11 @@ local function init()
             cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
             cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
             cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
-            
-            local ai_confederation_count = 1 -- limit:10 (limits turn start lag)
-            local player_confederation_count = 1 -- limit:10
+
+            local ai_confederation_limit = 10
+            local player_confederation_limit = 1 
+            local ai_confederation_count = 1 
+            local player_confederation_count = 1 
             local faction_list = cm:model():world():faction_list() --context:faction():factions_of_same_subculture() --cm:model():world():faction_list()
             for i = 0, faction_list:num_items() - 1 do
                 local current_faction = faction_list:item_at(i)            
@@ -1284,7 +1288,7 @@ local function init()
                         and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "player"
                         or (cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "ai" and not ai_remaining) 
                         or (cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "disable" and prefered_faction and prefered_faction:name() == faction_P1:name())) then
-                            if not cm:get_saved_value("faction_P1") and confed_penalty(faction_P1) == "" and player_confederation_count <= 10 
+                            if not cm:get_saved_value("faction_P1") and confed_penalty(faction_P1) == "" and player_confederation_count <= player_confederation_limit
                             and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") == "player_ai" 
                             or cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") == "player") and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") 
                             or cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "all" or (cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "lorefriendly" 
@@ -1294,10 +1298,10 @@ local function init()
                                     sm0_log("["..player_confederation_count.."] Player 1 intends to intends to spawn missing lords for: "..current_faction:name())
                                     spawn_missing_lords(faction_P1, current_faction)
                                     --making sure there are no further confederations happening during the spawn_missing_lords loop
-                                    player_confederation_count = player_confederation_count + 10
-                                    ai_confederation_count = ai_confederation_count + 10                                  
+                                    player_confederation_count = player_confederation_count + player_confederation_limit
+                                    ai_confederation_count = ai_confederation_count + ai_confederation_limit                                  
                                 else
-                                    sm0_log("["..player_confederation_count.."] Player 1 intends to confederated: "..current_faction:name())
+                                    sm0_log("["..player_confederation_count.."] Player 1 intends to confederate: "..current_faction:name())
                                     rd_dilemma(faction_P1, current_faction)
                                     if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
                                         cm:set_saved_value("faction_P1", true)
@@ -1310,7 +1314,7 @@ local function init()
                             and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "player" 
                             or (cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "ai" and not ai_remaining) 
                             or (cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "disable" and prefered_faction and prefered_faction:name() == faction_P2:name())) then
-                            if not cm:get_saved_value("faction_P2") and confed_penalty(faction_P2) == "" and player_confederation_count <= 10
+                            if not cm:get_saved_value("faction_P2") and confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit
                             and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") == "player_ai" 
                             or cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") == "player") and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") 
                             or cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "all" or (cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "lorefriendly" 
@@ -1320,10 +1324,10 @@ local function init()
                                     sm0_log("["..player_confederation_count.."] Player 2 intends to intends to spawn missing lords for: "..current_faction:name())
                                     spawn_missing_lords(faction_P2, current_faction)
                                     --making sure there are no further confederations happening during the spawn_missing_lords loop
-                                    player_confederation_count = player_confederation_count + 10
-                                    ai_confederation_count = ai_confederation_count + 10
+                                    player_confederation_count = player_confederation_count + player_confederation_limit
+                                    ai_confederation_count = ai_confederation_count + ai_confederation_limit
                                 else
-                                    sm0_log("["..player_confederation_count.."] Player 2 intends to confederated: "..current_faction:name())
+                                    sm0_log("["..player_confederation_count.."] Player 2 intends to confederate: "..current_faction:name())
                                     rd_dilemma(faction_P2, current_faction)
                                     if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
                                         cm:set_saved_value("faction_P2", true)
@@ -1335,7 +1339,7 @@ local function init()
                         else --ai
                             if not cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") == "player_ai" 
                             or cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") == "ai" then 
-                                if ai_confederation_count <= 10 and prefered_faction and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") 
+                                if ai_confederation_count <= ai_confederation_limit and prefered_faction and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") 
                                 or cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "all" or (cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") == "lorefriendly" 
                                 and prefered_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() ~= "wh2_dlc09_tmb_the_sentinels")) 
                                 and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" then -- disabled for beastmen/savage orcs because they are able to respawn anyways
@@ -1345,10 +1349,10 @@ local function init()
                                                 sm0_log("["..ai_confederation_count.."] AI: "..current_faction:name().." intends to spawn missing lords!")
                                                 spawn_missing_lords(prefered_faction, current_faction)
                                                 --making sure there are no further confederations happening during the spawn_missing_lords loop
-                                                player_confederation_count = player_confederation_count + 10
-                                                ai_confederation_count = ai_confederation_count + 10
+                                                player_confederation_count = player_confederation_count + player_confederation_limit
+                                                ai_confederation_count = ai_confederation_count + ai_confederation_limit
                                             else
-                                                sm0_log("["..ai_confederation_count.."] AI: "..prefered_faction:name().." intends to confederated: "..current_faction:name())
+                                                sm0_log("["..ai_confederation_count.."] AI: "..prefered_faction:name().." intends to confederate: "..current_faction:name())
                                                 confed_revived(prefered_faction, current_faction)
                                             end
                                             ai_confederation_count = ai_confederation_count + 1

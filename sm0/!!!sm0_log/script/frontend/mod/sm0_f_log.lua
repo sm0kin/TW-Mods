@@ -139,15 +139,15 @@ local function sm0_DEBUG()
 		end
 	)
 
-	cm.check_callbacks = wrapFunction(
-		cm.check_callbacks,
-		function(ab)
+	--cm.check_callbacks = wrapFunction(
+	--	cm.check_callbacks,
+	--	function(ab)
 			--out("check_callbacks")
 			--for i, v in pairs(ab) do
 			--    out("i: " .. tostring(i) .. " v: " .. tostring(v))
 			--end
-		end
-	)
+	--	end
+	--)
 
 	local currentAddListener = core.add_listener
 	--v [NO_CHECK] function(core: any, listenerName: any, eventName: any, conditionFunc: (function(context: WHATEVER?) --> boolean) | boolean, listenerFunc: function(context: WHATEVER?), persistent: any)
