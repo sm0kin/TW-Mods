@@ -210,6 +210,19 @@ local function closeAbandonUI()
 	end
 end
 
+--v function(faction: CA_FACTION)
+local function kill_colonels(faction)
+    local char_list = faction:character_list()
+    for i = 0, char_list:num_items() - 1 do
+        local character = char_list:item_at(i)
+        if character:character_type("colonel") then
+            if not character:has_military_force() and not character:is_politician() and not character:has_garrison_residence() then
+                cm:kill_character(character:command_queue_index(), true, true)
+            end
+        end
+    end
+end
+
 --v function() --init
 function sm0_abandon()
     frameName = effect.get_localised_string("sm0_frame_name") --"Abandon Region"
@@ -352,6 +365,7 @@ function sm0_abandon()
                 end
                 cm:set_region_abandoned(regionName)
                 cm:treasury_mod(faction, cash)
+                kill_colonels(cm:get_faction(faction))
             else
                 if remove == "remove" then
                     core:remove_listener("Abandon_"..regionName.."_"..faction)
@@ -403,6 +417,7 @@ function sm0_abandon()
                                 cm:set_region_abandoned(regionName)
                                 cm:treasury_mod(faction, cash)
                                 cm:set_saved_value("abandon_"..regionName.."_"..regionOwner:name(), false)
+                                kill_colonels(context:faction())
                             end
                         end,
                         false

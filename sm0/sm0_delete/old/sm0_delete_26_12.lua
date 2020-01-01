@@ -128,7 +128,7 @@ local blacklisted_subtypes = {
 	--"wh2_dlc13_lzd_slann_mage_priest_high_horde",
 	--"wh2_dlc13_lzd_slann_mage_priest_life",
 	--"wh2_dlc13_lzd_slann_mage_priest_life_horde",
-	--"wh2_main_def_black_ark",
+	"wh2_main_def_black_ark",
 	"wh2_main_def_malekith",
 	"wh2_main_def_morathi",
 	"wh2_main_hef_prince_alastar",
@@ -261,13 +261,7 @@ local blacklisted_subtypes = {
 	--Empire Master Engineer
 	"wh_main_emp_jubal_falk",
 	--Cataph Sea Patrol
-	"AK_aislinn",
-	--Mixu's: Vangheist's Revenge
-	"cst_vangheist",
-	"cst_bloodline_the_white_death",
-	"cst_bloodline_tia_drowna",
-	"cst_bloodline_dreng_gunddadrak",
-	"cst_bloodline_khoskog"
+	"AK_aislinn"
 } --:vector<string>
 
 local immortal_subtypes = {
@@ -283,23 +277,21 @@ local immortal_subtypes = {
 	"wh2_dlc09_tmb_tomb_king_setep",
 	"wh2_dlc09_tmb_tomb_king_thutep",
 	"wh2_dlc09_tmb_tomb_king_wakhaf",
-	"wh2_dlc09_tmb_tomb_king",
+	--"wh2_dlc09_tmb_tomb_king",
+	--"wh2_dlc11_cst_ghost_paladin",
 	"wh2_dlc11_cst_admiral_tech_01",
 	"wh2_dlc11_cst_admiral_tech_02",
 	"wh2_dlc11_cst_admiral_tech_03",
 	"wh2_dlc11_cst_admiral_tech_04",
-	--Covered by turn 1 listener
 	--"dlc06_dwf_master_engineer_ghost",
 	--"dlc06_dwf_runesmith_ghost",
 	--"dlc06_dwf_thane_ghost_1",
 	--"dlc06_dwf_thane_ghost_2",
-	--"wh2_dlc11_cst_ghost_paladin",
 	--mixu
-	"tmb_liche_high_priest_death",
-	"tmb_liche_high_priest_light",
-	"tmb_liche_high_priest_nehekhara",
-	"tmb_liche_high_priest_shadow"
-
+	--"tmb_liche_high_priest_death",
+	--"tmb_liche_high_priest_light",
+	--"tmb_liche_high_priest_nehekhara",
+	--"tmb_liche_high_priest_shadow"
 } --:vector<string>
 
 --v function(uic: CA_UIC)
@@ -610,7 +602,6 @@ end
 
 --v function()
 function sm0_delete()
-	if not cm:get_saved_value("sm0_immortal_count") then cm:set_saved_value("sm0_immortal_count", 0) end
 	core:add_listener(
 		"units_dropdown_PanelOpenedCampaign",
 		"PanelOpenedCampaign",
@@ -684,7 +675,6 @@ function sm0_delete()
 			local char_lookup = cm:char_lookup_str(context:faction_cqi())
 			sm0_log("sm0_delete_UITriggerScriptEvent | set_character_immortality = false | "..char_lookup)
 			cm:set_character_immortality(char_lookup, false)
-			cm:set_saved_value("sm0_immortal_cqi"..context:faction_cqi(), false)
             cm:kill_character(context:faction_cqi(), false, true)
         end,
         true
@@ -694,20 +684,16 @@ function sm0_delete()
 		"sm0_immortal_CharacterSkillPointAllocated",
 		"CharacterSkillPointAllocated",
 		function(context)
-			return (context:skill_point_spent_on() == "wh2_dlc09_skill_tmb_hidden_king_title"
+			return context:skill_point_spent_on() == "wh2_dlc09_skill_tmb_hidden_king_title"
 			or context:skill_point_spent_on() == "mixu_tmb_liche_high_priest_hidden_title"
 			or context:skill_point_spent_on() == "wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality"
 			or context:skill_point_spent_on() == "wh2_main_skill_all_immortality_hero"
 			or context:skill_point_spent_on() == "wh2_main_skill_all_immortality_lord"
-			or context:skill_point_spent_on() == "wh_main_skill_dwf_slayer_self_immortality")
-			and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index())
+			or context:skill_point_spent_on() == "wh_main_skill_dwf_slayer_self_immortality"
 		end,
 		function(context)
+			sm0_log("sm0_immortal_CharacterSkillPointAllocated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-			cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
-			cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-			sm0_log("sm0_immortal_CharacterSkillPointAllocated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
-			.." | "..context:character():command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 		end,
 		true
 	)
@@ -724,14 +710,9 @@ function sm0_delete()
 		end,
 		function(context)
 			for _, agent_subtype in pairs(immortal_subtypes) do
-				if agent_subtype == context:character():character_subtype_key() and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
-					cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
-						cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-					end, 0.5)
-					cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
-					cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-					sm0_log("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
-					.." | "..context:character():command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				if agent_subtype == context:character():character_subtype_key() then
+					sm0_log("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+					cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 				end
 			end
 		end,
@@ -757,13 +738,9 @@ function sm0_delete()
 					or current_char:has_skill("mixu_tmb_liche_high_priest_hidden_title")
 					or current_char:has_skill("wh2_main_skill_all_immortality_hero") 
 					or current_char:has_skill("wh2_main_skill_all_immortality_lord") 
-					or current_char:has_skill("wh_main_skill_dwf_slayer_self_immortality") 
-					and not cm:get_saved_value("sm0_immortal_cqi"..current_char:command_queue_index()) then
+					or current_char:has_skill("wh_main_skill_dwf_slayer_self_immortality") then
+						sm0_log("sm0_immortal_FactionTurnStart | set_character_immortality = true | "..current_char:faction():name().." | "..current_char:character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(current_char), true)
-						cm:set_saved_value("sm0_immortal_cqi"..current_char:command_queue_index(), true)
-						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-						sm0_log("sm0_immortal_FactionTurnStart | set_character_immortality = true | "..current_char:faction():name().." | "..current_char:character_subtype_key()
-						.." | "..current_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 					end
 				end
 			end
@@ -782,12 +759,9 @@ function sm0_delete()
 				local char_list = context:faction():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if cm:char_is_agent(char) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
-						cm:set_character_immortality(cm:char_lookup_str(char), true)
-						cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
-						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1) 	
-						sm0_log("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key()
-						.." | "..char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+					if cm:char_is_agent(char) then 
+						sm0_log("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key())
+						cm:set_character_immortality(cm:char_lookup_str(char), true) 	
 					end
 				end
 			end
@@ -795,12 +769,9 @@ function sm0_delete()
 				local char_list = context:faction():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if cm:char_is_general(char) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
+					if cm:char_is_general(char) then 
+						sm0_log("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(char), true) 
-						cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
-						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-						sm0_log("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key()
-						.." | "..char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 					end
 				end			
 			end
@@ -814,23 +785,13 @@ function sm0_delete()
 			return context:character():faction():name() == "wh2_dlc13_lzd_spirits_of_the_jungle" or context:character():faction():subculture() == "wh_main_sc_nor_norsca"
 		end,
 		function(context)
-			if cm:char_is_agent(context:character()) and (context:character():faction():has_technology("tech_dlc08_nor_nw_03") or context:character():faction():has_technology("tech_dlc13_lzd_vassal_2")) and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
-				cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
-					cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-				end, 0.5)
-				cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
-				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-				sm0_log("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
-				.." | "..context:character():command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+			if cm:char_is_agent(context:character()) and (context:character():faction():has_technology("tech_dlc08_nor_nw_03") or context:character():faction():has_technology("tech_dlc13_lzd_vassal_2")) then	
+				sm0_log("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
-			if cm:char_is_general(context:character()) and context:character():faction():has_technology("tech_dlc08_nor_nw_11") and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
-				cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
-					cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-				end, 0.5)
-				cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
-				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-				sm0_log("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
-				.." | "..context:character():command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+			if cm:char_is_general(context:character()) and context:character():faction():has_technology("tech_dlc08_nor_nw_11") then	
+				sm0_log("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
+				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 			end
 		end,
 		true
@@ -846,12 +807,9 @@ function sm0_delete()
 				local char_list = context:confederation():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if cm:char_is_agent(char) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
+					if cm:char_is_agent(char) then 
+						sm0_log("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(char), true) 
-						cm:set_saved_value("sm0_immortal_cqi"..char():command_queue_index(), true)
-						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-						sm0_log("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key()
-						.." | "..char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 					end
 				end
 			end
@@ -859,12 +817,9 @@ function sm0_delete()
 				local char_list = context:confederation():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if cm:char_is_general(char) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
+					if cm:char_is_general(char) then 
+						sm0_log("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(char), true) 
-						cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
-						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-						sm0_log("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key()
-						.." | "..char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 					end
 				end			
 			end
@@ -877,12 +832,9 @@ function sm0_delete()
 		"ScriptEventBretonniaGrailVowCompleted",
 		true,
 		function(context)
-			if context:character():faction():is_human() and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then	
+			if context:character():faction():is_human() then	
+				sm0_log("sm0_immortal_ScriptEventBretonniaGrailVowCompleted | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-				cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
-				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-				sm0_log("sm0_immortal_ScriptEventBretonniaGrailVowCompleted | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
-				.." | "..context:character():command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 			end
 		end,
 		true
@@ -895,12 +847,9 @@ function sm0_delete()
 			local character = context:character()
 			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
-					if character:rank() >= 10 and not cm:get_saved_value("sm0_immortal_cqi"..character:command_queue_index()) then
+					if character:rank() >= 10 then
+						sm0_log("sm0_immortal_character_rank_up_vows_per_level_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(character), true)
-						cm:set_saved_value("sm0_immortal_cqi"..character:command_queue_index(), true)
-						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-						sm0_log("sm0_immortal_character_rank_up_vows_per_level_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
-						.." | "..character:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 					end
 				end
 			end
@@ -915,12 +864,9 @@ function sm0_delete()
 			local character = context:character()
 			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
-					if character:rank() >= 10 and not cm:get_saved_value("sm0_immortal_cqi"..character:command_queue_index()) then
+					if character:rank() >= 10 then
+						sm0_log("sm0_immortal_character_created_bret_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key())
 						cm:set_character_immortality(cm:char_lookup_str(character), true)
-						cm:set_saved_value("sm0_immortal_cqi"..character:command_queue_index(), true)
-						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-						sm0_log("sm0_immortal_character_created_bret_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
-						.." | "..context:character():command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 					end
 				end
 			end

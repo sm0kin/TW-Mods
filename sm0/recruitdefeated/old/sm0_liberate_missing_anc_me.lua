@@ -67,6 +67,7 @@ local subtype_anc = {
         {"mission", "wh_main_anc_talisman_the_eye_of_sheerian", "wh_dlc01_chs_archaon_eye_of_sheerian_stage_1", 18,"wh_dlc01_chs_archaon_eye_of_sheerian_stage_2_mpc"},
         {"mission", "wh_main_anc_enchanted_item_the_crown_of_domination", "wh_dlc01_chs_archaon_crown_of_domination_stage_1", 23,"wh_dlc01_chs_archaon_crown_of_domination_stage_2a_mpc"}
     },
+    
     ["chs_prince_sigvald"] = {
         {"mission", "wh_main_anc_weapon_sliverslash", "wh_dlc01_chs_prince_sigvald_sliverslash_stage_1", 8,"wh_dlc01_chs_prince_sigvald_sliverslash_stage_4a_mpc"},
         {"mission", "wh_main_anc_armour_auric_armour", "wh_dlc01_chs_prince_sigvald_auric_armour_stage_1", 13,"wh_dlc01_chs_prince_sigvald_auric_armour_stage_3a_mpc"}
@@ -334,7 +335,7 @@ function sm0_liberate_missing_anc_me()
                     and cm:get_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key) >= n then
                     --is_human check for quest ui
                         if character:faction():is_human() and current_mission_key ~= "" then 
-                            if cm:is_local_players_turn() then
+                            if cm:whose_turn_is_it() == character:faction():name() then
                                 local mission_found = false
                                 local mission_button = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_missions")
                                 mission_button:SimulateLClick()
@@ -414,7 +415,7 @@ function sm0_liberate_missing_anc_me()
     --	false
     --)
 
-    -- this method is better because it behaves the same way starting items are added to Tehenhauin and Tiktaq'to (startpos)
+    -- this method is better because it behaves the same way starting items are added to Tehenhauin and Tiktaq'to
     core:add_listener(
         "sm0_missing_anc_FactionTurnStart",
         "FactionTurnStart",
