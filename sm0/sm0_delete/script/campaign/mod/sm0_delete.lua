@@ -299,7 +299,6 @@ local immortal_subtypes = {
 	"tmb_liche_high_priest_light",
 	"tmb_liche_high_priest_nehekhara",
 	"tmb_liche_high_priest_shadow"
-
 } --:vector<string>
 
 --v function(uic: CA_UIC)
@@ -725,9 +724,9 @@ function sm0_delete()
 		function(context)
 			for _, agent_subtype in pairs(immortal_subtypes) do
 				if agent_subtype == context:character():character_subtype_key() and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
-					cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
+					--cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
 						cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-					end, 0.5)
+					--end, 0.5)
 					cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
 					cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 					sm0_log("sm0_immortal_skill_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
@@ -815,18 +814,18 @@ function sm0_delete()
 		end,
 		function(context)
 			if cm:char_is_agent(context:character()) and (context:character():faction():has_technology("tech_dlc08_nor_nw_03") or context:character():faction():has_technology("tech_dlc13_lzd_vassal_2")) and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
-				cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
+				--cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
 					cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-				end, 0.5)
+				--end, 0.5)
 				cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
 				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 				sm0_log("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
 				.." | "..context:character():command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 			end
 			if cm:char_is_general(context:character()) and context:character():faction():has_technology("tech_dlc08_nor_nw_11") and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
-				cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
+				--cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
 					cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
-				end, 0.5)
+				--end, 0.5)
 				cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
 				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 				sm0_log("sm0_immortal_tech_CharacterCreated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()

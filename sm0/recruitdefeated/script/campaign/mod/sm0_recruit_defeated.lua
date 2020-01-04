@@ -481,11 +481,11 @@ local seahelm_agents = {
 } --:vector<map<string, string>> 
 --Mixu's: Vangheist's Revenge
 local mixu_vangheist = {
-    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_vangheist"},
-    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_the_white_death"},
-    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_tia_drowna"},
-    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_dreng_gunddadrak"},
-    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_khoskog"}
+    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_vangheist", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"},
+    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_the_white_death", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"},
+    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_tia_drowna", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"},
+    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_dreng_gunddadrak", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"},
+    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_khoskog", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"}
 } --:vector<map<string, string>> 
 
 local alastar_quests = {
@@ -653,7 +653,12 @@ local function spawn_missing_lords(confederator, confederated)
                 --sm0_log("spawn_missing_lords | Faction revived: "..confederated:name().." | Region: "..start_region:name().." | CQI: "..cqi)
                 char_cqi = cqi
                 local char = cm:get_character_by_cqi(char_cqi)
-                if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(char_cqi), true) end 
+                --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and not cm:get_saved_value("sm0_immortal_cqi"..char_cqi) then
+                --    cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
+				--		cm:set_character_immortality(cm:char_lookup_str(char_cqi), true) 
+				--	end, 0.5)                   
+                --    cm:set_saved_value("sm0_immortal_cqi"..char_cqi, true)
+                --end 
             end,
             true
         )
@@ -705,7 +710,12 @@ local function spawn_missing_lords(confederator, confederated)
                                                 cm:set_saved_value(locked_ai_generals[k].subtype.."_spawned", confederated:name()) 
                                             end
                                         end
-                                        if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(cqi), true) end 
+                                        --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and not cm:get_saved_value("sm0_immortal_cqi"..cqi) then                                           
+                                        --    cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
+                                        --        cm:set_character_immortality(cm:char_lookup_str(cqi), true)
+                                        --    end, 0.1)  
+                                        --    cm:set_saved_value("sm0_immortal_cqi"..cqi, true)
+                                        --end 
                                         cm:kill_character(cqi, true, false)
                                         --if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(cqi), false) end
                                         --cm:callback(function()
@@ -730,7 +740,10 @@ local function spawn_missing_lords(confederator, confederated)
                 local char = char_list:item_at(i)
                 --if char then sm0_log("DEAD FACTION char: "..char:character_subtype_key()) end
                 cm:kill_character(char:command_queue_index(), true, true)
-                if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) end 
+                --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
+                --    cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) 
+                --    cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), false)
+                --end 
             end   
         end, 2)
     else
@@ -998,7 +1011,12 @@ local function confed_revived(confederator, confederated)
                         --if vfs.exists("script/campaign/mod/sr_chaos.lua") then lord_event(confederator:name(), char, lost_factions_agents) end
                         --sm0_log("Faction: "..confederated:name().." | ".."Character | Forename: "..effect.get_localised_string(char:get_forename()).." | Surname: "..effect.get_localised_string(char:get_surname()))
                     end
-                    if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), true) end 
+                    --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
+                    --    --cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
+                    --        cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), true) 
+                    --    --end, 0.5) 
+                    --    cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
+                    --end 
                     if command_queue_index ~= cqi and not char:is_faction_leader() then cm:kill_character(command_queue_index, true, false) end
                 end
                 if confederated:name() == "wh2_main_hef_eataine" and not cm:get_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked") then
@@ -1045,19 +1063,24 @@ local function confed_revived(confederator, confederated)
                         end, 0.5)
                         -- some faction leaders need a immortality reset after confederation
                         local char = cm:get_character_by_cqi(faction_leader_cqi)
-                        if char:character_subtype("wh2_dlc09_tmb_arkhan") or char:character_subtype("wh2_dlc09_tmb_khalida") or char:character_subtype("wh2_dlc09_tmb_khatep") or char:character_subtype("wh2_dlc09_tmb_settra")
-                        or char:character_subtype("wh2_dlc11_cst_aranessa") or char:character_subtype("wh2_dlc11_cst_cylostra") or char:character_subtype("wh2_dlc11_cst_harkon") or char:character_subtype("wh2_dlc11_cst_noctilus") then
+                        if (char:character_subtype("wh2_dlc09_tmb_arkhan") or char:character_subtype("wh2_dlc09_tmb_khalida") or char:character_subtype("wh2_dlc09_tmb_khatep") or char:character_subtype("wh2_dlc09_tmb_settra")
+                        or char:character_subtype("wh2_dlc11_cst_aranessa") or char:character_subtype("wh2_dlc11_cst_cylostra") or char:character_subtype("wh2_dlc11_cst_harkon") 
+                        or char:character_subtype("wh2_dlc11_cst_noctilus")) and not cm:get_saved_value("sm0_immortal_cqi"..faction_leader_cqi) then
                             cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), true) 
+                            cm:set_saved_value("sm0_immortal_cqi"..faction_leader_cqi, true)
                         end
                         cm:kill_character(cqi, true, false) 
                         cm:kill_character(cqi, true, false) 
                         cm:kill_character(faction_leader_cqi, true, false)        
                         apply_diplomacy(confederator:name())
-                        local char_list = context:confederation():character_list()
-                        for i = 0, char_list:num_items() - 1 do 
-                            local char = char_list:item_at(i)
-                            if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) end 
-                        end           
+                        --local char_list = context:confederation():character_list()
+                        --for i = 0, char_list:num_items() - 1 do 
+                        --    local char = char_list:item_at(i)
+                        --    if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
+                        --        cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) 
+                        --        cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), false)
+                        --    end 
+                        --end           
                     end,
                     false
                 )
@@ -1306,7 +1329,9 @@ local function init()
                                 and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
                                 and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
                                     local standing = current_faction:diplomatic_standing_with(subculture_faction:name())
-                                    if not is_number(saved_standing) or standing > saved_standing then
+                                    if not is_number(saved_standing) or standing > saved_standing 
+                                    and not (cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P1:name() and faction_P1:name() == subculture_faction:name())
+                                    and not (cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P2:name() and faction_P2:name() == subculture_faction:name()) then
                                         saved_standing = standing
                                         prefered_faction = subculture_faction
                                         --sm0_log("Faction: "..subculture_faction:name().." | Diplomatic Standing: "..tostring(saved_standing))
