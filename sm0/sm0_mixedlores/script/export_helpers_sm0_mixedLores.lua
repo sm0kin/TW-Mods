@@ -188,7 +188,7 @@ local optionsIconPath = "ui/icon_options2.png"
 local resetIconPath = "ui/icon_stats_reset_small2.png"
 local shuffleIconPath = "ui/icon_swap_small2.png"
 local playerFaction = cm:get_faction(cm:get_local_faction(true))
-if string.find(playerFaction:name(), "wh_") then
+if string.find(playerFaction:culture(), "wh_") then
 	homeIconPath = "ui/icon_home_small.png"
 	bookIconPath = "ui/icon_lorebook.png"
 	browserIconPath = "ui/icon_spell_browser.png"

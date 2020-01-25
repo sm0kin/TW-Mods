@@ -6,7 +6,7 @@ require("sm0/sm0_force_confederation/script/campaign/mod/sm0_confed")
 
 -- ABANDON REGION
 require("sm0/sm0_abandon/script/campaign/mod/sm0_abandon")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_abandon")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_abandon")
 
 
 -- SAVE CAMERA SETTINGS
@@ -158,6 +158,8 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --cbf
 require("sm0/cbf/script/campaign/mod/sm0_missing_anc")
 require("sm0/cbf/script/campaign/mod/sm0_horde")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
+
 
 require("sm0/sm0_liberate/script/campaign/mod/sm0_liberate_missing_anc")
 

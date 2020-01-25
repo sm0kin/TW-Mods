@@ -2,7 +2,6 @@
 --# type global CA_CQI = number | int
 
 -- CLASS DECLARATION
---# assume global class BM
 --# assume global class CM
 --# assume global class CUIM
 --# assume global class CUIM_OVERRIDE
@@ -91,7 +90,7 @@
 --# "land_ambush" | "land_bridge" | "land_normal" | "naval_blockade" | "naval_breakout" | "naval_normal" | "port_assault" | "settlement_relief" | "settlement_sally" | "settlement_standard" | "settlement_unfortified"
 
 -- BATTLE
---# assume BM.modify_battle_speed: method(gamespeed: number)
+--# assume CA_BATTLE_MANAGER.modify_battle_speed: method(gamespeed: number)
 
 -- CAMERA
 --# assume CA_CAMERA.fade: method(UNKNOWN: bool, duration: number|int)
@@ -306,8 +305,10 @@
 --# assume CM.add_ancillary_to_faction: method(faction: CA_FACTION, ancillary: string, suppress_event_feed: boolean)
 --More character commands
 --# assume CM.add_experience_to_units_commanded_by_character: method(char_lookup_str: string, level: int) --add_experience_to_units_commanded_by_character("faction:f,type:t,ability:a,surname:s,forename:f,garrison:g,x:1,y:2,r:3", level)
---# assume CM.kill_character: method(lookup: CA_CQI, kill_army: boolean, throughcq: boolean)
+--# assume CM.kill_character: method(lookup: CA_CQI | string, kill_army: boolean, throughcq: boolean)
+--# assume CM.kill_character_and_commanded_unit: method(lookup: CA_CQI | string, kill_army: boolean, throughcq: boolean)
 --# assume CM.set_character_immortality: method(lookup: string, immortal: boolean)
+--# assume CM.set_character_unique: method(lookup: string, unique: boolean)
 --# assume CM.kill_all_armies_for_faction: method(factionName: CA_FACTION)
 --# assume CM.teleport_to: method(charString: string, xPos: number, yPos: number, useCommandQueue: boolean)
 --# assume CM.replenish_action_points: method(lookup: string, faction: number) -- A unary AP proportion (0-1) may optionally be specified.
@@ -777,6 +778,7 @@
 --# assume CA_SLOT.has_building: method() --> boolean
 --# assume CA_SLOT.building: method() --> CA_BUILDING
 --# assume CA_SLOT.resource_key: method() --> string
+--# assume CA_SLOT.name: method() --> string
 
 -- BUILDING
 --# assume CA_BUILDING.name: method() --> string
@@ -982,7 +984,7 @@
 --# assume global Give_Trait: function(character: CA_CHAR, trait: string, _points: number?, _chance: number?)
 -- CAMPAIGN
 --# assume global get_cm: function() --> CM
---# assume global get_bm: function() --> BM
+--# assume global get_bm: function() --> CA_BATTLE_MANAGER
 --# assume global get_events: function() --> map<string, vector<function(context:WHATEVER?)>>
 --# assume global Get_Character_Side_In_Last_Battle: function(char: CA_CHAR) --> BATTLE_SIDE
 --# assume global q_setup: function()

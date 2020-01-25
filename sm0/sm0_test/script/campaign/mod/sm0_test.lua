@@ -34,6 +34,7 @@ local function expCheat()
         local cqi = currentChar:command_queue_index()
 		cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
 		--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
+		--if currentChar:character_subtype("wh2_main_skv_lord_skrolk") then cm:force_add_ancillary(currentChar, "wh2_main_anc_arcane_item_the_liber_bubonicus", true, false) end
 	end
 	--if cm:is_new_game() then
 		local factionList = cm:model():world():faction_list()
@@ -130,7 +131,21 @@ local function unitCheat()
 						"wh2_dlc12_lzd_mon_ancient_stegadon_1"} --:vector<string>
 						
 	local playerFaction = cm:get_faction(cm:get_local_faction(true))
-	if playerFaction:name() == "wh2_dlc09_tmb_khemri" then
+	if playerFaction:subculture() == "wh2_main_sc_skv_skaven" then
+		local characterList = playerFaction:character_list()
+		for i = 0, characterList:num_items() - 1 do
+			local currentChar = characterList:item_at(i)	
+			if currentChar:is_faction_leader() then
+				--cm:remove_all_units_from_general(currentChar)
+				--sm0_log("remove_all_units_from_general/wh2_dlc09_tmb_settra")
+				local cqi = currentChar:command_queue_index()
+				cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_dlc12_skv_veh_doom_flayer_ror_tech_lab_0")
+				--for k, v in pairs(TKunitstring) do 
+				--	cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
+				--end
+			end
+		end
+	elseif playerFaction:name() == "wh2_dlc09_tmb_khemri" then
 		local characterList = playerFaction:character_list()
 		for i = 0, characterList:num_items() - 1 do
 			local currentChar = characterList:item_at(i)	
@@ -252,6 +267,9 @@ local function deletePlayerSubcultureFactions()
 	local factionList = cm:model():world():faction_list()
 	for i = 0, factionList2:num_items() - 1 do
 		local faction = factionList2:item_at(i)
+		if faction and not faction:is_dead() and not faction:is_human() and cm:model():turn_number() == 2 then
+			cm:force_confederation(playerFaction:name(), faction:name())	
+		end
 		if faction and not faction:is_dead() and not faction:is_human() and cm:model():turn_number() == 3 then
 			if faction:name() == "wh_main_teb_tilea" or faction:name() == "wh2_dlc09_tmb_followers_of_nagash" or faction:name() == "wh2_dlc11_cst_noctilus" or faction:name() == "wh_main_grn_greenskins" 	
 			--or faction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" 
@@ -359,6 +377,8 @@ end
 --v function()
 function sm0_test()
 	if cm:is_new_game() then sm0_log_reset() end
+	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
+	
 	core:add_listener(
 		"refugee_FactionTurnStart",
 		"FactionTurnStart",
@@ -404,7 +424,11 @@ function sm0_test()
 		function(context)
 			--cm:trigger_incident("wh2_main_hef_eataine", "sm0_hef_add_influence", true)
 			local human_factions = cm:get_human_factions()
-			deletePlayerSubcultureFactions()
+
+			--if cm:model():turn_number() == 2 then cm:unlock_starting_general_recruitment("2140784146", "wh_main_vmp_vampire_counts") end
+			
+			--deletePlayerSubcultureFactions()
+
 			--item test
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then
 			--	cm:transfer_region_to_faction("wh2_main_vor_kingdom_of_beasts_temple_of_skulls", human_factions[1])

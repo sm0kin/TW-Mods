@@ -267,13 +267,7 @@ local blacklisted_subtypes = {
 	"cst_bloodline_the_white_death",
 	"cst_bloodline_tia_drowna",
 	"cst_bloodline_dreng_gunddadrak",
-	"cst_bloodline_khoskog",
-	-- bug fixes
-	"wh2_dlc09_tmb_tomb_king",
-	"tmb_liche_high_priest_death",
-	"tmb_liche_high_priest_light",
-	"tmb_liche_high_priest_nehekhara",
-	"tmb_liche_high_priest_shadow"
+	"cst_bloodline_khoskog"
 } --:vector<string>
 
 local immortal_subtypes = {
@@ -283,13 +277,13 @@ local immortal_subtypes = {
 	"wh2_dlc11_vmp_bloodline_necrarch",
 	"wh2_dlc11_vmp_bloodline_strigoi",
 	"wh2_dlc11_vmp_bloodline_von_carstein",
-	--"wh2_dlc09_tmb_tomb_king_alkhazzar_ii",
-	--"wh2_dlc09_tmb_tomb_king_lahmizzash",
-	--"wh2_dlc09_tmb_tomb_king_rakhash",
-	--"wh2_dlc09_tmb_tomb_king_setep",
-	--"wh2_dlc09_tmb_tomb_king_thutep",
-	--"wh2_dlc09_tmb_tomb_king_wakhaf",
-	--"wh2_dlc09_tmb_tomb_king",
+	"wh2_dlc09_tmb_tomb_king_alkhazzar_ii",
+	"wh2_dlc09_tmb_tomb_king_lahmizzash",
+	"wh2_dlc09_tmb_tomb_king_rakhash",
+	"wh2_dlc09_tmb_tomb_king_setep",
+	"wh2_dlc09_tmb_tomb_king_thutep",
+	"wh2_dlc09_tmb_tomb_king_wakhaf",
+	"wh2_dlc09_tmb_tomb_king",
 	"wh2_dlc11_cst_admiral_tech_01",
 	"wh2_dlc11_cst_admiral_tech_02",
 	"wh2_dlc11_cst_admiral_tech_03",
@@ -301,10 +295,10 @@ local immortal_subtypes = {
 	--"dlc06_dwf_thane_ghost_2",
 	--"wh2_dlc11_cst_ghost_paladin",
 	--mixu
-	--"tmb_liche_high_priest_death",
-	--"tmb_liche_high_priest_light",
-	--"tmb_liche_high_priest_nehekhara",
-	--"tmb_liche_high_priest_shadow"
+	"tmb_liche_high_priest_death",
+	"tmb_liche_high_priest_light",
+	"tmb_liche_high_priest_nehekhara",
+	"tmb_liche_high_priest_shadow"
 } --:vector<string>
 
 --v function(uic: CA_UIC)
@@ -678,7 +672,7 @@ function sm0_delete()
 		end,
 		true
 	)
-	-- multiplayer listener
+	-- Multiplayer listener
     core:add_listener(
         "sm0_delete_UITriggerScriptEvent",
         "UITriggerScriptEvent",
@@ -690,8 +684,7 @@ function sm0_delete()
 			sm0_log("sm0_delete_UITriggerScriptEvent | set_character_immortality = false | "..char_lookup)
 			cm:set_character_immortality(char_lookup, false)
 			cm:set_saved_value("sm0_immortal_cqi"..context:faction_cqi(), false)
-			cm:kill_character(context:faction_cqi(), false, true)
-			--cm:kill_character_and_commanded_unit(char_lookup, false, true)
+            cm:kill_character(context:faction_cqi(), false, true)
         end,
         true
     )
@@ -945,7 +938,8 @@ function sm0_delete()
 				local char_list = context:faction():character_list()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
-					if char:character_subtype("brt_paladin") and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) 
+					if (char:character_subtype("brt_paladin") or char:character_subtype("brt_paladin") or char:character_subtype("brt_paladin"))
+					and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) 
 					and char:trait_points("wh_dlc07_trait_brt_grail_vow_valour_pledge_agent") == 6 then
 						cm:set_character_immortality(cm:char_lookup_str(char), true) 
 						cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)

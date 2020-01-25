@@ -1,69 +1,75 @@
 local regions_table = {
     -- DWARFS
-    "wh_main_the_silver_road_karaz_a_karak",
-    "wh_main_the_vaults_karak_izor", 
-    "wh_main_peak_pass_karak_kadrin", 
+    "wh_main_the_silver_road_karaz_a_karak", --Thorgrim ME
+    "wh_main_the_vaults_karak_izor", --Belegar ME
+    "wh_main_peak_pass_karak_kadrin", --Ungrim ME
     -- WOOD ELVES
-    "wh_main_athel_loren_waterfall_palace", 
-    "wh_main_athel_loren_yn_edryl_korian", 
+    "wh_main_athel_loren_waterfall_palace", --Durthu ME
+    "wh_main_athel_loren_yn_edryl_korian", --Orion ME
     -- BRETONNIA
-    "wh_main_carcassone_et_brionne_castle_carcassonne", 
-    "wh_main_bordeleaux_et_aquitaine_bordeleaux", 
-    "wh_main_couronne_et_languille_couronne", 
+    "wh_main_carcassone_et_brionne_castle_carcassonne", --Louen ME 
+    "wh_main_bordeleaux_et_aquitaine_bordeleaux", --Alberic ME
+    "wh_main_couronne_et_languille_couronne", --Morgianna ME
+    "wh2_main_coast_of_araby_copher",  --Repanse ME
+"wh2_main_vor_coast_of_araby_copher", --Repanse Vortex
     -- EMPIRE / TEB / KISLEV
-    "wh_main_reikland_altdorf", 
-    "wh_main_middenland_middenheim", 
+    "wh_main_reikland_altdorf", --Franz ME
+    "wh_main_middenland_middenheim", --Todbringer ME
     "wh_main_estalia_magritta", 
-    "wh_main_wissenland_nuln", 
+    "wh_main_wissenland_nuln",
     "wh_main_the_wasteland_marienburg", 
     "wh_main_southern_oblast_kislev", 
     "wh_main_talabecland_talabheim", 
-    "wh_main_tilea_miragliano", 
+    "wh_main_tilea_miragliano",
     "wh2_main_solland_pfeildorf",  --(Gelt ME)
     "wh2_main_the_creeping_jungle_temple_of_kara",  --(Markus ME)
     "wh2_main_vor_scorpion_coast_temple_of_tlencan",  --(Markus Vor)
     -- VAMPIRE COUNTS
-    "wh_main_eastern_sylvania_castle_drakenhof", 
-    "wh_main_northern_grey_mountains_blackstone_post", 
+    "wh_main_eastern_sylvania_castle_drakenhof",  --Mannfred ME
+    "wh_main_northern_grey_mountains_blackstone_post", --Kemmler ME
     -- GREENSKINS
-    "wh_main_death_pass_karak_drazh", 
-    "wh_main_western_badlands_ekrund", 
-    "wh_main_southern_grey_mountains_karak_azgaraz", 
+    "wh_main_death_pass_karak_drazh", --Grimgor ME
+    "wh_main_western_badlands_ekrund", --Wurrzag ME
+    "wh_main_southern_grey_mountains_karak_azgaraz", --Skarsnik ME
     -- SKAVEN
-    "wh2_main_charnel_valley_karag_orrud", 
-    "wh2_main_vor_southern_jungles_yuatek", 
-    "wh2_main_hell_pit_hell_pit", 
-    "wh2_main_the_clawed_coast_hoteks_column", 
-    "wh2_main_vor_the_clawed_coast_hoteks_column", 
-    "wh2_main_headhunters_jungle_oyxl", 
-    "wh2_main_vor_the_lost_valleys_oyxl", 
-    "wh2_main_skavenblight_skavenblight", 
-    "wh2_main_vor_the_vampire_coast_the_star_tower", 
+    "wh2_main_charnel_valley_karag_orrud", --Queek ME
+    "wh2_main_vor_southern_jungles_yuatek", --Queek Vor 
+    "wh2_main_hell_pit_hell_pit",
+    "wh2_main_the_clawed_coast_hoteks_column", --Tretch ME
+    "wh2_main_vor_the_clawed_coast_hoteks_column", --Tretch Vor
+    "wh2_main_headhunters_jungle_oyxl", --Skrolk ME
+    "wh2_main_vor_the_lost_valleys_oyxl", --Skrolk Vor
+    "wh2_main_skavenblight_skavenblight", --Ikit ME
+    "wh2_main_vor_the_vampire_coast_the_star_tower", --Ikit Vor
+    "wh2_main_gnoblar_country_flayed_rock", --Snikch ME
+"wh2_main_vor_land_of_the_dervishes_el-kalabad", --Snikch Vortex
     -- DARK ELVES	
-    "wh2_main_iron_mountains_naggarond",
-    "wh2_main_vor_naggarond_naggarond",
+    "wh2_main_iron_mountains_naggarond", --Malekith ME
+    "wh2_main_vor_naggarond_naggarond", --Malekith Vor
     "wh2_main_titan_peaks_ancient_city_of_quintex", 
     "wh2_main_vor_iron_peaks_ancient_city_of_quintex", 
     "wh2_main_the_road_of_skulls_har_ganeth", 
     "wh2_main_vor_the_road_of_skulls_har_ganeth", 
     "wh2_main_headhunters_jungle_chupayotl", 
-    "wh2_main_vor_culchan_plains_chupayotl", 
+    "wh2_main_vor_culchan_plains_chupayotl",
+    "wh2_main_the_black_flood_hag_graef", --Malus ME
+    "wh2_main_vor_the_black_flood_hag_graef", --Malus Vortex
     -- LIZARDMEN
-    "wh2_main_isthmus_of_lustria_hexoatl", 
-    "wh2_main_vor_isthmus_of_lustria_hexoatl", 
-    "wh2_main_kingdom_of_beasts_temple_of_skulls", 
-    "wh2_main_vor_kingdom_of_beasts_temple_of_skulls", 
-    "wh2_main_southern_great_jungle_itza", 
-    "wh2_main_vor_northern_great_jungle_itza", 
+    "wh2_main_isthmus_of_lustria_hexoatl", --Mazdamundi ME
+    "wh2_main_vor_isthmus_of_lustria_hexoatl", --Mazdamundi Vortex
+    "wh2_main_kingdom_of_beasts_temple_of_skulls", --Dinoriderman --ME
+    "wh2_main_vor_kingdom_of_beasts_temple_of_skulls", --Dinoriderman --Vor
+    "wh2_main_southern_great_jungle_itza", --Gor Rok ME
+    "wh2_main_vor_northern_great_jungle_itza", --Gor Rok Vor
     "wh2_main_northern_great_jungle_xlanhuapec", 
     "wh2_main_vor_culchan_plains_kaiax", 
-    "wh2_main_western_jungles_tlaqua", 
-    "wh2_main_vor_western_jungles_tlaqua", 
+    "wh2_main_western_jungles_tlaqua", --Pun ME
+    "wh2_main_vor_western_jungles_tlaqua", --Pun Vor
     -- TOMB KINGS
-    "wh2_main_vor_copper_desert_the_forgotten_isles", 
+    "wh2_main_vor_copper_desert_the_forgotten_isles",
     "wh2_main_vor_ashen_coast_scarpels_lair", 
-    "wh2_main_vor_land_of_the_dead_khemri", 
-    "wh2_main_land_of_the_dead_khemri", 
+    "wh2_main_vor_land_of_the_dead_khemri", --Settra Vor
+    "wh2_main_land_of_the_dead_khemri", --Setra ME
     "wh2_main_land_of_assassins_palace_of_the_wizard_caliph", 
     "wh2_main_vor_land_of_assassins_palace_of_the_wizard_caliph", 
     "wh2_main_blackspine_mountains_plain_of_spiders", 
@@ -103,10 +109,12 @@ local function upgrade_capitals(tier, ownerScope, settlementScope)
             end
         end
     end
-    if settlementScope == "all" then
+    if settlementScope == "all" or settlementScope == "all_province" then
         local region_list = cm:model():world():region_manager():region_list()
         for i=0, region_list:num_items() - 1 do
-            upgrade(region_list:item_at(i):name())
+            if settlementScope == "all" or (settlementScope == "all_province" and region_list:item_at(i):is_province_capital()) then
+                upgrade(region_list:item_at(i):name())
+            end
         end
     else
         for _, region in ipairs(regions_table) do
@@ -173,7 +181,8 @@ function frosty_tiers()
         ownerScope:add_option("aiOnly", "AI-Only", "Changes only apply to AI factions.")
         local settlementScope = frostyTiers:add_tweaker("settlementScope", "Settlement Scope", "Only Starting settlements of the playable factions or all province capitals.")
 		settlementScope:add_option("table", "Playable Faction Capitals", "The higher tier upgrade also extends to a small handful of cities that have exceptionally high est. populations in the lore: Hellpit, Itza, Kislev, Magritta, Marienburg, Miragliano, Nuln, Skavenblight and Talabheim.")
-        settlementScope:add_option("all", "All Province Capitals", "All province capitals start at a higher tier.")
+        settlementScope:add_option("all_province", "All Province Capitals", "All province capitals start at a higher tier.")
+        settlementScope:add_option("all", "All Settlements", "All settlement main buildings start at a higher tier.")
         local settlementTier = frostyTiers:add_tweaker("settlementTier", "Settlement Starting Tier", "Set the Settlement Starting Tier.")
         settlementTier:add_option("4", "Tier IV", "Sets the Settlement Starting Tier to IV.")
 		settlementTier:add_option("2", "Tier II", "Sets the Settlement Starting Tier to II.")

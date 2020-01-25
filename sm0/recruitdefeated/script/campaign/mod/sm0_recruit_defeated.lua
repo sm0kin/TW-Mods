@@ -717,11 +717,15 @@ local function spawn_missing_lords(confederator, confederated)
                                         --    cm:set_saved_value("sm0_immortal_cqi"..cqi, true)
                                         --end 
                                         cm:kill_character(cqi, true, false)
+                                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(cqi), true, false)                                       
                                         --if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(cqi), false) end
                                         --cm:callback(function()
                                             --if char:is_wounded() then cm:stop_character_convalescing(cqi) end
                                         --end, 0.5)
-                                        if n >= 10 or cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then cm:kill_character(char_cqi, true, false) end
+                                        if n >= 10 or cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then 
+                                            cm:kill_character(char_cqi, true, false) 
+                                            --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char_cqi), true, false)   
+                                        end
                                     end,
                                     false
                                 )
@@ -735,11 +739,13 @@ local function spawn_missing_lords(confederator, confederated)
             kill_faction(confederated:name()) --backup
             --cm:kill_all_armies_for_faction(confederated) --backup
             cm:kill_character(char_cqi, true, false)
+            --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char_cqi), true, false)
             local char_list = confederated:character_list()
             for i = 0, char_list:num_items() - 1 do
                 local char = char_list:item_at(i)
                 --if char then sm0_log("DEAD FACTION char: "..char:character_subtype_key()) end
                 cm:kill_character(char:command_queue_index(), true, true)
+                --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char:command_queue_index()), true, true)
                 --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
                 --    cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) 
                 --    cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), false)
@@ -1017,7 +1023,10 @@ local function confed_revived(confederator, confederated)
                     --    --end, 0.5) 
                     --    cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
                     --end 
-                    if command_queue_index ~= cqi and not char:is_faction_leader() then cm:kill_character(command_queue_index, true, false) end
+                    if command_queue_index ~= cqi and not char:is_faction_leader() then 
+                        cm:kill_character(command_queue_index, true, false) 
+                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char:command_queue_index(), true, false) 
+                    end
                 end
                 if confederated:name() == "wh2_main_hef_eataine" and not cm:get_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked") then
                     local char_list = confederated:character_list()
@@ -1071,7 +1080,9 @@ local function confed_revived(confederator, confederated)
                         end
                         cm:kill_character(cqi, true, false) 
                         cm:kill_character(cqi, true, false) 
-                        cm:kill_character(faction_leader_cqi, true, false)        
+                        cm:kill_character(faction_leader_cqi, true, false)  
+                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(cqi), true, false)    
+                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(faction_leader_cqi), true, false)  
                         apply_diplomacy(confederator:name())
                         --local char_list = context:confederation():character_list()
                         --for i = 0, char_list:num_items() - 1 do 
@@ -1331,7 +1342,7 @@ local function init()
                                     local standing = current_faction:diplomatic_standing_with(subculture_faction:name())
                                     if not is_number(saved_standing) or standing > saved_standing 
                                     and not (cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P1:name() and faction_P1:name() == subculture_faction:name())
-                                    and not (cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P2:name() and faction_P2:name() == subculture_faction:name()) then
+                                    and not (cm:is_multiplayer() and cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P2:name() and faction_P2:name() == subculture_faction:name()) then
                                         saved_standing = standing
                                         prefered_faction = subculture_faction
                                         --sm0_log("Faction: "..subculture_faction:name().." | Diplomatic Standing: "..tostring(saved_standing))
@@ -1609,7 +1620,7 @@ local function init()
 							true,
 							function(char_cqi, force_cqi)
 								handover_nakai_region();
-								cm:kill_character(char_cqi, true, true);
+                                cm:kill_character(char_cqi, true, true);
 							end
 						);
 					else
