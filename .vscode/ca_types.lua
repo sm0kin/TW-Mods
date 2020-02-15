@@ -311,7 +311,7 @@
 --# assume CM.set_character_unique: method(lookup: string, unique: boolean)
 --# assume CM.kill_all_armies_for_faction: method(factionName: CA_FACTION)
 --# assume CM.teleport_to: method(charString: string, xPos: number, yPos: number, useCommandQueue: boolean)
---# assume CM.replenish_action_points: method(lookup: string, faction: number) -- A unary AP proportion (0-1) may optionally be specified.
+--# assume CM.replenish_action_points: method(lookup: string) -- A unary AP proportion (0-1) may optionally be specified.
 --# assume CM.stop_character_convalescing: method(character_cqi: CA_CQI)
 --# assume CM.cancel_actions_for: method(character_lookup: string)
 --# assume CM.convert_force_to_type: method(military_force: CA_MILITARY_FORCE, force_type: string)
@@ -402,12 +402,12 @@
 --# assume CM.add_first_tick_callback: method(function)
 --# assume CM.force_rebellion_in_region: method(region: string, unitsize: number, unit_list: string, xpos: number, ypos: number, suppress_message: boolean)
 --# assume CM.set_public_order_of_province_for_region: method(region: string, public_order: number)
---# assume CM.spawn_unique_agent: method(faction_CQI: CA_CQI, agent_record: string, force: boolean)
---# assume CM.spawn_unique_agent_at_region: method(faction_CQI: CA_CQI, agent_record: string, region_cqi: CA_CQI, force: boolean)
---# assume CM.spawn_unique_agent_at_character: method(faction_CQI: CA_CQI, agent_record: string, character_cqi: CA_CQI, force: boolean)
---# assume CM.spawn_agent_at_military_force: method(owning_faction: CA_FACTION, target_force: CA_MILITARY_FORCE, agent_record: string, agent_subtype_record: string?)
---# assume CM.spawn_agent_at_settlement: method(owning_faction: CA_FACTION, target_settlement: CA_SETTLEMENT, agent_record: string, agent_subtype_record: string?)
---# assume CM.spawn_agent_at_position: method(owning_faction: CA_FACTION, x: number, y: number, agent_record: string, agent_subtype_record: string?)
+--# assume CM.spawn_unique_agent: method(faction_CQI: CA_CQI, agent_type: string, force: boolean)
+--# assume CM.spawn_unique_agent_at_region: method(faction_CQI: CA_CQI, agent_type: string, region_cqi: CA_CQI, force: boolean)
+--# assume CM.spawn_unique_agent_at_character: method(faction_CQI: CA_CQI, agent_type: string, character_cqi: CA_CQI, force: boolean)
+--# assume CM.spawn_agent_at_military_force: method(owning_faction: CA_FACTION, target_force: CA_MILITARY_FORCE, agent_type: string, agent_subtype_record: string?)
+--# assume CM.spawn_agent_at_settlement: method(owning_faction: CA_FACTION, target_settlement: CA_SETTLEMENT, agent_type: string, agent_subtype_record: string?)
+--# assume CM.spawn_agent_at_position: method(owning_faction: CA_FACTION, x: number, y: number, agent_type: string, agent_subtype_record: string?)
 --# assume CM.embed_agent_in_force: method(agent: CA_CQI, military_force: CA_MILITARY_FORCE)
 --spawn location finding
 --# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, settlement_region_key: string, on_sea: boolean, in_same_region: boolean, preferred_spawn_distance: number?) --> (number, number)
@@ -449,8 +449,9 @@
 --# assume CM.grant_unit_to_character: method(lookup: string , unit: string)
 --# assume CM.remove_all_units_from_general: method(character: CA_CHAR)
 --# assume CM.force_character_force_into_stance: method(lookup: string, stance: string)
+--# assume CM.set_unit_hp_to_unary_of_maximum: method(unit: CA_UNIT, unary_hp: number)
 --diplomacy commands
---# assume CM.force_diplomacy:  method(faction: string, other_faction: string, record: string, offer: boolean, accept: boolean, do_not_enable_payments: boolean)
+--# assume CM.force_diplomacy: method(faction: string, other_faction: string, record: string, offer: boolean, accept: boolean, do_not_enable_payments: boolean)
 --# assume CM.make_diplomacy_available: method(faction: string, other_faction: string)
 --# assume CM.force_make_peace: method(faction: string, other_faction: string)
 --# assume CM.force_declare_war: method(declarer: string, declaree: string, attacker_allies: boolean, defender_allies: boolean, command_queue: boolean?)
@@ -459,7 +460,7 @@
 --# assume CM.faction_has_trade_agreement_with_faction: method( first_faction: CA_FACTION, second_faction: CA_FACTION)
 --# assume CM.faction_has_nap_with_faction: method(first_faction: CA_FACTION, second_faction: CA_FACTION)
 --# assume CM.force_confederation: method(confederator: string, confederated: string)
---# assume CM.force_alliance: method(faction: string, other_faction:string, unknown_bool: boolean)
+--# assume CM.force_alliance: method(faction: string, other_faction: string, is_military_alliance: boolean)
 --pending battle commands
 --# assume CM.pending_battle_cache_get_defender: method(pos: int) --> (CA_CQI, CA_CQI, string)
 --# assume CM.pending_battle_cache_get_attacker: method(pos: int) --> (CA_CQI, CA_CQI, string)
@@ -744,6 +745,7 @@
 --# assume CA_REGION.adjacent_region_list: method() --> CA_REGION_LIST
 --# assume CA_REGION.logical_position_x: method() --> number
 --# assume CA_REGION.logical_position_y: method() --> number
+--# assume CA_REGION.religion_proportion: method(religion: string) --> number
 
 --REGION LIST
 --# assume CA_REGION_LIST.num_items: method() --> number
@@ -888,7 +890,7 @@
 --# assume CA_PENDING_BATTLE.defender_battle_result: method() --> string
 --# assume CA_PENDING_BATTLE.percentage_of_defender_killed: method() --> number
 --# assume CA_PENDING_BATTLE.percentage_of_attacker_killed: method() --> number
-
+--# assume CA_PENDING_BATTLE.night_battle: method() --> boolean
 
 -- CORE
 --# assume CORE.get_ui_root: method() --> CA_UIC
@@ -992,6 +994,7 @@
 --# assume global char_with_forename_has_no_military_force: function(forename: string) --> boolean
 --# assume global is_surtha_ek: function(char: CA_CHAR) --> boolean
 --# assume global is_character: function(char: CA_CHAR) --> boolean
+--# assume global add_vow_progress: function(char: CA_CHAR, trait: string, ai: bool, agents: bool)
 
 -- CA LUA OBJECTS:
 --RITES UNLOCK OBJECT

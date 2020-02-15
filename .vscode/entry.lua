@@ -158,11 +158,21 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --cbf
 require("sm0/cbf/script/campaign/mod/sm0_missing_anc")
 require("sm0/cbf/script/campaign/mod/sm0_horde")
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
+require("sm0/cbf/script/campaign/mod/fix_revitalizing_rite")
+require("sm0/cbf/script/campaign/mod/fix_snikch_anc")
+require("sm0/cbf/script/campaign/mod/fix_defeated_trait")
+require("sm0/cbf/script/campaign/mod/fix_ai_vow")
+require("sm0/cbf/script/campaign/mod/fix_hostility_mission")
+require("sm0/cbf/script/campaign/mod/fix_multiple_vows")
 
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_revitalizing_rite")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_menace")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_pledge_to_valor")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_gate_notification")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_ai_vow")
 
 require("sm0/sm0_liberate/script/campaign/mod/sm0_liberate_missing_anc")
-
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_missing_anc")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_horde")
 

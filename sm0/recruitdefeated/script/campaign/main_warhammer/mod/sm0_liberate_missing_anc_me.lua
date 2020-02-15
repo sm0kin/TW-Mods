@@ -348,6 +348,7 @@ function sm0_liberate_missing_anc_me()
                                         if quest_title and mission_title == quest_title:GetStateText() then
                                             --sm0_log("UI mission_title = "..quest_title:GetStateText())
                                             mission_found = true 
+                                            cm:set_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key, 0)
                                         end  
                                     end
                                     if not mission_found then

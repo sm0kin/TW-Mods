@@ -775,7 +775,10 @@ local function confed_penalty(faction)
     } --:vector<string>
     local has_confed_bundle = ""
     for i = 1, #bundles do
-        if faction and faction:has_effect_bundle(bundles[i]) then has_confed_bundle = bundles[i] end
+        if faction and faction:has_effect_bundle(bundles[i]) then 
+            has_confed_bundle = bundles[i] 
+            break
+        end
     end
     return has_confed_bundle
 end

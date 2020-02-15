@@ -378,7 +378,50 @@ end
 function sm0_test()
 	if cm:is_new_game() then sm0_log_reset() end
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
-	
+	cm:transfer_region_to_faction("wh2_main_eagle_gate", cm:get_local_faction(true))
+	--cm:spawn_agent_at_settlement(cm:get_faction(cm:get_local_faction(true)), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
+	--local characterList = cm:get_faction(cm:get_local_faction(true)):character_list()
+    --for i = 0, characterList:num_items() - 1 do
+    --    local currentChar = characterList:item_at(i)	
+    --    local cqi = currentChar:command_queue_index()
+	--	cm:replenish_action_points(cm:char_lookup_str(cqi))
+	--end
+	--cm:force_make_peace(cm:get_local_faction(true), "wh_dlc03_bst_beastmen")
+	--cm:force_alliance(cm:get_local_faction(true), "wh_dlc03_bst_beastmen", true)
+	--local x, y = cm:find_valid_spawn_location_for_character_from_settlement()
+
+	--core:add_listener(
+    --    "test123_CharacterCreated",
+    --    "CharacterCreated",
+	--	function(context)
+	--		return context:character():faction():is_human() and context:character():faction():culture() == "wh_main_brt_bretonnia"
+	--	end,
+    --    function(context)
+    --        local character = context:character()
+    --        if character:character_type("general") == true then
+    --            local faction = context:character():faction()
+	--			for i = 1, 6 do
+	--				add_vow_progress(character, "wh_dlc07_trait_brt_knights_vow_order_pledge", true, false)
+	--			end
+	--			for i = 1, 6 do
+	--				add_vow_progress(character, "wh_dlc07_trait_brt_questing_vow_heroism_pledge", true, false)
+	--			end
+    --        end
+    --    end,
+    --    true
+	--)
+	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 1600)
+	--cm:create_force(
+	--	"wh_main_chs_chaos",
+	--	"wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0",
+	--	"wh2_main_skavenblight_skavenblight",
+	--	445, 270,
+	--	true,
+	--	function(char_cqi, force_cqi)
+		--
+	--	end
+	--)
+
 	core:add_listener(
 		"refugee_FactionTurnStart",
 		"FactionTurnStart",
@@ -481,7 +524,6 @@ function sm0_test()
 		true
 	)
 	--cm:win_next_autoresolve_battle(cm:get_local_faction())
-	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 600)
 	core:add_listener(
         "test_ComponentLClickUp",
         "ComponentLClickUp",
