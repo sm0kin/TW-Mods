@@ -504,6 +504,60 @@ local locked_ai_generals = {
     {["id"] = "2140784189",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "dlc05_bst_morghur"}                           -- Morghur
 } --:vector<map<string, string>> 
 
+-- "major" factions
+local playable_factions = { 
+    "wh2_main_hef_eataine",
+    "wh2_main_hef_order_of_loremasters",
+    "wh2_main_hef_avelorn",
+    "wh2_main_hef_nagarythe",
+    "wh2_main_lzd_hexoatl",
+    "wh2_main_lzd_last_defenders",
+    "wh2_dlc13_lzd_spirits_of_the_jungle",
+    "wh2_dlc12_lzd_cult_of_sotek",
+    "wh2_main_lzd_itza",
+    "wh2_main_lzd_tlaqua",
+    "wh2_main_def_naggarond",
+    "wh2_main_def_cult_of_pleasure",
+    "wh2_main_def_har_ganeth",
+    "wh2_dlc11_def_the_blessed_dread",
+    "wh2_main_def_hag_graef",
+    "wh2_main_skv_clan_mors",
+    "wh2_main_skv_clan_pestilens",
+    "wh2_dlc09_skv_clan_rictus",
+    "wh2_main_skv_clan_skyre",
+    "wh2_main_skv_clan_eshin",
+    "wh2_dlc11_cst_vampire_coast",
+    "wh2_dlc11_cst_noctilus",
+    "wh2_dlc11_cst_pirates_of_sartosa",
+    "wh2_dlc11_cst_the_drowned",
+    "wh2_dlc09_tmb_khemri",
+    "wh2_dlc09_tmb_lybaras",
+    "wh2_dlc09_tmb_followers_of_nagash",
+    "wh2_dlc09_tmb_exiles_of_nehek",
+    "wh_main_emp_empire",
+    "wh2_dlc13_emp_golden_order",
+    "wh2_dlc13_emp_the_huntmarshals_expedition",
+    "wh_main_dwf_dwarfs",
+    "wh_main_dwf_karak_izor",
+    "wh_main_dwf_karak_kadrin",
+    "wh_main_grn_greenskins",
+    "wh_main_grn_crooked_moon",
+    "wh_main_grn_orcs_of_the_bloody_hand",
+    "wh_main_vmp_vampire_counts",
+    "wh_main_vmp_schwartzhafen",
+    "wh2_dlc11_vmp_the_barrow_legion",
+    "wh_dlc08_nor_norsca",
+    "wh_dlc08_nor_wintertooth",
+    "wh_main_brt_bretonnia",
+    "wh_main_brt_bordeleaux",
+    "wh_main_brt_carcassonne",
+    "wh2_dlc14_brt_chevaliers_de_lyonesse",
+    "wh_dlc05_wef_wood_elves",
+    "wh_dlc05_wef_argwylon",
+    "wh_dlc03_bst_beastmen",
+    "wh_main_chs_chaos"
+} --:vector<string>
+
 --v function(quests: vector<{string, number}>, subtype: string)
 local function ancillary_on_rankup(quests, subtype)
 	for i = 1, #quests do
@@ -1332,28 +1386,76 @@ local function init()
                             end
                         end
                         local prefered_faction = nil --:CA_FACTION
-                        --if cm:get_saved_value("mcm_tweaker_recruit_defeated_diplo_value") ~= "disable" then
+                        if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") ~= "power" then
                             local saved_standing = nil --:number
-                            local subculture_faction_list = current_faction:factions_of_same_subculture()
-                            for j = 0, subculture_faction_list:num_items() - 1 do
-                                local subculture_faction = subculture_faction_list:item_at(j)
-                                if not subculture_faction:is_dead() 
-                                and not subculture_faction:name():find("_waaagh") and not subculture_faction:name():find("_brayherd") 
-                                and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
-                                and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
-                                and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
-                                    local standing = current_faction:diplomatic_standing_with(subculture_faction:name())
+                            local factions_met_list = current_faction:factions_met()
+                            for j = 0, factions_met_list:num_items() - 1 do
+                                local faction_met = factions_met_list:item_at(j)
+                                if not faction_met:is_dead() and faction_met:subculture() == current_faction:subculture()
+                                and not faction_met:name():find("_waaagh") and not faction_met:name():find("_brayherd") 
+                                and not faction_met:name():find("_qb") and not faction_met:name():find("_separatists") and not faction_met:name():find("_dil") 
+                                and not faction_met:name():find("_blood_voyage") and not faction_met:name():find("_encounters") and not faction_met:name():find("rebel") 
+                                and not faction_met:name():find("_intervention") and not faction_met:name():find("_invasion") then 
+                                    local standing = current_faction:diplomatic_standing_with(faction_met:name())
                                     if not is_number(saved_standing) or standing > saved_standing 
-                                    and not (cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P1:name() and faction_P1:name() == subculture_faction:name())
-                                    and not (cm:is_multiplayer() and cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P2:name() and faction_P2:name() == subculture_faction:name()) then
+                                    and not (cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P1:name() and faction_P1:name() == faction_met:name())
+                                    and not (cm:is_multiplayer() and cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P2:name() and faction_P2:name() == faction_met:name()) then
                                         saved_standing = standing
-                                        prefered_faction = subculture_faction
-                                        --sm0_log("Faction: "..subculture_faction:name().." | Diplomatic Standing: "..tostring(saved_standing))
+                                        prefered_faction = faction_met
+                                        --sm0_log("factions_met_list|Faction: "..prefered_faction:name().." | Diplomatic Standing: "..tostring(saved_standing))
+                                    end
+                                end
+                            end
+                            if not prefered_faction then
+                                local subculture_faction_list = current_faction:factions_of_same_subculture()
+                                for j = 0, subculture_faction_list:num_items() - 1 do
+                                    local subculture_faction = subculture_faction_list:item_at(j)
+                                    if not subculture_faction:is_dead() 
+                                    and not subculture_faction:name():find("_waaagh") and not subculture_faction:name():find("_brayherd") 
+                                    and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
+                                    and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
+                                    and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
+                                        local standing = current_faction:diplomatic_standing_with(subculture_faction:name())
+                                        if not is_number(saved_standing) or standing > saved_standing 
+                                        and not (cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P1:name() and faction_P1:name() == subculture_faction:name())
+                                        and not (cm:is_multiplayer() and cm:get_saved_value("rd_choice_1_"..current_faction:name()) == faction_P2:name() and faction_P2:name() == subculture_faction:name()) then
+                                            saved_standing = standing
+                                            prefered_faction = subculture_faction
+                                            --sm0_log("factions_met_list/factions_of_same_subculture|Faction: "..prefered_faction:name().." | Diplomatic Standing: "..tostring(saved_standing))
+                                        end
                                     end
                                 end
                             end
                             --if prefered_faction then sm0_log("Faction: "..current_faction:name().." prefers to join Faction: "..prefered_faction:name().." | Diplomatic Standing: "..tostring(saved_standing)) end
-                        --end    
+                        else
+                            for j = 1, #playable_factions do
+                                local playable_faction = cm:get_faction(playable_factions[j])
+                                if playable_faction and not playable_faction:is_dead() and playable_faction:subculture() == current_faction:subculture()
+                                and not playable_faction:name():find("_waaagh") and not playable_faction:name():find("_brayherd") 
+                                and not playable_faction:name():find("_qb") and not playable_faction:name():find("_separatists") and not playable_faction:name():find("_dil") 
+                                and not playable_faction:name():find("_blood_voyage") and not playable_faction:name():find("_encounters") and not playable_faction:name():find("rebel") 
+                                and not playable_faction:name():find("_intervention") and not playable_faction:name():find("_invasion") then 
+                                    prefered_faction = playable_faction
+                                    --sm0_log("playable_factions|Faction: "..prefered_faction:name())
+                                    break
+                                end
+                            end
+                            if not prefered_faction then -- backup for when all major factions of a subculture are dead
+                                local subculture_faction_list = current_faction:factions_of_same_subculture()
+                                for j = 0, subculture_faction_list:num_items() - 1 do
+                                    local subculture_faction = subculture_faction_list:item_at(j)
+                                    if not subculture_faction:is_dead()
+                                    and not subculture_faction:name():find("_waaagh") and not subculture_faction:name():find("_brayherd") 
+                                    and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
+                                    and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
+                                    and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
+                                        prefered_faction = subculture_faction
+                                        --sm0_log("playable_factions/factions_of_same_subculture|Faction: "..prefered_faction:name())
+                                        break
+                                    end
+                                end
+                            end
+                        end   
                         if not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name()
                         and (not cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "player"
                         or (cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") == "ai" and not ai_remaining) 
@@ -1693,10 +1795,13 @@ function sm0_recruit_defeated()
             scope:add_option("player_ai", "Player & AI", "")
             scope:add_option("player", "Player only", "")
             scope:add_option("ai", "AI only", "")
-            local preferance = recruit_defeated:add_tweaker("preferance", "Preference", "Should factions prefer to join the ai or the player (supersede diplomatic standing)?") --mcm_tweaker_recruit_defeated_preferance_value
+            local preferance = recruit_defeated:add_tweaker("preferance", "Preference (1. Level)", "Should factions prefer to join the ai or the player (supersedes \"Preference (2. Level)\")?") --mcm_tweaker_recruit_defeated_preferance_value
             preferance:add_option("player", "Prefer Player", "Defeated Lords/Heroes will always join a player-led faction.")
             preferance:add_option("ai", "Prefer AI", "As long as a AI factions is left defeated Lords/Heroes will prefer them over the player.")
-            preferance:add_option("disable", "Disable", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.")
+            preferance:add_option("disable", "Disable", "No AI/Player preferance.")
+            local preferance2 = recruit_defeated:add_tweaker("preferance2", "Preference (2. Level)", "Which factions defeated lords/heroes prefer to join (superseded by \"Preference (1. Level)\"?") --mcm_tweaker_recruit_defeated_preferance2_value
+            preferance2:add_option("relation", "Relation based", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.")
+            preferance2:add_option("power", "Prefer Major Factions", "Defeated Lords/Heroes will prefer Major Factions.")
             --local diplo = recruit_defeated:add_tweaker("diplo", "Lords/Heroes join factions based on diplomatic standing", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.") --mcm_tweaker_recruit_defeated_diplo_value
             --diplo:add_option("enable", "Enable", "") 
             --diplo:add_option("disable", "Disable", "")
