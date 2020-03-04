@@ -229,6 +229,7 @@
 --# assume CM.get_human_factions: method() --> vector<string>
 --# assume CM.turn_number: method() --> number
 --# assume CM.is_any_cutscene_running: method() --> boolean
+--# assume CM.get_campaign_name: method() --> string
 --get functions
 --# assume CM.get_highest_ranked_general_for_faction: method(faction_key: string) --> CA_CHAR
 --# assume CM.get_character_by_cqi: method(cqi: CA_CQI) --> CA_CHAR

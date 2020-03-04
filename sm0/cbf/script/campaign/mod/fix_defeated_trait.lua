@@ -72,10 +72,10 @@ function Get_Enemy_Legendary_Lords_In_Last_Battle(character)
 	local num_attackers = cm:pending_battle_cache_num_attackers();
 	local num_defenders = cm:pending_battle_cache_num_defenders();
 
-	--if pb:night_battle() == true or pb:ambush_battle() == true then
-	--	num_attackers = 1;
-	--	num_defenders = 1;
-	--end
+	if pb:night_battle() == true then --or pb:ambush_battle() == true 
+		num_attackers = 1;
+		num_defenders = 1;
+	end
 	
 	for i = 1, num_attackers do
 		local this_char_cqi, this_mf_cqi, current_faction_name = cm:pending_battle_cache_get_attacker(i);

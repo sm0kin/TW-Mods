@@ -164,6 +164,7 @@ require("sm0/cbf/script/campaign/mod/fix_defeated_trait")
 require("sm0/cbf/script/campaign/mod/fix_ai_vow")
 require("sm0/cbf/script/campaign/mod/fix_hostility_mission")
 require("sm0/cbf/script/campaign/mod/fix_multiple_vows")
+require("sm0/cbf/script/campaign/mod/fix_lokhir_quest")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_revitalizing_rite")
@@ -180,3 +181,5 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 require("sm0/sm0_hide_flag/script/campaign/mod/sm0_hide_flag")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_hide_flag")
 
+--balance
+require("sm0/sm0_balance/script/campaign/mod/sm0_balance")

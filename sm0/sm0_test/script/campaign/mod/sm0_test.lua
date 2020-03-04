@@ -268,12 +268,13 @@ local function deletePlayerSubcultureFactions()
 	for i = 0, factionList2:num_items() - 1 do
 		local faction = factionList2:item_at(i)
 		if faction and not faction:is_dead() and not faction:is_human() and cm:model():turn_number() == 2 then
-			cm:force_confederation(playerFaction:name(), faction:name())	
+			--cm:force_confederation(playerFaction:name(), faction:name())	
 		end
 		if faction and not faction:is_dead() and not faction:is_human() and cm:model():turn_number() == 3 then
 			if faction:name() == "wh_main_teb_tilea" or faction:name() == "wh2_dlc09_tmb_followers_of_nagash" or faction:name() == "wh2_dlc11_cst_noctilus" or faction:name() == "wh_main_grn_greenskins" 	
 			--or faction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" 
-			or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh2_dlc11_cst_vampire_coast"
+			or ((--faction:name() == "wh2_main_hef_caledor" or 
+			faction:name() == "wh2_dlc11_cst_vampire_coast"
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
 				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else
@@ -411,6 +412,7 @@ function sm0_test()
     --    true
 	--)
 	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 1600)
+	cm:faction_add_pooled_resource(cm:get_local_faction(true), "cst_infamy", "wh2_dlc11_resource_factor_other", 5000)
 	--cm:create_force(
 	--	"wh_main_chs_chaos",
 	--	"wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0",

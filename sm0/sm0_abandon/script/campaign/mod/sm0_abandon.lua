@@ -330,7 +330,10 @@ function sm0_abandon()
             local penalty_scope_end  = string.find(info, "°")
             local penalty_scope = string.sub(info, removeEnd + 1, penalty_scope_end - 1)
             local penalty_tier = string.sub(info, penalty_scope_end + 1)
-            
+            penalty = penalty_value
+            penalty_scope = penalty_scope_value
+            penalty_tier = penalty_tier_value 
+
             if cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") ~= "oneTurn" then
                 cm:show_message_event(
                     faction,
@@ -396,7 +399,7 @@ function sm0_abandon()
                                     if penalty_scope == "local" then effect_bundle = "wh2_sm0_abandon_public_order_down_local" end
                                     local region = cm:get_region(regionName)
                                     if penalty_tier == "enabled" then 
-                                        turns = 1 
+                                        --turns = 1 
                                         local settlement_building = region:settlement():primary_slot():building():name()
                                         for i = 1, 5 do
                                             if string.match(settlement_building, "ruin") then

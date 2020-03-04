@@ -39,7 +39,8 @@ local subtype_anc = {
     },
     ["grn_azhag_the_slaughterer"] = {
         {"mission", "wh_main_anc_enchanted_item_the_crown_of_sorcery", "wh_main_grn_azhag_the_slaughterer_crown_of_sorcery_stage_1", 8,"wh_main_grn_azhag_the_slaughterer_crown_of_sorcery_stage_3a_mpc"},
-        {"dilemma", "wh_main_anc_armour_azhags_ard_armour", "wh_main_azhag_the_slaughterer_azhags_ard_armour_stage_1", 13,"wh_main_grn_azhag_the_slaughterer_azhags_ard_armour_stage_4a_mpc"},
+        {"mission", "wh_main_anc_armour_azhags_ard_armour", "wh_main_grn_azhag_the_slaughterer_azhags_ard_armour_stage_1.1", 13,"wh_main_grn_azhag_the_slaughterer_azhags_ard_armour_stage_4a_mpc"}, --        {"dilemma", "wh_main_anc_armour_azhags_ard_armour", "wh_main_azhag_the_slaughterer_azhags_ard_armour_stage_1", 13,"wh_main_grn_azhag_the_slaughterer_azhags_ard_armour_stage_4a_mpc"},
+
         {"mission", "wh_main_anc_weapon_slaggas_slashas", "wh_main_grn_azhag_the_slaughterer_slaggas_slashas_stage_1", 18,"wh_main_grn_azhag_the_slaughterer_slaggas_slashas_stage_4a_mpc"}
     },
     ["vmp_mannfred_von_carstein"] = {
@@ -313,7 +314,7 @@ function sm0_liberate_missing_anc_me()
     -- Let's say AI Morathi ranks up to level 6 and gets her item. Her faction gets wiped out later on, but she comes back via liberation/rebel/script. 
     -- The AI recruits her again but decides to not equip the item. Later the player confederates her faction but morathi's item is still part of her (now "dead") faction.
     core:add_listener(
-        "sm0_backup_CharacterRankUp",
+        "sm0_backup_CharacterTurnStart",
         "CharacterTurnStart",
         function(context)
             return subtype_anc[context:character():character_subtype_key()] ~= nil
@@ -328,48 +329,45 @@ function sm0_liberate_missing_anc_me()
                 local current_rank_req = current_quest_record[4]
                 local mission_title = effect.get_localised_string("missions_localised_title_"..current_mission_key)
                 if character:rank() >= current_rank_req and not character:faction():ancillary_exists(current_ancillary_key) then
-                    -- delay by n turns
-                    local n = 1
-                    if cm:get_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key)
-                    and cm:get_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key) >= n then
-                    --is_human check for quest ui
-                        if character:faction():is_human() and current_mission_key ~= "" and cm:is_local_players_turn() then 
-                            --if cm:get_local_faction(true) == character:faction():name() then
-                                local mission_found = false
-                                local mission_button = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_missions")
-                                mission_button:SimulateLClick()
-                                local list_box = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "missions_dropdown", "panel", "panel_clip", "list_view", "list_clip", "list_box")
-                                if list_box and mission_button then
-                                    for i = 0, list_box:ChildCount() - 1 do
-                                        local quest_uic = UIComponent(list_box:Find(i))
-                                        local quest_title = find_uicomponent(quest_uic, "name")
-                                        --sm0_log("mission_title = "..mission_title) 
-                                        if quest_title and mission_title == quest_title:GetStateText() then
-                                            --sm0_log("UI mission_title = "..quest_title:GetStateText())
-                                            mission_found = true 
-                                            cm:set_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key, 0)
-                                        end  
-                                    end
-                                    if not mission_found then
-                                        --sm0_log("force_add_ancillary: "..current_ancillary_key) 
-                                        CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "RD|"..tostring(character:command_queue_index())..":"..current_ancillary_key)
+                    local char_cqi = context:character():command_queue_index()
+                    core:add_listener(
+                        "sm0_backup_"..current_ancillary_key.."_CharacterTurnEnd",
+                        "CharacterTurnEnd",
+                        function(context)
+                            return context:character():command_queue_index() == char_cqi
+                        end,
+                        function(context)
+                            if character:faction():is_human() and current_mission_key ~= "" then 
+                                if cm:is_local_players_turn() then
+                                    local mission_found = false
+                                    local mission_button = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_missions")
+                                    mission_button:SimulateLClick()
+                                    local list_box = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "missions_dropdown", "panel", "panel_clip", "list_view", "list_clip", "list_box")
+                                    if list_box and mission_button then
+                                        for i = 0, list_box:ChildCount() - 1 do
+                                            local quest_uic = UIComponent(list_box:Find(i))
+                                            local quest_title = find_uicomponent(quest_uic, "name")
+                                            --sm0_log("mission_title = "..mission_title) 
+                                            if quest_title and mission_title == quest_title:GetStateText() then
+                                                --sm0_log("UI mission_title = "..quest_title:GetStateText())
+                                                mission_found = true 
+                                            end  
+                                        end
+                                        if not mission_found then
+                                            --sm0_log("force_add_ancillary: "..current_ancillary_key) 
+                                            CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "anc|"..tostring(character:command_queue_index())..":"..current_ancillary_key)
+                                        end
                                     end
                                 end
-                            --end
-                        else
-                            --sm0_log("force_add_ancillary: "..current_ancillary_key)
-                            cm:disable_event_feed_events(true, "", "", "character_ancillary_gained")
-                            cm:force_add_ancillary(character, current_ancillary_key, true, false)
-                            cm:disable_event_feed_events(false, "", "", "character_ancillary_gained")
-                        end
-                    else
-                        local m = cm:get_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key)
-                        if not is_number(m) then
-                            cm:set_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key, 1)
-                        else
-                            cm:set_saved_value("sm0_q_bak_"..character:faction():name().."_"..current_ancillary_key, m + 1)
-                        end
-                    end
+                            else
+                                --sm0_log("force_add_ancillary: "..current_ancillary_key)
+                                cm:disable_event_feed_events(true, "", "", "character_ancillary_gained")
+                                cm:force_add_ancillary(character, current_ancillary_key, true, false)
+                                cm:disable_event_feed_events(false, "", "", "character_ancillary_gained")
+                            end
+                        end,
+                        false
+                    )
                 else
                     --sm0_log("ancillary_exists: "..current_ancillary_key)
                 end
@@ -379,14 +377,14 @@ function sm0_liberate_missing_anc_me()
     )
     --Multiplayer listener
     core:add_listener(
-        "sm0_rd_UITriggerScriptEvent",
+        "sm0_backup_UITriggerScriptEvent",
         "UITriggerScriptEvent",
         function(context)
-            return context:trigger():starts_with("RD|")
+            return context:trigger():starts_with("anc|")
         end,
         function(context)
             local str = context:trigger() --:string
-            local info = string.gsub(str, "RD|", "")
+            local info = string.gsub(str, "anc|", "")
             local cqi_end = string.find(info, ":")
             local cqi = string.sub(info, 1, cqi_end - 1) 
             local anc = string.sub(info, cqi_end + 1)
@@ -398,7 +396,7 @@ function sm0_liberate_missing_anc_me()
         end,
         true
     )
-
+    
     -- Fix for missing Turn 1 ancillary
     --
     -- this method won't add the item before the factions turn (important for ai)
@@ -421,7 +419,7 @@ function sm0_liberate_missing_anc_me()
         "FactionTurnStart",
         true,
         function(context)
-            for _, anc in ipairs(missing_anc) do
+            for _, anc in pairs(missing_anc) do
                 if not cm:model():world():ancillary_exists(anc.key) then
                     local faction = cm:get_faction(anc.faction)
                     local not_found = true
