@@ -376,7 +376,8 @@ function sm0_slann_options()
 					slann_spawn(faction_key, "wh2_main_lzd_slann_mage_priest_horde")
 				else
 					-- Life Slann
-                    --slann_spawn(faction_key, "wh2_dlc13_lzd_slann_mage_priest_life_horde")
+					--slann_spawn(faction_key, "wh2_dlc13_lzd_slann_mage_priest_life_horde")
+					-- Next
                     cm:callback(
 						function(context)
 							cm:trigger_dilemma(faction_key, "wh2_main_lzd_slann_selection_2")
@@ -397,6 +398,7 @@ function sm0_slann_options()
 				else
 					-- Life Slann
 					--slann_spawn(faction_key, "wh2_dlc13_lzd_slann_mage_priest_life")
+					-- Next
 					cm:callback(
 						function(context)
 							cm:trigger_dilemma(faction_key, "wh2_main_lzd_slann_selection_2")
@@ -419,17 +421,16 @@ function sm0_slann_options()
 
 			if faction_key == "wh2_dlc13_lzd_spirits_of_the_jungle" then
 				if choice == 0 then
-					-- Fire Slann
+					-- Life Slann
 					slann_spawn(faction_key, "wh2_dlc13_lzd_slann_mage_priest_life_horde")
 				elseif choice == 1 then
-					-- High Slann
+					-- Heaven Slann
 					slann_spawn(faction_key, "wh2_sm0_lzd_slann_mage_priest_heavens_horde")
 				elseif choice == 2 then
-					-- Light Slann
+					-- Mixed Slann
 					slann_spawn(faction_key, "wh2_sm0_lzd_slann_mage_priest_mixed_horde")
 				else
-					-- Life Slann
-                    --slann_spawn(faction_key, "wh2_dlc13_lzd_slann_mage_priest_life_horde")
+					-- Previous
 					cm:callback(
 						function(context)
 							cm:trigger_dilemma(faction_key, "wh2_main_lzd_slann_selection")
@@ -439,17 +440,16 @@ function sm0_slann_options()
 
 			else
 				if choice == 0 then
-					-- Fire Slann
+					-- Life Slann
 					slann_spawn(faction_key, "wh2_dlc13_lzd_slann_mage_priest_life")
 				elseif choice == 1 then
-					-- High Slann
+					-- Heaven Slann
 					slann_spawn(faction_key, "wh2_sm0_lzd_slann_mage_priest_heavens")
 				elseif choice == 2 then
-					-- Light Slann
+					-- Mixed Slann
 					slann_spawn(faction_key, "wh2_sm0_lzd_slann_mage_priest_mixed")
 				else
-					-- Life Slann
-                    --slann_spawn(faction_key, "wh2_dlc13_lzd_slann_mage_priest_life")
+					-- Previous
 					cm:callback(
 						function(context)
 							cm:trigger_dilemma(faction_key, "wh2_main_lzd_slann_selection")

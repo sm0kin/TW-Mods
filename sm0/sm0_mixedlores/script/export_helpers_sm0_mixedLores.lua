@@ -543,7 +543,7 @@ local function createReturnButton(char)
 	closeButton:MoveTo(closeButtonX + closeButton:Width()/2, closeButtonY)
 	returnButton:PositionRelativeTo(closeButton, - closeButton:Width(), 0)
 	returnButton:SetState("hover")
-	returnButton.uic:SetTooltipText("Return to Spell Slot List")			
+	returnButton.uic:SetTooltipText("Return to Spell Slot List", "", false)			
 	returnButton:SetState("active")
 	returnButton:RegisterForClick(
 		function(context)
@@ -588,26 +588,26 @@ local function createSpellButtonContainer(lore, selectedSpellSlot, char)
 		spellButton:SetState("hover")
 		local index = string.match(selectedSpellSlot, "%d")
 		--# assume spellSlots: map<number, string>
-		spellButton.uic:SetTooltipText("Select "..spell.." to replace "..spellSlots[tonumber(index)]..".")	
+		spellButton.uic:SetTooltipText("Select "..spell.." to replace "..spellSlots[tonumber(index)]..".", "", false)	
 		spellButton:SetState("active")
 		--# assume spellSlots: vector<string>
 		for _, spellSlot in ipairs(spellSlots) do
 			if spellSlot == spell then
 				spellButton:SetDisabled(true)
-				spellButton.uic:SetTooltipText("This spell has already been selected.")	
+				spellButton.uic:SetTooltipText("This spell has already been selected.", "", false)	
 			end
 		end
 		local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 		if savedOption ~= "Spells for free" and not ml_tables.has_skills[skill] then
 			spellButton:SetDisabled(true)
 			local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_"..skill)
-			spellButton.uic:SetTooltipText(reqTooltip)	
+			spellButton.uic:SetTooltipText(reqTooltip, "", false)	
 		end
 		--if ml_tables.default_rule == "Modified TT 8th edition - Teclis" and not tableContains(loreTable, spellSlots[tonumber(string.match(spellSlotSelected, "%d"))]) and lore ~= "Lore of High Magic" then
 		--	for _, spell in ipairs(spellSlots) do
 		--		if tableContains(loreTable, spell) then
 		--			spellButton:SetDisabled(true)
-		--			spellButton.uic:SetTooltipText("You can only choose one spell from the "..lore..".")	
+		--			spellButton.uic:SetTooltipText("You can only choose one spell from the "..lore..".", "", false)			
 		--		end
 		--	end
 		--end
@@ -636,10 +636,10 @@ local function setupSingleSelectedButtonGroup(buttons, selectedSpellSlot, char)
 				for _, otherButton in ipairs(buttons) do
 					if button.name == otherButton.name then
 						otherButton:SetState("selected_hover")
-						otherButton.uic:SetTooltipText("Select your prefered spell of the "..button.name..".")
+						otherButton.uic:SetTooltipText("Select your prefered spell of the "..button.name..".", "", false)	
 					else
 						otherButton:SetState("hover")
-						otherButton.uic:SetTooltipText("Select the Lore of Magic you want to pick a spell from.")
+						otherButton.uic:SetTooltipText("Select the Lore of Magic you want to pick a spell from.", "", false)	
 						otherButton:SetState("active")
 					end
 				end
@@ -686,7 +686,7 @@ local function createLoreButtonContainer(char, selectedSpellSlot)
 			for _, spell in ipairs(spellSlots) do
 				if tableContains(ml_tables.lores[loreButton.name], spell) then
 					loreButton:SetDisabled(true)
-					loreButton.uic:SetTooltipText("You can only choose one spell from the "..loreButton.name..".")	
+					loreButton.uic:SetTooltipText("You can only choose one spell from the "..loreButton.name..".", "", false)	
 				end
 			end
 		elseif ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
@@ -702,7 +702,7 @@ local function createLoreButtonContainer(char, selectedSpellSlot)
 				--# assume spellSlots: map<number, string>
 				if not string.find(spell, "Spell Slot") and not tableContains(ml_tables.lores[loreButton.name], spell) and (occupiedSlotCount > 1 or (occupiedSlotCount == 1 and string.find(spellSlots[tonumber(indexStr)], "Spell Slot"))) then
 					loreButton:SetDisabled(true)
-					loreButton.uic:SetTooltipText("You can only choose spells from one lore of magic.")	
+					loreButton.uic:SetTooltipText("You can only choose spells from one lore of magic.", "", false)	
 				end
 			end
 		end
@@ -759,7 +759,7 @@ createSpellSlotButtonContainer = function(char, spellSlots)
 			if not ml_tables.has_skills["wh2_sm0_skill_magic_spell_slot_"..tostring(i)] then
 				spellSlotButton:SetDisabled(true)
 				local reqTooltip = "Required Skill: "..effect.get_localised_string("character_skills_localised_name_".."wh2_sm0_skill_magic_spell_slot_"..tostring(i))
-				spellSlotButton.uic:SetTooltipText(reqTooltip)	
+				spellSlotButton.uic:SetTooltipText(reqTooltip, "", false)		
 			end
 		end
 	end
@@ -797,7 +797,7 @@ local function createSpellBrowserButton()
 	spellBrowserButton:MoveTo(posFrameX + offsetX, posFrameY + offsetY)
 	spellBrowserButton:SetImagePath(browserIconPath)
 	spellBrowserButton:SetState("hover")
-	spellBrowserButton:SetTooltipText("Spell Browser")
+	spellBrowserButton:SetTooltipText("Spell Browser", "", false)	
 	spellBrowserButton:PropagatePriority(100)
 	spellBrowserButton:SetState("active")
 	local button_spell_browser = find_uicomponent(core:get_ui_root(), "button_spell_browser")
@@ -874,20 +874,20 @@ local function createOptionsFrame(char)
 	local defaultSkillOptionButton = TextButton.new("Skill - based", optionFrame, "TEXT_TOGGLE", "Skill - based")
 	hideButtonSmoke(defaultSkillOptionButton.uic)
 	defaultSkillOptionButton:SetState("hover")
-	defaultSkillOptionButton.uic:SetTooltipText("Spells are been made available by their respective skill.")
+	defaultSkillOptionButton.uic:SetTooltipText("Spells are been made available by their respective skill.", "", false)	
 	defaultSkillOptionButton:SetState("active")
 	defaultSkillOptionButton:SetState("selected_hover")
-	defaultSkillOptionButton.uic:SetTooltipText("Spells are been made available by their respective skill.")
+	defaultSkillOptionButton.uic:SetTooltipText("Spells are been made available by their respective skill.", "", false)	
 	defaultSkillOptionButton:SetState("active")
 	table.insert(skillOptionButtons, defaultSkillOptionButton)
 	skillOptionContainerH:AddComponent(defaultSkillOptionButton)
 	local freeOptionButton = TextButton.new("Spells for free", optionFrame, "TEXT_TOGGLE", "Spells for free")
 	hideButtonSmoke(freeOptionButton.uic)
 	freeOptionButton:SetState("hover")
-	freeOptionButton.uic:SetTooltipText("All spells are available from the start.")
+	freeOptionButton.uic:SetTooltipText("All spells are available from the start.", "", false)	
 	freeOptionButton:SetState("active")
 	freeOptionButton:SetState("selected_hover")
-	freeOptionButton.uic:SetTooltipText("All spells are available from the start.")
+	freeOptionButton.uic:SetTooltipText("All spells are available from the start.", "", false)	
 	freeOptionButton:SetState("active")
 	table.insert(skillOptionButtons, freeOptionButton)
 	skillOptionContainerH:AddComponent(freeOptionButton)
@@ -903,32 +903,32 @@ local function createOptionsFrame(char)
 	setupSingleSelectionOptionButtons(skillOptionButtons)
 	if ml_tables.default_rule == "TT 6th edition - The Fay Enchantress" then
 		defaultSkillOptionButton:SetDisabled(true)
-		defaultSkillOptionButton.uic:SetTooltipText("Not Supported.")	
+		defaultSkillOptionButton.uic:SetTooltipText("Not Supported.", "", false)	
 	end
 	savedSkillButton:SetState("selected")
 	optionListV:AddComponent(skillOptionContainerH)
 
-	local divider = Image.new("option_divider", optionFrame, "ui/skins/default/separator_line.png")
+	local divider = Image.new("option_divider", optionFrame, "ui/skins/default/separator_line.png")	
 	divider:Resize(2*dummyButtonX, 2)
 	optionListV:AddComponent(divider)
 
 	local multiColourOptionButton = TextButton.new("Multi-Colour", optionFrame, "TEXT_TOGGLE", "Multi-Colour")
 	hideButtonSmoke(multiColourOptionButton.uic)
 	multiColourOptionButton:SetState("hover")
-	multiColourOptionButton.uic:SetTooltipText("Buttons are coloured in a way to represent their spell group affiliation.")
+	multiColourOptionButton.uic:SetTooltipText("Buttons are coloured in a way to represent their spell group affiliation.", "", false)	
 	multiColourOptionButton:SetState("active")
 	multiColourOptionButton:SetState("selected_hover")
-	multiColourOptionButton.uic:SetTooltipText("Buttons are coloured in a way to represent their spell group affiliation.")
+	multiColourOptionButton.uic:SetTooltipText("Buttons are coloured in a way to represent their spell group affiliation.", "", false)	
 	multiColourOptionButton:SetState("active")
 	table.insert(colourOptionButtons, multiColourOptionButton)
 	colourOptionContainerH:AddComponent(multiColourOptionButton)
 	local singleColourOptionButton = TextButton.new("Single-Colour", optionFrame, "TEXT_TOGGLE", "Single-Colour")
 	hideButtonSmoke(singleColourOptionButton.uic)
 	singleColourOptionButton:SetState("hover")
-	singleColourOptionButton.uic:SetTooltipText("All buttons are created using the default Warhammer button colour.")
+	singleColourOptionButton.uic:SetTooltipText("All buttons are created using the default Warhammer button colour.", "", false)	
 	singleColourOptionButton:SetState("active")
 	singleColourOptionButton:SetState("selected_hover")
-	singleColourOptionButton.uic:SetTooltipText("All buttons are created using the default Warhammer button colour.")
+	singleColourOptionButton.uic:SetTooltipText("All buttons are created using the default Warhammer button colour.", "", false)	
 	singleColourOptionButton:SetState("active")
 	table.insert(colourOptionButtons, singleColourOptionButton)
 	colourOptionContainerH:AddComponent(singleColourOptionButton)
@@ -970,7 +970,7 @@ local function createOptionButton(char)
 	optionButton:MoveTo(posFrameX + sizeFrameX - (offsetX + optionButton:Width()), posFrameY + offsetY)
 	optionButton:SetImagePath(optionsIconPath)
 	optionButton:SetState("hover")
-	optionButton:SetTooltipText("Options")
+	optionButton:SetTooltipText("Options", "", false)	
 	optionButton:PropagatePriority(100)
 	optionButton:SetState("active")
 	Util.registerForClick(optionButton, "ml_optionButtonListener",
@@ -991,7 +991,7 @@ local function createResetButton(char)
 	resetButton:MoveTo(posFrameX + sizeFrameX - (offsetX + 2*resetButton:Width()), posFrameY + offsetY)
 	resetButton:SetImagePath(resetIconPath)
 	resetButton:SetState("hover")
-	resetButton:SetTooltipText("Reset")
+	resetButton:SetTooltipText("Reset", "", false)	
 	resetButton:PropagatePriority(100)
 	resetButton:SetState("active")
 	Util.registerForClick(resetButton, "ml_resetButtonListener",
@@ -1019,7 +1019,7 @@ local function createShuffleButton(char)
 	shuffleButton:MoveTo(posFrameX + sizeFrameX - (offsetX + 3*shuffleButton:Width()), posFrameY + offsetY)
 	shuffleButton:SetImagePath(shuffleIconPath)
 	shuffleButton:SetState("hover")
-	shuffleButton:SetTooltipText("Shuffle")
+	shuffleButton:SetTooltipText("Shuffle", "", false)	
 	shuffleButton:PropagatePriority(100)
 	shuffleButton:SetState("active")
 	Util.registerForClick(shuffleButton, "ml_shuffleButtonListener",
@@ -1059,7 +1059,7 @@ local function createLoreUI()
 		closeButton:SetImagePath("ui/skins/default/icon_cross.png")
 	end
 	closeButton:SetState("hover")
-	closeButton:SetTooltipText("Close Lore of Magic")			
+	closeButton:SetTooltipText("Close Lore of Magic", "", false)			
 	closeButton:SetState("active")
 	frameButtonContainer = Container.new(FlowLayout.HORIZONTAL)
 	loreFrame:AddComponent(frameButtonContainer)
@@ -1103,14 +1103,14 @@ local function createloreButton_charPanel()
 				loreButton_charPanel:Resize(referenceButton:Width(), referenceButton:Height())
 				loreButton_charPanel:PositionRelativeTo(referenceButton, -loreButton_charPanel:Width() - 1, 0)
 				loreButton_charPanel:SetState("hover")
-				loreButton_charPanel.uic:SetTooltipText("Lore of Magic")			
+				loreButton_charPanel.uic:SetTooltipText("Lore of Magic", "", false)			
 				loreButton_charPanel:SetState("active")
 				loreButton_charPanel:RegisterForClick(
 					function(context)
 						createLoreUI()
 						spellBrowserButton:SetDisabled(true)
 						spellBrowserButton:SetOpacity(50)
-						--spellBrowserButton:SetTooltipText("Locked by c++")	
+						--spellBrowserButton:SetTooltipText("Locked by c++", "", false)			
 					end
 				)
 			end
@@ -1133,14 +1133,14 @@ local function createloreButton_preBattle(battle_type)
 			loreButton_preBattle:MoveTo(posFrameX + offsetX, posReferenceButtonY)
 			loreButton_preBattle:SetImagePath(bookIconPath)
 			loreButton_preBattle:SetState("hover")
-			loreButton_preBattle:SetTooltipText("Lore of Magic")
+			loreButton_preBattle:SetTooltipText("Lore of Magic", "", false)	
 			loreButton_preBattle:PropagatePriority(100)
 			loreButton_preBattle:SetState("active")
 			if battle_type == "settlement_standard" or battle_type == "settlement_unfortified" then 
 				referenceButton = find_uicomponent(buttonParent, "siege_information_panel", "button_holder", "button_info")
 			elseif battle_type == "ambush" or battle_type == "land_ambush" then
 				loreButton_preBattle:SetDisabled(true)
-				loreButton_preBattle:SetTooltipText("This is not the time...")
+				loreButton_preBattle:SetTooltipText("This is not the time...", "", false)	
 				loreButton_preBattle:SetOpacity(50)
 			end
 	--		end, 0, "positionloreButton_preBattle"
@@ -1150,7 +1150,7 @@ local function createloreButton_preBattle(battle_type)
 			createLoreUI()
 			spellBrowserButton:SetDisabled(true)
 			spellBrowserButton:SetOpacity(50)
-			--spellBrowserButton:SetTooltipText("Locked by c++")	
+			--spellBrowserButton:SetTooltipText("Locked by c++", "", false)			
 		end
 	)
 end
@@ -1174,7 +1174,7 @@ local function createloreButton_unitsPanel()
 				loreButton_unitsPanel:PositionRelativeTo(recruitButton, loreButton_unitsPanel:Width() + 4, 0)
 			end
 			loreButton_unitsPanel:SetState("hover")
-			loreButton_unitsPanel.uic:SetTooltipText("Lore of Magic")
+			loreButton_unitsPanel.uic:SetTooltipText("Lore of Magic", "", false)	
 			loreButton_unitsPanel:SetState("active")
 	--	end, 0, "positionloreButton_unitsPanel"
 	--)

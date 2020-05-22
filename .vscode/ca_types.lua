@@ -187,7 +187,7 @@
 --# assume CA_UIC.SetImagePath: method(path: string)
 --# assume CA_UIC.SetCanResizeHeight: method(state: boolean)
 --# assume CA_UIC.SetCanResizeWidth: method(state: boolean)
---# assume CA_UIC.SetTooltipText: method(tooltip: string, state: boolean?)
+--# assume CA_UIC.SetTooltipText: method(tooltip: string, text_source: string, state: boolean) --text_source: source of text in format of a stringtable key (tablename_recordname_key)
 --# assume CA_UIC.GetStateText: method() --> string
 --# assume CA_UIC.PropagatePriority: method(priority: number)
 --# assume CA_UIC.Priority: method() --> number
@@ -1399,10 +1399,50 @@ Removed:
 set_ritual_unlocked
 set_ritual_chain_unlocked
 --]]
+
+
+-- The Total WAAAGH! Update
+--function cutscene:new_from_cindyscene(name, players_army, end_callback, cindy_scene, blend_in_duration, blend_out_duration)
+--function cutscene:add_cinematic_trigger_listener(id, callback)
+--function campaign_cutscene:new(name, length, end_callback, send_metrics_data) <- function campaign_cutscene:new(name, length, end_callback)
+--function campaign_cutscene:new_from_cindyscene(name, end_callback, cindy_scene, blend_in_duration, blend_out_duration, send_metrics_data)
+--function campaign_manager:are_any_factions_human(faction_list, tolerate_errors)
+--function campaign_manager:progress_on_advice_finished_poll(callback, playtime, use_os_clock, count) <- function campaign_manager:progress_on_advice_finished_poll(callback, delay, playtime, use_os_clock, count)
+-- deleted: function campaign_manager:call_if_no_exceptions_human(callback, exception_list)
+--function find_uicomponent(...) <- function find_uicomponent(parent, ...)
+-- new: function core_object:svr_save_persistent_bool(name, value)
+-- new: function core_object:svr_load_persistent_bool(name)
+-- new: function core_object:svr_save_persistent_string(name, value)
+-- new: function core_object:svr_load_persistent_bool(name) <- should be "svr_load_persistent_string"
+--function core_object:clean_listeners(eventname) <- function core_object:clean_listeners()
+--function core_object:remove_listener(name_to_remove) <- function core_object:remove_listener(name_to_remove, start_point)
+-- new: function core_object:trigger_custom_event(event, context_data)
+--function core_object:get_unique_counter(classification) <- function core_object:get_unique_counter()
+--function core_object:check_bit(test_value, bit_position) <- function check_bit(test_value, bit_position)
+--function core_object:add_static_object(name, object, classification, overwrite) <- function core_object:add_static_object(name, object, overwrite)
+--function core_object:get_static_object(name, classification) <- function core_object:get_static_object(name)
+-- new: function custom_context:add_data_with_key(value, function_name)
+--function help_page:set_record_state(uic, record, state) <- function help_page:set_record_state(uic, record, state, make_active)
+-- new: function string.starts_with(input, start_str, ignore_case)
+-- new: function string.ends_with(input, end_str, ignore_case)
+-- new: function math.ceilTo(value, multiplier)
+-- new: function math.clamp(value, minv, maxv)
+-- new: function math.floorTo(value, nearest)
+-- new: function math.normalize(value, vmin, vmax)
+--function start_early_game_public_order_mission_listener(advice_key, infotext, mission_key, mission_issuer, region_key, mission_rewards, disregard_first_turn_flag) <- function start_early_game_public_order_mission_listener(advice_key, infotext, mission_key, mission_issuer, region_key, mission_rewards)
+-- new: function confed_missions:setup()
+-- new: function confed_missions:generate_mission_listener(confed_mission)
+-- new: function confed_missions:generate_dilemma_listener(confed_mission)
+-- new: function confed_missions:disable_cai_targeting_against_faction_capital(confed_mission)
+-- new: function confed_missions:enable_cai_targeting_against_faction_capital(confed_mission)
+-- new: function confed_missions:disable_diplomatic_confed(confed_mission)
+-- new: function confed_missions:enable_diplomatic_confed(confed_mission)
+-- new: function qbh:setup_qb_effect_bundle_listener(effect_bundle_key,set_piece_battle_key,condition,opt_side) 
+-- new: function rite_agent_spawn(faction_key, type_key, subtype_key)
+-- deleted: function malus_rite_agent_spawn(faction_key, type_key, subtype_key)
+
+
 --# assume global kill_faction: function(faction_key: string)
-
-
-
 
 -- GLOBAL VARIABLES
 --leave at the bottom of this file

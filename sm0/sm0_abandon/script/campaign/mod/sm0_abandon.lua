@@ -136,17 +136,17 @@ local function createAbandonFrame(abandonRegionStr)
     abandonFrame:AddComponent(confirmButton)
     confirmButton:SetState("hover")
 
-    confirmButton.uic:SetTooltipText(confirmButtonTooltipHover1.." " .. regionOnscreenName .. " " ..confirmButtonTooltipHover2.. " " .. money .. ".")
+    confirmButton.uic:SetTooltipText(confirmButtonTooltipHover1.." " .. regionOnscreenName .. " " ..confirmButtonTooltipHover2.. " " .. money .. ".", "", false)
     confirmButton:SetState("active")
     if region:garrison_residence():is_under_siege() then
         confirmButton:SetDisabled(true)
-        confirmButton.uic:SetTooltipText(confirmButtonTooltipDisabled)
+        confirmButton.uic:SetTooltipText(confirmButtonTooltipDisabled, "", false)
     end
     local region = cm:get_region(regionStr)
     local regionOwner = region:owning_faction()
     if cm:get_saved_value("abandon_"..regionStr.."_"..regionOwner:name()) then
         confirmButton:SetState("selected_hover")
-        confirmButton.uic:SetTooltipText(regionOnscreenName.." "..confirmButtonTooltipHover3)
+        confirmButton.uic:SetTooltipText(regionOnscreenName.." "..confirmButtonTooltipHover3, "", false)
     end
 
     --Changed this to campaignUI trigger
@@ -163,7 +163,7 @@ local function createAbandonFrame(abandonRegionStr)
             else
                 if not cm:get_saved_value("abandon_"..regionStr.."_"..regionOwner:name()) then
                     confirmButton:SetState("selected_hover")
-                    confirmButton.uic:SetTooltipText(regionOnscreenName.." "..confirmButtonTooltipHover3)
+                    confirmButton.uic:SetTooltipText(regionOnscreenName.." "..confirmButtonTooltipHover3, "", false)
                     CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
                     ..regionToSend.."<"..moneyToSend..">"..penalty_value.."~".."^"..penalty_scope_value.."°"..penalty_tier_value)
                 else
@@ -187,7 +187,7 @@ local function createAbandonButton()
         abandonButton:Resize(renameButton:Width(), renameButton:Height())
         abandonButton:PositionRelativeTo(renameButton, renameButton:Width() + 1, 0)
         abandonButton:SetState("hover")
-        abandonButton.uic:SetTooltipText(abandonButtonTooltip)
+        abandonButton.uic:SetTooltipText(abandonButtonTooltip, "", false)
         abandonButton:SetState("active")
         abandonButton:RegisterForClick(
             function(context)
@@ -256,7 +256,7 @@ function sm0_abandon()
             local currentFactionStr = region:owning_faction():name()
             if currentFactionStr ~= playerFactionStr then
                 abandonButton:SetDisabled(true)
-                abandonButton.uic:SetTooltipText(abandonButtonTooltip)
+                abandonButton.uic:SetTooltipText(abandonButtonTooltip, "", false)
             else
                 abandonButton:SetDisabled(false)
             end
@@ -296,7 +296,7 @@ function sm0_abandon()
                         abandonButton:PositionRelativeTo(renameButton, renameButton:Width() + 1, 0)
                         if currentFactionStr ~= playerFactionStr then
                             abandonButton:SetDisabled(true)
-                            abandonButton.uic:SetTooltipText(abandonButtonTooltip)
+                            abandonButton.uic:SetTooltipText(abandonButtonTooltip, "", false)
                         else
                             abandonButton:SetDisabled(false)
                         end

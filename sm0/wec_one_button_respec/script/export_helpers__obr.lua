@@ -49,25 +49,25 @@ local function are_you_sure(cqi)
         local respec_cost = (char:rank() - 1) * cm:get_saved_value("mcm_variable_obr_cost_value")
         if respec_cost <= char:faction():treasury() then
             ButtonYes:SetState("hover")
-            ButtonYes.uic:SetTooltipText("Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]!")
+            ButtonYes.uic:SetTooltipText("Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]!", "", false)
             ButtonYes:SetState("active")
         else
             ButtonYes:SetDisabled(true)
-            ButtonYes.uic:SetTooltipText("[[col:red]]You don't have enough funds![[/col]] \n Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]")
+            ButtonYes.uic:SetTooltipText("[[col:red]]You don't have enough funds![[/col]] \n Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]", "", false)
         end
     else
         ButtonYes:SetState("hover")
-        ButtonYes.uic:SetTooltipText("Respec your lord/hero.")
+        ButtonYes.uic:SetTooltipText("Respec your lord/hero.", "", false)
         ButtonYes:SetState("active")
     end
     if char:rank() == 1 then
         ButtonYes:SetDisabled(true)
-        ButtonYes.uic:SetTooltipText("No skill points allocated.")
+        ButtonYes.uic:SetTooltipText("No skill points allocated.", "", false)
     end
     ButtonYes:Resize(300, 45)
     local ButtonNo = TextButton.new("confirm_no", ConfirmFrame, "TEXT", "No")
     ButtonNo:SetState("hover")
-    ButtonNo.uic:SetTooltipText("Cancel")
+    ButtonNo.uic:SetTooltipText("Cancel", "", true)
     ButtonNo:SetState("active")
     ButtonNo:Resize(300, 45)
     ConfirmFrame:AddComponent(ConfirmText)
@@ -128,10 +128,10 @@ function llr.create_button(cqi)
         if cm:get_saved_value("mcm_tweaker_obr_limit_value") ~= "disabled" then
             if cm:get_saved_value("llr_respec_" .. tostring(cqi)) and cm:get_saved_value("mcm_tweaker_obr_limit_value") ~= "disabled" then
                 llr.button:SetDisabled(true)
-                llr.button.uic:SetTooltipText("[[col:red]]You have already respec'd this character. This cannot be done twice! [[/col]]")
+                llr.button.uic:SetTooltipText("[[col:red]]You have already respec'd this character. This cannot be done twice! [[/col]]", "", false)
             else
                 llr.button:SetState("hover")
-                llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. This can only be done once! [[/col]]")
+                llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. This can only be done once! [[/col]]", "", false)
                 llr.button:SetState("active")
                 llr.button:RegisterForClick(
                     function(context)
@@ -145,7 +145,7 @@ function llr.create_button(cqi)
             end
         else
             llr.button:SetState("hover")
-            llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. [[/col]]")
+            llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. [[/col]]", "", false)
             llr.button:SetState("active")
             llr.button:RegisterForClick(
                 function(context)
@@ -260,13 +260,7 @@ core:add_listener(
         if cm:get_saved_value("mcm_tweaker_obr_en_cost_value") == "enabled" or (cm:get_saved_value("mcm_tweaker_obr_en_cost_value") == "firstforfree" and cm:get_saved_value("llr_respec_" .. tostring(cqi))) then
             local respec_cost = (char:rank() - 1) * cm:get_saved_value("mcm_variable_obr_cost_value")
             if respec_cost <= char:faction():treasury() then
-                cm:disable_event_feed_events(true, "", "wh_event_subcategory_faction_event_dilemma_incident", "")
-                cm:trigger_custom_incident(char:faction():name(), "wh2_sm0_incident_treasury_down", true, "payload{money -"..respec_cost..";}")
-                cm:callback(
-                    function()
-                        cm:disable_event_feed_events(false, "", "wh_event_subcategory_faction_event_dilemma_incident", "")
-                    end, 0.5, "RE_ENABLE INCIDENTS"
-                )
+                cm:treasury_mod(char:faction():name(), -1*respec_cost)
                 cm:set_saved_value("llr_respec_" .. tostring(cqi), true)
                 cm:force_reset_skills(cm:char_lookup_str(cqi))
             end

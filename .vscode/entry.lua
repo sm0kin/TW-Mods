@@ -88,6 +88,8 @@ require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
 require("sm0/wec_one_button_respec/script/export_helpers__obr")
 require("sm0/mcm/script/export_helpers__mcm_ui")
+require("sm0/mcm/script/export_helpers__mcm_basic_settings")
+require("sm0/mcm/script/campaign/mod/!!ModConfigurationManager")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__mcm_ui")
@@ -95,6 +97,7 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --frostydemise
 require("sm0/frosty_mods/script/campaign/mod/frosty_horde")
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
+require("sm0/frosty_mods/script/campaign/mod/reworks/frosty_tiers")
 require("sm0/frosty_mods/script/campaign/mod/legendary_confeds")
 require("sm0/frosty_mods/script/campaign/main_warhammer/wh_quests")
 require("sm0/frosty_mods/script/campaign/mod/add_mounts_experiment")
@@ -183,3 +186,6 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 
 --balance
 require("sm0/sm0_balance/script/campaign/mod/sm0_balance")
+
+-- norsca no supply lines
+require("sm0/sm0_norsca/script/campaign/mod/sm0_norsca")

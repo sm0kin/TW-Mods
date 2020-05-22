@@ -508,7 +508,7 @@ function legendary_confeds()
                 end
             end
         end
-		mcm:add_new_game_only_callback(
+        mcm:add_new_game_only_callback(
             function()
                 cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
                 cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
@@ -593,7 +593,7 @@ function legendary_confeds()
                     end, 0.1)
                 end
             )
-            elseif (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture()) then
+            elseif (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture()) then 
                 cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
                 cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
                 cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")

@@ -21,21 +21,21 @@ end
 
 --v function()
 local function deleteSpeedUI()
-    if speedBox then
+    if is_uicomponent(find_uicomponent(core:get_ui_root(), "speedBox")) then
         deleteUIC(speedBox)
         speedBox = nil
     end
-    if applyButton then
+    if is_uicomponent(find_uicomponent(core:get_ui_root(), "applyButton")) then
         deleteUIC(applyButton)
         core:remove_listener("sm0_applyButton")
         applyButton = nil
     end
-    if saveButton then
+    if is_uicomponent(find_uicomponent(core:get_ui_root(), "saveButton")) then
         deleteUIC(saveButton)
         core:remove_listener("sm0_saveButton")
         saveButton = nil
     end
-    if loadButton then
+    if is_uicomponent(find_uicomponent(core:get_ui_root(), "loadButton")) then
         deleteUIC(loadButton)
         core:remove_listener("sm0_loadButton")
         loadButton = nil
@@ -84,7 +84,7 @@ local function createSpeedUI()
     applyButton:Resize(referenceButtonW, referenceButtonH)
     applyButton:MoveTo(referenceButtonX - referenceButtonW, referenceButtonY)
     applyButton:SetState("hover")
-    applyButton:SetTooltipText("apply speed")
+    applyButton:SetTooltipText("apply speed", "", false)
     applyButton:SetState("active")
     core:add_listener(
         "sm0_applyButton",
@@ -149,8 +149,9 @@ local function createSpeedUI()
         saveButton:Resize(referenceButtonW, referenceButtonH)
         saveButton:MoveTo(referenceButtonX - 3.5*referenceButtonW, referenceButtonY)
         saveButton:SetState("hover")
-        saveButton:SetTooltipText("save prefered speed")
+        saveButton:SetTooltipText("save prefered speed", "", false)
         saveButton:SetState("active")
+        
         core:add_listener(
             "sm0_saveButton",
             "ComponentLClickUp",
@@ -172,13 +173,13 @@ local function createSpeedUI()
                     loadButton:SetDisabled(false)
                     loadButton:SetOpacity(255)
                     loadButton:SetState("hover")
-                    loadButton:SetTooltipText("load prefered speed: "..tostring(number))
+                    loadButton:SetTooltipText("load prefered speed: "..tostring(number), "", false)
                     loadButton:SetState("active")
                 end
             end,
             true
         )
-
+        
         speed_buttons:CreateComponent("loadButton", "ui/templates/square_medium_button")
         loadButton = UIComponent(speed_buttons:Find("loadButton"))
         speed_buttons:Adopt(loadButton:Address())
@@ -197,15 +198,15 @@ local function createSpeedUI()
         loadButton:Resize(referenceButtonW, referenceButtonH)
         loadButton:MoveTo(referenceButtonX - 4.5*referenceButtonW, referenceButtonY)
         loadButton:SetState("hover")
-        loadButton:SetTooltipText("load prefered speed")
+        loadButton:SetTooltipText("load prefered speed", "", false)
         loadButton:SetState("active")
         if tonumber(core:svr_load_string("svr_battleSpeed")) then 
             loadButton:SetState("hover")
-            loadButton:SetTooltipText("load prefered speed: "..tostring(core:svr_load_string("svr_battleSpeed")))
+            loadButton:SetTooltipText("load prefered speed: "..tostring(core:svr_load_string("svr_battleSpeed")), "", false)
             loadButton:SetState("active")
         else
             loadButton:SetDisabled(true)
-            loadButton:SetTooltipText("no prefered speed found")
+            loadButton:SetTooltipText("no prefered speed found",  "", false)
             loadButton:SetOpacity(50)
         end
         core:add_listener(

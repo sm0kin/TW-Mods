@@ -184,7 +184,7 @@ local function createUI()
     loadButton:Resize(referenceButtonW, referenceButtonH)
     loadButton:MoveTo(referenceButtonX, referenceButtonY + referenceButtonH + 25)
     loadButton:SetState("hover")
-    loadButton:SetTooltipText("Load user camera settings")
+    loadButton:SetTooltipText("Load user camera settings", "", true)
     loadButton:SetState("active")
     core:add_listener(
         "sm0_loadButton",
@@ -211,7 +211,7 @@ local function createUI()
     saveButton:Resize(referenceButtonW, referenceButtonH)
     saveButton:MoveTo(referenceButtonX - referenceButtonW - 1, referenceButtonY + referenceButtonH + 25)
     saveButton:SetState("hover")
-    saveButton:SetTooltipText("Save user camera settings as default")
+    saveButton:SetTooltipText("Save user camera settings as default", "", true)
     saveButton:SetState("active")
     core:add_listener(
         "sm0_saveButton",
@@ -234,7 +234,7 @@ local function createUI()
     resetButton:Resize(referenceButtonW, referenceButtonH)
     resetButton:MoveTo(referenceButtonX - 2*referenceButtonW - 2, referenceButtonY + referenceButtonH + 25)
     resetButton:SetState("hover")
-    resetButton:SetTooltipText("Reset camera settings to CA default")
+    resetButton:SetTooltipText("Reset camera settings to CA default", "", true)
     resetButton:SetState("active")
     core:add_listener(
         "sm0_resetButton",
@@ -249,57 +249,58 @@ local function createUI()
     )
 end
 
-core:add_listener(
-    "applyLClickUp",
-    "ComponentLClickUp",
-    function(context)
-        return context.string == "apply_current_faction" or context.string == "apply_player" or context.string == "apply_allies" or context.string == "apply_enemies" or context.string == "apply_neutrals"
-    end,
-    function(context)
-        if context.string == "apply_current_faction" then
-            deleteUI()
-        else
-            createUI()
-        end
-    end,
-    true
-)
-
-core:add_listener(
-    "SettingsLClickUp",
-    "ComponentLClickUp",
-    function(context)
-        return context.string == "button_settings" or context.string == "button_pause"
-    end,
-    function(context)
-        cm:callback(
-            function()
-                local apply_current_faction = find_uicomponent(core:get_ui_root(), "layout", "settings_panel", "camera_settings", "buttons_list", "apply_current_faction")
-                if apply_current_faction:CurrentState() ~= "selected" and apply_current_faction:CurrentState() ~= "selected_hover" and apply_current_faction:CurrentState() ~= "selected_down" then
-                    createUI()
-                else
-                    deleteUI()
-                end
-            end, 0, "waitForUI"
-        )
-    end,
-    true
-)
-
 --v function()
 function sm0_save_cam()
-    local playerFaction = cm:get_faction(cm:get_local_faction(true))
-    local playerCultureStr = playerFaction:culture()
-    if string.find(playerCultureStr, "wh2_") then
-        resetIconPath = "ui/icon_stats_reset_small2.png"
-        saveIconPath = "ui/icon_quick_save2.png"
-        loadIconPath = "ui/icon_load2.png"
-    end
-    if cm:is_new_game() then
-        local loadTable, err = table.load("cameraPreferences.txt")
-        if not err then
-            applySettingsFromTable(loadTable)
-            deleteUI()
+    if not cm:is_multiplayer() then
+        local playerFaction = cm:get_faction(cm:get_local_faction(true))
+        local playerCultureStr = playerFaction:culture()
+        if string.find(playerCultureStr, "wh2_") then
+            resetIconPath = "ui/icon_stats_reset_small2.png"
+            saveIconPath = "ui/icon_quick_save2.png"
+            loadIconPath = "ui/icon_load2.png"
         end
+        if cm:is_new_game() then
+            local loadTable, err = table.load("cameraPreferences.txt")
+            if not err then
+                applySettingsFromTable(loadTable)
+                deleteUI()
+            end
+        end
+        core:add_listener(
+            "applyLClickUp",
+            "ComponentLClickUp",
+            function(context)
+                return context.string == "apply_current_faction" or context.string == "apply_player" or context.string == "apply_allies" or context.string == "apply_enemies" or context.string == "apply_neutrals"
+            end,
+            function(context)
+                if context.string == "apply_current_faction" then
+                    deleteUI()
+                else
+                    createUI()
+                end
+            end,
+            true
+        )
+
+        core:add_listener(
+            "SettingsLClickUp",
+            "ComponentLClickUp",
+            function(context)
+                return context.string == "button_settings" or context.string == "button_pause"
+            end,
+            function(context)
+                cm:callback(
+                    function()
+                        local apply_current_faction = find_uicomponent(core:get_ui_root(), "layout", "settings_panel", "camera_settings", "buttons_list", "apply_current_faction")
+                        if apply_current_faction:CurrentState() ~= "selected" and apply_current_faction:CurrentState() ~= "selected_hover" and apply_current_faction:CurrentState() ~= "selected_down" then
+                            createUI()
+                        else
+                            deleteUI()
+                        end
+                    end, 0, "waitForUI"
+                )
+            end,
+            true
+        )
     end
 end

@@ -8,7 +8,6 @@ local OccupationOptionID = {
 	["1913039133"] = "wh2_sm0_sc_def_dark_elves_occupation_decision_confederate",
 	["1913039134"] = "wh2_sm0_sc_dwf_dwarfs_occupation_decision_confederate",
 	["1913039135"] = "wh2_sm0_sc_emp_empire_occupation_decision_confederate",
-	["1913039136"] = "wh2_sm0_sc_grn_greenskins_occupation_decision_confederate",
 	["1913039137"] = "wh2_sm0_sc_hef_high_elves_occupation_decision_confederate",
 	["1913039138"] = "wh2_sm0_sc_wef_wood_elves_occupation_decision_confederate",
 	["1913039139"] = "wh2_sm0_sc_vmp_vampire_counts_occupation_decision_confederate",
@@ -250,7 +249,7 @@ function sm0_confed()
 					if frame then
 						icon = find_uicomponent(core:get_ui_root(), "settlement_captured", "button_parent", tostring(currentID), "frame", "icon_parent", "icon_vassals")
 						icon:SetImagePath("UI/skins/default/treaty_confederation.png")
-						icon:SetTooltipText("Forces the enemy faction to accept Confederation. All their armies will be disbanded and their legendary lords will be forced to serve under your rule.", true)
+						icon:SetTooltipText("Forces the enemy faction to accept Confederation. All their armies will be disbanded and their legendary lords will be forced to serve under your rule.", "", true)
 						local button = find_uicomponent(core:get_ui_root(), "settlement_captured", tostring(currentID), "option_button")
 						if FACTION_GARRISON_ATTACKED == nil then
 							FACTION_GARRISON_ATTACKED = cm:get_saved_value("faction_garrison_attacked")
@@ -259,16 +258,16 @@ function sm0_confed()
 							if FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_khemri" then
 								button:SetDisabled(true)
 								button:SetOpacity(50)
-								button:SetTooltipText("SETTRA DOES NOT SERVE!")
+								button:SetTooltipText("SETTRA DOES NOT SERVE!", "", false)
 							else
 								if playerFaction:name() == "wh2_dlc09_tmb_followers_of_nagash" and FACTION_GARRISON_ATTACKED ~= "wh2_dlc09_tmb_the_sentinels" or playerFaction:name() == "wh2_dlc09_tmb_the_sentinels" and FACTION_GARRISON_ATTACKED ~= "wh2_dlc09_tmb_followers_of_nagash" then
 									button:SetDisabled(true)
 									button:SetOpacity(50)
-									button:SetTooltipText("They would rather disintegrate than follow Nagash!")
+									button:SetTooltipText("They would rather disintegrate than follow Nagash!", "", false)
 								elseif playerFaction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_the_sentinels" or playerFaction:name() ~= "wh2_dlc09_tmb_the_sentinels" and FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_followers_of_nagash" then
 									button:SetDisabled(true)
 									button:SetOpacity(50)
-									button:SetTooltipText("Betraying Khemri must never be forgiven!")
+									button:SetTooltipText("Betraying Khemri must never be forgiven!", "", false)
 								end
 							end
 						end

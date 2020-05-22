@@ -5,8 +5,8 @@ local subculture_levels = {
     ["wh_main_sc_chs_chaos"] = "25", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_dwf_dwarfs"] = "0", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_emp_empire"] = "0", -- 5/10/15/20/25/30/35/40/45/50
-    ["wh_main_sc_grn_greenskins"] = "25", -- 5/10/15/20/25/30/35/40/45/50
-    ["wh_main_sc_grn_savage_orcs"] = "25", -- 5/10/15/20/25/30/35/40/45/50
+    ["wh_main_sc_grn_greenskins"] = "30", -- 5/10/15/20/25/30/35/40/45/50
+    ["wh_main_sc_grn_savage_orcs"] = "30", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_ksl_kislev"] = "0", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_nor_norsca"] = "35", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_teb_teb"] = "0", -- 5/10/15/20/25/30/35/40/45/50
@@ -95,12 +95,16 @@ function sm0_balance()
             if not context:faction():has_effect_bundle(effect_bundle_key) then
                 if subculture_levels[subculture] and subculture_levels[subculture] ~= "0" then
                     cm:apply_effect_bundle(effect_bundle_key, context:faction():name(), -1)
+                    out("sm0/apply_effect_bundle|faction = "..context:faction():name().."|effect_bundle_key = "..effect_bundle_key)
                 end
                 for i = 1, #effect_bundles do
                     if context:faction():has_effect_bundle(effect_bundles[i]) and effect_bundle_key ~= effect_bundles[i] then
                         cm:remove_effect_bundle(effect_bundles[i], context:faction():name())
+                        out("sm0/remove_effect_bundle|faction = "..context:faction():name().."|effect_bundle_key = "..effect_bundle_key)
                     end
                 end
+            else
+                out("sm0/has_effect_bundle|faction = "..context:faction():name().."|effect_bundle_key = "..effect_bundle_key)
             end
         end,
         true

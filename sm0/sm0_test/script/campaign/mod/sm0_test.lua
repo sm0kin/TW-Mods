@@ -537,6 +537,27 @@ function sm0_test()
         end,
         true
 	)
+	core:add_listener(
+        "test2_ComponentLClickUp",
+        "ComponentLClickUp",
+        function(context)
+            return true
+        end,
+		function(context) --wont work!
+			--local checkbox_incremental_autosave = find_uicomponent(core:get_ui_root(), "options_game", "panel_campaign", "checkbox_incremental_autosave")
+			--local realism_mode = find_uicomponent(core:get_ui_root(), "options_game", "panel_battle", "realism_mode")
+			--checkbox_incremental_autosave:SetDisabled(false)
+			--realism_mode:SetDisabled(false)
+			--if checkbox_incremental_autosave:CurrentState() == "inactive" then checkbox_incremental_autosave:SetState("active") end
+			--if realism_mode:CurrentState() == "inactive" then realism_mode:SetState("active") end
+		--root > sp_grand_campaign > options > campaign > checkbox_incremental_autosave
+		--root > sp_grand_campaign > options > battle_time_limit > realism_mode
+		--root > options_game > panel_campaign > checkbox_incremental_autosave
+		--root > options_game > panel_battle > realism_mode        
+		end,
+        true
+	)
+
 	--core:add_listener(
     --    "test_CharacterConvalescedOrKilled",
     --    "CharacterConvalescedOrKilled",
