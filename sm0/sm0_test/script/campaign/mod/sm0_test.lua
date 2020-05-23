@@ -377,7 +377,10 @@ end
 -- init
 --v function()
 function sm0_test()
-	if cm:is_new_game() then sm0_log_reset() end
+	if cm:is_new_game() and not cm:get_saved_value("sm0_log_reset") then
+		sm0_log_reset()
+		cm:set_saved_value("sm0_log_reset", true)
+	end	
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
 	cm:transfer_region_to_faction("wh2_main_eagle_gate", cm:get_local_faction(true))
 	--cm:spawn_agent_at_settlement(cm:get_faction(cm:get_local_faction(true)), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
@@ -472,7 +475,7 @@ function sm0_test()
 
 			--if cm:model():turn_number() == 2 then cm:unlock_starting_general_recruitment("2140784146", "wh_main_vmp_vampire_counts") end
 			
-			--deletePlayerSubcultureFactions()
+			deletePlayerSubcultureFactions()
 
 			--item test
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then

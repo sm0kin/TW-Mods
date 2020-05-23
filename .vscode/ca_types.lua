@@ -860,6 +860,7 @@
 --# assume CA_FACTION.factions_of_same_subculture: method() --> CA_FACTION_LIST
 --# assume CA_FACTION.foreign_slot_managers: method() --> CA_FOREIGN_SLOT_LIST
 --# assume CA_FACTION.ancillary_exists: method(ancillary: string) --> boolean
+--# assume CA_FACTION.is_quest_battle_faction: method() --> boolean
 
 -- FACTION LIST
 --# assume CA_FACTION_LIST.num_items: method() --> number

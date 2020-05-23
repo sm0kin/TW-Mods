@@ -37,6 +37,8 @@ local ulthuan_target_regions = {
 		["wh2_main_cothique_tor_koruali"] = true,
 		["wh2_main_yvresse_tor_yvresse"] = true,
 		["wh2_main_yvresse_elessaeli"] = true,
+		["wh2_main_yvresse_tralinia"] = true,
+		["wh2_main_yvresse_shrine_of_loec"] = true,
 		-- INNER
 		["wh2_main_eataine_tower_of_lysean"] = true,
 		["wh2_main_ellyrion_tor_elyr"] = true,

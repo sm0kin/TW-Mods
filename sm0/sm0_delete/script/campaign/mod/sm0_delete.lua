@@ -615,6 +615,10 @@ end
 
 --v function()
 function sm0_delete()
+	if cm:is_new_game() and not cm:get_saved_value("sm0_log_reset") then
+		sm0_log_reset()
+		cm:set_saved_value("sm0_log_reset", true)
+	end
 	if not cm:get_saved_value("sm0_immortal_count") then cm:set_saved_value("sm0_immortal_count", 0) end
 	core:add_listener(
 		"units_dropdown_PanelOpenedCampaign",

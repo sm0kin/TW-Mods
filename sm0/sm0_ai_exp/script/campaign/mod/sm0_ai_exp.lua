@@ -26,8 +26,11 @@ local function sm0_log(text)
 end
 
 function sm0_ai_exp()
-	if cm:is_new_game() then sm0_log_reset() end
-    core:add_listener(
+	if cm:is_new_game() and not cm:get_saved_value("sm0_log_reset") then
+		sm0_log_reset()
+		cm:set_saved_value("sm0_log_reset", true)
+	end
+	core:add_listener(
         "ai_exp_CharacterTurnStart",
         "CharacterTurnStart",
         function(context)

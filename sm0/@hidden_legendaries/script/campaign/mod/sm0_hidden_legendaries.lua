@@ -73,5 +73,9 @@ local function setupRankListener(quests, subtype)
 end
 
 function sm0_hidden_legendaries()
+	if cm:is_new_game() and not cm:get_saved_value("sm0_log_reset") then
+		sm0_log_reset()
+		cm:set_saved_value("sm0_log_reset", true)
+	end
 	setupRankListener(louen_extra_items, louen_subtype)	
 end

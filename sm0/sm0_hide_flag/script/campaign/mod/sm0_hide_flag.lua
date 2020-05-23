@@ -106,6 +106,10 @@ local function create_checkbox_toggle()
 end
 
 function sm0_hide_flag()
+	if cm:is_new_game() and not cm:get_saved_value("sm0_log_reset") then
+		sm0_log_reset()
+		cm:set_saved_value("sm0_log_reset", true)
+	end
 	core:add_listener(
 		"sm0_flag_checkbox_toggle_PanelOpenedCampaign",
 		"PanelOpenedCampaign",

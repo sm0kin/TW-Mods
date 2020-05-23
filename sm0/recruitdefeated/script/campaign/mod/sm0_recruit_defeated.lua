@@ -5,7 +5,7 @@ mcm = _G.mcm
 local function sm0_log_reset()
 	if not __write_output_to_logfile then
 		return
-	end
+    end
 	local log_time_stamp = os.date("%d, %m %Y %X")
 	--# assume log_time_stamp: string
 	local pop_log = io.open("sm0_log.txt","w+")
@@ -370,6 +370,7 @@ local mixu1_agents = {
     {["faction"] = "wh_main_emp_talabecland", ["subtype"] = "emp_helmut_feuerbach"},
     --{["faction"] = "wh_main_emp_middenland", ["subtype"] = --"emp_markus_wulfhart"}, --dlc
     --{["faction"] = "", ["subtype"] = "emp_alberich_von_korden"}, 
+    --{["faction"] = "", ["subtype"] = "emp_alberich_von_korden_hero"}, 
     {["faction"] = "wh_main_emp_empire", ["subtype"] = "emp_luthor_huss"},
     {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "emp_theodore_bruckner"},
     {["faction"] = "wh_main_emp_middenland", ["subtype"] = "emp_vorn_thugenheim"},
@@ -379,14 +380,16 @@ local mixu1_agents = {
     --MIXU Part 2--
 local mixu2_agents = {
     {["faction"] = "wh2_main_brt_knights_of_origo", ["subtype"] = "brt_john_tyreweld"},
-    --{["faction"] = "", wh_main_chs_chaos_separatists ["subtype"] = chs_egrimm_van_horstmann"}, --player unlock
+    --{["faction"] = "", ["subtype"] = chs_egrimm_van_horstmann"}, --player unlock
     {["faction"] = "wh2_main_def_scourge_of_khaine", ["subtype"] = "def_tullaris_dreadbringer"},
+    {["faction"] = "wh2_main_def_scourge_of_khaine", ["subtype"] = "def_tullaris_hero"},
     --{["faction"] = "wh_main_dwf_zhufbar", ["subtype"] = "dwf_bloodline_grimm_burloksson"}, --player unlock
     {["faction"] = "wh_main_grn_red_fangs", ["subtype"] = "grn_gorfang_rotgut"},
     {["faction"] = "wh2_main_hef_saphery", ["subtype"] = "hef_belannaer"},
     --{["faction"] = "wh2_main_hef_eataine", ["subtype"] = "hef_bloodline_caradryan"}, --player unlock
+    --{["faction"] = "wh2_main_hef_eataine", ["subtype"] = "hef_caradryan_hero"}, --player unlock
     {["faction"] = "wh2_main_hef_chrace", ["subtype"] = "hef_korhil"},
-    --{["faction"] = "wh2_main_hef_caledor", ["subtype"] = "hef_prince_imrik"},
+    --{["faction"] = "wh2_main_hef_caledor", ["subtype"] = "hef_prince_imrik"}, --dlc
     --{["faction"] = "wh2_main_lzd_itza", ["subtype"] = "lzd_gor_rok"}, --dlc
     {["faction"] = "wh2_main_lzd_xlanhuapec", ["subtype"] = "lzd_lord_huinitenuchli"},
     --{["faction"] = "wh2_main_lzd_tlaqua", ["subtype"] = "lzd_oxyotl"}, --player unlock
@@ -399,11 +402,13 @@ local mixu2_agents = {
     {["faction"] = "wh2_main_brt_knights_of_origo", ["subtype"] = "brt_donna_don_domingio"},
     {["faction"] = "wh2_dlc09_tmb_numas", ["subtype"] = "tmb_ramhotep"},
     {["faction"] = "wh2_main_bst_ripper_horn", ["subtype"] = "bst_ghorros_warhoof"},
+    {["faction"] = "", ["subtype"] = "chs_aekold_helbrass"},
+    {["faction"] = "", ["subtype"] = "chs_azubhor_clawhand"},  
     {["faction"] = "wh2_main_skv_clan_mordkin", ["subtype"] = "skv_feskit"}
 } --:vector<map<string, string>> 
     --XOUDAD High Elves Expanded--
 local xoudad_agents = {
-    --{["faction"] = "wh2_main_hef_yvresse", ["subtype"] = "wh2_main_hef_eltharion"},
+    --{["faction"] = "wh2_main_hef_yvresse", ["subtype"] = "wh2_main_hef_eltharion"}, --dlc
     {["faction"] = "", ["subtype"] = "wax_emp_valten"}
 } --:vector<map<string, string>> 
     --CATAPH TEB--
@@ -496,7 +501,7 @@ local alastar_quests = {
 
 local locked_ai_generals = {
     {["id"] = "2140784160",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "pro01_dwf_grombrindal"},                         -- Grombrindal
-    {["id"] = "2140783606",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_azhag_the_slaughterer"},                 -- Azhag the Slaughterer
+    --{["id"] = "2140783606",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "grn_azhag_the_slaughterer"},             -- Azhag the Slaughterer
     {["id"] = "2140784146",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "dlc04_vmp_helman_ghorst"},               -- Helman Ghorst
     {["id"] = "2140784202",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "pro02_vmp_isabella_von_carstein"},        -- Isabella von Carstein
     --{["id"] = "2140783648",	["faction"] = "wh2_dlc13_emp_golden_order", ["subtype"] = "emp_balthasar_gelt"},                -- Balthasar Gelt
@@ -1133,6 +1138,31 @@ local me_missing_anc = {
     }
 } --:map<string, vector<vector<WHATEVER>>>
 
+local subtype_immortality = {
+    --["dlc03_emp_boris_todbringer"] = true,
+    --["wh_dlc05_vmp_red_duke"] = true,
+    --["wh2_main_hef_prince_alastar"] = true -- no longer needed (the empire undivided update made him immortal)    --["wh2_dlc09_tmb_arkhan"] = true,
+    ["wh2_dlc09_tmb_khalida"] = true,
+    ["wh2_dlc09_tmb_khatep"] = true,
+    ["wh2_dlc09_tmb_settra"] = true,
+    ["wh2_dlc11_cst_aranessa"] = true,
+    ["wh2_dlc11_cst_cylostra"] = true,
+    ["wh2_dlc11_cst_harkon"] = true,
+    ["wh2_dlc11_cst_noctilus"] = true
+} --: map<string, boolean>
+
+--v function(faction: CA_FACTION)
+local function immortality_backup(faction)
+    local char_list = faction:character_list()
+    for i = 0, char_list:num_items() - 1 do 
+        local char = char_list:item_at(i)
+        if subtype_immortality[char:character_subtype_key()] then 
+            sm0_log("immortality_backup: "..tostring(char:character_subtype_key()))
+            cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), true) 
+        end 
+    end       
+end
+
 --v function(faction: CA_FACTION)
 local function equip_quest_anc(faction)
     local missing_anc = {} --:map<string, vector<vector<WHATEVER>>>
@@ -1388,7 +1418,7 @@ local function spawn_missing_lords(confederator, confederated)
                                             --if char:is_wounded() then cm:stop_character_convalescing(cqi) end
                                         --end, 0.5)
                                         if n >= 10 or cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then 
-                                            cm:kill_character(char_cqi, true, false) 
+                                            if char_cqi and cm:get_character_by_cqi(char_cqi) then cm:kill_character(char_cqi, true, false) end
                                             --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char_cqi), true, false)   
                                         end
                                     end,
@@ -1746,16 +1776,10 @@ local function confed_revived(confederator, confederated)
                             if confed_penalty(confederator) ~= "" then cm:remove_effect_bundle(confed_penalty(confederator), confederator:name()) end 
                         end, 0.5)
                         -- some faction leaders need a immortality reset after confederation
-                        local char = cm:get_character_by_cqi(faction_leader_cqi)
-                        if (char:character_subtype("wh2_dlc09_tmb_arkhan") or char:character_subtype("wh2_dlc09_tmb_khalida") or char:character_subtype("wh2_dlc09_tmb_khatep") or char:character_subtype("wh2_dlc09_tmb_settra")
-                        or char:character_subtype("wh2_dlc11_cst_aranessa") or char:character_subtype("wh2_dlc11_cst_cylostra") or char:character_subtype("wh2_dlc11_cst_harkon") 
-                        or char:character_subtype("wh2_dlc11_cst_noctilus")) and not cm:get_saved_value("sm0_immortal_cqi"..faction_leader_cqi) then
-                            cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), true) 
-                            cm:set_saved_value("sm0_immortal_cqi"..faction_leader_cqi, true)
-                        end
+                        immortality_backup(context:confederation())
                         -- kill command doesn't work reliably...
                         cm:kill_character(cqi, true, false) 
-                        cm:kill_character(cqi, true, false) 
+                        if cqi and cm:get_character_by_cqi(cqi) then cm:kill_character(cqi, true, false) end
                         cm:callback(function() 
                             cm:kill_character(faction_leader_cqi, true, false)  
                         end, 0.5)  
@@ -1890,10 +1914,12 @@ local function init()
                     local current_faction = faction_list:item_at(i)
                     if current_faction:is_dead() then -- delayed spawn?
                         -- faction exceptions
-                        if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
-                        and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
+                        if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and current_faction:name() ~= "wh2_dlc13_lzd_defenders_of_the_great_plan" and current_faction:name() ~= "wh2_dlc13_lzd_avengers" 
+                        and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
+                        and not current_faction:name():find("_unknown") and not current_faction:name():find("_incursion")
+                        and not current_faction:is_quest_battle_faction() and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
                         and not current_faction:name():find("_blood_voyage") and not current_faction:name():find("_encounters") and not current_faction:name():find("rebel") 
-                        and not current_faction:name():find("_intervention") and not current_faction:name():find("_invasion") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
+                        and not current_faction:name():find("_intervention") and not current_faction:name():find("_invasion") then
                             cm:set_saved_value("delayed_spawn_"..current_faction:name(), true)
                             sm0_log("Faction will spawn delayed: "..current_faction:name())
                         end
@@ -1917,10 +1943,12 @@ local function init()
                     local current_faction = faction_list:item_at(i)
                     if current_faction:is_dead() then -- delayed spawn?
                         -- faction exceptions
-                        if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
-                        and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
+                        if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and current_faction:name() ~= "wh2_dlc13_lzd_defenders_of_the_great_plan" and current_faction:name() ~= "wh2_dlc13_lzd_avengers" 
+                        and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
+                        and not current_faction:name():find("_unknown") and not current_faction:name():find("_incursion")
+                        and not current_faction:is_quest_battle_faction() and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
                         and not current_faction:name():find("_blood_voyage") and not current_faction:name():find("_encounters") and not current_faction:name():find("rebel") 
-                        and not current_faction:name():find("_intervention") and not current_faction:name():find("_invasion") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
+                        and not current_faction:name():find("_intervention") and not current_faction:name():find("_invasion") then
                             cm:set_saved_value("delayed_spawn_"..current_faction:name(), true)
                             sm0_log("Faction will spawn delayed: "..current_faction:name())
                         end
@@ -1987,8 +2015,10 @@ local function init()
                 and (not cm:get_saved_value("rd_choice_3_"..current_faction:name()) or cm:model():turn_number() >= cm:get_saved_value("rd_choice_3_"..current_faction:name())) 
                 and not cm:get_saved_value("rd_choice_2_"..current_faction:name()) then 
                     -- faction exceptions
-                    if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
-                    and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
+                    if current_faction:subculture() ~= "wh_main_sc_chs_chaos" and current_faction:name() ~= "wh2_dlc13_lzd_defenders_of_the_great_plan" and current_faction:name() ~= "wh2_dlc13_lzd_avengers" 
+                    and not current_faction:name():find("_waaagh") and not current_faction:name():find("_brayherd") 
+                    and not current_faction:name():find("_unknown") and not current_faction:name():find("_incursion")
+                    and not current_faction:is_quest_battle_faction() and not current_faction:name():find("_qb") and not current_faction:name():find("_separatists") and not current_faction:name():find("_dil") 
                     and not current_faction:name():find("_blood_voyage") and not current_faction:name():find("_encounters") and not current_faction:name():find("rebel") 
                     and not current_faction:name():find("_intervention") and not current_faction:name():find("_invasion") then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
                         local ai_remaining
@@ -1996,9 +2026,10 @@ local function init()
                             local subculture_faction_list = current_faction:factions_of_same_subculture()
                             for j = 0, subculture_faction_list:num_items() - 1 do
                                 local subculture_faction = subculture_faction_list:item_at(j)
-                                if not subculture_faction:is_dead() and not subculture_faction:is_human()
+                                if not subculture_faction:is_dead() and not subculture_faction:is_human() and subculture_faction:name() ~= "wh2_dlc13_lzd_defenders_of_the_great_plan" and subculture_faction:name() ~= "wh2_dlc13_lzd_avengers"
                                 and not subculture_faction:name():find("_waaagh") and not subculture_faction:name():find("_brayherd") 
-                                and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
+                                and not subculture_faction:name():find("_unknown") and not subculture_faction:name():find("_incursion")
+                                and not subculture_faction:is_quest_battle_faction() and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
                                 and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
                                 and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
                                     ai_remaining = subculture_faction
@@ -2012,9 +2043,10 @@ local function init()
                             local factions_met_list = current_faction:factions_met()
                             for j = 0, factions_met_list:num_items() - 1 do
                                 local faction_met = factions_met_list:item_at(j)
-                                if not faction_met:is_dead() and faction_met:subculture() == current_faction:subculture()
+                                if not faction_met:is_dead() and faction_met:subculture() == current_faction:subculture() and faction_met:name() ~= "wh2_dlc13_lzd_defenders_of_the_great_plan" and faction_met:name() ~= "wh2_dlc13_lzd_avengers"
                                 and not faction_met:name():find("_waaagh") and not faction_met:name():find("_brayherd") 
-                                and not faction_met:name():find("_qb") and not faction_met:name():find("_separatists") and not faction_met:name():find("_dil") 
+                                and not faction_met:name():find("_unknown") and not faction_met:name():find("_incursion")
+                                and not faction_met:is_quest_battle_faction() and not faction_met:name():find("_qb") and not faction_met:name():find("_separatists") and not faction_met:name():find("_dil") 
                                 and not faction_met:name():find("_blood_voyage") and not faction_met:name():find("_encounters") and not faction_met:name():find("rebel") 
                                 and not faction_met:name():find("_intervention") and not faction_met:name():find("_invasion") then 
                                     local standing = current_faction:diplomatic_standing_with(faction_met:name())
@@ -2031,9 +2063,10 @@ local function init()
                                 local subculture_faction_list = current_faction:factions_of_same_subculture()
                                 for j = 0, subculture_faction_list:num_items() - 1 do
                                     local subculture_faction = subculture_faction_list:item_at(j)
-                                    if not subculture_faction:is_dead() 
+                                    if not subculture_faction:is_dead() and subculture_faction:name() ~= "wh2_dlc13_lzd_defenders_of_the_great_plan" and subculture_faction:name() ~= "wh2_dlc13_lzd_avengers"
                                     and not subculture_faction:name():find("_waaagh") and not subculture_faction:name():find("_brayherd") 
-                                    and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
+                                    and not subculture_faction:name():find("_unknown") and not subculture_faction:name():find("_incursion") 
+                                    and not subculture_faction:is_quest_battle_faction() and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
                                     and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
                                     and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
                                         local standing = current_faction:diplomatic_standing_with(subculture_faction:name())
@@ -2051,9 +2084,10 @@ local function init()
                         else
                             for j = 1, #playable_factions do
                                 local playable_faction = cm:get_faction(playable_factions[j])
-                                if playable_faction and not playable_faction:is_dead() and playable_faction:subculture() == current_faction:subculture()
+                                if playable_faction and not playable_faction:is_dead() and playable_faction:subculture() == current_faction:subculture()  and current_faction:name() ~= "wh2_dlc13_lzd_defenders_of_the_great_plan" and current_faction:name() ~= "wh2_dlc13_lzd_avengers"
                                 and not playable_faction:name():find("_waaagh") and not playable_faction:name():find("_brayherd") 
-                                and not playable_faction:name():find("_qb") and not playable_faction:name():find("_separatists") and not playable_faction:name():find("_dil") 
+                                and not playable_faction:name():find("_unknown") and not playable_faction:name():find("_incursion")
+                                and not playable_faction:is_quest_battle_faction() and not playable_faction:name():find("_qb") and not playable_faction:name():find("_separatists") and not playable_faction:name():find("_dil") 
                                 and not playable_faction:name():find("_blood_voyage") and not playable_faction:name():find("_encounters") and not playable_faction:name():find("rebel") 
                                 and not playable_faction:name():find("_intervention") and not playable_faction:name():find("_invasion") then 
                                     prefered_faction = playable_faction
@@ -2065,9 +2099,10 @@ local function init()
                                 local subculture_faction_list = current_faction:factions_of_same_subculture()
                                 for j = 0, subculture_faction_list:num_items() - 1 do
                                     local subculture_faction = subculture_faction_list:item_at(j)
-                                    if not subculture_faction:is_dead()
+                                    if not subculture_faction:is_dead() and subculture_faction:name() ~= "wh2_dlc13_lzd_defenders_of_the_great_plan" and subculture_faction:name() ~= "wh2_dlc13_lzd_avengers"
                                     and not subculture_faction:name():find("_waaagh") and not subculture_faction:name():find("_brayherd") 
-                                    and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
+                                    and not subculture_faction:name():find("_unknown") and not subculture_faction:name():find("_incursion")
+                                    and not subculture_faction:is_quest_battle_faction() and not subculture_faction:name():find("_qb") and not subculture_faction:name():find("_separatists") and not subculture_faction:name():find("_dil") 
                                     and not subculture_faction:name():find("_blood_voyage") and not subculture_faction:name():find("_encounters") and not subculture_faction:name():find("rebel") 
                                     and not subculture_faction:name():find("_intervention") and not subculture_faction:name():find("_invasion") then 
                                         prefered_faction = subculture_faction
@@ -2287,7 +2322,7 @@ local function init()
 			local confederation_timeout = 5
 			
 			-- exclude Empire, Beastmen, Norsca and Bretonnia - they can confederate as often as they like but only if they aren't AI
-			if faction_human == false or (faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and faction_culture ~= "wh_main_brt_bretonnia" and faction_subculture ~= "wh_main_sc_nor_norsca") then
+			if faction_human == false or (faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and (faction_culture ~= "wh_main_brt_bretonnia" or faction_name == "wh2_dlc14_brt_chevaliers_de_lyonesse") and faction_subculture ~= "wh_main_sc_nor_norsca") then
 				if faction_human == false then
 					confederation_timeout = 10
 				end
@@ -2325,7 +2360,7 @@ local function init()
 				local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
 				
 				cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
-				cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_negotiated", "")
+				cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
 
 				if defender_faction:is_null_interface() == false then
 					if defender_faction:is_dead() == true and faction:has_home_region() == true then
@@ -2364,16 +2399,16 @@ local function init()
 				end
 	
 				cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1)
-				cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_negotiated", "") end, 1)
+				cm:callback(function() cm:disable_event_feed_events(false, "", "","diplomacy_treaty_negotiated_vassal") end, 1);
             elseif source_faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
                 if not cm:get_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle") then
                     cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
-                    cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_negotiated", "")
+                    cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
     
                     cm:force_confederation(faction_name, "wh2_dlc13_lzd_defenders_of_the_great_plan")
     
                     cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_negotiated", "") end, 1)                
+                    cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_treaty_negotiated_vassal") end, 1);
                 else
                     cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", false)
                 end
@@ -2401,7 +2436,10 @@ function sm0_recruit_defeated()
     -- old version compatibility
     local version_number = "1.1" --debug: "vs.code" --H&B "1.0" --S&B "1.1"
     if cm:is_new_game() then 
-        sm0_log_reset()
+        if not cm:get_saved_value("sm0_log_reset") then
+            sm0_log_reset()
+            cm:set_saved_value("sm0_log_reset", true)
+        end
         if not not mcm then
             local recruit_defeated = mcm:register_mod("recruit_defeated", "Recruit Defeated Legendary Lords", "")
             --if legacy_option then

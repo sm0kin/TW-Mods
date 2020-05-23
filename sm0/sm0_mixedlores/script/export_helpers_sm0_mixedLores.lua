@@ -1773,7 +1773,10 @@ local function ml_setup()
 end
 
 if cm:is_new_game() then 
-	sm0_log_reset()
+	if not cm:get_saved_value("sm0_log_reset") then
+		sm0_log_reset()
+		cm:set_saved_value("sm0_log_reset", true)
+	end
 	ml_setup() 
 else
 	local pb = cm:model():pending_battle()
