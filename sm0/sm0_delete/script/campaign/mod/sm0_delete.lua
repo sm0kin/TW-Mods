@@ -148,6 +148,9 @@ local blacklisted_subtypes = {
 	"wh2_dlc14_brt_repanse",
 	"wh2_dlc14_def_malus_darkblade",
 	"wh2_dlc14_skv_deathmaster_snikch",
+	"wh2_dlc15_hef_imrik",
+	"wh2_dlc15_hef_eltharion",
+	"wh2_dlc15_grn_grom_the_paunch",
 	--mixu1
 	"brt_almaric_de_gaudaron",
 	"brt_chilfroy",
@@ -180,11 +183,11 @@ local blacklisted_subtypes = {
 	"hef_belannaer",
 	"hef_bloodline_caradryan",
 	"def_tullaris_dreadbringer",
+	"def_tullaris_hero",
 	"lzd_tetto_eko",
 	"hef_korhil",
 	"brt_donna_don_domingio",
 	"brt_john_tyreweld",
-	"hef_prince_imrik",
 	"hef_caradryan_hero",
 	"dwf_bloodline_grimm_burloksson",
 	"lzd_lord_huinitenuchli",
@@ -201,8 +204,10 @@ local blacklisted_subtypes = {
 	"bst_ghorros_warhoof",
 	"bst_gorehoof",
 	"skv_feskit",
+	"chs_aekold_helbrass",
+	"chs_azubhor_clawhand",
 	--XOUDAD High Elves Expanded--
-	"wh2_main_hef_eltharion",
+	--
 	--XOUDAD Valten
 	"wax_emp_valten",
     --CATAPH TEB--
@@ -289,7 +294,7 @@ local immortal_subtypes = {
 	--"wh2_dlc09_tmb_tomb_king_setep",
 	--"wh2_dlc09_tmb_tomb_king_thutep",
 	--"wh2_dlc09_tmb_tomb_king_wakhaf",
-	--"wh2_dlc09_tmb_tomb_king",
+	"wh2_dlc09_tmb_tomb_king",
 	"wh2_dlc11_cst_admiral_tech_01",
 	"wh2_dlc11_cst_admiral_tech_02",
 	"wh2_dlc11_cst_admiral_tech_03",
@@ -301,10 +306,10 @@ local immortal_subtypes = {
 	--"dlc06_dwf_thane_ghost_2",
 	--"wh2_dlc11_cst_ghost_paladin",
 	--mixu
-	--"tmb_liche_high_priest_death",
-	--"tmb_liche_high_priest_light",
-	--"tmb_liche_high_priest_nehekhara",
-	--"tmb_liche_high_priest_shadow"
+	"tmb_liche_high_priest_death",
+	"tmb_liche_high_priest_light",
+	"tmb_liche_high_priest_nehekhara",
+	"tmb_liche_high_priest_shadow"
 } --:vector<string>
 
 --v function(uic: CA_UIC)
@@ -315,6 +320,26 @@ local function delete_UIC(uic)
     local garbage = UIComponent(component)
     garbage:Adopt(uic:Address())
     garbage:DestroyChildren()
+end
+
+--v function() --> CA_CQI
+local function get_selected_char_CQI()
+    local charCQI = cm:get_campaign_ui_manager():get_char_selected_cqi()
+    local char = cm:get_character_by_cqi(charCQI)
+    if char:has_military_force() then
+        local unitsUIC = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "units")
+        for i = 0, unitsUIC:ChildCount() - 1 do
+            local uic_child = UIComponent(unitsUIC:Find(i))
+            if uic_child:CurrentState() == "Selected" and string.find(uic_child:Id(), "Agent") then
+                local charList = char:military_force():character_list()
+                local agentIndex = string.match(uic_child:Id(), "%d")
+                local selectedChar = charList:item_at(tonumber(agentIndex))
+                charCQI = selectedChar:command_queue_index()
+                break
+            end     
+        end
+    end
+    return charCQI
 end
 
 --v function()
@@ -387,7 +412,7 @@ local function create_trash_ui()
 	--trash_bin_button:SetState("active")
 	trash_bin_button:SetDisabled(true)
 	trash_bin_button:SetOpacity(50)
-	trash_bin_button:SetTooltipText(trash_bin_button_disabled)
+	trash_bin_button:SetTooltipText(trash_bin_button_disabled, "", false) 
 
 	for i = 0, list_box:ChildCount() - 1 do
 		local character_row = UIComponent(list_box:Find(i))
@@ -435,12 +460,12 @@ local function create_trash_ui()
 						check_trash_button:SetDisabled(false)
 						check_trash_button:SetOpacity(255)
 						check_trash_button:SetState("hover")
-						check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2)
+						check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2, "", false) 
 						check_trash_button:SetState("active")
 					else
 						check_trash_button:SetDisabled(true)
 						check_trash_button:SetOpacity(50)
-						check_trash_button:SetTooltipText(check_trash_button_disabled)
+						check_trash_button:SetTooltipText(check_trash_button_disabled, "", false) 
 					end
 				end
 				if units_dropdown:Find("trash_bin_button") then 
@@ -449,12 +474,12 @@ local function create_trash_ui()
 						trash_bin_button:SetDisabled(false)
 						trash_bin_button:SetOpacity(255)
 						trash_bin_button:SetState("hover")
-						trash_bin_button:SetTooltipText(trash_bin_button_hover_1..chars_selected..trash_bin_button_hover_2)
+						trash_bin_button:SetTooltipText(trash_bin_button_hover_1..chars_selected..trash_bin_button_hover_2, "", false) 
 						trash_bin_button:SetState("active")
 					else
 						trash_bin_button:SetDisabled(true)
 						trash_bin_button:SetOpacity(50)
-						trash_bin_button:SetTooltipText(trash_bin_button_disabled)
+						trash_bin_button:SetTooltipText(trash_bin_button_disabled, "", false) 
 					end
 				end
 			end,
@@ -464,13 +489,13 @@ local function create_trash_ui()
 		local char = cm:get_character_by_cqi(cqi_string)
 		checkbox_toggle:SetState("hover")
 		if cm:char_is_general(char) then 
-			checkbox_toggle:SetTooltipText(checkbox_toggle_lord_hover) 
+			checkbox_toggle:SetTooltipText(checkbox_toggle_lord_hover, "", false) 
 			checkbox_toggle:SetState("selected_hover")
-			checkbox_toggle:SetTooltipText(checkbox_toggle_lord_selected_hover)
+			checkbox_toggle:SetTooltipText(checkbox_toggle_lord_selected_hover, "", false) 
 		else
-			checkbox_toggle:SetTooltipText(checkbox_toggle_hero_hover) 
+			checkbox_toggle:SetTooltipText(checkbox_toggle_hero_hover, "", false) 
 			checkbox_toggle:SetState("selected_hover")
-			checkbox_toggle:SetTooltipText(checkbox_toggle_hero_selected_hover)
+			checkbox_toggle:SetTooltipText(checkbox_toggle_hero_selected_hover, "", false) 
 		end
 		checkbox_toggle:SetState("active")
 		checkbox_toggle:SetDisabled(false)
@@ -480,9 +505,9 @@ local function create_trash_ui()
 				checkbox_toggle:SetDisabled(true)
 				checkbox_toggle:SetOpacity(150)
 				if cm:char_is_general(char) then 
-					checkbox_toggle:SetTooltipText(checkbox_toggle_lord_disabled)
+					checkbox_toggle:SetTooltipText(checkbox_toggle_lord_disabled, "", false) 
 				else
-					checkbox_toggle:SetTooltipText(checkbox_toggle_hero_disabled)
+					checkbox_toggle:SetTooltipText(checkbox_toggle_hero_disabled, "", false) 
 				end
 			end
 		end
@@ -509,7 +534,7 @@ local function create_trash_ui()
 					cross_trash_button:SetImagePath("ui/skins/default/icon_cross.png")
 				end
 				cross_trash_button:SetState("hover")
-				cross_trash_button:SetTooltipText(cross_trash_button_hover)
+				cross_trash_button:SetTooltipText(cross_trash_button_hover, "", false) 
 				cross_trash_button:SetState("active")
 				core:add_listener(
 					"sm0_cross_trash_button",
@@ -556,12 +581,12 @@ local function create_trash_ui()
 					check_trash_button:SetDisabled(false)
 					check_trash_button:SetOpacity(255)
 					check_trash_button:SetState("hover")
-					check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2)
+					check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2, "", false) 
 					check_trash_button:SetState("active")
 				else
 					check_trash_button:SetDisabled(true)
 					check_trash_button:SetOpacity(50)
-					check_trash_button:SetTooltipText(check_trash_button_disabled)
+					check_trash_button:SetTooltipText(check_trash_button_disabled, "", false) 
 				end
 
 				core:add_listener(
@@ -713,7 +738,7 @@ function sm0_delete()
 			and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index())
 		end,
 		function(context)
-			cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+			if not cm:char_is_general(context:character()) then cm:set_character_immortality(cm:char_lookup_str(context:character()), true) end
 			cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
 			cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 			sm0_log("sm0_immortal_CharacterSkillPointAllocated | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
@@ -736,7 +761,7 @@ function sm0_delete()
 			for _, agent_subtype in pairs(immortal_subtypes) do
 				if agent_subtype == context:character():character_subtype_key() and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
 					--cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
-						cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+					if not cm:char_is_general(context:character()) then cm:set_character_immortality(cm:char_lookup_str(context:character()), true) end
 					--end, 0.5)
 					cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
 					cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
@@ -769,7 +794,7 @@ function sm0_delete()
 					or current_char:has_skill("wh2_main_skill_all_immortality_lord") 
 					or current_char:has_skill("wh_main_skill_dwf_slayer_self_immortality") 
 					and not cm:get_saved_value("sm0_immortal_cqi"..current_char:command_queue_index()) then
-						cm:set_character_immortality(cm:char_lookup_str(current_char), true)
+						if not cm:char_is_general(current_char) then cm:set_character_immortality(cm:char_lookup_str(current_char), true) end
 						cm:set_saved_value("sm0_immortal_cqi"..current_char:command_queue_index(), true)
 						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 						sm0_log("sm0_immortal_FactionTurnStart | set_character_immortality = true | "..current_char:faction():name().." | "..current_char:character_subtype_key()
@@ -793,7 +818,7 @@ function sm0_delete()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
 					if cm:char_is_agent(char) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
-						cm:set_character_immortality(cm:char_lookup_str(char), true)
+						if not cm:char_is_general(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
 						cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
 						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1) 	
 						sm0_log("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key()
@@ -806,7 +831,7 @@ function sm0_delete()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
 					if cm:char_is_general(char) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
-						cm:set_character_immortality(cm:char_lookup_str(char), true) 
+						if not cm:char_is_general(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
 						cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
 						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 						sm0_log("sm0_immortal_tech_ResearchCompleted | set_character_immortality = true | "..context:faction():name().." | "..char:character_subtype_key()
@@ -826,7 +851,7 @@ function sm0_delete()
 		function(context)
 			if cm:char_is_agent(context:character()) and (context:character():faction():has_technology("tech_dlc08_nor_nw_03") or context:character():faction():has_technology("tech_dlc13_lzd_vassal_2")) and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
 				--cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
-					cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
 				--end, 0.5)
 				cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
 				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
@@ -835,7 +860,7 @@ function sm0_delete()
 			end
 			if cm:char_is_general(context:character()) and context:character():faction():has_technology("tech_dlc08_nor_nw_11") and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then
 				--cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
-					cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+				--if not cm:char_is_general(context:character()) then cm:set_character_immortality(cm:char_lookup_str(context:character()), true) end
 				--end, 0.5)
 				cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
 				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
@@ -857,7 +882,7 @@ function sm0_delete()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
 					if cm:char_is_agent(char) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
-						cm:set_character_immortality(cm:char_lookup_str(char), true) 
+						if not cm:char_is_general(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
 						cm:set_saved_value("sm0_immortal_cqi"..char():command_queue_index(), true)
 						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 						sm0_log("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key()
@@ -870,7 +895,7 @@ function sm0_delete()
 				for i = 0, char_list:num_items() - 1 do
 					local char = char_list:item_at(i)
 					if cm:char_is_general(char) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
-						cm:set_character_immortality(cm:char_lookup_str(char), true) 
+						if not cm:char_is_general(char) then cm:set_character_immortality(cm:char_lookup_str(char), true) end
 						cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
 						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 						sm0_log("sm0_immortal_tech_FactionJoinsConfederation | set_character_immortality = true | "..context:confederation():name().." | "..char:character_subtype_key()
@@ -888,7 +913,7 @@ function sm0_delete()
 		true,
 		function(context)
 			if context:character():faction():is_human() and not cm:get_saved_value("sm0_immortal_cqi"..context:character():command_queue_index()) then	
-				cm:set_character_immortality(cm:char_lookup_str(context:character()), true)
+				if not cm:char_is_general(context:character()) then cm:set_character_immortality(cm:char_lookup_str(context:character()), true) end
 				cm:set_saved_value("sm0_immortal_cqi"..context:character():command_queue_index(), true)
 				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 				sm0_log("sm0_immortal_ScriptEventBretonniaGrailVowCompleted | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
@@ -906,7 +931,6 @@ function sm0_delete()
 			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
 					if character:rank() >= 10 and not cm:get_saved_value("sm0_immortal_cqi"..character:command_queue_index()) then
-						cm:set_character_immortality(cm:char_lookup_str(character), true)
 						cm:set_saved_value("sm0_immortal_cqi"..character:command_queue_index(), true)
 						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 						sm0_log("sm0_immortal_character_rank_up_vows_per_level_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
@@ -926,7 +950,6 @@ function sm0_delete()
 			if not character:faction():is_human() and character:faction():culture() == "wh_main_brt_bretonnia" then
 				if character:character_type("general") == true then
 					if character:rank() >= 10 and not cm:get_saved_value("sm0_immortal_cqi"..character:command_queue_index()) then
-						cm:set_character_immortality(cm:char_lookup_str(character), true)
 						cm:set_saved_value("sm0_immortal_cqi"..character:command_queue_index(), true)
 						cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
 						sm0_log("sm0_immortal_character_created_bret_ai | set_character_immortality = true | "..context:character():faction():name().." | "..context:character():character_subtype_key()
@@ -976,4 +999,237 @@ function sm0_delete()
 	--	end,
 	--	true
 	--)	
+
+
+	-- new
+	core:add_listener(
+		"sm0_immortal_changes_FactionTurnStart",
+		"FactionTurnStart",
+		true,
+		function(context)
+			-- previous faction
+			local prev_faction_name = cm:get_saved_value("sm0_faction_name")
+			cm:set_saved_value("sm0_faction_name", context:faction():name())
+			if prev_faction_name then
+				local prev_faction = cm:get_faction(prev_faction_name)
+				local character_list = prev_faction:character_list()
+				for i = 0, character_list:num_items() - 1 do
+					local current_char = character_list:item_at(i)
+					if cm:char_is_general(current_char)	and cm:get_saved_value("sm0_immortal_cqi"..current_char:command_queue_index()) then
+						cm:set_character_immortality(cm:char_lookup_str(current_char), true)
+						--cm:set_saved_value("sm0_immortal_cqi"..current_char:command_queue_index(), true)
+						--cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
+						--sm0_log("sm0_mortal_FactionTurnStart | set_character_immortality = true | "..current_char:faction():name().." | "..current_char:character_subtype_key()
+						--.." | "..current_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+					end
+				end
+			end
+			-- current faction
+			local character_list = context:faction():character_list() --:CA_CHAR_LIST
+			for i = 0, character_list:num_items() - 1 do
+				local current_char = character_list:item_at(i)
+				if cm:char_is_general(current_char)	and cm:get_saved_value("sm0_immortal_cqi"..current_char:command_queue_index()) then
+					cm:set_character_immortality(cm:char_lookup_str(current_char), false)
+					--cm:set_saved_value("sm0_immortal_cqi"..current_char:command_queue_index(), true)
+					--cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
+					--sm0_log("sm0_mortal_FactionTurnStart | set_character_immortality = true | "..current_char:faction():name().." | "..current_char:character_subtype_key()
+					--.." | "..current_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				end
+			end
+		end,
+		true
+	)
+	-- pre battle: enable immortality if eligible
+	core:add_listener(
+		"sm0_immortal_changes_PendingBattle",
+		"PendingBattle",
+		true,
+		function(context)
+			local pb = context:pending_battle() --:CA_PENDING_BATTLE
+			local current_faction_name = cm:whose_turn_is_it()
+			local attacker = pb:attacker()
+			local defender = pb:defender()
+			if attacker:faction():name() == current_faction_name then
+				if cm:char_is_general(attacker)	and cm:get_saved_value("sm0_immortal_cqi"..attacker:command_queue_index()) then
+					cm:set_character_immortality(cm:char_lookup_str(attacker), true)
+					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = true | "..attacker:faction():name().." | "..attacker:character_subtype_key()
+						.." | "..attacker:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				end
+			elseif defender:faction():name() == current_faction_name then 
+				if cm:char_is_general(defender) and cm:get_saved_value("sm0_immortal_cqi"..defender:command_queue_index()) then
+					cm:set_character_immortality(cm:char_lookup_str(defender), true)
+					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = true | "..defender:faction():name().." | "..defender:character_subtype_key()
+						.." | "..defender:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				end
+			end
+			local attackers = pb:secondary_attackers()
+			for i = 0, attackers:num_items() - 1 do
+				local current_attacker = attackers:item_at(i)
+				if cm:char_is_general(current_attacker)	and current_attacker:faction():name() == current_faction_name 
+				and cm:get_saved_value("sm0_immortal_cqi"..current_attacker:command_queue_index()) then
+					cm:set_character_immortality(cm:char_lookup_str(current_attacker), true)
+					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = true | "..current_attacker:faction():name().." | "..current_attacker:character_subtype_key()
+						.." | "..current_attacker:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				end
+			end
+			local defenders = pb:secondary_defenders()
+			for i = 0, defenders:num_items() - 1 do
+				local current_defender = defenders:item_at(i)
+				if cm:char_is_general(current_defender)	and current_defender:faction():name() == current_faction_name 
+				and cm:get_saved_value("sm0_immortal_cqi"..current_defender:command_queue_index()) then
+					cm:set_character_immortality(cm:char_lookup_str(current_defender), true)
+					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = true | "..current_defender:faction():name().." | "..current_defender:character_subtype_key()
+						.." | "..current_defender:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				end
+			end
+		end,
+		true
+	)
+	-- post battle: disable immortality
+	core:add_listener(
+		"sm0_immortal_changes_BattleCompleted",
+		"BattleCompleted",
+		true,
+		function()			
+			local num_attackers = cm:pending_battle_cache_num_attackers()
+			local num_defenders = cm:pending_battle_cache_num_defenders()
+			for i = 1, num_attackers do
+				local current_char_cqi, current_mf_cqi, current_faction_name = cm:pending_battle_cache_get_attacker(i)
+				local current_char = cm:get_character_by_cqi(current_char_cqi)
+				if cm:char_is_general(current_char)	and current_faction_name == current_faction_name and cm:get_saved_value("sm0_immortal_cqi"..current_char_cqi) then
+					cm:set_character_immortality(cm:char_lookup_str(current_char_cqi), false)
+					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = false | "..current_char:faction():name().." | "..current_char:character_subtype_key()
+						.." | "..current_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				end
+			end
+			for i = 1, num_defenders do
+				local current_char_cqi, current_mf_cqi, current_faction_name = cm:pending_battle_cache_get_defender(i)
+				local current_char = cm:get_character_by_cqi(current_char_cqi)
+				if cm:char_is_general(current_char)	and current_faction_name == current_faction_name and cm:get_saved_value("sm0_immortal_cqi"..current_char_cqi) then
+					cm:set_character_immortality(cm:char_lookup_str(current_char_cqi), false)
+					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = false | "..current_char:faction():name().." | "..current_char:character_subtype_key()
+						.." | "..current_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				end
+			end
+		end,
+		true
+	)
+	-- skill point reset
+	core:add_listener(
+		"skill_reset_LClickUp",
+		"ComponentLClickUp",
+		function(context)
+			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel")
+			return context.string == "button_stats_reset" and is_uicomponent(panel)
+		end,
+		function(context)
+			local selected_char_cqi = get_selected_char_CQI()
+			local selected_char = cm:get_character_by_cqi(selected_char_cqi)
+			cm:callback(function(context)
+				if selected_char:has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
+				or selected_char:has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
+				or selected_char:has_skill("mixu_tmb_liche_high_priest_hidden_title")
+				or selected_char:has_skill("wh2_main_skill_all_immortality_hero") 
+				or selected_char:has_skill("wh2_main_skill_all_immortality_lord") 
+				or selected_char:has_skill("wh_main_skill_dwf_slayer_self_immortality")  then
+					if not cm:char_is_general(selected_char) then cm:set_character_immortality(cm:char_lookup_str(selected_char), true) end
+					cm:set_saved_value("sm0_immortal_cqi"..selected_char:command_queue_index(), true)
+					--cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
+					sm0_log("skill_reset_LClickUp | set_character_immortality = true | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
+					.." | "..selected_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				else
+					if not cm:char_is_general(selected_char) then cm:set_character_immortality(cm:char_lookup_str(selected_char), false) end
+					cm:set_saved_value("sm0_immortal_cqi"..selected_char:command_queue_index(), false)
+					cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") - 1)
+					sm0_log("skill_reset_LClickUp | set_character_immortality = false | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
+					.." | "..selected_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+				end
+			end, 0.1)
+		end,
+		true
+	)
+	core:add_listener(
+		"llrRespec",
+		"UITriggerScriptEvent",
+		function(context)
+			return context:trigger() == "LegendaryLordRespec"
+		end,
+		function(context)
+			local cqi = context:faction_cqi() --: CA_CQI
+			local selected_char = cm:get_character_by_cqi(cqi)
+			if selected_char:has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
+			or selected_char:has_skill("wh2_dlc09_skill_tmb_tomb_king_elixir_of_immortality") 
+			or selected_char:has_skill("mixu_tmb_liche_high_priest_hidden_title")
+			or selected_char:has_skill("wh2_main_skill_all_immortality_hero") 
+			or selected_char:has_skill("wh2_main_skill_all_immortality_lord") 
+			or selected_char:has_skill("wh_main_skill_dwf_slayer_self_immortality")  then
+				if not cm:char_is_general(selected_char) then cm:set_character_immortality(cm:char_lookup_str(selected_char), true) end
+				cm:set_saved_value("sm0_immortal_cqi"..selected_char:command_queue_index(), true)
+				--cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
+				sm0_log("skill_reset_LClickUp | set_character_immortality = true | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
+				.." | "..selected_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+			else
+				if not cm:char_is_general(selected_char) then cm:set_character_immortality(cm:char_lookup_str(selected_char), false) end
+				cm:set_saved_value("sm0_immortal_cqi"..selected_char:command_queue_index(), false)
+				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") - 1)
+				sm0_log("skill_reset_LClickUp | set_character_immortality = false | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
+				.." | "..selected_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
+			end
+		end,
+		true
+	)
+	-- rename immortal heroes
+	--v function()
+	local function enable_rename_button()
+		cm:callback(function()
+			local selected_char_cqi = get_selected_char_CQI()
+			local selected_char = cm:get_character_by_cqi(selected_char_cqi)
+			local is_blacklisted = false
+			for _, subtype in ipairs(blacklisted_subtypes) do
+				if selected_char:character_subtype(subtype) then
+					is_blacklisted = true
+					break
+				end
+			end
+			if not is_blacklisted and not cm:char_is_general(selected_char) then
+				local button_rename = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_rename")
+				if button_rename then button_rename:SetState("active") end
+			end
+		end, 0.1)
+	end
+	core:add_listener(
+		"rename_immortal_heroes_PanelOpenedCampaign",
+		"PanelOpenedCampaign",
+		function(context)
+			return context.string == "character_details_panel"
+		end,
+		function()
+			enable_rename_button()
+		end,
+		true
+	)
+	core:add_listener(
+		"rename_immortal_heroes_ComponentLClickUp",
+		"ComponentLClickUp",
+		function(context)
+			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel")
+			return (context.string == "button_cycle_right" or context.string == "button_cycle_left") and is_uicomponent(panel)
+		end,
+		function(context)
+			enable_rename_button()		
+		end,
+		true
+	)	
+	core:add_listener(
+		"rename_immortal_heroes_ShortcutPressed",
+		"ShortcutPressed",
+		function(context)
+			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel")
+			return (context.string == "select_next" or context.string == "select_prev") and is_uicomponent(panel)
+		end,
+		function(context)
+			enable_rename_button()	
+		end,
+		true
+	)
 end

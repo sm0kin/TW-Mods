@@ -443,3 +443,53 @@ local function has_agent_subtype(faction, subtype)
     end
     return has_agent
 end
+
+
+    -- vanilla listener replacement (wh2_dlc15_eltharion_lair.lua)
+    if cm:is_new_game() then cm:set_saved_value("modified_lair_max_yvresse_level", 2) end
+    core:remove_listener("lair_BuildingCompleted")
+    core:add_listener(
+        "modified_lair_BuildingCompleted",
+        "BuildingCompleted",
+        true,
+        function(context)
+            local building = context:building()
+            local region_key = context:garrison_residence():region():name()
+            local building_chain = building:chain()
+            local building_level = building:building_level()
+            if building:faction():name() == "wh2_main_hef_yvresse" then
+                if region_key == "wh2_main_vor_northern_yvresse_tor_yvresse" or region_key == "wh2_main_yvresse_tor_yvresse" then
+                    if building_chain == "wh2_dlc15_special_settlement_tor_yvresse_eltharion" then
+                        if cm:get_saved_value("modified_lair_max_yvresse_level") == 4 and building_level == 5 then
+                            cm:set_saved_value("modified_lair_max_yvresse_level", cm:get_saved_value("modified_lair_max_yvresse_level") + 1)
+                            cm:faction_add_pooled_resource(cm:get_saved_value("modified_lair_max_yvresse_level"), "yvresse_defence", "wh2_dlc15_resource_factor_yvresse_defence_settlement", 10)                 
+                        elseif cm:get_saved_value("modified_lair_max_yvresse_level") == 3 and building_level == 4 then
+                            cm:set_saved_value("modified_lair_max_yvresse_level", cm:get_saved_value("modified_lair_max_yvresse_level") + 1)
+                            cm:faction_add_pooled_resource(cm:get_saved_value("modified_lair_max_yvresse_level"), "yvresse_defence", "wh2_dlc15_resource_factor_yvresse_defence_settlement", 10)
+                        elseif cm:get_saved_value("modified_lair_max_yvresse_level") == 2 and building_level == 3 then
+                            cm:set_saved_value("modified_lair_max_yvresse_level", cm:get_saved_value("modified_lair_max_yvresse_level") + 1)
+                            cm:faction_add_pooled_resource(cm:get_saved_value("modified_lair_max_yvresse_level"), "yvresse_defence", "wh2_dlc15_resource_factor_yvresse_defence_settlement", 5)
+                        end
+                    end
+                end
+            end
+        end,
+        true
+    )
+
+    local function upgrade(currentRegion)
+        local regionCA = cm:get_region(currentRegion)
+        if regionCA and not regionCA:is_abandoned() then
+            local settlement = regionCA:settlement()
+            if (ai_tier ~= "6" and regionCA and not regionCA:owning_faction():is_human()) then
+                for i = 2, #ai_tier do
+                    cm:instantly_set_settlement_primary_slot_level(settlement, tonumber(i))
+                end
+            end
+            if (player_tier ~= "6" and regionCA and regionCA:owning_faction():is_human()) then
+                for i = 2, #player_tier do
+                    cm:instantly_set_settlement_primary_slot_level(settlement, tonumber(i))
+                end
+            end
+        end
+    end

@@ -11,6 +11,7 @@
 --# assume global class CA_UIContext
 --# assume global class CA_CHAR_CONTEXT
 --# assume global class CA_SETTLEMENT_CONTEXT
+--# assume global class CA_BUILDING_CONTEXT
 ----# assume global class CA_CQI
 --# assume global class CA_CHAR
 --# assume global class CA_CHAR_LIST
@@ -148,6 +149,8 @@
 --# assume CA_UIContext.string: string
 --# assume CA_SETTLEMENT_CONTEXT.garrison_residence: method() --> CA_GARRISON_RESIDENCE
 --# assume CA_CHAR_CONTEXT.character: method() --> CA_CHAR
+--# assume CA_BUILDING_CONTEXT.building: method() --> CA_BUILDING
+--# assume CA_BUILDING_CONTEXT.garrison_residence: method() --> CA_GARRISON_RESIDENCE
 
 -- UIC
 --# assume CA_UIC.Address: method() --> CA_Component
@@ -463,8 +466,8 @@
 --# assume CM.force_confederation: method(confederator: string, confederated: string)
 --# assume CM.force_alliance: method(faction: string, other_faction: string, is_military_alliance: boolean)
 --pending battle commands
---# assume CM.pending_battle_cache_get_defender: method(pos: int) --> (CA_CQI, CA_CQI, string)
---# assume CM.pending_battle_cache_get_attacker: method(pos: int) --> (CA_CQI, CA_CQI, string)
+--# assume CM.pending_battle_cache_get_defender: method(pos: int) --> (CA_CQI, CA_CQI, string) -- string: faction
+--# assume CM.pending_battle_cache_get_attacker: method(pos: int) --> (CA_CQI, CA_CQI, string) 
 --# assume CM.pending_battle_cache_get_enemies_of_char: method(char: CA_CHAR) --> vector<CA_CHAR>
 --# assume CM.pending_battle_cache_attacker_victory: method() --> boolean
 --# assume CM.pending_battle_cache_defender_victory: method() --> boolean
@@ -785,6 +788,7 @@
 
 -- BUILDING
 --# assume CA_BUILDING.name: method() --> string
+--# assume CA_BUILDING.building_level: method() --> number | int
 --# assume CA_BUILDING.chain: method() --> string
 --# assume CA_BUILDING.superchain: method() --> string
 --# assume CA_BUILDING.faction: method() --> CA_FACTION
@@ -989,7 +993,7 @@
 -- CAMPAIGN
 --# assume global get_cm: function() --> CM
 --# assume global get_bm: function() --> CA_BATTLE_MANAGER
---# assume global get_events: function() --> map<string, vector<function(context:WHATEVER?)>>
+----# assume global get_events: function() --> map<string, vector<function(context:WHATEVER?)>> Removed with the WAAAGH update
 --# assume global Get_Character_Side_In_Last_Battle: function(char: CA_CHAR) --> BATTLE_SIDE
 --# assume global q_setup: function()
 --# assume global set_up_rank_up_listener: function(quest_table: vector<vector<string | number>>, subtype: string, infotext: vector<string | number>)
@@ -1441,7 +1445,6 @@ set_ritual_chain_unlocked
 -- new: function qbh:setup_qb_effect_bundle_listener(effect_bundle_key,set_piece_battle_key,condition,opt_side) 
 -- new: function rite_agent_spawn(faction_key, type_key, subtype_key)
 -- deleted: function malus_rite_agent_spawn(faction_key, type_key, subtype_key)
-
 
 --# assume global kill_faction: function(faction_key: string)
 

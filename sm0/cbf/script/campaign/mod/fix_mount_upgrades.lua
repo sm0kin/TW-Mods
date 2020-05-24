@@ -46,9 +46,14 @@ local subtype_to_mount_list = {
         skill = 		"wh2_dlc14_skill_brt_henri_le_massif_barded_warhorse",
         ancillary =		"wh2_dlc14_anc_mount_brt_henri_le_massif_barded_warhorse",
         unique = true
-    }
-};
+	},
+	["wh2_dlc15_hef_imrik"] = {
+		skill = 		"wh2_dlc15_skill_hef_imrik_mount_dragon_prince_steed",
+        ancillary =		"wh2_dlc15_anc_mount_hef_imrik_dragon_prince_warhorse",
+        unique = true
 
+	}
+};
 function Faction_AttemptToAddMount(character)
     local subtype_key = character:character_subtype_key();
 

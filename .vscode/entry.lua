@@ -168,6 +168,7 @@ require("sm0/cbf/script/campaign/mod/fix_ai_vow")
 require("sm0/cbf/script/campaign/mod/fix_hostility_mission")
 require("sm0/cbf/script/campaign/mod/fix_multiple_vows")
 require("sm0/cbf/script/campaign/mod/fix_lokhir_quest")
+require("sm0/cbf/script/campaign/mod/fix_mount_upgrades")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_revitalizing_rite")

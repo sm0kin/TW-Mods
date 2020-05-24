@@ -788,7 +788,10 @@ local vor_missing_anc = {
         {"", "wh2_dlc12_anc_weapon_the_blade_of_ancient_skies", "", 1}
     },
     ["wh2_dlc11_cst_harkon"] = {
-        {"", "wh2_dlc11_anc_follower_captain_drekla", "", 1}
+        {"", "wh2_dlc11_anc_follower_captain_drekla", "", 1},
+    },
+    ["wh2_dlc15_hef_imrik"] = {
+        {"", "wh2_dlc15_anc_weapon_star_lance", "", 1},
     }
 } --:map<string, vector<vector<WHATEVER>>>
 
@@ -1135,6 +1138,9 @@ local me_missing_anc = {
     },
     ["wh2_dlc11_cst_harkon"] = {
         {"", "wh2_dlc11_anc_follower_captain_drekla", "", 1}
+    },
+    ["wh2_dlc15_hef_imrik"] = {
+        {"", "wh2_dlc15_anc_weapon_star_lance", "", 1},
     }
 } --:map<string, vector<vector<WHATEVER>>>
 
