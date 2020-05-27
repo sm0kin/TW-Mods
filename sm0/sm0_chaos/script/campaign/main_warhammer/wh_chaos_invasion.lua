@@ -1067,7 +1067,7 @@ function ci_mid_game_setup_listeners(exemption_turn)
 	
 	if cm:is_multiplayer() then
 		core:add_listener(
-			"turn_number_check_late",
+			"turn_number_check_late_mp",
 			"FactionTurnStart",
 			function(context)
 				local turn_number = cm:get_saved_value("ci_start_pre_late_game_to_late_game_listener_mp");
@@ -1171,6 +1171,7 @@ end;
 -- (it's called twice to handle the one-turn window that opens in sp before the intervention fires)
 function ci_late_game_remove_listeners()
 	core:remove_listener("turn_number_check_late");
+	core:remove_listener("turn_number_check_late_mp");
 	core:remove_listener("turn_number_check_late_autorun");
 	core:remove_listener("imperium_level_check_late");
 	core:remove_listener("settlement_occupied_mid_game");

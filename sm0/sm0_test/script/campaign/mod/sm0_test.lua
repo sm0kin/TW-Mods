@@ -53,6 +53,25 @@ end
 
 --v function()
 local function unitCheat()
+	local NORSCAunitstring = {"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1",
+						"wh_dlc08_nor_mon_war_mammoth_1"} --:vector<string>
 	local TKunitstring = {"wh2_dlc09_tmb_inf_tomb_guard_1",
 						"wh2_dlc09_tmb_inf_tomb_guard_1",
 						"wh2_dlc09_tmb_inf_tomb_guard_1",
@@ -131,7 +150,22 @@ local function unitCheat()
 						"wh2_dlc12_lzd_mon_ancient_stegadon_1"} --:vector<string>
 						
 	local playerFaction = cm:get_faction(cm:get_local_faction(true))
-	if playerFaction:subculture() == "wh2_main_sc_skv_skaven" then
+	if playerFaction:subculture() == "wh_main_sc_nor_norsca" then
+		local characterList = playerFaction:character_list()
+		for i = 0, characterList:num_items() - 1 do
+			local currentChar = characterList:item_at(i)	
+			if currentChar:is_faction_leader() then
+				cm:remove_all_units_from_general(currentChar)
+				--sm0_log("remove_all_units_from_general/wh2_dlc09_tmb_settra")
+				local cqi = currentChar:command_queue_index()
+				--cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_dlc12_skv_veh_doom_flayer_ror_tech_lab_0")
+				for k, v in pairs(NORSCAunitstring) do 
+					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
+				end
+				cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force", cqi, 0, true)
+			end
+		end
+	elseif playerFaction:subculture() == "wh2_main_sc_skv_skaven" then
 		local characterList = playerFaction:character_list()
 		for i = 0, characterList:num_items() - 1 do
 			local currentChar = characterList:item_at(i)	
@@ -143,6 +177,7 @@ local function unitCheat()
 				--for k, v in pairs(TKunitstring) do 
 				--	cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
 				--end
+				cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force", cqi, 0, true)
 			end
 		end
 	elseif playerFaction:name() == "wh2_dlc09_tmb_khemri" then
@@ -156,6 +191,7 @@ local function unitCheat()
 				for k, v in pairs(TKunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), v)
 				end
+
 			end
 		end
 	elseif playerFaction:name() == "wh2_dlc09_tmb_followers_of_nagash" then

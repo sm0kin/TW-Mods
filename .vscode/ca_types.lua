@@ -1000,6 +1000,7 @@
 --# assume global char_with_forename_has_no_military_force: function(forename: string) --> boolean
 --# assume global is_surtha_ek: function(char: CA_CHAR) --> boolean
 --# assume global is_character: function(char: CA_CHAR) --> boolean
+--# assume global is_faction: function(char: CA_FACTION) --> boolean
 --# assume global add_vow_progress: function(char: CA_CHAR, trait: string, ai: bool, agents: bool)
 
 -- CA LUA OBJECTS:

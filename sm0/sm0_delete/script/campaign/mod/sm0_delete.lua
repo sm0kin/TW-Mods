@@ -1010,8 +1010,8 @@ function sm0_delete()
 			-- previous faction
 			local prev_faction_name = cm:get_saved_value("sm0_faction_name")
 			cm:set_saved_value("sm0_faction_name", context:faction():name())
-			if prev_faction_name then
-				local prev_faction = cm:get_faction(prev_faction_name)
+			local prev_faction = cm:get_faction(prev_faction_name)
+			if is_faction(prev_faction) then
 				local character_list = prev_faction:character_list()
 				for i = 0, character_list:num_items() - 1 do
 					local current_char = character_list:item_at(i)
@@ -1052,33 +1052,33 @@ function sm0_delete()
 			if attacker:faction():name() == current_faction_name then
 				if cm:char_is_general(attacker)	and cm:get_saved_value("sm0_immortal_cqi"..attacker:command_queue_index()) then
 					cm:set_character_immortality(cm:char_lookup_str(attacker), true)
-					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = true | "..attacker:faction():name().." | "..attacker:character_subtype_key()
+					sm0_log("sm0_immortal_changes_PendingBattle | set_character_immortality = true | "..attacker:faction():name().." | "..attacker:character_subtype_key()
 						.." | "..attacker:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 				end
 			elseif defender:faction():name() == current_faction_name then 
 				if cm:char_is_general(defender) and cm:get_saved_value("sm0_immortal_cqi"..defender:command_queue_index()) then
 					cm:set_character_immortality(cm:char_lookup_str(defender), true)
-					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = true | "..defender:faction():name().." | "..defender:character_subtype_key()
+					sm0_log("sm0_immortal_changes_PendingBattle | set_character_immortality = true | "..defender:faction():name().." | "..defender:character_subtype_key()
 						.." | "..defender:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 				end
 			end
 			local attackers = pb:secondary_attackers()
 			for i = 0, attackers:num_items() - 1 do
 				local current_attacker = attackers:item_at(i)
-				if cm:char_is_general(current_attacker)	and current_attacker:faction():name() == current_faction_name 
+				if is_character(current_attacker) and cm:char_is_general(current_attacker) and current_attacker:faction():name() == current_faction_name 
 				and cm:get_saved_value("sm0_immortal_cqi"..current_attacker:command_queue_index()) then
 					cm:set_character_immortality(cm:char_lookup_str(current_attacker), true)
-					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = true | "..current_attacker:faction():name().." | "..current_attacker:character_subtype_key()
+					sm0_log("sm0_immortal_changes_PendingBattle | set_character_immortality = true | "..current_attacker:faction():name().." | "..current_attacker:character_subtype_key()
 						.." | "..current_attacker:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 				end
 			end
 			local defenders = pb:secondary_defenders()
 			for i = 0, defenders:num_items() - 1 do
 				local current_defender = defenders:item_at(i)
-				if cm:char_is_general(current_defender)	and current_defender:faction():name() == current_faction_name 
+				if is_character(current_defender) and cm:char_is_general(current_defender) and current_defender:faction():name() == current_faction_name 
 				and cm:get_saved_value("sm0_immortal_cqi"..current_defender:command_queue_index()) then
 					cm:set_character_immortality(cm:char_lookup_str(current_defender), true)
-					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = true | "..current_defender:faction():name().." | "..current_defender:character_subtype_key()
+					sm0_log("sm0_immortal_changes_PendingBattle | set_character_immortality = true | "..current_defender:faction():name().." | "..current_defender:character_subtype_key()
 						.." | "..current_defender:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 				end
 			end
@@ -1096,7 +1096,7 @@ function sm0_delete()
 			for i = 1, num_attackers do
 				local current_char_cqi, current_mf_cqi, current_faction_name = cm:pending_battle_cache_get_attacker(i)
 				local current_char = cm:get_character_by_cqi(current_char_cqi)
-				if cm:char_is_general(current_char)	and current_faction_name == current_faction_name and cm:get_saved_value("sm0_immortal_cqi"..current_char_cqi) then
+				if is_character(current_char) and cm:char_is_general(current_char)	and current_faction_name == current_faction_name and cm:get_saved_value("sm0_immortal_cqi"..current_char_cqi) then
 					cm:set_character_immortality(cm:char_lookup_str(current_char_cqi), false)
 					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = false | "..current_char:faction():name().." | "..current_char:character_subtype_key()
 						.." | "..current_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
@@ -1105,7 +1105,7 @@ function sm0_delete()
 			for i = 1, num_defenders do
 				local current_char_cqi, current_mf_cqi, current_faction_name = cm:pending_battle_cache_get_defender(i)
 				local current_char = cm:get_character_by_cqi(current_char_cqi)
-				if cm:char_is_general(current_char)	and current_faction_name == current_faction_name and cm:get_saved_value("sm0_immortal_cqi"..current_char_cqi) then
+				if is_character(current_char) and cm:char_is_general(current_char)	and current_faction_name == current_faction_name and cm:get_saved_value("sm0_immortal_cqi"..current_char_cqi) then
 					cm:set_character_immortality(cm:char_lookup_str(current_char_cqi), false)
 					sm0_log("sm0_immortal_changes_BattleCompleted | set_character_immortality = false | "..current_char:faction():name().." | "..current_char:character_subtype_key()
 						.." | "..current_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))

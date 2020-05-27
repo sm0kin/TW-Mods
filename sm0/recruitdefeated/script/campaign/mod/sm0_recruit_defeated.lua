@@ -1145,7 +1145,8 @@ local me_missing_anc = {
 local subtype_immortality = {
     --["dlc03_emp_boris_todbringer"] = true,
     --["wh_dlc05_vmp_red_duke"] = true,
-    --["wh2_main_hef_prince_alastar"] = true -- no longer needed (the empire undivided update made him immortal)    --["wh2_dlc09_tmb_arkhan"] = true,
+    --["wh2_main_hef_prince_alastar"] = true -- no longer needed (the empire undivided update made him immortal)    
+    ["wh2_dlc09_tmb_arkhan"] = true,
     ["wh2_dlc09_tmb_khalida"] = true,
     ["wh2_dlc09_tmb_khatep"] = true,
     ["wh2_dlc09_tmb_settra"] = true,
