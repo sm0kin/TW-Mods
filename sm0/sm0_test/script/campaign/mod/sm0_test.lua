@@ -166,6 +166,8 @@ local function unitCheat()
 			end
 		end
 	elseif playerFaction:subculture() == "wh2_main_sc_skv_skaven" then
+		cm:spawn_agent_at_settlement(playerFaction, playerFaction:home_region():settlement(), "wizard", "wh2_main_skv_plague_priest")
+		cm:spawn_agent_at_settlement(cm:get_faction(cm:get_local_faction(true)), playerFaction:home_region():settlement(), "spy", "wh2_main_skv_assassin")
 		local characterList = playerFaction:character_list()
 		for i = 0, characterList:num_items() - 1 do
 			local currentChar = characterList:item_at(i)	
@@ -180,6 +182,19 @@ local function unitCheat()
 				cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force", cqi, 0, true)
 			end
 		end
+		local spawn_x = playerFaction:home_region():settlement():logical_position_x()
+		local spawn_y = playerFaction:home_region():settlement():logical_position_y()
+		--cm:create_force(
+		--	"wh_main_chs_chaos",
+		--	"wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0",
+		--	playerFaction:home_region():name(),
+		--	spawn_x - 5,
+		--	spawn_y - 17,
+		--	true,
+		--	function(cqi)
+		--	end
+		--)
+							
 	elseif playerFaction:name() == "wh2_dlc09_tmb_khemri" then
 		local characterList = playerFaction:character_list()
 		for i = 0, characterList:num_items() - 1 do
@@ -510,7 +525,8 @@ function sm0_test()
 			local human_factions = cm:get_human_factions()
 
 			--if cm:model():turn_number() == 2 then cm:unlock_starting_general_recruitment("2140784146", "wh_main_vmp_vampire_counts") end
-			
+			--if cm:model():turn_number() == 2 then cm:force_confederation("wh_main_grn_teef_snatchaz","wh_main_grn_orcs_of_the_bloody_hand") end
+			--if cm:model():turn_number() == 4 then kill_faction("wh_main_grn_teef_snatchaz") end
 			deletePlayerSubcultureFactions()
 
 			--item test

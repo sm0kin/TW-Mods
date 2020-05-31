@@ -274,11 +274,11 @@ local blacklisted_subtypes = {
 	"cst_bloodline_dreng_gunddadrak",
 	"cst_bloodline_khoskog",
 	-- bug fixes
-	"wh2_dlc09_tmb_tomb_king",
-	"tmb_liche_high_priest_death",
-	"tmb_liche_high_priest_light",
-	"tmb_liche_high_priest_nehekhara",
-	"tmb_liche_high_priest_shadow"
+	--"wh2_dlc09_tmb_tomb_king",
+	--"tmb_liche_high_priest_death",
+	--"tmb_liche_high_priest_light",
+	--"tmb_liche_high_priest_nehekhara",
+	--"tmb_liche_high_priest_shadow"
 } --:vector<string>
 
 local immortal_subtypes = {
@@ -1135,13 +1135,13 @@ function sm0_delete()
 					if not cm:char_is_general(selected_char) then cm:set_character_immortality(cm:char_lookup_str(selected_char), true) end
 					cm:set_saved_value("sm0_immortal_cqi"..selected_char:command_queue_index(), true)
 					--cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-					sm0_log("skill_reset_LClickUp | set_character_immortality = true | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
+					sm0_log("button_stats_reset | set_character_immortality = true | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
 					.." | "..selected_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 				else
 					if not cm:char_is_general(selected_char) then cm:set_character_immortality(cm:char_lookup_str(selected_char), false) end
 					cm:set_saved_value("sm0_immortal_cqi"..selected_char:command_queue_index(), false)
 					cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") - 1)
-					sm0_log("skill_reset_LClickUp | set_character_immortality = false | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
+					sm0_log("button_stats_reset | set_character_immortality = false | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
 					.." | "..selected_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 				end
 			end, 0.1)
@@ -1166,13 +1166,13 @@ function sm0_delete()
 				if not cm:char_is_general(selected_char) then cm:set_character_immortality(cm:char_lookup_str(selected_char), true) end
 				cm:set_saved_value("sm0_immortal_cqi"..selected_char:command_queue_index(), true)
 				--cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") + 1)
-				sm0_log("skill_reset_LClickUp | set_character_immortality = true | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
+				sm0_log("LegendaryLordRespec | set_character_immortality = true | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
 				.." | "..selected_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 			else
 				if not cm:char_is_general(selected_char) then cm:set_character_immortality(cm:char_lookup_str(selected_char), false) end
 				cm:set_saved_value("sm0_immortal_cqi"..selected_char:command_queue_index(), false)
 				cm:set_saved_value("sm0_immortal_count", cm:get_saved_value("sm0_immortal_count") - 1)
-				sm0_log("skill_reset_LClickUp | set_character_immortality = false | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
+				sm0_log("LegendaryLordRespec | set_character_immortality = false | "..selected_char:faction():name().." | "..selected_char:character_subtype_key()
 				.." | "..selected_char:command_queue_index().." | sm0_immortal_count = "..cm:get_saved_value("sm0_immortal_count"))
 			end
 		end,

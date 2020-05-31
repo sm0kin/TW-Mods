@@ -97,6 +97,7 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --frostydemise
 require("sm0/frosty_mods/script/campaign/mod/frosty_horde")
 require("sm0/frosty_mods/script/campaign/mod/frosty_tiers")
+require("sm0/frosty_mods/script/campaign/mod/frosty_tiers_mct2")
 require("sm0/frosty_mods/script/campaign/mod/reworks/frosty_tiers")
 require("sm0/frosty_mods/script/campaign/mod/legendary_confeds")
 require("sm0/frosty_mods/script/campaign/main_warhammer/wh_quests")
@@ -169,6 +170,7 @@ require("sm0/cbf/script/campaign/mod/fix_hostility_mission")
 require("sm0/cbf/script/campaign/mod/fix_multiple_vows")
 require("sm0/cbf/script/campaign/mod/fix_lokhir_quest")
 require("sm0/cbf/script/campaign/mod/fix_mount_upgrades")
+require("sm0/cbf/script/campaign/mod/fix_prisoner_defeated_traits")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_revitalizing_rite")

@@ -472,6 +472,8 @@
 --# assume CM.pending_battle_cache_attacker_victory: method() --> boolean
 --# assume CM.pending_battle_cache_defender_victory: method() --> boolean
 --# assume CM.pending_battle_cache_faction_is_involved: method(faction_key: string) --> boolean
+--# assume CM.pending_battle_cache_faction_is_attacker: method(faction_key: string) --> boolean
+--# assume CM.pending_battle_cache_faction_is_defender: method(faction_key: string) --> boolean
 --# assume CM.pending_battle_cache_num_attackers: method() --> int
 --# assume CM.pending_battle_cache_num_defenders: method() --> int
 --# assume CM.pending_battle_cache_human_is_involved: method() --> boolean

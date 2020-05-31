@@ -135,7 +135,6 @@ local regions_table = {
 
 } --: vector<string>
 
-
 ------------------------
 --upgrade_capitals--
 ------------------------
@@ -295,7 +294,7 @@ function frosty_tiers()
     ------------------------
 
     local mcm = _G.mcm
-	if not not mcm then
+	if mcm then
         local frostyTiers = mcm:register_mod("frostyTiers", "Higher Starting Tier: Capitals & Hordes", "With this mod your starting settlements/horde can be set at a higher tier from the get-go.")
         
         local _01_enableorDisable = frostyTiers:add_tweaker("_01_enableorDisable", "Mod Status", "")
@@ -327,8 +326,7 @@ function frosty_tiers()
 		_05_settlementScope:add_option("e1_faction_capitals", "No", "Only main faction capitals are affected")
         _05_settlementScope:add_option("e2_provinces_too", "Province Capitals", "All province capitals start at a higher tier.")
         _05_settlementScope:add_option("e3_any_settlement", "Any Settlements", "All settlement main buildings start at a higher tier.")
-
-        
+   
 		mcm:add_new_game_only_callback(
             function()
                 if cm:get_saved_value("mcm_tweaker_frostyTiers__01_enableorDisable_value") == "a1_enable" then
@@ -337,7 +335,44 @@ function frosty_tiers()
                 end
 			end
         )
-    else
+    end
+
+    ------------------------
+    --MCT2 OPTIONS--
+    ------------------------
+    local mct = get_mct()
+    if mct then
+        local frosty_tiers = mct:get_mod_with_name("frosty_tiers")
+        local settings_table = frosty_tiers:get_settings()
+        --local _01_enableorDisable = frosty_tiers:get_option_by_key("_01_enableorDisable")
+        --if cm:is_new_game() and _01_enableorDisable:get_selected_setting() then 
+        if cm:is_new_game() and settings_table._01_enableorDisable then 
+            upgrade_capitals(settings_table._02_settlementTier, settings_table._03_AI_settlementTier, settings_table._05_settlementScope)    
+            upgrade_horde(settings_table._04_hordeTier, nil)
+        end
+        core:add_listener(
+            "frosty_tiers_MctOptionSettingFinalized",
+            "MctOptionSettingFinalized",
+            true,
+            function(context)
+                local mct = context:mct()
+                local frosty_tiers = mct:get_mod_with_name("frosty_tiers")
+                local settings_table = frosty_tiers:get_settings()
+                local _01_enableorDisable = frosty_tiers:get_option_by_key("_01_enableorDisable")
+
+                if cm:is_new_game() and _01_enableorDisable:get_selected_setting() then 
+                    upgrade_capitals(settings_table._02_settlementTier, settings_table._03_AI_settlementTier, settings_table._05_settlementScope)    
+                    upgrade_horde(settings_table._04_hordeTier, nil)
+                end
+            end,
+            true
+        )
+    end
+    ------------------------------------------------
+    --NO MCT - DEFAULT OPTIONS--
+    ------------------------------------------------
+
+    if not (mct or mcm) then
         if cm:is_new_game() then 
             upgrade_capitals("4", "4", "e1_faction_capitals")    
             upgrade_horde("4", nil)
