@@ -107,6 +107,7 @@ require("sm0/frosty_mods/script/campaign/mod/frosty_banners")
 require("sm0/frosty_mods/script/campaign/mod/lords_of_change")
 require("sm0/frosty_mods/script/campaign/mod/frosty_temp")
 require("sm0/frosty_mods/script/campaign/mod/frosty_battle_royale")
+require("sm0/frosty_mods/test/legendary_confeds")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/frosty_horde")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds")
@@ -192,3 +193,7 @@ require("sm0/sm0_balance/script/campaign/mod/sm0_balance")
 
 -- norsca no supply lines
 require("sm0/sm0_norsca/script/campaign/mod/sm0_norsca")
+
+--bugs
+require("sm0/cbf/script/campaign/wh2_campaign_faction_renaming")
+

@@ -340,9 +340,10 @@ function frosty_tiers()
     ------------------------
     --MCT2 OPTIONS--
     ------------------------
+    
     local mct = get_mct()
     if mct then
-        local frosty_tiers = mct:get_mod_with_name("frosty_tiers")
+        local frosty_tiers = mct:get_mod_by_key("frosty_tiers")
         local settings_table = frosty_tiers:get_settings()
         --local _01_enableorDisable = frosty_tiers:get_option_by_key("_01_enableorDisable")
         --if cm:is_new_game() and _01_enableorDisable:get_selected_setting() then 
@@ -355,8 +356,6 @@ function frosty_tiers()
             "MctOptionSettingFinalized",
             true,
             function(context)
-                local mct = context:mct()
-                local frosty_tiers = mct:get_mod_with_name("frosty_tiers")
                 local settings_table = frosty_tiers:get_settings()
                 local _01_enableorDisable = frosty_tiers:get_option_by_key("_01_enableorDisable")
 
@@ -368,6 +367,7 @@ function frosty_tiers()
             true
         )
     end
+
     ------------------------------------------------
     --NO MCT - DEFAULT OPTIONS--
     ------------------------------------------------

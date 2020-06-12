@@ -325,7 +325,7 @@ local function deletePlayerSubcultureFactions()
 			if faction:name() == "wh_main_teb_tilea" or faction:name() == "wh2_dlc09_tmb_followers_of_nagash" or faction:name() == "wh2_dlc11_cst_noctilus" or faction:name() == "wh_main_grn_greenskins" 	
 			--or faction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" 
 			or ((--faction:name() == "wh2_main_hef_caledor" or 
-			faction:name() == "wh2_dlc11_cst_vampire_coast"
+			faction:name() == "wh2_dlc11_cst_vampire_coast" or faction:name() == "wh_main_emp_middenland" 
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
 				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else

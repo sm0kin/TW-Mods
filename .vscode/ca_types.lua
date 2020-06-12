@@ -500,6 +500,9 @@
 --# assume CM.foreign_slot_instantly_upgrade_building: method (slot: CA_FOREIGN_SLOT, upgrade_building_key: string) 
 --# assume CM.foreign_slot_instantly_dismantle_building: method (slot: CA_FOREIGN_SLOT) --<region_key>:<slot_number>
 --# assume CM.add_development_points_to_region: method (region: string, development_points: number )
+--# assume CM.cai_disable_targeting_against_settlement: method (settlement: string)
+--# assume CM.cai_enable_targeting_against_settlement: method (settlment: string)
+--# assume CM.heal_garrison: method(region_cqi: number)
 --autoresolve
 --# assume CM.win_next_autoresolve_battle: method(faction: string)
 --# assume CM.modify_next_autoresolve_battle: method(attacker_win_chance: number, defender_win_chance: number, attacker_losses_modifier: number, defender_losses_modifier: number, wipe_out_loser: boolean)
@@ -736,6 +739,7 @@
 
 -- REGION
 --# assume CA_REGION.settlement: method() --> CA_SETTLEMENT
+--# assume CA_REGION.cqi: method() --> number
 --# assume CA_REGION.garrison_residence: method() --> CA_GARRISON_RESIDENCE
 --# assume CA_REGION.name: method() --> string
 --# assume CA_REGION.province_name: method() --> string

@@ -274,11 +274,11 @@ local blacklisted_subtypes = {
 	"cst_bloodline_dreng_gunddadrak",
 	"cst_bloodline_khoskog",
 	-- bug fixes
-	--"wh2_dlc09_tmb_tomb_king",
-	--"tmb_liche_high_priest_death",
-	--"tmb_liche_high_priest_light",
-	--"tmb_liche_high_priest_nehekhara",
-	--"tmb_liche_high_priest_shadow"
+	"wh2_dlc09_tmb_tomb_king",
+	"tmb_liche_high_priest_death",
+	"tmb_liche_high_priest_light",
+	"tmb_liche_high_priest_nehekhara",
+	"tmb_liche_high_priest_shadow"
 } --:vector<string>
 
 local immortal_subtypes = {
@@ -294,7 +294,6 @@ local immortal_subtypes = {
 	--"wh2_dlc09_tmb_tomb_king_setep",
 	--"wh2_dlc09_tmb_tomb_king_thutep",
 	--"wh2_dlc09_tmb_tomb_king_wakhaf",
-	"wh2_dlc09_tmb_tomb_king",
 	"wh2_dlc11_cst_admiral_tech_01",
 	"wh2_dlc11_cst_admiral_tech_02",
 	"wh2_dlc11_cst_admiral_tech_03",
@@ -305,11 +304,12 @@ local immortal_subtypes = {
 	--"dlc06_dwf_thane_ghost_1",
 	--"dlc06_dwf_thane_ghost_2",
 	--"wh2_dlc11_cst_ghost_paladin",
-	--mixu
-	"tmb_liche_high_priest_death",
-	"tmb_liche_high_priest_light",
-	"tmb_liche_high_priest_nehekhara",
-	"tmb_liche_high_priest_shadow"
+	--"wh2_dlc09_tmb_tomb_king",
+	----mixu
+	--"tmb_liche_high_priest_death",
+	--"tmb_liche_high_priest_light",
+	--"tmb_liche_high_priest_nehekhara",
+	--"tmb_liche_high_priest_shadow"
 } --:vector<string>
 
 --v function(uic: CA_UIC)
