@@ -197,3 +197,7 @@ require("sm0/sm0_norsca/script/campaign/mod/sm0_norsca")
 --bugs
 require("sm0/cbf/script/campaign/wh2_campaign_faction_renaming")
 
+--chaos
+require("sm0/sm0_chaos/script/campaign/mod/sm0_chaos")
+
+

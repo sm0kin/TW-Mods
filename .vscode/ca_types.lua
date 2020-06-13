@@ -968,6 +968,10 @@
 --# assume CA_RITUAL_LIST.is_empty: method() --> boolean
 --# assume CA_RITUAL_LIST.num_items: method() --> int
 
+-- CUSTOM EFFECT BUNDLES
+--# assume CA_CUSTOM_EFFECT_BUNDLE.add_effect: method(effect_bundle: string, effect_scope: string, effect_value: int)
+--# assume CA_CUSTOM_EFFECT_BUNDLE.set_duration: method(duration: int) --> int
+
 -- GLOBAL FUNCTIONS
 -- COMMON
 --# assume global find_uicomponent: function(parent: CA_UIC, string...) --> CA_UIC

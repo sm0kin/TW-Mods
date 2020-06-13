@@ -54,12 +54,13 @@ local ci_norsca_spawn_area = {474, 518, 160, 186};
 
 -- range of units to spawn a new horde with (min, max)
 -- mid game | late game
-local ci_horde_size = {{17, 20}, {20, 20}}; --{{15, 17}, {19,19}}; 
+local ci_horde_size = {{27, 30}, {40, 40}} --ca-- {{15, 17}, {19,19}}; --mod-- {{17, 20}, {20, 20}};
 
 -- amount of free XP to give agents and armies when spawning
 -- agents | mid game | late game
 -- rank 2, 3, 4 | rank 7, 8, 9 | rank 20, 21, 22
 local ci_character_xp = {{2, 3, 4}, {12, 13, 14}, {22, 23, 24}};
+local ci_ll_character_xp = 40
 
 -- turn number to shuffle the AI personalities if the Chaos faction is under player control
 local ci_player_chaos_personality_shuffle_turn = 30;
@@ -1578,7 +1579,7 @@ function ci_late_game_setup_listeners()
 				local current_char_forename = current_char:get_forename();
 				
 				if (current_char_forename == "names_name_2147345922" or current_char_forename == "names_name_2147345931") and current_char:rank() < 5 then
-					cm:add_agent_experience(cm:char_lookup_str(current_char:cqi()), ci_character_xp[3][cm:random_number(3)], true);
+					cm:add_agent_experience(cm:char_lookup_str(current_char:cqi()), ci_ll_character_xp, true);
 					cm:set_saved_value("kholek_sigvald_experience", true);
 				end;
 			end;
@@ -2149,7 +2150,7 @@ function ci_spawn_special_character(char_details)
 					cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force", cqi, 0, true);
 					cm:set_character_immortality(char_str, true);
 					cm:set_character_unique(char_str, true);
-					cm:add_agent_experience(char_str, ci_character_xp[3][cm:random_number(3)], true);
+					cm:add_agent_experience(char_str, ci_ll_character_xp, true);
 					
 					local char = cm:get_character_by_cqi(cqi);
 					local mf_cqi = char:military_force():command_queue_index();
@@ -2189,7 +2190,7 @@ function ci_spawn_archaon()
 					y,
 					function(cqi)
 						cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force_unbreakable", cqi, 0, true);
-						cm:add_agent_experience(cm:char_lookup_str(cqi), ci_character_xp[3][cm:random_number(3)], true);
+						cm:add_agent_experience(cm:char_lookup_str(cqi), ci_ll_character_xp, true);
 					
 						local char = cm:get_character_by_cqi(cqi);
 						local mf_cqi = char:military_force():command_queue_index();
