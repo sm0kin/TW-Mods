@@ -5,12 +5,12 @@ local subculture_levels = {
     ["wh_main_sc_chs_chaos"] = "25", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_dwf_dwarfs"] = "0", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_emp_empire"] = "0", -- 5/10/15/20/25/30/35/40/45/50
-    ["wh_main_sc_grn_greenskins"] = "30", -- 5/10/15/20/25/30/35/40/45/50
-    ["wh_main_sc_grn_savage_orcs"] = "30", -- 5/10/15/20/25/30/35/40/45/50
+    ["wh_main_sc_grn_greenskins"] = "15", -- 5/10/15/20/25/30/35/40/45/50
+    ["wh_main_sc_grn_savage_orcs"] = "15", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_ksl_kislev"] = "0", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_nor_norsca"] = "35", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_teb_teb"] = "0", -- 5/10/15/20/25/30/35/40/45/50
-    ["wh_main_sc_vmp_vampire_counts"] = "25", -- 5/10/15/20/25/30/35/40/45/50
+    ["wh_main_sc_vmp_vampire_counts"] = "15", -- 5/10/15/20/25/30/35/40/45/50
     ["wh2_dlc09_rogue_black_creek_raiders"] = "0",
     ["wh2_dlc09_rogue_dwellers_of_zardok"] = "0",
     ["wh2_dlc09_rogue_eyes_of_the_jungle"] = "0",
@@ -66,7 +66,7 @@ local subculture_levels = {
     ["wh2_main_sc_def_dark_elves"] = "5", -- 5/10/15/20/25/30/35/40/45/50
     ["wh2_main_sc_hef_high_elves"] = "0", -- 5/10/15/20/25/30/35/40/45/50
     ["wh2_main_sc_lzd_lizardmen"] = "0", -- 5/10/15/20/25/30/35/40/45/50
-    ["wh2_main_sc_skv_skaven"] = "15" -- 5/10/15/20/25/30/35/40/45/50
+    ["wh2_main_sc_skv_skaven"] = "10" -- 5/10/15/20/25/30/35/40/45/50
 } --:map<string, string>
 
 local effect_bundles = {
