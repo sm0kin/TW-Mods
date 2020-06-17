@@ -215,9 +215,6 @@ function sm0_confed()
 						if faction:is_human() and faction:has_pooled_resource("emp_loyalty") == true then
 							cm:force_diplomacy("faction:"..faction_name, "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false)
 							cm:force_diplomacy("faction:"..faction_name, "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false)
-							if vfs.exists("script/campaign/mod/mixu_le_unlocker.lua") then 
-								cm:force_diplomacy("faction:"..faction_name, "faction:wh_main_emp_marienburg", "form confederation", true, true, false)
-							end
 						end
 					end, 1, "changeDiplomacyOptions"
 				)
