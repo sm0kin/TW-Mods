@@ -10,7 +10,7 @@ local subculture_levels = {
     ["wh_main_sc_ksl_kislev"] = "0", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_nor_norsca"] = "35", -- 5/10/15/20/25/30/35/40/45/50
     ["wh_main_sc_teb_teb"] = "0", -- 5/10/15/20/25/30/35/40/45/50
-    ["wh_main_sc_vmp_vampire_counts"] = "15", -- 5/10/15/20/25/30/35/40/45/50
+    ["wh_main_sc_vmp_vampire_counts"] = "25", -- 5/10/15/20/25/30/35/40/45/50
     ["wh2_dlc09_rogue_black_creek_raiders"] = "0",
     ["wh2_dlc09_rogue_dwellers_of_zardok"] = "0",
     ["wh2_dlc09_rogue_eyes_of_the_jungle"] = "0",
@@ -87,7 +87,7 @@ function sm0_balance()
         "sm0_balance_FactionTurnStart",
         "FactionTurnStart",
         function(context)
-            return not context:faction():is_human()
+            return not context:faction():is_human() and not context:faction():is_rebel()
         end,
         function(context)
             local subculture = context:faction():subculture()

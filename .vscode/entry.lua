@@ -172,6 +172,7 @@ require("sm0/cbf/script/campaign/mod/fix_multiple_vows")
 require("sm0/cbf/script/campaign/mod/fix_lokhir_quest")
 require("sm0/cbf/script/campaign/mod/fix_mount_upgrades")
 require("sm0/cbf/script/campaign/mod/fix_prisoner_defeated_traits")
+require("sm0/cbf/script/campaign/mod/fix_staff_of_volans")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_revitalizing_rite")
@@ -199,5 +200,10 @@ require("sm0/cbf/script/campaign/wh2_campaign_faction_renaming")
 
 --chaos
 require("sm0/sm0_chaos/script/campaign/mod/sm0_chaos")
+require("sm0/sm0_chaos/script/campaign/main_warhammer/wh_chaos_invasion")
 
+--deco
+require("sm0/amazons/script/campaign/mod/amazons_faction")
+require("sm0/amazons/script/campaign/mod/amazons_missions")
+require("sm0/amazons/script/campaign/mod/amazons_ror_units")
 

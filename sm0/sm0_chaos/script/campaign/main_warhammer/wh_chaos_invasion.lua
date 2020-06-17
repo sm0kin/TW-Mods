@@ -40,8 +40,9 @@ local ci_early_game_event_turn = 20;
 -- the number of hordes we want the Chaos faction to have when spawning a new wave
 -- mid game | late game
 -- easy, normal, hard, very hard, legendary
+-- sm0kin
 local ci_max_num_hordes = {{20, 20, 25, 30, 35}, {30, 30, 35, 40, 45}}; --x5 {{4, 4, 5, 6, 7}, {6, 6, 7, 8, 9}};
-
+-- sm0kin end
 -- the area in which it is valid to spawn hordes (currently a rectangle in the Chaos Wastes region) and the faction that should spawn there
 -- min x, max x, min y, max y
 local ci_spawn_areas = {
@@ -54,13 +55,16 @@ local ci_norsca_spawn_area = {474, 518, 160, 186};
 
 -- range of units to spawn a new horde with (min, max)
 -- mid game | late game
-local ci_horde_size = {{27, 30}, {40, 40}} --ca-- {{15, 17}, {19,19}}; --mod-- {{17, 20}, {20, 20}};
-
+-- sm0kin
+local ci_horde_size = {{29, 39}, {39, 39}} --ca-- {{15, 17}, {19,19}}; --mod-- {{17, 20}, {20, 20}};
+-- sm0kin end
 -- amount of free XP to give agents and armies when spawning
 -- agents | mid game | late game
 -- rank 2, 3, 4 | rank 7, 8, 9 | rank 20, 21, 22
-local ci_character_xp = {{2, 3, 4}, {12, 13, 14}, {22, 23, 24}};
+-- sm0kin
+local ci_character_xp = {{12, 13, 14}, {12, 13, 14}, {22, 23, 24}};
 local ci_ll_character_xp = 40
+-- sm0kin end
 
 -- turn number to shuffle the AI personalities if the Chaos faction is under player control
 local ci_player_chaos_personality_shuffle_turn = 30;
@@ -79,13 +83,17 @@ local ci_loc_details = {
 };
 
 local ci_archaon_forename = "names_name_2147343903";
-
+-- sm0kin
 local ci_chaos_horde_buildings = {
 	"wh_main_horde_chaos_settlement_3",
 	"wh_main_horde_chaos_warriors_2",
-	"wh_main_horde_chaos_forge_1"
+	"wh_main_horde_chaos_forge_1",
+	"wh_main_horde_chaos_weapons_2",
+	"wh_main_horde_chaos_dragon_ogres_1",
+	"wh_main_horde_chaos_knights_1",
+	"wh_main_horde_chaos_magic_1"
 };
-
+-- sm0kin end
 local ci_beastmen_horde_buildings = {
 	"wh_dlc03_horde_beastmen_herd_3",
 	"wh_dlc03_horde_beastmen_gors_3",
@@ -1579,7 +1587,9 @@ function ci_late_game_setup_listeners()
 				local current_char_forename = current_char:get_forename();
 				
 				if (current_char_forename == "names_name_2147345922" or current_char_forename == "names_name_2147345931") and current_char:rank() < 5 then
+					-- sm0kin
 					cm:add_agent_experience(cm:char_lookup_str(current_char:cqi()), ci_ll_character_xp, true);
+					-- sm0kin end
 					cm:set_saved_value("kholek_sigvald_experience", true);
 				end;
 			end;
@@ -1846,62 +1856,119 @@ end;
 
 function ci_setup_armies()
 	local ram = random_army_manager;
-	
+
 	ram:new_force("chaos_1");
 	
 	ram:add_mandatory_unit("chaos_1", "wh_main_chs_art_hellcannon",		1);
-	
-	ram:add_unit("chaos_1", "wh_main_chs_inf_chaos_marauders_0",		2);
-	ram:add_unit("chaos_1", "wh_main_chs_inf_chaos_warriors_0",			5);
-	ram:add_unit("chaos_1", "wh_main_chs_inf_chaos_warriors_1",			3);
-	ram:add_unit("chaos_1", "wh_main_chs_cav_chaos_chariot",			2);
-	ram:add_unit("chaos_1", "wh_main_nor_cav_marauder_horsemen_0",		2);
-	ram:add_unit("chaos_1", "wh_main_chs_cav_chaos_knights_0",			4);
-	ram:add_unit("chaos_1", "wh_main_chs_mon_chaos_warhounds_0",		1);
-	ram:add_unit("chaos_1", "wh_main_chs_mon_chaos_spawn",				2);
-	ram:add_unit("chaos_1", "wh_main_chs_mon_trolls",					2);
+	-- sm0kin
+	ram:add_unit("chaos_1", "wh_main_chs_inf_chaos_marauders_0",		5)
+	ram:add_unit("chaos_1", "wh_main_chs_inf_chaos_marauders_1",		10)
+	ram:add_unit("chaos_1", "wh_main_chs_inf_chaos_warriors_0",			10)
+	ram:add_unit("chaos_1", "wh_main_chs_inf_chaos_warriors_1",			5)
+	ram:add_unit("chaos_1", "wh_dlc01_chs_inf_chaos_warriors_2",		10)
+	ram:add_unit("chaos_1", "wh_dlc06_chs_inf_aspiring_champions_0",	3)
+	ram:add_unit("chaos_1", "wh_main_chs_cav_chaos_chariot",			2)
+	ram:add_unit("chaos_1", "wh_main_nor_cav_marauder_horsemen_0",		2)
+	ram:add_unit("chaos_1", "wh_main_chs_cav_marauder_horsemen_1",		2)
+	ram:add_unit("chaos_1", "wh_dlc06_chs_cav_marauder_horsemasters_0",	2)
+	ram:add_unit("chaos_1", "wh_main_chs_mon_chaos_warhounds_0",		2)
+	ram:add_unit("chaos_1", "wh_main_chs_mon_chaos_warhounds_1",		1)
+	ram:add_unit("chaos_1", "wh_main_chs_mon_chaos_spawn",				2)
+	ram:add_unit("chaos_1", "wh_main_chs_mon_trolls",					2)
+	ram:add_unit("chaos_1", "wh_dlc06_chs_feral_manticore",				2)
+	ram:add_unit("chaos_1", "wh_dlc01_chs_inf_forsaken_0",				5)
 	
 	ram:new_force("chaos_2");
 	
 	ram:add_mandatory_unit("chaos_2", "wh_main_chs_art_hellcannon",		1);
 	
-	ram:add_unit("chaos_2", "wh_main_chs_inf_chaos_warriors_0",			20);
-	ram:add_unit("chaos_2", "wh_main_chs_inf_chaos_warriors_1",			10);
-	ram:add_unit("chaos_2", "wh_main_chs_inf_chosen_0",					7);
-	ram:add_unit("chaos_2", "wh_main_chs_inf_chosen_1",					4);
-	ram:add_unit("chaos_2", "wh_main_chs_cav_chaos_knights_0",			15);
-	ram:add_unit("chaos_2", "wh_main_chs_cav_chaos_chariot",			8);
-	ram:add_unit("chaos_2", "wh_main_chs_mon_chaos_spawn",				8);
-	ram:add_unit("chaos_2", "wh_main_chs_mon_trolls",					10);
-	ram:add_unit("chaos_2", "wh_main_chs_mon_giant",					8);
-	ram:add_unit("chaos_2", "wh_main_chs_art_hellcannon",				10);
+	ram:add_unit("chaos_2", "wh_main_chs_inf_chaos_warriors_0",			8)
+	ram:add_unit("chaos_2", "wh_main_chs_inf_chaos_warriors_1",			4)
+	ram:add_unit("chaos_2", "wh_dlc01_chs_inf_chaos_warriors_2",		8)
+	ram:add_unit("chaos_2", "wh_main_chs_inf_chosen_0",					8)
+	ram:add_unit("chaos_2", "wh_main_chs_inf_chosen_1",					8)
+	ram:add_unit("chaos_2", "wh_dlc01_chs_inf_chosen_2",				4)
+	ram:add_unit("chaos_2", "wh_main_chs_cav_chaos_knights_0",			5)
+	ram:add_unit("chaos_2", "wh_main_chs_cav_chaos_knights_1",			5)
+	ram:add_unit("chaos_2", "wh_dlc01_chs_cav_gorebeast_chariot",		3)
+	ram:add_unit("chaos_2", "wh_main_chs_mon_chaos_spawn",				3)
+	ram:add_unit("chaos_2", "wh_dlc01_chs_mon_trolls_1",				3)
+	ram:add_unit("chaos_2", "wh_main_chs_mon_giant",					2)
+	ram:add_unit("chaos_2", "wh_main_chs_art_hellcannon",				2)
+	ram:add_unit("chaos_2", "wh_dlc01_chs_mon_dragon_ogre_shaggoth",	2)
+	ram:add_unit("chaos_2", "wh_dlc01_chs_mon_dragon_ogre",	            2)
 	
 	ram:new_force("beastmen_1");
 	
-	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_ungor_herd_1",			26);
-	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_ungor_raiders_0",		18);
-	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_ungor_spearmen_0",		18);
-	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_chaos_warhounds_0",	13);
+	ram:add_mandatory_unit("beastmen_1", "wh_dlc03_bst_inf_cygor_0",	1)
+
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_ungor_herd_1",			20);
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_ungor_raiders_0",		15);
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_ungor_spearmen_0",		15);
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_chaos_warhounds_0",	6)
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_chaos_warhounds_1",	6)
+	ram:add_unit("beastmen_1", "wh_dlc05_bst_mon_harpies_0",			3)
 	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_gor_herd_0",			10);
 	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_gor_herd_1",			10);
-	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_centigors_0",			5);
-	
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_centigors_0",			3);
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_centigors_1",			3);
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_centigors_2",			3);
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_inf_razorgor_herd_0",		3);
+	ram:add_unit("beastmen_1", "wh_dlc03_bst_mon_chaos_spawn_0",		3);
+
 	ram:new_force("beastmen_2");
+
+	ram:add_mandatory_unit("beastmen_2", "wh_dlc03_bst_inf_cygor_0",	1)
 	
 	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_gor_herd_0",			17);
 	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_gor_herd_1",			17);
 	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_ungor_spearmen_1",		12);
 	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_ungor_raiders_0",		12);
 	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_bestigor_herd_0",		10);
-	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_minotaurs_0",			8);
-	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_minotaurs_1",			8);
+	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_minotaurs_0",			6)
+	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_minotaurs_1",			6)
+	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_minotaurs_2",			5)
 	ram:add_unit("beastmen_2", "wh_dlc03_bst_inf_cygor_0",				7);
 	ram:add_unit("beastmen_2", "wh_dlc03_bst_mon_giant_0",				5);
 	ram:add_unit("beastmen_2", "wh_dlc03_bst_cav_razorgor_chariot_0",	4);
+
+	ram:new_force("norsca_1")
+
+	ram:add_mandatory_unit("norsca_1", "wh_dlc08_nor_mon_war_mammoth_0",		1)
+
+	ram:add_unit("norsca_1", "wh_main_nor_inf_chaos_marauders_0",				5)
+	ram:add_unit("norsca_1", "wh_main_nor_inf_chaos_marauders_1",				5)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_inf_marauder_spearman_0",			5)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_inf_marauder_berserkers_0",			15)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_inf_marauder_champions_0",			15)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_inf_marauder_champions_1",			15)
+	ram:add_unit("norsca_1", "wh_main_nor_mon_chaos_trolls",					3)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_norscan_ice_trolls_0",			3)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_skinwolves_0",					3)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_skinwolves_1",					3)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_fimir_0",						3)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_fimir_1",						3)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_marauder_warwolves_0",			3)
+	ram:add_unit("norsca_1", "wh_main_nor_cav_chaos_chariot",					6)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_cav_marauder_warwolves_chariot_0",	6)
+	ram:add_unit("norsca_1", "wh_main_nor_cav_marauder_horsemen_0",				5)
+	ram:add_unit("norsca_1", "wh_main_nor_cav_marauder_horsemen_1",				5)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_cav_marauder_horsemasters_0",		5)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_inf_marauder_hunters_0",				5)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_inf_marauder_hunters_1",				5)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_feral_manticore",					3)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_frost_wyrm_0",					2)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_norscan_giant_0",				2)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_war_mammoth_0",					2)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_war_mammoth_1",					1)
+	ram:add_unit("norsca_1", "wh_dlc08_nor_mon_war_mammoth_2",					1)
+	-- sm0kin end
 end;
 
 function ci_get_army_string(race, stage)
-	return random_army_manager:generate_force(race .. "_" .. stage, cm:random_number(ci_horde_size[stage][2], ci_horde_size[stage][1]));
+	-- sm0kin
+	return random_army_manager:generate_force(race .. "_" .. stage, cm:random_number(ci_horde_size[stage][2], ci_horde_size[stage][1]), false, true)
+	-- sm0kin end
 end;
 
 function is_valid_spawn_point(x, y)
@@ -2043,13 +2110,9 @@ function ci_spawn_norsca()
 	local num_armies_to_spawn = ci_max_num_hordes[1][difficulty];
 	
 	local turn_number = tostring(cm:model():turn_number());
-	
-	local army_string = {
-		"wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_1,wh_main_nor_inf_chaos_marauders_1,wh_main_nor_mon_chaos_warhounds_0,wh_main_nor_mon_chaos_warhounds_0,wh_main_nor_mon_chaos_trolls,wh_main_nor_mon_chaos_trolls,wh_main_nor_cav_chaos_chariot,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_1,wh_main_nor_cav_marauder_horsemen_1",
-		"wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_1,wh_main_nor_inf_chaos_marauders_1,wh_main_nor_cav_chaos_chariot,wh_main_nor_cav_chaos_chariot,wh_main_nor_mon_chaos_trolls,wh_main_nor_mon_chaos_trolls,wh_main_nor_mon_chaos_warhounds_0,wh_main_nor_mon_chaos_warhounds_0,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_1,wh_main_nor_cav_marauder_horsemen_1,wh_main_nor_cav_marauder_horsemen_1",
-		"wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_0,wh_main_nor_inf_chaos_marauders_1,wh_main_nor_inf_chaos_marauders_1,wh_main_nor_cav_chaos_chariot,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_0,wh_main_nor_cav_marauder_horsemen_1,wh_main_nor_cav_marauder_horsemen_1,wh_main_nor_mon_chaos_warhounds_0,wh_main_nor_mon_chaos_warhounds_0,wh_main_nor_mon_chaos_warhounds_0,wh_main_nor_mon_chaos_trolls,wh_main_nor_mon_chaos_trolls"
-	};
-	
+	-- sm0kin
+	local army_string = ci_get_army_string("norsca", 1)
+	-- sm0kin end
 	for i = 1, num_armies_to_spawn do
 		local valid = false;
 		local x = 0;
@@ -2070,6 +2133,9 @@ function ci_spawn_norsca()
 					function(cqi)
 						cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force", cqi, 0, true);
 						cm:add_agent_experience(cm:char_lookup_str(cqi), ci_character_xp[2][cm:random_number(3)], true);
+						-- sm0kin
+						cm:add_experience_to_units_commanded_by_character(cm:char_lookup_str(cqi), 5)
+						-- sm0kin end
 					end
 				);
 				
@@ -2119,7 +2185,9 @@ function ci_disable_further_advice()
 end;
 
 function ci_spawn_special_character(char_details)
+	-- sm0kin
 	local unit_str = ci_get_army_string("chaos", 2);
+	-- sm0kin end
 	local valid = false;
 	local x = 0;
 	local y = 0;
@@ -2171,7 +2239,9 @@ function ci_spawn_archaon()
 	elseif archaon:has_military_force() then
 		script_error("WARNING: Tried to spawn Archaon for the Chaos Invasion late game event, but he is already on the map - how could this happen?");
 	else
+		-- sm0kin
 		local unit_str = ci_get_army_string("chaos", 2);
+		-- sm0kin end
 		local valid = false;
 		local x = 0;
 		local y = 0;
@@ -2190,7 +2260,9 @@ function ci_spawn_archaon()
 					y,
 					function(cqi)
 						cm:apply_effect_bundle_to_characters_force("wh_main_bundle_military_upkeep_free_force_unbreakable", cqi, 0, true);
+						-- sm0kin
 						cm:add_agent_experience(cm:char_lookup_str(cqi), ci_ll_character_xp, true);
+						-- sm0kin end
 					
 						local char = cm:get_character_by_cqi(cqi);
 						local mf_cqi = char:military_force():command_queue_index();
@@ -2245,7 +2317,7 @@ function ci_chaos_diplomacy_startup()
 						cm:force_diplomacy("faction:" .. ci_beastmen_faction_string, "faction:" .. current_faction_name, "peace", false, false, true);
 					end;
 				end;
-				
+
 				local factions_at_war_with = {
 					"wh_main_emp_empire",
 					"wh2_dlc13_emp_golden_order",
@@ -2273,7 +2345,7 @@ function ci_chaos_diplomacy_startup()
 					"wh_main_vmp_vampire_counts",
 					"wh_main_vmp_schwartzhafen"
 				};
-				
+
 				local human_factions = cm:get_human_factions();
 				local mpc_declared_war_on_player_1 = false;
 				
@@ -2319,21 +2391,39 @@ function ci_chaos_diplomacy_startup()
 				
 				table.insert(vassal_enemies, cm:get_faction(ci_beastmen_faction_string):factions_at_war_with());
 				
-				-- only make Norsca factions Chaos's vassals if Beastmen are not human controlled in SPC
-				if cm:is_multiplayer() or not cm:get_faction("wh_dlc03_bst_beastmen"):is_human() then
-					local varg_faction = cm:get_faction("wh_main_nor_varg");
-					local skaeling_faction = cm:get_faction("wh_main_nor_skaeling");
-					
-					table.insert(vassal_enemies, varg_faction:factions_at_war_with());
-					table.insert(vassal_enemies, skaeling_faction:factions_at_war_with());
-				end;
-				
+				-- sm0kin
 				local player_1 = cm:get_faction(human_factions[1]);
 				local player_2 = nil;
 				-- only get player 2 if one exists
 				if cm:is_multiplayer() then
 					player_2 = cm:get_faction(human_factions[2]);
 				end;
+
+				-- only make Norsca factions Chaos's vassals if Beastmen are not human controlled in SPC
+				if cm:is_multiplayer() or not cm:get_faction("wh_dlc03_bst_beastmen"):is_human() then
+					local varg_faction = cm:get_faction("wh_main_nor_varg");
+					local skaeling_faction = cm:get_faction("wh_main_nor_skaeling");
+
+					table.insert(vassal_enemies, varg_faction:factions_at_war_with());
+					table.insert(vassal_enemies, skaeling_faction:factions_at_war_with());
+
+					if player_1:subculture() ~= "wh_main_sc_nor_norsca" and (not player_2 or player_2:subculture() ~= "wh_main_sc_nor_norsca") then
+						local wh_dlc08_nor_goromadny_tribe = cm:get_faction("wh_dlc08_nor_goromadny_tribe")
+						local wh_dlc08_nor_helspire_tribe = cm:get_faction("wh_dlc08_nor_helspire_tribe")
+						local wh_dlc08_nor_naglfarlings = cm:get_faction("wh_dlc08_nor_naglfarlings")
+						local wh_dlc08_nor_norsca = cm:get_faction("wh_dlc08_nor_norsca")
+						local wh_dlc08_nor_vanaheimlings = cm:get_faction("wh_dlc08_nor_vanaheimlings")
+						local wh_dlc08_nor_wintertooth = cm:get_faction("wh_dlc08_nor_wintertooth")
+
+						table.insert(vassal_enemies, wh_dlc08_nor_goromadny_tribe:factions_at_war_with())
+						table.insert(vassal_enemies, wh_dlc08_nor_helspire_tribe:factions_at_war_with())
+						table.insert(vassal_enemies, wh_dlc08_nor_naglfarlings:factions_at_war_with())
+						table.insert(vassal_enemies, wh_dlc08_nor_norsca:factions_at_war_with())
+						table.insert(vassal_enemies, wh_dlc08_nor_vanaheimlings:factions_at_war_with())
+						table.insert(vassal_enemies, wh_dlc08_nor_wintertooth:factions_at_war_with())
+					end
+				end;
+				-- sm0kin end		
 				
 				-- declare war on all enemies of Chaos's vassals unless they are allied with a human faction (they should be dealt with earlier)
 				for i = 1, #vassal_enemies do
@@ -2349,8 +2439,17 @@ function ci_chaos_diplomacy_startup()
 									"wh_main_nor_varg",
 									"wh_main_nor_skaeling",
 									ci_chaos_faction_string
-								};
-								
+								};	
+								-- sm0kin							
+								if player_1:subculture() ~= "wh_main_sc_nor_norsca" and (not player_2 or player_2:subculture() ~= "wh_main_sc_nor_norsca") then
+									table.insert(chaos_factions, "wh_dlc08_nor_goromadny_tribe")
+									table.insert(chaos_factions, "wh_dlc08_nor_helspire_tribe")
+									table.insert(chaos_factions, "wh_dlc08_nor_naglfarlings")
+									table.insert(chaos_factions, "wh_dlc08_nor_norsca")
+									table.insert(chaos_factions, "wh_dlc08_nor_vanaheimlings")
+									table.insert(chaos_factions, "wh_dlc08_nor_wintertooth")
+								end
+								-- sm0kin end
 								for k = 1, #chaos_factions do
 									local current_chaos_faction = chaos_factions[k];
 									
@@ -2417,6 +2516,24 @@ function ci_make_chaos_vassals()
 		"wh_main_nor_varg",
 		"wh_main_nor_skaeling"
 	};
+	-- sm0kin
+	local human_factions = cm:get_human_factions();
+	local player_1 = cm:get_faction(human_factions[1]);
+	local player_2 = nil;
+	-- only get player 2 if one exists
+	if cm:is_multiplayer() then
+		player_2 = cm:get_faction(human_factions[2]);
+	end;
+	local vassal_factions = {}
+	if player_1:subculture() ~= "wh_main_sc_nor_norsca" and (not player_2 or player_2:subculture() ~= "wh_main_sc_nor_norsca") then
+		table.insert(vassal_factions, "wh_dlc08_nor_goromadny_tribe")
+		table.insert(vassal_factions, "wh_dlc08_nor_helspire_tribe")
+		table.insert(vassal_factions, "wh_dlc08_nor_naglfarlings")
+		table.insert(vassal_factions, "wh_dlc08_nor_norsca")
+		table.insert(vassal_factions, "wh_dlc08_nor_vanaheimlings")
+		table.insert(vassal_factions, "wh_dlc08_nor_wintertooth")
+	end
+	-- sm0kin end
 	
 	local make_norsca_vassals = false;
 	

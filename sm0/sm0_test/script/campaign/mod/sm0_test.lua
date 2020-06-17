@@ -503,6 +503,17 @@ function sm0_test()
 						end
 					end
 				end
+				if cm:model():turn_number() == 2 then 
+					--ci_mid_game_start_setup()
+
+				end
+				if cm:model():turn_number() == 4 then 
+					--ci_late_game_transition()
+				end
+				if cm:model():turn_number() == 6 then 
+					--ci_spawn_norsca()
+					--ci_late_game_start()
+				end
 			end
 			--sm0_log("sm0/faction = "..context:faction():name())
 		end,

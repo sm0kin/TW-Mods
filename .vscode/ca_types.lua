@@ -654,10 +654,10 @@
 
 -- CHARACTER
 --# assume CA_CHAR.has_trait: method(traitName: string) --> boolean
---# assume CA_CHAR.logical_position_x: method() --> number
---# assume CA_CHAR.logical_position_y: method() --> number
---# assume CA_CHAR.display_position_x: method() --> number
---# assume CA_CHAR.display_position_y: method() --> number
+--# assume CA_CHAR.logical_position_x: method() --> int
+--# assume CA_CHAR.logical_position_y: method() --> int
+--# assume CA_CHAR.display_position_x: method() --> int
+--# assume CA_CHAR.display_position_y: method() --> int
 --# assume CA_CHAR.character_subtype_key: method() --> string
 --# assume CA_CHAR.region: method() --> CA_REGION
 --# assume CA_CHAR.faction: method() --> CA_FACTION
@@ -753,8 +753,8 @@
 --# assume CA_REGION.resource_exists: method(resource_key: string) --> boolean
 --# assume CA_REGION.any_resource_available: method() --> boolean
 --# assume CA_REGION.adjacent_region_list: method() --> CA_REGION_LIST
---# assume CA_REGION.logical_position_x: method() --> number
---# assume CA_REGION.logical_position_y: method() --> number
+--# assume CA_REGION.logical_position_x: method() --> int
+--# assume CA_REGION.logical_position_y: method() --> int
 --# assume CA_REGION.religion_proportion: method(religion: string) --> number
 
 --REGION LIST
@@ -763,10 +763,10 @@
 --# assume CA_REGION_LIST.is_empty: method() --> boolean
 
 -- SETTLEMENT
---# assume CA_SETTLEMENT.logical_position_x: method() --> number
---# assume CA_SETTLEMENT.logical_position_y: method() --> number
---# assume CA_SETTLEMENT.display_position_x: method() --> number
---# assume CA_SETTLEMENT.display_position_y: method() --> number
+--# assume CA_SETTLEMENT.logical_position_x: method() --> int
+--# assume CA_SETTLEMENT.logical_position_y: method() --> int
+--# assume CA_SETTLEMENT.display_position_x: method() --> int
+--# assume CA_SETTLEMENT.display_position_y: method() --> int
 --# assume CA_SETTLEMENT.get_climate: method() --> string
 --# assume CA_SETTLEMENT.is_null_interface: method() --> boolean
 --# assume CA_SETTLEMENT.faction: method() -->CA_FACTION
@@ -871,6 +871,7 @@
 --# assume CA_FACTION.foreign_slot_managers: method() --> CA_FOREIGN_SLOT_LIST
 --# assume CA_FACTION.ancillary_exists: method(ancillary: string) --> boolean
 --# assume CA_FACTION.is_quest_battle_faction: method() --> boolean
+--# assume CA_FACTION.is_rebel: method() --> boolean
 
 -- FACTION LIST
 --# assume CA_FACTION_LIST.num_items: method() --> number
@@ -1061,7 +1062,7 @@
 --# assume RAM.new_force: method(key: string)
 --# assume RAM.add_mandatory_unit: method(forcekey: string, unitkey: string, q: number)
 --# assume RAM.add_unit: method(forcekey: string, unitkey: string, q: number)
---# assume RAM.generate_force: method(id: string, sizes: {number, number}, is_table: boolean) --> string
+--# assume RAM.generate_force: method(id: string, sizes: {number, number}, is_table: boolean?) --> string
 
 -- CAMPAIGN CUTSCENE OBJECT
 --# assume global class CA_CUTSCENE

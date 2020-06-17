@@ -84,6 +84,12 @@ core:add_listener(
 			num_attackers = 1
 			num_defenders = 1
 		end
+
+		-- only the first attacking/attacked character is supposed to gain a trait
+		-- reinforcing generals will be ignored
+		num_attackers = 1
+		num_defenders = 1
+
 		if cm:pending_battle_cache_faction_is_attacker("wh2_main_hef_yvresse") and cm:pending_battle_cache_attacker_victory() then
 			for i = 1, num_attackers do
 				local this_char_cqi, this_mf_cqi, current_faction_name = cm:pending_battle_cache_get_attacker(i)
