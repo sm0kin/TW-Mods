@@ -35,6 +35,7 @@ local function expCheat()
 		cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
 		--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
 		--if currentChar:character_subtype("wh2_main_skv_lord_skrolk") then cm:force_add_ancillary(currentChar, "wh2_main_anc_arcane_item_the_liber_bubonicus", true, false) end
+		if currentChar:character_subtype("dwf_thorgrim_grudgebearer") then cm:force_add_ancillary(currentChar, "wh2_dlc10_dwf_anc_enchanted_item_horn_of_the_ancestors", true, false) end
 	end
 	--if cm:is_new_game() then
 		local factionList = cm:model():world():faction_list()
@@ -434,6 +435,7 @@ function sm0_test()
 	end	
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
 	cm:transfer_region_to_faction("wh2_main_eagle_gate", cm:get_local_faction(true))
+	cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction(true))
 	--cm:spawn_agent_at_settlement(cm:get_faction(cm:get_local_faction(true)), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
 	--local characterList = cm:get_faction(cm:get_local_faction(true)):character_list()
     --for i = 0, characterList:num_items() - 1 do
@@ -504,8 +506,64 @@ function sm0_test()
 					end
 				end
 				if cm:model():turn_number() == 2 then 
-					--ci_mid_game_start_setup()
-
+					--[[
+					local elector_faction_1 = cm:model():world():faction_by_key("wh_main_emp_nordland")
+					local elector_cqi_1 = elector_faction_1:command_queue_index()
+					local elector_faction_2 = cm:model():world():faction_by_key("wh_main_emp_ostland")
+					local elector_cqi_2 = elector_faction_2:command_queue_index()
+					local char_cqi = elector_faction_1:faction_leader():command_queue_index()
+					cm:trigger_dilemma_with_targets(
+						context:faction():command_queue_index(),
+						"wh2_dlc13_emp_elector_civil_war",
+						elector_cqi_1,
+						elector_cqi_2,
+						char_cqi, --
+						0,
+						0,
+						0
+					)					
+					cm:trigger_dilemma_with_targets(
+						context:faction():command_queue_index(),
+						"wh2_dlc13_emp_elector_succeeds", 
+						elector_cqi_1,
+						0,
+						char_cqi, --
+						0,
+						0,
+						0
+					)
+					cm:trigger_dilemma_with_targets(
+						context:faction():command_queue_index(),
+						"wh2_dlc13_emp_elector_succeeds_fealty", 
+						elector_cqi_1,
+						0,
+						char_cqi, --
+						0,
+						0,
+						0
+					)
+					cm:trigger_dilemma_with_targets(
+						context:faction():command_queue_index(),
+						"wh2_dlc13_emp_elector_politics_5",
+						elector_cqi_1,
+						elector_cqi_2,
+						char_cqi, --
+						0,
+						0,
+						0
+					)					
+					cm:trigger_dilemma_with_targets(
+						context:faction():command_queue_index(),
+						"wh2_dlc13_emp_elector_politics_7",
+						elector_cqi_1,
+						elector_cqi_2,
+						char_cqi, --
+						0,
+						0,
+						0
+					)					
+				--]]
+				--ci_mid_game_start_setup()
 				end
 				if cm:model():turn_number() == 4 then 
 					--ci_late_game_transition()
@@ -538,7 +596,7 @@ function sm0_test()
 			--if cm:model():turn_number() == 2 then cm:unlock_starting_general_recruitment("2140784146", "wh_main_vmp_vampire_counts") end
 			--if cm:model():turn_number() == 2 then cm:force_confederation("wh_main_grn_teef_snatchaz","wh_main_grn_orcs_of_the_bloody_hand") end
 			--if cm:model():turn_number() == 4 then kill_faction("wh_main_grn_teef_snatchaz") end
-			deletePlayerSubcultureFactions()
+			--deletePlayerSubcultureFactions()
 
 			--item test
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then
@@ -561,6 +619,11 @@ function sm0_test()
 		end,
 		function(context)
 			cm:show_shroud(false)
+			--local region_list = cm:model():world():region_manager():region_list()
+			--for i = 0, region_list:num_items() - 1 do
+			--	local region = region_list:item_at(i)
+			--	cm:set_region_abandoned(region:name())
+			--end
 			--expCheat()
 			--if cm:model():turn_number() == 2 then expCheat() end
 			--sm0_log("Faction: "..context:faction():name().." /is_dead: "..tostring(context:faction():is_dead()))

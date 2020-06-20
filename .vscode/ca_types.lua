@@ -732,6 +732,7 @@
 --# assume CA_UNIT_LIST.num_items: method() --> number
 --# assume CA_UNIT_LIST.item_at: method(j: number) --> CA_UNIT
 --# assume CA_UNIT_LIST.has_unit: method(unit: string) --> boolean
+--# assume CA_UNIT_LIST.is_empty: method() --> boolean
 
 -- REGION_MANAGER
 --# assume CA_REGION_MANAGER.region_list: method() --> CA_REGION_LIST
@@ -978,6 +979,7 @@
 -- GLOBAL FUNCTIONS
 -- COMMON
 --# assume global find_uicomponent: function(parent: CA_UIC, string...) --> CA_UIC
+--# assume global set_component_visible_with_parent: function(is_visible: boolean, parent: CA_UIC, string...)
 --# assume global find_child_uicomponent: function(parent: CA_UIC, child: string) --> CA_UIC
 --# assume global UIComponent: function(pointer: CA_Component) --> CA_UIC
 --# assume global find_uicomponent_from_table: function(root: CA_UIC, findtable: vector<string>) --> CA_UIC
@@ -1501,3 +1503,18 @@ set_ritual_chain_unlocked
 --
 --CHANGED/FIXED:
 --- Fundamental change to the __write_output_to_file boolean. In order to get script logs to output, you just have to put a file in `script` called `enable_console_logging`, and put any text within the file.
+
+
+-- Da Nutz ‘N’ Boltz Update
+
+--- @function pending_battle_cache_get_attacker_subtype
+--- @desc Returns just the subtype of a particular attacker in the cached pending battle. The attacker is specified by numerical index, with the first being accessible at record 1.
+--- @p @number index of attacker
+--- @return @string subtype
+--function campaign_manager:pending_battle_cache_get_attacker_subtype(index)
+
+--- @function pending_battle_cache_get_defender_subtype
+--- @desc Returns just the subtype of a particular defender in the cached pending battle. The defender is specified by numerical index, with the first being accessible at record 1.
+--- @p @number index of defender
+--- @return @string subtype
+--function campaign_manager:pending_battle_cache_get_defender_subtype(index)

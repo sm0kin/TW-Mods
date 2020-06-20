@@ -52,7 +52,8 @@ function sm0_chaos()
 			--cm:callback(function() 
 				local ram = random_army_manager
 				local character = context:character()
-				if character and character:character_subtype("chs_kholek_suneater") and not cm:get_saved_value("sm0_chaos_buffs_chs_kholek_suneater") then	
+				if character and character:character_subtype("chs_kholek_suneater") and not cm:get_saved_value("sm0_chaos_buffs_chs_kholek_suneater") 
+				and character:has_military_force() and not character:military_force():unit_list():is_empty() then
 					local army_size = character:military_force():unit_list():num_items()		
 					ram:new_force("kholek")
 					ram:add_mandatory_unit("kholek", "wh_main_chs_art_hellcannon",					1)	--2
@@ -73,7 +74,8 @@ function sm0_chaos()
 					cm:grant_unit_to_character(cm:char_lookup_str(character:command_queue_index()), unit_string)
 					cm:add_experience_to_units_commanded_by_character(cm:char_lookup_str(character:command_queue_index()), 9)
 					cm:set_saved_value("sm0_chaos_buffs_chs_kholek_suneater", true)
-				elseif character and character:character_subtype("chs_prince_sigvald") and not cm:get_saved_value("sm0_chaos_buffs_chs_prince_sigvald") then
+				elseif character and character:character_subtype("chs_prince_sigvald") and not cm:get_saved_value("sm0_chaos_buffs_chs_prince_sigvald") 
+				and character:has_military_force() and not character:military_force():unit_list():is_empty() then
 					local army_size = character:military_force():unit_list():num_items()		
 					ram:new_force("sigvald")
 					ram:add_mandatory_unit("sigvald", "wh_main_chs_art_hellcannon",					1)	--2
@@ -97,7 +99,8 @@ function sm0_chaos()
 					cm:grant_unit_to_character(cm:char_lookup_str(character:command_queue_index()), unit_string)
 					cm:add_experience_to_units_commanded_by_character(cm:char_lookup_str(character:command_queue_index()), 9)
 					cm:set_saved_value("sm0_chaos_buffs_chs_prince_sigvald", true)
-				elseif character and character:character_subtype("chs_archaon") and not cm:get_saved_value("sm0_chaos_buffs_chs_archaon") then
+				elseif character and character:character_subtype("chs_archaon") and not cm:get_saved_value("sm0_chaos_buffs_chs_archaon") 
+				and character:has_military_force() and not character:military_force():unit_list():is_empty() then
 					local army_size = character:military_force():unit_list():num_items()		
 					ram:new_force("archaon")
 					ram:add_mandatory_unit("archaon", "wh_main_chs_art_hellcannon",					1)	--2
@@ -128,7 +131,8 @@ function sm0_chaos()
 					cm:grant_unit_to_character(cm:char_lookup_str(character:command_queue_index()), unit_string)					
 					cm:add_experience_to_units_commanded_by_character(cm:char_lookup_str(character:command_queue_index()), 9)
 					cm:set_saved_value("sm0_chaos_buffs_chs_archaon", true)
-				elseif character and character:character_subtype("chs_lord_of_change") and not cm:get_saved_value("sm0_chaos_buffs_chs_lord_of_change") then
+				elseif character and character:character_subtype("chs_lord_of_change") and not cm:get_saved_value("sm0_chaos_buffs_chs_lord_of_change") 
+				and character:has_military_force() and not character:military_force():unit_list():is_empty() then
 					local army_size = character:military_force():unit_list():num_items()		
 					ram:new_force("bird")
 					ram:add_mandatory_unit("bird", "wh_main_chs_art_hellcannon",					1)	--2
