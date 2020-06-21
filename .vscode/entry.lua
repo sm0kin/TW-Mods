@@ -174,6 +174,7 @@ require("sm0/cbf/script/campaign/mod/fix_mount_upgrades")
 require("sm0/cbf/script/campaign/mod/fix_prisoner_defeated_traits")
 require("sm0/cbf/script/campaign/mod/fix_staff_of_volans")
 require("sm0/cbf/script/campaign/mod/fix_blark_hero_immortality")
+require("sm0/cbf/script/campaign/mod/fix_scrap_ai_listener")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_revitalizing_rite")

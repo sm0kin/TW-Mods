@@ -146,7 +146,7 @@ function q_setup()
 	local tehenhauin_faction = "wh2_dlc12_lzd_cult_of_sotek";
 	local tiktaqto_faction = "wh2_main_lzd_tlaqua";
 	local nakai_faction = "wh2_dlc13_lzd_spirits_of_the_jungle";
-	local gorrok_faction = "wh2_dlc14_lzd_itz_itza_tribe";
+	local gorrok_faction = "wh2_main_lzd_itza";
 	
 	local skrolk_faction = "wh2_main_skv_clan_pestilens";
 	local queek_headtaker_faction = "wh2_main_skv_clan_mors";

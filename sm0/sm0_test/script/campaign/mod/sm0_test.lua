@@ -622,7 +622,9 @@ function sm0_test()
 			--local region_list = cm:model():world():region_manager():region_list()
 			--for i = 0, region_list:num_items() - 1 do
 			--	local region = region_list:item_at(i)
-			--	cm:set_region_abandoned(region:name())
+			--	--cm:set_region_abandoned(region:name())
+			--	cm:transfer_region_to_faction(region:name(), cm:get_local_faction(true))	
+			--	cm:heal_garrison(region:cqi())				
 			--end
 			--expCheat()
 			--if cm:model():turn_number() == 2 then expCheat() end

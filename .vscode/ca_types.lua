@@ -65,6 +65,7 @@
 --# assume global class CA_SCRIPT_MESSAGER
 --# assume global class CAM_VECTOR
 --# assume global class VECTOR
+--# assume global class CA_UNIT_PURCHASABLE_EFFECT
 
 -- TYPES
 --# type global CA_EventName = 
@@ -599,6 +600,10 @@
 --# assume CM.start_faction_region_change_monitor: method(faction_name: string)
 --# assume CM.add_foreign_slot_set_to_region_for_faction: method(faction_cqi: CA_CQI, region_cqi: CA_CQI, slot_set: string)
 --# assume CM.remove_faction_foreign_slots_from_region: method(faction_cqi: CA_CQI, region_cqi: CA_CQI)
+
+-- scrap
+--# assume CM.faction_set_unit_purchasable_effect_lock_state: method(faction: CA_FACTION, purchasable_effect: string, lock_reason: string, should_lock: boolean)
+--# assume CM.faction_purchase_unit_effect: method(faction: CA_FACTION, unit: CA_UNIT, purchasable_effect: CA_UNIT_PURCHASABLE_EFFECT)
 
 -- CAMPAIGN UI MANAGER
 --# assume CUIM.get_char_selected: method() --> string
