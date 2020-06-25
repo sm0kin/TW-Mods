@@ -66,6 +66,7 @@
 --# assume global class CAM_VECTOR
 --# assume global class VECTOR
 --# assume global class CA_UNIT_PURCHASABLE_EFFECT
+--# assume global class CA_EVENTS
 
 -- TYPES
 --# type global CA_EventName = 
@@ -312,6 +313,7 @@
 --# assume CM.add_experience_to_units_commanded_by_character: method(char_lookup_str: string, level: int) --add_experience_to_units_commanded_by_character("faction:f,type:t,ability:a,surname:s,forename:f,garrison:g,x:1,y:2,r:3", level)
 --# assume CM.kill_character: method(lookup: CA_CQI | string, kill_army: boolean, throughcq: boolean)
 --# assume CM.kill_character_and_commanded_unit: method(lookup: CA_CQI | string, kill_army: boolean, throughcq: boolean)
+--# assume CM.wound_character: method(lookup: CA_CQI | string, turns: number, throughcq: boolean)
 --# assume CM.set_character_immortality: method(lookup: string, immortal: boolean)
 --# assume CM.set_character_unique: method(lookup: string, unique: boolean)
 --# assume CM.kill_all_armies_for_faction: method(factionName: CA_FACTION)
@@ -413,7 +415,7 @@
 --# assume CM.spawn_agent_at_military_force: method(owning_faction: CA_FACTION, target_force: CA_MILITARY_FORCE, agent_type: string, agent_subtype_record: string?)
 --# assume CM.spawn_agent_at_settlement: method(owning_faction: CA_FACTION, target_settlement: CA_SETTLEMENT, agent_type: string, agent_subtype_record: string?)
 --# assume CM.spawn_agent_at_position: method(owning_faction: CA_FACTION, x: number, y: number, agent_type: string, agent_subtype_record: string?)
---# assume CM.embed_agent_in_force: method(agent: CA_CQI, military_force: CA_MILITARY_FORCE)
+--# assume CM.embed_agent_in_force: method(agent: CA_CHAR, military_force: CA_MILITARY_FORCE)
 --spawn location finding
 --# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, settlement_region_key: string, on_sea: boolean, in_same_region: boolean, preferred_spawn_distance: number?) --> (number, number)
 --# assume CM.find_valid_spawn_location_for_character_from_character: method(faction_key: string, character_lookup: string, in_same_region: boolean, preferred_spawn_distance: number?) --> (number, number)
@@ -604,6 +606,12 @@
 -- scrap
 --# assume CM.faction_set_unit_purchasable_effect_lock_state: method(faction: CA_FACTION, purchasable_effect: string, lock_reason: string, should_lock: boolean)
 --# assume CM.faction_purchase_unit_effect: method(faction: CA_FACTION, unit: CA_UNIT, purchasable_effect: CA_UNIT_PURCHASABLE_EFFECT)
+
+-- merc pool
+--# assume CM.add_units_to_faction_mercenary_pool: method(faction_cqi: CA_CQI, unit_key: string, count: number)
+
+-- prison
+--# assume CM.faction_imprison_character: method(faction: CA_FACTION, character: CA_CHAR)
 
 -- CAMPAIGN UI MANAGER
 --# assume CUIM.get_char_selected: method() --> string
@@ -1324,6 +1332,7 @@
 
 --# assume CA_EFFECT.tweaker_value: function(tweaker_key: string) --> number
 --# assume CA_EFFECT.clear_advice_session_history: function()
+--# assume CA_EFFECT.CharacterCharacterTargetAction: function()
 
 --# assume CORE.get_or_create_component: method(key: string, template: string, parent: CA_UIC) --> CA_UIC
 --# assume CORE.get_static_object: method(key: string) --> WHATEVER
@@ -1474,6 +1483,7 @@ set_ritual_chain_unlocked
 --# assume global cm: CM
 --# assume global core: CORE
 --# assume global effect: CA_EFFECT
+--# assume global events: CA_EVENTS
 --# assume global __write_output_to_logfile: boolean
 --# assume global mission_manager: MISSION_MANAGER
 --# assume global rite_unlock: RITE_UNLOCK

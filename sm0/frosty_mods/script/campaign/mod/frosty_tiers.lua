@@ -340,8 +340,7 @@ function frosty_tiers()
     ------------------------
     --MCT2 OPTIONS--
     ------------------------
-    
-    local mct = get_mct()
+    local mct = core:get_static_object("mod_configuration_tool")
     if mct then
         local frosty_tiers = mct:get_mod_by_key("frosty_tiers")
         local settings_table = frosty_tiers:get_settings()

@@ -38,17 +38,17 @@ local function expCheat()
 		if currentChar:character_subtype("dwf_thorgrim_grudgebearer") then cm:force_add_ancillary(currentChar, "wh2_dlc10_dwf_anc_enchanted_item_horn_of_the_ancestors", true, false) end
 	end
 	--if cm:is_new_game() then
-		local factionList = cm:model():world():faction_list()
-		for i = 0, factionList:num_items() - 1 do
-			local faction = factionList:item_at(i)
-			local characterList = faction:character_list()
-			for i = 0, characterList:num_items() - 1 do
-				local currentChar = characterList:item_at(i)	
-				local cqi = currentChar:command_queue_index()
-				cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
-				--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
-			end
-		end
+	--	local factionList = cm:model():world():faction_list()
+	--	for i = 0, factionList:num_items() - 1 do
+	--		local faction = factionList:item_at(i)
+	--		local characterList = faction:character_list()
+	--		for i = 0, characterList:num_items() - 1 do
+	--			local currentChar = characterList:item_at(i)	
+	--			local cqi = currentChar:command_queue_index()
+	--			cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
+	--			--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
+	--		end
+	--	end
 	--end
 end
 
@@ -195,7 +195,20 @@ local function unitCheat()
 		--	function(cqi)
 		--	end
 		--)
-							
+	elseif playerFaction:subculture() == "wh_main_sc_grn_greenskins" then
+		local characterList = playerFaction:character_list()
+		for i = 0, characterList:num_items() - 1 do
+			local currentChar = characterList:item_at(i)	
+			if currentChar:character_subtype("dlc06_grn_skarsnik") then
+				--cm:remove_all_units_from_general(currentChar)
+				sm0_log("remove_all_units_from_general/dlc06_grn_skarsnik")
+				local cqi = currentChar:command_queue_index()
+				--for k, v in pairs(TKunitstring) do 
+					cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_dlc15_grn_mon_rogue_idol_0")
+				--end
+
+			end
+		end	
 	elseif playerFaction:name() == "wh2_dlc09_tmb_khemri" then
 		local characterList = playerFaction:character_list()
 		for i = 0, characterList:num_items() - 1 do
@@ -433,6 +446,29 @@ function sm0_test()
 		sm0_log_reset()
 		cm:set_saved_value("sm0_log_reset", true)
 	end	
+	--local top_knots = cm:get_faction("wh_main_grn_top_knotz")
+	--local mf_list = top_knots:military_force_list()
+	--for i = 0, mf_list:num_items() - 1 do
+	--	local mf = mf_list:item_at(i)
+	--	if not mf:is_armed_citizenry() then 
+	--		cm:spawn_agent_at_military_force(top_knots, mf, "wizard", "grn_orc_shaman")
+	--		core:add_listener(
+	--			"grn_orc_shaman_CharacterCreated",
+	--			"CharacterCreated",
+	--			function(context)
+	--				return true
+	--			end,
+	--			function(context)
+	--				out("sm0/CharacterCreated")
+	--				--cm:callback(function() 
+	--					cm:embed_agent_in_force(context:character(), mf)
+	--				--end, 1)  
+	--			end,
+	--			false
+	--		)
+	--	end
+	--end
+	
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
 	cm:transfer_region_to_faction("wh2_main_eagle_gate", cm:get_local_faction(true))
 	cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction(true))
@@ -469,6 +505,7 @@ function sm0_test()
 	--)
 	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 1600)
 	cm:faction_add_pooled_resource(cm:get_local_faction(true), "cst_infamy", "wh2_dlc11_resource_factor_other", 5000)
+	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "grn_salvage", "wh2_dlc11_resource_factor_other", 5000)
 	--cm:create_force(
 	--	"wh_main_chs_chaos",
 	--	"wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0",
