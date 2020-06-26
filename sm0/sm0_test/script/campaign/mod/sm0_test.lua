@@ -149,6 +149,25 @@ local function unitCheat()
 						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
 						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
 						"wh2_dlc12_lzd_mon_ancient_stegadon_1"} --:vector<string>
+	local GRNunitstring = {"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0",
+						"wh2_dlc15_grn_mon_rogue_idol_0"} --:vector<string>					
 						
 	local playerFaction = cm:get_faction(cm:get_local_faction(true))
 	if playerFaction:subculture() == "wh_main_sc_nor_norsca" then
@@ -199,13 +218,13 @@ local function unitCheat()
 		local characterList = playerFaction:character_list()
 		for i = 0, characterList:num_items() - 1 do
 			local currentChar = characterList:item_at(i)	
-			if currentChar:character_subtype("dlc06_grn_skarsnik") then
+			if currentChar:character_subtype("dlc06_grn_skarsnik") or currentChar:is_faction_leader() then
 				--cm:remove_all_units_from_general(currentChar)
 				sm0_log("remove_all_units_from_general/dlc06_grn_skarsnik")
 				local cqi = currentChar:command_queue_index()
-				--for k, v in pairs(TKunitstring) do 
+				for k, v in pairs(GRNunitstring) do 
 					cm:grant_unit_to_character(cm:char_lookup_str(cqi), "wh2_dlc15_grn_mon_rogue_idol_0")
-				--end
+				end
 
 			end
 		end	

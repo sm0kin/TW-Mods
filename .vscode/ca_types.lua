@@ -897,6 +897,7 @@
 
 -- EFFECT
 --# assume CA_EFFECT.get_localised_string: function(key: string) --> string
+--# assume CA_EFFECT.get_skinned_image_path: function(key: string) --> string
 
 -- PENDING BATTLE
 --# assume CA_PENDING_BATTLE.is_null_interface: method() --> boolean
