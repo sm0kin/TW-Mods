@@ -1,6 +1,3 @@
-local mcm = _G.mcm
-local mct = core:get_static_object("mod_configuration_tool")
-
 local abandon_button = nil --:BUTTON
 local abandon_frame = nil --:FRAME
 local building_cost = {800, 1600, 3200, 4800, 7200} --:vector<number>
@@ -17,11 +14,12 @@ local confirm_button_tooltip_hover3 = "will be abandoned at the beginning of the
 local confirm_button_tooltip_disabled = "Besieged Settlements can't be abandoned!"
 local abandon_button_tooltip = "Abandon selected settlement"
 local icon_path = ""
-local enable_value = ""
-local penalty_value = ""  
-local penalty_scope_value = ""
-local penalty_tier_value = ""
-local delay_value = ""              
+local mct_settings      
+local enable_value --:WHATEVER
+local penalty_value --:WHATEVER
+local penalty_scope_value --:WHATEVER
+local penalty_tier_value --:WHATEVER
+local delay_value --:WHATEVER 
 local id_from_subculture = {
     ["wh_dlc03_sc_bst_beastmen"] = 19130,
     ["wh_dlc05_sc_wef_wood_elves"] = 19131,
@@ -51,7 +49,7 @@ local function calc_cost(region)
         local building = primary_slot:building()
         local building_name = building:name()
         for k, cost in ipairs(building_cost) do
-            if string.match(building_name, "ruin") and penalty_value ~= "no_penalty" and penalty_scope_value ~= "local" and penalty_tier_value ~= "enabled" then
+            if string.match(building_name, "ruin") and penalty_value ~= "false" and penalty_scope_value ~= "local" and penalty_tier_value ~= "false" then
                 money = 0.6 * 400 
             elseif string.match(building_name, "_"..k) then
                 money = 0.6 * cost
@@ -68,6 +66,12 @@ local function create_abandon_frame(abandon_region_key)
     end
     abandon_frame = Frame.new(frame_name)
     abandon_frame:Resize(720, 340)
+    local parchment = find_uicomponent(abandon_frame.uic, "parchment")
+    local frame_X, frame_Y = abandon_frame.uic:Position()
+    local frame_W, frame_H = abandon_frame.uic:Bounds()
+    local parchment_W, parchment_H = parchment:Bounds()
+    local gap_X, gap_Y = frame_W - parchment_W, frame_H - parchment_H
+    parchment:MoveTo(frame_X + gap_X/2, frame_Y + gap_Y/2)
 	abandon_frame.uic:PropagatePriority(100)
     Util.centreComponentOnScreen(abandon_frame)
     abandon_frame.uic:RegisterTopMost()
@@ -77,16 +81,19 @@ local function create_abandon_frame(abandon_region_key)
     money = math.floor(money)
     abandon_text = Text.new("abandon_text", abandon_frame, "NORMAL", "test1")
     abandon_text:Resize(640, 225)
+    abandon_text:SetText(abandon_text1)
+    abandon_frame:AddComponent(abandon_text)
+    local confirm_text = Text.new("confirm_text", abandon_frame, "HEADER", "test12") --WRAPPED --HEADER
+    confirm_text:Resize(620, 100)
     if delay_value ~= "one_turn" then 
-        abandon_text:SetText(abandon_text1 .. "\n\n\n" ..abandon_text2.. " " ..region_onscreen_name.. " " ..abandon_text4)
+        confirm_text:SetText(abandon_text2.. " " ..region_onscreen_name.. " " ..abandon_text3)
     else
-        abandon_text:SetText(abandon_text1 .. "\n\n\n" ..abandon_text2.. " " ..region_onscreen_name.. " " ..abandon_text3)
+        confirm_text:SetText(abandon_text2.. " " ..region_onscreen_name.. " " ..abandon_text4)
     end
-    abandon_text:SetText(abandon_text1 .. "\n\n\n" ..abandon_text2.. " " ..region_onscreen_name.. " " ..abandon_text3)
+    abandon_frame:AddComponent(confirm_text)
     Util.centreComponentOnComponent(abandon_text, abandon_frame)
 	abandon_frame:AddCloseButton(
         function()
-            abandon_text:Delete()
 			abandon_frame = nil
         end,
         true
@@ -115,7 +122,7 @@ local function create_abandon_frame(abandon_region_key)
             local money_to_send = calc_cost(cm:get_region(region_to_send))
             if delay_value ~= "one_turn" then
                 CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
-                ..region_to_send.."<"..money_to_send..">"..penalty_value.."~".."^"..penalty_scope_value.."°"..penalty_tier_value.."$"..delay_value)
+                ..region_to_send.."<"..money_to_send..">"..tostring(penalty_value).."~".."^"..tostring(penalty_scope_value).."°"..tostring(penalty_tier_value).."$"..tostring(delay_value))
                 abandon_frame:Delete()
                 abandon_frame = nil
                 abandon_button:SetDisabled(true)
@@ -124,18 +131,21 @@ local function create_abandon_frame(abandon_region_key)
                     confirm_button:SetState("selected_hover")
                     confirm_button.uic:SetTooltipText(region_onscreen_name.." "..confirm_button_tooltip_hover3, "", false)
                     CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
-                    ..region_to_send.."<"..money_to_send..">"..penalty_value.."~".."^"..penalty_scope_value.."°"..penalty_tier_value.."$"..delay_value)
+                    ..region_to_send.."<"..money_to_send..">"..tostring(penalty_value).."~".."^"..tostring(penalty_scope_value).."°"..tostring(penalty_tier_value).."$"..tostring(delay_value))
                 else
                     confirm_button:SetState("active")
                     CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
-                    ..region_to_send.."<"..money_to_send..">"..penalty_value.."~remove".."^"..penalty_scope_value.."°"..penalty_tier_value.."$"..delay_value)
+                    ..region_to_send.."<"..money_to_send..">"..tostring(penalty_value).."~remove".."^"..tostring(penalty_scope_value).."°"..tostring(penalty_tier_value).."$"..tostring(delay_value))
                 end
             end
         end 
     )
     Util.centreComponentOnComponent(confirm_button, abandon_frame)
-    local confirm_buttonX, confirm_buttonY = confirm_button:Position() --:number, number
-	confirm_button:MoveTo(confirm_buttonX, confirm_buttonY + 80)
+    local confirm_button_X, confirm_button_Y = confirm_button:Position() --:number, number
+    confirm_button:MoveTo(confirm_button_X, confirm_button_Y + 80)
+    Util.centreComponentOnComponent(confirm_text, abandon_frame)
+    local confirm_text_X, confirm_text_Y = confirm_text:Position() --:number, number
+    confirm_text:MoveTo(confirm_text_X, confirm_text_Y + 65)
 end
 
 --v function()
@@ -182,82 +192,17 @@ local function kill_colonels(faction)
     end
 end
 
--- MCT new --
-core:add_listener(
-    "frosty_tiers_MctOptionSettingFinalized",
-    "MctOptionSettingFinalized",
-    function(context)
-        return context:mod():get_key() == "abandon_region" and not cm:is_multiplayer()
-    end,
-    function(context)
-        local settings_table = context:setting()
-        enable_value = settings_table.a_enable
-        penalty_value = settings_table.a_penalty
-        penalty_scope_value = settings_table.c_penalty_scope
-        penalty_tier_value = settings_table.b_penalty_tier
-        delay_value = settings_table.b_delay
-    end,
-    true
-)
-
---v function() --init
-function sm0_abandon()
-    frame_name = effect.get_localised_string("sm0_frame_name") --"Abandon Region"
-    abandon_text1 = effect.get_localised_string("sm0_text_string1") --"If the enemy is getting too close and it looks likely you may lose control of a region, it is possible to abandon a settlement – enacting a scorched earth policy to deny the invaders their prize. When you leave, a small amount will be added to your treasury as the population save their valuables from the destruction. Although other regions won't approve of your decision..."
-    abandon_text2 = effect.get_localised_string("sm0_text_string2") --"Do you really want to abandon the settlement of"
-    abandon_text3 = effect.get_localised_string("sm0_text_string3") --"this turn?"
-    abandon_text4 = effect.get_localised_string("sm0_text_string4") --"next turn?"
-    confirm_button_text = effect.get_localised_string("sm0_confirm_button_text") --"Abandon"
-    confirm_button_tooltip_hover1 = effect.get_localised_string("sm0_confirm_button_tooltip_hover1") --"Abandoning the settlement of"
-    confirm_button_tooltip_hover2 = effect.get_localised_string("sm0_confirm_button_tooltip_hover2") --"nets you"
-    confirm_button_tooltip_hover3 = effect.get_localised_string("sm0_confirm_button_tooltip_hover3") --" will be abandoned at the beginning of the next turn."
-    confirm_button_tooltip_disabled = effect.get_localised_string("sm0_confirm_button_tooltip_disabled") --"Besieged Settlements can't be abandoned!"
-    abandon_button_tooltip = effect.get_localised_string("sm0_abandon_button_tooltip_hover") --"Abandon selected settlement"
-    local player_faction = cm:get_faction(cm:get_local_faction(true))
-    local player_faction_key = player_faction:name()
-    icon_path = effect.get_skinned_image_path("icon_raze.png")
-
-    enable_value = cm:get_saved_value("mcm_tweaker_abandon_region_enable_value") or "enable"
-    penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value") or "penalty"
-    penalty_scope_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_scope_value") or "global"
-    penalty_tier_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_tier_value") or "enabled"
-    delay_value = cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") or "instant"
-
-    if cm:get_saved_value("mct_abandon_region") then 
-        enable_value = cm:get_saved_value("mct_abandon_region").a_enable
-        penalty_value = cm:get_saved_value("mct_abandon_region").a_penalty 
-        penalty_scope_value = cm:get_saved_value("mct_abandon_region").a_penalty
-        penalty_tier_value = cm:get_saved_value("mct_abandon_region").b_penalty_tier
-        delay_value = cm:get_saved_value("mct_abandon_region").b_delay
-    end
-
-        -- MCT old --
-    if mcm and (not mct or cm:is_multiplayer()) then
-        local abandon = mcm:register_mod("abandon_region", "Abandon Region", "Adds the possibility to abandon a settlement.")
-        local penalty = abandon:add_tweaker("penalty", "Public Order - Penalty", "Enable/Disable the public order penalty for abandoning one of your regions.")
-        penalty:add_option("penalty", "Public Order - Penalty", "If you choose to enact a scorched earth policy you have to suffer the consequences.")
-        penalty:add_option("no_penalty", "No Penalty", "Abandoning Regions has no consequences!")
-        local penalty_scope = abandon:add_tweaker("penalty_scope", "Public Order - Penalty Scope", "Local/Global public order penalty for abandoning one of your regions.")
-        penalty_scope:add_option("global", "Global Penalty", "Global Public Order penalty.")
-        penalty_scope:add_option("local", "Local Penalty", "Local Public Order penalty.")
-        local penalty_tier = abandon:add_tweaker("penalty_tier", "Public Order - Penalty settlement tier based", "Public order penalty for abandoning one of your regions based on the settlement tier.")
-        penalty_tier:add_option("enabled", "Enable", "")
-        penalty_tier:add_option("disabled", "Disable", "")
-        local delay = abandon:add_tweaker("delay", "Turns until Regions are abandoned", "Choose between instant and single turn delay until Regions are abandoned.")
-        delay:add_option("instant", "Instant", "Regions can be abandoned instantly.")
-        delay:add_option("one_turn", "One Turn", "Abandoning a region takes one turn.")
-        mcm:add_new_game_only_callback(
-            function()
-                penalty_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value")
-                penalty_scope_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_scope_value")
-                penalty_tier_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_tier_value")
-                delay_value = cm:get_saved_value("mcm_tweaker_abandon_region_delay_value")
-            end
-        )
-    end
-    if enable_value == "enable" then
+--v function(enable_value: boolean)
+local function init_abandon_region_listeners(enable_value)
+    core:remove_listener("abadon_region_PanelOpenedCampaign")
+    core:remove_listener("abadon_region_PanelClosedCampaign")
+    core:remove_listener("abadon_region_SettlementSelected")
+    core:remove_listener("abadon_region_UITriggerScriptEvent")
+    if enable_value then
+        local player_faction = cm:get_faction(cm:get_local_faction(true))
+        local player_faction_key = player_faction:name()
         core:add_listener(
-            "AbandonSettlement_PanelOpenedCampaign",
+            "abadon_region_PanelOpenedCampaign",
             "PanelOpenedCampaign",
             function(context)
                 return context.string == "settlement_panel"
@@ -277,7 +222,7 @@ function sm0_abandon()
         )
 
         core:add_listener(
-            "AbandonSettlement_PanelClosedCampaign",
+            "abadon_region_PanelClosedCampaign",
             "PanelClosedCampaign",
             function(context)
                 return context.string == "settlement_panel"
@@ -289,7 +234,7 @@ function sm0_abandon()
         )
 
         core:add_listener(
-            "AbandonSettlementSelected",
+            "abadon_region_SettlementSelected",
             "SettlementSelected",
             true,
             function(context)
@@ -320,7 +265,7 @@ function sm0_abandon()
 
         --Multiplayer listener
         core:add_listener(
-            "AbandonMultiplayerCompatible",
+            "abadon_region_UITriggerScriptEvent",
             "UITriggerScriptEvent",
             function(context)
                 return context:trigger():starts_with("burnitdown|")
@@ -341,8 +286,8 @@ function sm0_abandon()
                 local penalty_scope = string.sub(info, remove_end + 1, penalty_scope_end - 1)
                 local penalty_tier_end = string.find(info, "$")
                 local penalty_tier = string.sub(info, penalty_scope_end + 1, penalty_tier_end - 1)
-                local delay = string.sub(info, penalty_tier_end + 1)
-
+                local delay = string.sub(info, penalty_tier_end + 1)       
+                
                 if delay ~= "one_turn" then
                     cm:show_message_event(
                         faction,
@@ -352,12 +297,12 @@ function sm0_abandon()
                         true,
                         id_from_subculture[cm:get_faction(faction):subculture()]
                     )
-                    if penalty ~= "no_penalty" then 
+                    if penalty ~= "false" then 
                         local turns = 5
                         local effect_bundle = "wh2_sm0_abandon_public_order_down"
                         if penalty_scope == "local" then effect_bundle = "wh2_sm0_abandon_public_order_down_local" end
                         local region = cm:get_region(region_name)
-                        if penalty_tier == "enabled" then 
+                        if penalty_tier ~= "false" then 
                             local settlement_building = region:settlement():primary_slot():building():name()
                             for i = 1, 5 do
                                 if string.match(settlement_building, "ruin") then
@@ -402,12 +347,12 @@ function sm0_abandon()
                                         true,
                                         id_from_subculture[cm:get_faction(faction):subculture()]
                                     )
-                                    if penalty ~= "no_penalty" then 
+                                    if penalty ~= "false" then 
                                         local turns = 5
                                         local effect_bundle = "wh2_sm0_abandon_public_order_down"
                                         if penalty_scope == "local" then effect_bundle = "wh2_sm0_abandon_public_order_down_local" end
                                         local region = cm:get_region(region_name)
-                                        if penalty_tier == "enabled" then 
+                                        if penalty_tier ~= "false" then 
                                             --turns = 1 
                                             local settlement_building = region:settlement():primary_slot():building():name()
                                             for i = 1, 5 do
@@ -450,4 +395,134 @@ function sm0_abandon()
             end
         end
     end
+end
+
+core:add_listener(
+    "abandon_region_MctInitialized",
+    "MctInitialized",
+    true,
+    function(context)
+        local mct = get_mct()
+        local abandon_region_mod = mct:get_mod_by_key("abandon_region")
+        --local settings_table = abandon_region_mod:get_settings() 
+        --enable_value = settings_table.a_enable
+        --penalty_value = settings_table.a_penalty
+        --penalty_scope_value = settings_table.c_penalty_scope
+        --penalty_tier_value = settings_table.b_penalty_tier
+        --delay_value = settings_table.b_delay
+
+        local a_enable = abandon_region_mod:get_option_by_key("a_enable")
+        enable_value = a_enable:get_finalized_setting()
+        local a_penalty = abandon_region_mod:get_option_by_key("a_penalty")
+        penalty_value = a_penalty:get_finalized_setting()
+        local c_penalty_scope = abandon_region_mod:get_option_by_key("c_penalty_scope")
+        penalty_scope_value = c_penalty_scope:get_finalized_setting()
+        local b_penalty_tier = abandon_region_mod:get_option_by_key("b_penalty_tier")
+        penalty_tier_value = b_penalty_tier:get_finalized_setting()
+        local b_delay = abandon_region_mod:get_option_by_key("b_delay")
+        delay_value = b_delay:get_finalized_setting()
+        
+        --out("sm0/abandon_region_MctInitialized/enable_value = "..tostring(enable_value))
+        --out("sm0/abandon_region_MctInitialized/penalty_value = "..tostring(penalty_value))
+        --out("sm0/abandon_region_MctInitialized/penalty_scope_value = "..tostring(penalty_scope_value))
+        --out("sm0/abandon_region_MctInitialized/penalty_tier_value = "..tostring(penalty_tier_value))
+        --out("sm0/abandon_region_MctInitialized/delay_value = "..tostring(delay_value))
+    end,
+    true
+)
+
+core:add_listener(
+    "abandon_region_MctFinalized",
+    "MctFinalized",
+    true,
+    function(context)
+        local mct = get_mct()
+        local abandon_region_mod = mct:get_mod_by_key("abandon_region")
+        local settings_table = abandon_region_mod:get_settings() 
+        enable_value = settings_table.a_enable
+        penalty_value = settings_table.a_penalty
+        penalty_scope_value = settings_table.c_penalty_scope
+        penalty_tier_value = settings_table.b_penalty_tier
+        delay_value = settings_table.b_delay
+        
+        init_abandon_region_listeners(enable_value)
+    end,
+    true
+)
+
+--v function() --init
+function sm0_abandon()
+    frame_name = effect.get_localised_string("sm0_frame_name") --"Abandon Region"
+    abandon_text1 = effect.get_localised_string("sm0_text_string1") --"If the enemy is getting too close and it looks likely you may lose control of a region, it is possible to abandon a settlement – enacting a scorched earth policy to deny the invaders their prize. When you leave, a small amount will be added to your treasury as the population save their valuables from the destruction. Although other regions won't approve of your decision..."
+    abandon_text2 = effect.get_localised_string("sm0_text_string2") --"Do you really want to abandon the settlement of"
+    abandon_text3 = effect.get_localised_string("sm0_text_string3") --"this turn?"
+    abandon_text4 = effect.get_localised_string("sm0_text_string4") --"next turn?"
+    confirm_button_text = effect.get_localised_string("sm0_confirm_button_text") --"Abandon"
+    confirm_button_tooltip_hover1 = effect.get_localised_string("sm0_confirm_button_tooltip_hover1") --"Abandoning the settlement of"
+    confirm_button_tooltip_hover2 = effect.get_localised_string("sm0_confirm_button_tooltip_hover2") --"nets you"
+    confirm_button_tooltip_hover3 = effect.get_localised_string("sm0_confirm_button_tooltip_hover3") --" will be abandoned at the beginning of the next turn."
+    confirm_button_tooltip_disabled = effect.get_localised_string("sm0_confirm_button_tooltip_disabled") --"Besieged Settlements can't be abandoned!"
+    abandon_button_tooltip = effect.get_localised_string("sm0_abandon_button_tooltip_hover") --"Abandon selected settlement"
+    icon_path = effect.get_skinned_image_path("icon_raze.png")
+
+    local mcm = _G.mcm
+    local mct = core:get_static_object("mod_configuration_tool")
+
+    if mct and not cm:is_multiplayer() then
+        -- MCT new --
+        --out("sm0/mct and not cm:is_multiplayer()/enable_value = "..tostring(enable_value))
+        --out("sm0/mct and not cm:is_multiplayer()/penalty_value = "..tostring(penalty_value))
+        --out("sm0/mct and not cm:is_multiplayer()/penalty_scope_value = "..tostring(penalty_scope_value))
+        --out("sm0/mct and not cm:is_multiplayer()/penalty_tier_value = "..tostring(penalty_tier_value))
+        --out("sm0/mct and not cm:is_multiplayer()/delay_value = "..tostring(delay_value))
+    else
+        enable_value = true
+        if cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value") ~= "no_penalty" then
+            penalty_value = true
+        else
+            penalty_value = false
+        end
+        penalty_scope_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_scope_value") or "global"
+        if cm:get_saved_value("mcm_tweaker_abandon_region_penalty_tier_value") ~= "disabled" then
+            penalty_tier_value = true
+        else
+            penalty_tier_value = false
+        end
+        delay_value = cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") or "instant"
+
+        -- MCT old --
+        if mcm then
+            local abandon = mcm:register_mod("abandon_region", "Abandon Region", "Adds the possibility to abandon a settlement.")
+            local penalty = abandon:add_tweaker("penalty", "Public Order - Penalty", "Enable/Disable the public order penalty for abandoning one of your regions.")
+            penalty:add_option("penalty", "Public Order - Penalty", "If you choose to enact a scorched earth policy you have to suffer the consequences.")
+            penalty:add_option("no_penalty", "No Penalty", "Abandoning Regions has no consequences!")
+            local penalty_scope = abandon:add_tweaker("penalty_scope", "Public Order - Penalty Scope", "Local/Global public order penalty for abandoning one of your regions.")
+            penalty_scope:add_option("global", "Global Penalty", "Global Public Order penalty.")
+            penalty_scope:add_option("local", "Local Penalty", "Local Public Order penalty.")
+            local penalty_tier = abandon:add_tweaker("penalty_tier", "Public Order - Penalty settlement tier based", "Public order penalty for abandoning one of your regions based on the settlement tier.")
+            penalty_tier:add_option("enabled", "Enable", "")
+            penalty_tier:add_option("disabled", "Disable", "")
+            local delay = abandon:add_tweaker("delay", "Turns until Regions are abandoned", "Choose between instant and single turn delay until Regions are abandoned.")
+            delay:add_option("instant", "Instant", "Regions can be abandoned instantly.")
+            delay:add_option("one_turn", "One Turn", "Abandoning a region takes one turn.")
+            mcm:add_new_game_only_callback(
+                function()
+                    if cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value") ~= "no_penalty" then
+                        penalty_value = true
+                    else
+                        penalty_value = false
+                    end
+                    penalty_scope_value = cm:get_saved_value("mcm_tweaker_abandon_region_penalty_scope_value") or "global"
+                    if cm:get_saved_value("mcm_tweaker_abandon_region_penalty_tier_value") ~= "disabled" then
+                        penalty_tier_value = true
+                    else
+                        penalty_tier_value = false
+                    end
+                    delay_value = cm:get_saved_value("mcm_tweaker_abandon_region_delay_value") or "instant"
+                end
+            )
+        end
+    end
+
+    init_abandon_region_listeners(enable_value)
 end

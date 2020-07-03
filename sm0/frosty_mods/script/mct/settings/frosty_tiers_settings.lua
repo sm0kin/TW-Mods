@@ -1,6 +1,6 @@
 local frosty_tiers = mct:register_mod("frosty_tiers")
 frosty_tiers:set_title("Higher Starting Tier: Capitals & Hordes", false)
-frosty_tiers:set_author("FrostyDemise & sm0kin", false)
+frosty_tiers:set_author("FrostyDemise & sm0kin")
 --local description_row_1 = "With this mod your starting settlements/horde can be set at a higher tier from the get-go."
 --local description_row_2 = "\n\n[[col:red]]There is currently an issue with Eltharion so he's exempted from the mod.[[/col]]"
 

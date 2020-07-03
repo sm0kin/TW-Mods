@@ -6,7 +6,9 @@ require("sm0/sm0_force_confederation/script/campaign/mod/sm0_confed")
 
 -- ABANDON REGION
 require("sm0/sm0_abandon/script/campaign/mod/sm0_abandon")
+require("sm0/sm0_abandon/script/mct/settings/abandon_region_settings")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_abandon")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/mct/settings/abandon_region_settings")
 
 
 -- SAVE CAMERA SETTINGS
@@ -87,6 +89,12 @@ require("sm0/grant independance/script/campaign/mod/sm0_revive")
 require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
 require("sm0/wec_one_button_respec/script/export_helpers__obr")
+require("sm0/wec_one_button_respec/script/campaign/mod/wec_obr")
+require("sm0/wec_one_button_respec/script/campaign/mod/wec_obr")
+require("sm0/wec_one_button_respec/script/mct/settings/wec_obr_settings")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/wec_obr")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/mct/settings/wec_obr_settings")
+
 require("sm0/mcm/script/export_helpers__mcm_ui")
 require("sm0/mcm/script/export_helpers__mcm_basic_settings")
 require("sm0/mcm/script/campaign/mod/!!ModConfigurationManager")
