@@ -84,7 +84,7 @@ local function create_abandon_frame(abandon_region_key)
     abandon_text:SetText(abandon_text1)
     abandon_frame:AddComponent(abandon_text)
     local confirm_text = Text.new("confirm_text", abandon_frame, "HEADER", "test12") --WRAPPED --HEADER
-    confirm_text:Resize(620, 100)
+    confirm_text:Resize(630, 100)
     if delay_value ~= "one_turn" then 
         confirm_text:SetText(abandon_text2.. " " ..region_onscreen_name.. " " ..abandon_text3)
     else
@@ -194,15 +194,17 @@ end
 
 --v function(enable_value: boolean)
 local function init_abandon_region_listeners(enable_value)
-    core:remove_listener("abadon_region_PanelOpenedCampaign")
-    core:remove_listener("abadon_region_PanelClosedCampaign")
-    core:remove_listener("abadon_region_SettlementSelected")
-    core:remove_listener("abadon_region_UITriggerScriptEvent")
+    core:remove_listener("abandon_region_PanelOpenedCampaign")
+    core:remove_listener("abandon_region_PanelClosedCampaign")
+    core:remove_listener("abandon_region_SettlementSelected")
+    core:remove_listener("abandon_region_UITriggerScriptEvent")
+
     if enable_value then
         local player_faction = cm:get_faction(cm:get_local_faction(true))
         local player_faction_key = player_faction:name()
+        
         core:add_listener(
-            "abadon_region_PanelOpenedCampaign",
+            "abandon_region_PanelOpenedCampaign",
             "PanelOpenedCampaign",
             function(context)
                 return context.string == "settlement_panel"
@@ -222,7 +224,7 @@ local function init_abandon_region_listeners(enable_value)
         )
 
         core:add_listener(
-            "abadon_region_PanelClosedCampaign",
+            "abandon_region_PanelClosedCampaign",
             "PanelClosedCampaign",
             function(context)
                 return context.string == "settlement_panel"
@@ -234,7 +236,7 @@ local function init_abandon_region_listeners(enable_value)
         )
 
         core:add_listener(
-            "abadon_region_SettlementSelected",
+            "abandon_region_SettlementSelected",
             "SettlementSelected",
             true,
             function(context)
@@ -265,7 +267,7 @@ local function init_abandon_region_listeners(enable_value)
 
         --Multiplayer listener
         core:add_listener(
-            "abadon_region_UITriggerScriptEvent",
+            "abandon_region_UITriggerScriptEvent",
             "UITriggerScriptEvent",
             function(context)
                 return context:trigger():starts_with("burnitdown|")
@@ -422,11 +424,11 @@ core:add_listener(
         local b_delay = abandon_region_mod:get_option_by_key("b_delay")
         delay_value = b_delay:get_finalized_setting()
         
-        --out("sm0/abandon_region_MctInitialized/enable_value = "..tostring(enable_value))
-        --out("sm0/abandon_region_MctInitialized/penalty_value = "..tostring(penalty_value))
-        --out("sm0/abandon_region_MctInitialized/penalty_scope_value = "..tostring(penalty_scope_value))
-        --out("sm0/abandon_region_MctInitialized/penalty_tier_value = "..tostring(penalty_tier_value))
-        --out("sm0/abandon_region_MctInitialized/delay_value = "..tostring(delay_value))
+        --mct:log("sm0_abandon/abandon_region_MctInitialized/enable_value = "..tostring(enable_value))
+        --mct:log("sm0_abandon/abandon_region_MctInitialized/penalty_value = "..tostring(penalty_value))
+        --mct:log("sm0_abandon/abandon_region_MctInitialized/penalty_scope_value = "..tostring(penalty_scope_value))
+        --mct:log("sm0_abandon/abandon_region_MctInitialized/penalty_tier_value = "..tostring(penalty_tier_value))
+        --mct:log("sm0_abandon/abandon_region_MctInitialized/delay_value = "..tostring(delay_value))
     end,
     true
 )
@@ -468,13 +470,13 @@ function sm0_abandon()
     local mcm = _G.mcm
     local mct = core:get_static_object("mod_configuration_tool")
 
-    if mct and not cm:is_multiplayer() then
+    if mct then
         -- MCT new --
-        --out("sm0/mct and not cm:is_multiplayer()/enable_value = "..tostring(enable_value))
-        --out("sm0/mct and not cm:is_multiplayer()/penalty_value = "..tostring(penalty_value))
-        --out("sm0/mct and not cm:is_multiplayer()/penalty_scope_value = "..tostring(penalty_scope_value))
-        --out("sm0/mct and not cm:is_multiplayer()/penalty_tier_value = "..tostring(penalty_tier_value))
-        --out("sm0/mct and not cm:is_multiplayer()/delay_value = "..tostring(delay_value))
+        --mct:log("sm0_abandon/mct/enable_value = "..tostring(enable_value))
+        --mct:log("sm0_abandon/mct/penalty_value = "..tostring(penalty_value))
+        --mct:log("sm0_abandon/mct/penalty_scope_value = "..tostring(penalty_scope_value))
+        --mct:log("sm0_abandon/mct/penalty_tier_value = "..tostring(penalty_tier_value))
+        --mct:log("sm0_abandon/mct/delay_value = "..tostring(delay_value))
     else
         enable_value = true
         if cm:get_saved_value("mcm_tweaker_abandon_region_penalty_value") ~= "no_penalty" then

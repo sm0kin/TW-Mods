@@ -171,10 +171,12 @@ end
 
 --v function(enable_value: WHATEVER)
 local function init_obr_listeners(enable_value)
-    core:remove_listener("abadon_region_PanelOpenedCampaign")
-    core:remove_listener("abadon_region_PanelClosedCampaign")
-    core:remove_listener("abadon_region_SettlementSelected")
-    core:remove_listener("abadon_region_UITriggerScriptEvent")
+    core:remove_listener("obr_cycle_LeftLClickUp")
+    core:remove_listener("obr_next_ShortcutPressed")
+    core:remove_listener("obr_PanelOpenedCampaign")
+    core:remove_listener("obr_PanelClosedCampaign")
+    core:remove_listener("obr_UITriggerScriptEvent")
+
     if enable_value then
         core:add_listener(
             "obr_cycle_LeftLClickUp",
@@ -248,18 +250,18 @@ local function init_obr_listeners(enable_value)
             "obr_UITriggerScriptEvent",
             "UITriggerScriptEvent",
             function(context)
-                return context:trigger() == "LegendaryLordRespec|"
+                return context:trigger():starts_with("LegendaryLordRespec|")
             end,
             function(context)
                 local str = context:trigger() --:string
                 local info = string.gsub(str, "LegendaryLordRespec|", "")
                 local en_cost_end = string.find(info, "<")
                 local en_cost = string.sub(info, 1, en_cost_end - 1)
-                local cost = string.sub(info, en_cost_end + 1)   
+                local cost = string.sub(info, en_cost_end + 1)  
 
                 local cqi = context:faction_cqi() --: CA_CQI
                 local char = cm:get_character_by_cqi(cqi)
-                if en_cost or (en_cost == "firstforfree" and cm:get_saved_value("llr_respec_" .. tostring(cqi))) then
+                if en_cost == "enabled" or (en_cost == "firstforfree" and cm:get_saved_value("llr_respec_" .. tostring(cqi))) then
                     local respec_cost = (char:rank() - 1) * tonumber(cost)
                     if respec_cost <= char:faction():treasury() then
                         cm:treasury_mod(char:faction():name(), -1*respec_cost)
@@ -297,11 +299,12 @@ core:add_listener(
         llr.en_cost = b_en_cost:get_finalized_setting()
         --local c_cost = obr_mod:get_option_by_key("c_cost")
         --llr.cost = c_cost:get_finalized_setting()
+        llr.cost = 500
    
         llr.log("obr_MctInitialized/llr.enable = "..tostring(llr.enable))
         llr.log("obr_MctInitialized/llr.limit = "..tostring(llr.limit))
         llr.log("obr_MctInitialized/llr.en_cost = "..tostring(llr.en_cost))
-        --llr.log("obr_MctInitialized/llr.cost = "..tostring(llr.cost))
+        llr.log("obr_MctInitialized/llr.cost = "..tostring(llr.cost))
     end,
     true
 )
@@ -328,7 +331,7 @@ function wec_obr()
     local mcm = _G.mcm
     local mct = core:get_static_object("mod_configuration_tool")
 
-    if mct and not cm:is_multiplayer() then
+    if mct then
         -- MCT new --
     else
         llr.enable = true
