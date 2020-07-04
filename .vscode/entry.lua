@@ -1,9 +1,7 @@
 -- FORCE CONFEDERATION
 require("sm0/sm0_force_confederation/script/campaign/mod/sm0_confed")
 require("sm0/sm0_force_confederation/script/mct/settings/force_confederation_settings")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_confed")
---require("sm0/sm0_force_confederation/script/export_helpers_sm0_confed")
-
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_confed")
 
 -- ABANDON REGION
 require("sm0/sm0_abandon/script/campaign/mod/sm0_abandon")
@@ -16,9 +14,6 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 require("sm0/sm0_save_cam_settings/script/table_save")
 require("sm0/sm0_save_cam_settings/script/campaign/mod/sm0_save_cam")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_save_cam")
---require("sm0/sm0_save_cam_settings/script/export_helpers_sm0_save_cam")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers_sm0_save_cam")
-
 
 -- TEST MOD
 require("sm0/sm0_test/script/campaign/mod/sm0_test")
@@ -27,8 +22,6 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 
 -- HIDDEN LEGENDARIES
 require("sm0/@hidden_legendaries/script/campaign/mod/sm0_hidden_legendaries")
---require("sm0/@hidden_legendaries/script/export_helpers_sm0_hidden_legendaries")
-
 
 -- MIXED LORES
 require("sm0/sm0_mixedlores/script/export_helpers_sm0_mixedLores")
@@ -89,19 +82,11 @@ require("sm0/grant independance/script/campaign/mod/sm0_revive")
 
 require("sm0/z_BETA/supreme_anvil_of_vaul/script/export_helpers_vauls_anvil")
 
-require("sm0/wec_one_button_respec/script/export_helpers__obr")
-require("sm0/wec_one_button_respec/script/campaign/mod/wec_obr")
+-- one button respec
 require("sm0/wec_one_button_respec/script/campaign/mod/wec_obr")
 require("sm0/wec_one_button_respec/script/mct/settings/wec_obr_settings")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/wec_obr")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/mct/settings/wec_obr_settings")
-
-require("sm0/mcm/script/export_helpers__mcm_ui")
-require("sm0/mcm/script/export_helpers__mcm_basic_settings")
-require("sm0/mcm/script/campaign/mod/!!ModConfigurationManager")
-
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__obr")
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__mcm_ui")
 
 --frostydemise
 require("sm0/frosty_mods/script/campaign/mod/frosty_horde")
@@ -132,28 +117,14 @@ require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_wulfrik")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/new_wulfrik")
 
 --Scipion's Recruit Defeated Lords
-require("sm0/recruitdefeated/script/campaign/mod/viemzee_unlock_all_ll")
---require("sm0/Scipion/script/campaign/mod/viemzee_unlock_all_mixu")
 require("sm0/recruitdefeated/script/campaign/mod/sm0_recruit_defeated")
-require("sm0/recruitdefeated/script/campaign/mod/sm0_horde")
-require("sm0/cbf/script/campaign/main_warhammer/mod/sm0_liberate_missing_anc_me")
-require("sm0/cbf/script/campaign/wh2_main_great_vortex/mod/sm0_liberate_missing_anc_vor")
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_quest_backup")
+require("sm0/recruitdefeated/script/mct/settings/recruit_defeated_settings")
 
-
---require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__viemzee_sarthorael")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_recruit_defeated")
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/viemzee_unlock_all_ll")
-
---require("sm0/Scipion/script/export_helpers__viemzee_unlock_all_LL")
---require("sm0/Scipion/script/export_helpers__viemzee_unlock_all_mixu")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/mct/settings/recruit_defeated_settings")
 
 --sfo
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__sfo_starting_diplomacy")
-
---ai exp
-require("sm0/sm0_ai_exp/script/campaign/mod/sm0_ai_exp")
-require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_ai_exp")
 
 --difficulty
 require("sm0/sm0_difficulty/script/campaign/mod/sm0_difficulty")
@@ -224,4 +195,7 @@ require("sm0/sm0_chaos/script/campaign/main_warhammer/wh_chaos_invasion")
 require("sm0/amazons/script/campaign/mod/amazons_faction")
 require("sm0/amazons/script/campaign/mod/amazons_missions")
 require("sm0/amazons/script/campaign/mod/amazons_ror_units")
+---- ai exp
+require("sm0/sm0_ai_exp/script/campaign/mod/sm0_ai_exp")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_ai_exp")
 

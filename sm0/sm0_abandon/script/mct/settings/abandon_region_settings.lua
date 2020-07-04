@@ -68,9 +68,13 @@ penalty:add_option_set_callback(
         --# assume val: boolean
         local options = po_option_list
 
-        for i = 1, #po_option_list do
-            local option_obj = option:get_mod():get_option_by_key(options[i])
-            option_obj:set_uic_visibility(val)
+        local enable_obj = option:get_mod():get_option_by_key("a_enable")
+        local enable_val = enable_obj:get_selected_setting()
+        if enable_val then
+            for i = 1, #po_option_list do
+                local option_obj = option:get_mod():get_option_by_key(options[i])
+                option_obj:set_uic_visibility(val)
+            end
         end
     end
 )

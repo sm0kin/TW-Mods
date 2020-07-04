@@ -55,10 +55,15 @@ enable:add_option_set_callback(
 --        local en_cost = option:get_selected_setting()
 --        local cost = option:get_mod():get_option_by_key("c_cost")
 --        local limit = option:get_mod():get_option_by_key("a_limit")
---        if en_cost == "disabled" or (en_cost == "firstforfree" and limit) then
---            cost:set_uic_visibility(false)
---        else
---            cost:set_uic_visibility(true)
+--        local limit_val = limit:get_selected_setting()
+--        local enable_obj = option:get_mod():get_option_by_key("a_enable")
+--        local enable_val = enable_obj:get_selected_setting()
+--        if enable_val then
+--            if en_cost == "disabled" or (en_cost == "firstforfree" and limit_val) then
+--                cost:set_uic_visibility(false)
+--            else
+--                cost:set_uic_visibility(true)
+--            end
 --        end
 --    end
 --)
