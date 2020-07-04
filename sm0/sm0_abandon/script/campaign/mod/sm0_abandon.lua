@@ -84,13 +84,18 @@ local function create_abandon_frame(abandon_region_key)
     abandon_text:SetText(abandon_text1)
     abandon_frame:AddComponent(abandon_text)
     local confirm_text = Text.new("confirm_text", abandon_frame, "HEADER", "test12") --WRAPPED --HEADER
-    confirm_text:Resize(630, 100)
+    confirm_text:Resize(720, 100)
+    local icon_settlement_path = effect.get_skinned_image_path("icon_marker_settlement.png")
     if delay_value ~= "one_turn" then 
-        confirm_text:SetText(abandon_text2.. " " ..region_onscreen_name.. " " ..abandon_text3)
+        confirm_text:SetText(abandon_text2.. " [[img:" ..icon_settlement_path.. "]] " ..region_onscreen_name.. " " ..abandon_text3)
     else
-        confirm_text:SetText(abandon_text2.. " " ..region_onscreen_name.. " " ..abandon_text4)
+        confirm_text:SetText(abandon_text2.. " [[img:" ..icon_settlement_path.. "]] " ..region_onscreen_name.. " " ..abandon_text4)
     end
     abandon_frame:AddComponent(confirm_text)
+    local text_x, text_y = confirm_text.uic:TextDimensions()
+
+    if text_x > 700 then text_x = 700 end
+    confirm_text:Resize(text_x, 100)
     Util.centreComponentOnComponent(abandon_text, abandon_frame)
 	abandon_frame:AddCloseButton(
         function()
@@ -98,12 +103,13 @@ local function create_abandon_frame(abandon_region_key)
         end,
         true
     )
-    local confirm_button = TextButton.new("confirm_button", abandon_frame, "TEXT_TOGGLE", confirm_button_text.. " " .. region_onscreen_name)
+    local confirm_button = TextButton.new("confirm_button", abandon_frame, "TEXT_TOGGLE", confirm_button_text.. " [[img:" ..icon_settlement_path.. "]] " .. region_onscreen_name)
     confirm_button.uic:PropagatePriority(100)
     abandon_frame:AddComponent(confirm_button)
     confirm_button:SetState("hover")
 
-    confirm_button.uic:SetTooltipText(confirm_button_tooltip_hover1.." " .. region_onscreen_name .. " " ..confirm_button_tooltip_hover2.. " " .. money .. ".", "", false)
+    local icon_treasury_path = effect.get_skinned_image_path("icon_treasury.png")
+    confirm_button.uic:SetTooltipText(confirm_button_tooltip_hover1.." " .. region_onscreen_name .. " " ..confirm_button_tooltip_hover2.. " [[img:" ..icon_treasury_path.. "]] " .. money .. ".", "", false)
     confirm_button:SetState("active")
     if region:garrison_residence():is_under_siege() then
         confirm_button:SetDisabled(true)
