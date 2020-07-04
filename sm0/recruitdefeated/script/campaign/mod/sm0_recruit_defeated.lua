@@ -1559,13 +1559,23 @@ local function apply_diplomacy(faction_name)
     if faction then
         local subculture = faction:subculture()
         local culture = faction:culture()
-        local confed_option = cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value")
+        local confed_option_value --= cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value")
+        local confederation_options_mod 
+        local mct = core:get_static_object("mod_configuration_tool")
+        if mct then 
+            confederation_options_mod = mct:get_mod_by_key("confederation_options")
+            if confederation_options_mod then 
+                local confed_option = confederation_options_mod:get_option_by_key(culture)
+                confed_option_value = confed_option:get_finalized_setting()
+            end
+        end
         local option = {}
-        if confed_option == "enabled" then
+        local option_sc = {}
+        if confed_option_value == "free_confed" then
             option.offer = true
             option.accept = true
-            option.enable_payment = false
-        elseif confed_option == "player_only" then
+            option.enable_payment = true
+        elseif confed_option_value == "player_only" then
             if faction:is_human() then
                 option.offer = true
                 option.accept = true
@@ -1575,25 +1585,25 @@ local function apply_diplomacy(faction_name)
                 option.accept = true
                 option.enable_payment = false	
             end
-        elseif confed_option == "disabled" then
+        elseif confed_option_value == "disabled" then
             option.offer = false
             option.accept = false
             option.enable_payment = false				
-        elseif confed_option == "yield" or confed_option == nil then
+        elseif confed_option_value == "no_tweak" or confed_option_value == nil then
             option.offer = true
             option.accept = true
             option.enable_payment = false
             for i, subculture_confed in ipairs(subculture_confed_disabled) do
                 if subculture == subculture_confed then
-                    option.offer = false
-                    option.accept = false
-                    option.enable_payment = false
+                    option_sc.offer = false
+                    option_sc.accept = false
+                    option_sc.enable_payment = false
                 end
             end	
             if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then 
-                option.offer = true
-                option.accept = true
-                option.enable_payment = false            
+                option_sc.offer = true
+                option_sc.accept = true
+                option_sc.enable_payment = false            
             end
             if faction:has_pooled_resource("emp_loyalty") == true then
                 option.offer = false
@@ -1601,25 +1611,26 @@ local function apply_diplomacy(faction_name)
                 option.enable_payment = false
             end
             if subculture == "wh_dlc05_sc_wef_wood_elves" then
-                option.accept = false
-                option.enable_payment = false        	
+                option_sc.accept = false
+                option_sc.enable_payment = false        	
                 oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
                 if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
-                    option.offer = true
+                    option_sc.offer = true
                 else
-                    option.offer = false
+                    option_sc.offer = false
                 end  
             end
         end
         cm:callback(
             function(context)
-                cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option.offer, option.accept, option.enable_payment)
+                cm:force_diplomacy("faction:" .. faction_name, "culture:" .. culture, "form confederation", option.offer, option.accept, option.enable_payment)
+                cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.enable_payment)
 
                 if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
                     cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
                     cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
                 end
-                if (confed_option == "yield" or confed_option == nil) and subculture == "wh_main_sc_brt_bretonnia" and faction:is_human() 
+                if (confed_option_value == "no_tweak" or confed_option_value == nil) and subculture == "wh_main_sc_brt_bretonnia" and faction:is_human() 
                 and faction_name ~= "wh2_dlc14_brt_chevaliers_de_lyonesse" then
                     local bret_confederation_tech = {
                         {tech = "tech_dlc07_brt_heraldry_artois", faction = "wh_main_brt_artois"},
@@ -2478,7 +2489,7 @@ function sm0_recruit_defeated()
         cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
     end
     -- old version compatibility
-    local version_number = "1.1" --debug: "vs.code" --H&B "1.0" --S&B "1.1"
+    local version_number = "2.0" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0"
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()

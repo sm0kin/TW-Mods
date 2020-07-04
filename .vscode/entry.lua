@@ -1,5 +1,6 @@
 -- FORCE CONFEDERATION
 require("sm0/sm0_force_confederation/script/campaign/mod/sm0_confed")
+require("sm0/sm0_force_confederation/script/mct/settings/force_confederation_settings")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_confed")
 --require("sm0/sm0_force_confederation/script/export_helpers_sm0_confed")
 

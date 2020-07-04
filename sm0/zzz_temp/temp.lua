@@ -493,3 +493,23 @@ end
             end
         end
     end
+
+
+--cm:add_loading_game_callback(
+--	function(context)
+--		local mct = core:get_static_object("mod_configuration_tool")
+--		if not mct then
+--			mct_settings = cm:load_named_value("mct_confederation_options", {}, context)
+--			if is_table(mct_settings) then
+--				for option_key, option_data in pairs(mct_settings) do
+--					--local option_obj = mod_obj:get_option_by_key(option_key)
+--					--if option_obj then
+--					--	-- save the option details in Lua-state
+--					--	option_obj:set_finalized_setting_event_free(option_data._setting)
+--					--	option_obj:set_read_only(option_data._read_only)
+--					--end
+--				end
+--			end
+--		end
+--	end
+--)

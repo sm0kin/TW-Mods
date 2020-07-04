@@ -1,5 +1,3 @@
-local player_faction = nil
---# assume player_faction: CA_FACTION
 local enable_value --:WHATEVER
 local restriction_value --:WHATEVER
 local occupation_option_id = {
@@ -16,15 +14,13 @@ local occupation_option_id = {
 	["1913039141"] = "wh2_sm0_sc_teb_teb_occupation_decision_confederate"
 } --: map<string, string>
 
---v function()
-local function add_tk_immortality()
-	if player_faction and player_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
-		local character_list = player_faction:character_list()
-		for i = 0, character_list:num_items() - 1 do
-			local current_char = character_list:item_at(i)			
-			if current_char:is_wounded() and cm:char_is_general(current_char) then
-				cm:set_character_immortality(cm:char_lookup_str(current_char:command_queue_index()), true) 
-			end
+--v function(faction: CA_FACTION)
+local function add_tk_immortality(faction)
+	local character_list = faction:character_list()
+	for i = 0, character_list:num_items() - 1 do
+		local current_char = character_list:item_at(i)			
+		if current_char:is_wounded() and cm:char_is_general(current_char) then
+			cm:set_character_immortality(cm:char_lookup_str(current_char:command_queue_index()), true) 
 		end
 	end
 end
@@ -49,11 +45,13 @@ local function force_confed(char, faction)
 	cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
 	cm:force_confederation(winner_faction_name, loser_faction_name)
 	cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
-	cm:callback(
-		function(context)
-			add_tk_immortality()
-		end, 1, "wait for character list to update"
-	)
+	if char:faction():subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
+		cm:callback(
+			function(context)
+				add_tk_immortality(char:faction())
+			end, 1, "wait for character list to update"
+		)
+	end
 end
 
 --v function(enable_value: WHATEVER)
@@ -114,13 +112,23 @@ local function init_force_confed_listeners(enable_value)
 				if faction then
 					local subculture = faction:subculture()
 					local culture = faction:culture()
-					local confed_option = cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value")
+					local confed_option_value --= cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value")
+					local confederation_options_mod 
+					local mct = core:get_static_object("mod_configuration_tool")
+					if mct then 
+						confederation_options_mod = mct:get_mod_by_key("confederation_options")
+						if confederation_options_mod then 
+							local confed_option = confederation_options_mod:get_option_by_key(culture)
+							confed_option_value = confed_option:get_finalized_setting()
+						end
+					end
 					local option = {}
-					if confed_option == "enabled" then
+					local option_sc = {}
+					if confed_option_value == "free_confed" then
 						option.offer = true
 						option.accept = true
-						option.enable_payment = false
-					elseif confed_option == "player_only" then
+						option.enable_payment = true
+					elseif confed_option_value == "player_only" then
 						if faction:is_human() then
 							option.offer = true
 							option.accept = true
@@ -130,25 +138,25 @@ local function init_force_confed_listeners(enable_value)
 							option.accept = true
 							option.enable_payment = false	
 						end
-					elseif confed_option == "disabled" then
+					elseif confed_option_value == "disabled" then
 						option.offer = false
 						option.accept = false
 						option.enable_payment = false				
-					elseif confed_option == "yield" or confed_option == nil then
+					elseif confed_option_value == "no_tweak" or confed_option_value == nil then
 						option.offer = true
 						option.accept = true
 						option.enable_payment = false
 						for i, subculture_confed in ipairs(subculture_confed_disabled) do
 							if subculture == subculture_confed then
-								option.offer = false
-								option.accept = false
-								option.enable_payment = false
+								option_sc.offer = false
+								option_sc.accept = false
+								option_sc.enable_payment = false
 							end
 						end	
 						if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then 
-							option.offer = true
-							option.accept = true
-							option.enable_payment = false            
+							option_sc.offer = true
+							option_sc.accept = true
+							option_sc.enable_payment = false            
 						end
 						if faction:has_pooled_resource("emp_loyalty") == true then
 							option.offer = false
@@ -156,25 +164,26 @@ local function init_force_confed_listeners(enable_value)
 							option.enable_payment = false
 						end
 						if subculture == "wh_dlc05_sc_wef_wood_elves" then
-							option.accept = false
-							option.enable_payment = false        	
+							option_sc.accept = false
+							option_sc.enable_payment = false        	
 							oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
 							if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
-								option.offer = true
+								option_sc.offer = true
 							else
-								option.offer = false
+								option_sc.offer = false
 							end  
 						end
 					end
 					cm:callback(
 						function(context)
-							cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option.offer, option.accept, option.enable_payment)
-				
+							cm:force_diplomacy("faction:" .. faction_name, "culture:" .. culture, "form confederation", option.offer, option.accept, option.enable_payment)
+							cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.enable_payment)
+
 							if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
 								cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
 								cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
 							end
-							if (confed_option == "yield" or confed_option == nil) and subculture == "wh_main_sc_brt_bretonnia" and faction:is_human() 
+							if (confed_option_value == "no_tweak" or confed_option_value == nil) and subculture == "wh_main_sc_brt_bretonnia" and faction:is_human() 
 							and faction_name ~= "wh2_dlc14_brt_chevaliers_de_lyonesse" then
 								local bret_confederation_tech = {
 									{tech = "tech_dlc07_brt_heraldry_artois", faction = "wh_main_brt_artois"},
@@ -201,20 +210,23 @@ local function init_force_confed_listeners(enable_value)
 			true
 		)
 
-		if player_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
-			core:add_listener(
-				"force_confederation_GarrisonAttackedEvent",
-				"GarrisonAttackedEvent",
-				function(context)
-					return cm:is_local_players_turn() and context:garrison_residence():faction():region_list():num_items() == 1
-				end,
-				function(context)
-					FACTION_GARRISON_ATTACKED = context:garrison_residence():faction():name()
-					cm:set_saved_value("faction_garrison_attacked", FACTION_GARRISON_ATTACKED)
-				end,
-				true
-			)
-		end
+		core:add_listener(
+			"force_confederation_GarrisonAttackedEvent",
+			"GarrisonAttackedEvent",
+			function(context)
+				local garrison_faction = context:garrison_residence():faction()
+				local attacker_faction = context:character():faction()
+				out("sm0/force_confederation_GarrisonAttackedEvent/garrison_faction = "..garrison_faction:name())
+				out("sm0/force_confederation_GarrisonAttackedEvent/attacker_faction = "..attacker_faction:name())
+				return attacker_faction:is_human() and attacker_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" and garrison_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings"
+				and garrison_faction:region_list():num_items() == 1
+			end,
+			function(context)
+				FACTION_GARRISON_ATTACKED = context:garrison_residence():faction():name()
+				cm:set_saved_value("faction_garrison_attacked", FACTION_GARRISON_ATTACKED)
+			end,
+			true
+		)
 
 		core:add_listener(
 			"force_confederation_PanelOpenedCampaign",
@@ -223,6 +235,7 @@ local function init_force_confed_listeners(enable_value)
 				return context.string == "settlement_captured" 
 			end,
 			function(context)
+				player_faction = cm:get_faction(cm:get_local_faction(true))
 				local icon = find_uicomponent(core:get_ui_root(), "settlement_captured", "icon_vassals")
 				if icon ~= nil then 
 					for current_id, _ in pairs(occupation_option_id) do
@@ -235,7 +248,7 @@ local function init_force_confed_listeners(enable_value)
 							if FACTION_GARRISON_ATTACKED == nil then
 								FACTION_GARRISON_ATTACKED = cm:get_saved_value("faction_garrison_attacked")
 							end				
-							if restriction_value ~= "unrestricted" and player_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
+							if restriction_value and player_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
 								if FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_khemri" then
 									button:SetDisabled(true)
 									button:SetOpacity(50)
@@ -296,7 +309,6 @@ local function init_force_confed_listeners(enable_value)
 			end,
 			true
 		)	
-
 	end
 end
 
@@ -317,7 +329,8 @@ core:add_listener(
         restriction_value = b_restriction:get_finalized_setting()
         
         --out("mct:log/force_confed_MctInitialized/enable_value = "..tostring(enable_value))
-        --out("mct:log/force_confed_MctInitialized/restriction_value = "..tostring(restriction_value))
+		--out("mct:log/force_confed_MctInitialized/restriction_value = "..tostring(restriction_value))
+
     end,
     true
 )
@@ -340,21 +353,33 @@ core:add_listener(
 
 --v function() --init
 function sm0_confed()
-	player_faction = cm:get_faction(cm:get_local_faction(true))
 	local mcm = _G.mcm
     local mct = core:get_static_object("mod_configuration_tool")
 
     if mct then
         -- MCT new --
         --mct:log("sm0_confed/mct/enable_value = "..tostring(enable_value))
-        --mct:log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
+		--mct:log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
+		local confederation_options_mod = mct:get_mod_by_key("confederation_options")
+		if confederation_options_mod and cm:is_new_game() then
+			local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_tmb_tomb_kings")
+			tk_value = tk_option:get_finalized_setting()
+			if tk_value == "no_tweak" then
+				cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+			end
+			local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")
+			emp_value = emp_option:get_finalized_setting() -- no teb / kislev subculture?
+			if emp_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
+				cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
+			end
+		end
     else
-		local confed_option_tmb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
-		if not confed_option_tmb or confed_option_tmb == "yield" then
+		local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
+		if not tk_value or tk_value == "yield" then
 			cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
 		end
-		local confed_option_teb = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") -- no teb / kislev subculture?
-		if (not confed_option_tmb or confed_option_tmb == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
+		local emp_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") -- no teb / kislev subculture?
+		if (not emp_value or emp_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
 			cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
 		end
 		enable_value = true

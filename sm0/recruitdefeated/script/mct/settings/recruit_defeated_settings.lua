@@ -17,7 +17,6 @@ restriction:set_tooltip_text(loc_prefix.."b_restriction_tt", true)
 enable:add_option_set_callback(
     function(option) 
         local val = option:get_selected_setting()
-        --# assume val: boolean
         local restriction = option:get_mod():get_option_by_key("b_restriction")
         restriction:set_uic_visibility(val)
     end
