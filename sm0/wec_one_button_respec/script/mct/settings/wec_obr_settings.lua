@@ -26,14 +26,16 @@ en_cost:add_dropdown_value("disabled", "Disable", "Disable respec cost.", true)
 en_cost:add_dropdown_value("firstforfree", "Free 1st Respec", "Respeccing a Character is free the 1st time.")
 en_cost:add_dropdown_value("enabled", "Enable", "Respeccing always entails costs.")
 
---local cost = obr:add_new_option("c_cost", "slider")
---cost:set_text(loc_prefix.."c_cost_txt", true)
---cost:set_tooltip_text(loc_prefix.."c_cost_tt", true)
---cost:slider_set_values(100, 1000, 500)
+local cost = obr:add_new_option("c_cost", "slider")
+cost:set_text(loc_prefix.."c_cost_txt", true)
+cost:set_tooltip_text(loc_prefix.."c_cost_tt", true)
+cost:slider_set_min_max(100, 1000)
+cost:set_default_value(500)
+cost:slider_set_step_size(100)
 
 local options_list = {
     "a_limit",
-    --"c_cost",
+    "c_cost",
     "b_en_cost"
 } --:vector<string>
 
@@ -49,21 +51,3 @@ enable:add_option_set_callback(
         end
     end
 )
-
---en_cost:add_option_set_callback(
---    function(option) 
---        local en_cost = option:get_selected_setting()
---        local cost = option:get_mod():get_option_by_key("c_cost")
---        local limit = option:get_mod():get_option_by_key("a_limit")
---        local limit_val = limit:get_selected_setting()
---        local enable_obj = option:get_mod():get_option_by_key("a_enable")
---        local enable_val = enable_obj:get_selected_setting()
---        if enable_val then
---            if en_cost == "disabled" or (en_cost == "firstforfree" and limit_val) then
---                cost:set_uic_visibility(false)
---            else
---                cost:set_uic_visibility(true)
---            end
---        end
---    end
---)

@@ -1,15 +1,15 @@
-local loc_prefix = "mct_force_confederation_"
-local force_confed = mct:register_mod("force_confed")
-force_confed:set_title(loc_prefix.."mod_title", true)
-force_confed:set_author("sm0kin")
-force_confed:set_description(loc_prefix.."mod_desc", true)
+local loc_prefix = "mct_recruit_defeated_"
+local recruit_defeated = mct:register_mod("recruit_defeated")
+recruit_defeated:set_title(loc_prefix.."mod_title", true)
+recruit_defeated:set_author("sm0kin")
+recruit_defeated:set_description(loc_prefix.."mod_desc", true)
 
-local enable = force_confed:add_new_option("a_enable", "checkbox")
+local enable = recruit_defeated:add_new_option("a_enable", "checkbox")
 enable:set_default_value(true)
 enable:set_text(loc_prefix.."a_enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."a_enable_tt", true)
 
-local restriction = force_confed:add_new_option("b_restriction", "checkbox")
+local restriction = recruit_defeated:add_new_option("b_restriction", "checkbox")
 restriction:set_default_value(true)
 restriction:set_text(loc_prefix.."b_restriction_txt", true)
 restriction:set_tooltip_text(loc_prefix.."b_restriction_tt", true)

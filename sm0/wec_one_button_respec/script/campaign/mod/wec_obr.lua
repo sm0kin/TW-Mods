@@ -22,7 +22,7 @@ end
 
 --v function(cqi: CA_CQI)
 local function are_you_sure(cqi)
-    local ConfirmFrame = Frame.new("Respec?")
+    local ConfirmFrame = Frame.new(effect.get_localised_string("obr_frame_title"))
     ConfirmFrame:Resize(600, 300)
     Util.centreComponentOnScreen(ConfirmFrame)
     local parchment = find_uicomponent(ConfirmFrame.uic, "parchment")
@@ -31,34 +31,39 @@ local function are_you_sure(cqi)
     local pW, pH = parchment:Bounds()
     local gapX, gapY = fW - pW, fH - pH
     parchment:MoveTo(fX + gapX/2, fY + gapY/2)
-    local ConfirmText = Text.new("confirm_txt", ConfirmFrame, "HEADER", "Would you like to fully respec this character?")
+    local ConfirmText = Text.new("confirm_txt", ConfirmFrame, "HEADER", effect.get_localised_string("obr_ConfirmText"))
     ConfirmText:Resize(420, 100)
     tW, tH = ConfirmText:Bounds()
-    local ButtonYes = TextButton.new("confirm_yes", ConfirmFrame, "TEXT", "Yes")
+    local ButtonYes = TextButton.new("confirm_yes", ConfirmFrame, "TEXT", effect.get_localised_string("obr_confirm_yes_txt"))
     local char = cm:get_character_by_cqi(cqi)
     if llr.en_cost == "enabled" or (llr.en_cost == "firstforfree" and cm:get_saved_value("llr_respec_" .. tostring(cqi))) then
         local respec_cost = (char:rank() - 1) * llr.cost
         if respec_cost <= char:faction():treasury() then
             ButtonYes:SetState("hover")
-            ButtonYes.uic:SetTooltipText("Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]!", "", false)
+            ButtonYes.uic:SetTooltipText(effect.get_localised_string("obr_confirm_yes_money1_tt")..respec_cost..effect.get_localised_string("obr_confirm_yes_money2_tt"), "", false)
+            --ButtonYes.uic:SetTooltipText("Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]!", "", false)
             ButtonYes:SetState("active")
         else
             ButtonYes:SetDisabled(true)
-            ButtonYes.uic:SetTooltipText("[[col:red]]You don't have enough funds![[/col]] \n Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]", "", false)
+            ButtonYes.uic:SetTooltipText(effect.get_localised_string("obr_confirm_yes_no_money1_tt")..respec_cost..effect.get_localised_string("obr_confirm_yes_no_money2_tt"), "", false)
+            --ButtonYes.uic:SetTooltipText("[[col:red]]You don't have enough funds![[/col]] \n Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]", "", false)
         end
     else
         ButtonYes:SetState("hover")
-        ButtonYes.uic:SetTooltipText("Respec your lord/hero.", "", false)
+        ButtonYes.uic:SetTooltipText(effect.get_localised_string("obr_confirm_yes_free_tt"), "", false)
+        --ButtonYes.uic:SetTooltipText("Respec your lord/hero.", "", false)
         ButtonYes:SetState("active")
     end
     if char:rank() == 1 then
         ButtonYes:SetDisabled(true)
-        ButtonYes.uic:SetTooltipText("No skill points allocated.", "", false)
+        ButtonYes.uic:SetTooltipText(effect.get_localised_string("obr_confirm_yes_no_skills_tt"), "", false)
+        --ButtonYes.uic:SetTooltipText("No skill points allocated.", "", false)
     end
     ButtonYes:Resize(300, 45)
-    local ButtonNo = TextButton.new("confirm_no", ConfirmFrame, "TEXT", "No")
+    local ButtonNo = TextButton.new("confirm_no", ConfirmFrame, "TEXT", effect.get_localised_string("obr_confirm_no_txt"))
     ButtonNo:SetState("hover")
-    ButtonNo.uic:SetTooltipText("Cancel", "", true)
+    ButtonNo.uic:SetTooltipText(effect.get_localised_string("obr_confirm_no_tt"), "", true)
+    --ButtonNo.uic:SetTooltipText("Cancel", "", true)
     ButtonNo:SetState("active")
     ButtonNo:Resize(300, 45)
     ConfirmFrame:AddComponent(ConfirmText)
@@ -117,10 +122,12 @@ function llr.create_button(cqi)
         if llr.en_cost ~= "disabled" then
             if cm:get_saved_value("llr_respec_" .. tostring(cqi)) and llr.limit then
                 llr.button:SetDisabled(true)
-                llr.button.uic:SetTooltipText("[[col:red]]You have already respec'd this character. This cannot be done twice! [[/col]]", "", false)
+                llr.button.uic:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_disabled_tt"), "", false)
+                --llr.button.uic:SetTooltipText("[[col:red]]You have already respec'd this character. This cannot be done twice! [[/col]]", "", false)
             else
                 llr.button:SetState("hover")
-                llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. This can only be done once! [[/col]]", "", false)
+                llr.button.uic:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_limited_tt"), "", false)
+                --llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. This can only be done once! [[/col]]", "", false)
                 llr.button:SetState("active")
                 llr.button:RegisterForClick(
                     function(context)
@@ -134,7 +141,8 @@ function llr.create_button(cqi)
             end
         else
             llr.button:SetState("hover")
-            llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. [[/col]]", "", false)
+            llr.button.uic:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_unlimited_tt"), "", false)
+            --llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. [[/col]]", "", false)
             llr.button:SetState("active")
             llr.button:RegisterForClick(
                 function(context)
@@ -297,14 +305,13 @@ core:add_listener(
         llr.limit = a_limit:get_finalized_setting()
         local b_en_cost = obr_mod:get_option_by_key("b_en_cost")
         llr.en_cost = b_en_cost:get_finalized_setting()
-        --local c_cost = obr_mod:get_option_by_key("c_cost")
-        --llr.cost = c_cost:get_finalized_setting()
-        llr.cost = 500
+        local c_cost = obr_mod:get_option_by_key("c_cost")
+        llr.cost = c_cost:get_finalized_setting()
    
-        llr.log("obr_MctInitialized/llr.enable = "..tostring(llr.enable))
-        llr.log("obr_MctInitialized/llr.limit = "..tostring(llr.limit))
-        llr.log("obr_MctInitialized/llr.en_cost = "..tostring(llr.en_cost))
-        llr.log("obr_MctInitialized/llr.cost = "..tostring(llr.cost))
+        --llr.log("obr_MctInitialized/llr.enable = "..tostring(llr.enable))
+        --llr.log("obr_MctInitialized/llr.limit = "..tostring(llr.limit))
+        --llr.log("obr_MctInitialized/llr.en_cost = "..tostring(llr.en_cost))
+        --llr.log("obr_MctInitialized/llr.cost = "..tostring(llr.cost))
     end,
     true
 )
@@ -320,7 +327,7 @@ core:add_listener(
         llr.enable = settings_table.a_enable
         llr.limit = settings_table.a_limit
         llr.en_cost = settings_table.b_en_cost
-        --llr.cost = settings_table.c_cost
+        llr.cost = settings_table.c_cost
         
         init_obr_listeners(llr.enable)
     end,
@@ -333,6 +340,10 @@ function wec_obr()
 
     if mct then
         -- MCT new --
+        --llr.log("wec_obr/llr.enable = "..tostring(llr.enable))
+        --llr.log("wec_obr/llr.limit = "..tostring(llr.limit))
+        --llr.log("wec_obr/llr.en_cost = "..tostring(llr.en_cost))
+        --llr.log("wec_obr/llr.cost = "..tostring(llr.cost))
     else
         llr.enable = true
         if cm:get_saved_value("mcm_tweaker_obr_limit_value") ~= "disabled" then
@@ -341,7 +352,7 @@ function wec_obr()
             llr.limit = false
         end
         llr.en_cost = cm:get_saved_value("mcm_tweaker_obr_en_cost_value") or "disabled"
-        llr.cost = cm:get_saved_value("mcm_variable_obr_cost_value") or 200
+        llr.cost = cm:get_saved_value("mcm_variable_obr_cost_value") or 500
 
         -- MCT old --
         if not not mcm then

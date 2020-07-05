@@ -216,14 +216,16 @@ local function init_force_confed_listeners(enable_value)
 			function(context)
 				local garrison_faction = context:garrison_residence():faction()
 				local attacker_faction = context:character():faction()
-				out("sm0/force_confederation_GarrisonAttackedEvent/garrison_faction = "..garrison_faction:name())
-				out("sm0/force_confederation_GarrisonAttackedEvent/attacker_faction = "..attacker_faction:name())
 				return attacker_faction:is_human() and attacker_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" and garrison_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings"
 				and garrison_faction:region_list():num_items() == 1
 			end,
 			function(context)
-				FACTION_GARRISON_ATTACKED = context:garrison_residence():faction():name()
+				local garrison_faction = context:garrison_residence():faction()
+				local attacker_faction = context:character():faction()
+				FACTION_GARRISON_ATTACKED = garrison_faction:name()
 				cm:set_saved_value("faction_garrison_attacked", FACTION_GARRISON_ATTACKED)
+				--out("sm0/force_confederation_GarrisonAttackedEvent/garrison_faction = "..garrison_faction:name())
+				--out("sm0/force_confederation_GarrisonAttackedEvent/attacker_faction = "..attacker_faction:name())
 			end,
 			true
 		)

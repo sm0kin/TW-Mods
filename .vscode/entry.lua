@@ -160,6 +160,7 @@ require("sm0/cbf/script/campaign/mod/fix_agent_action_traits")
 require("sm0/cbf/script/campaign/wh2_main_great_vortex/mod/fix_storag_kor")
 require("sm0/cbf/script/campaign/mod/fix_brt_exclusive_traits")
 require("sm0/cbf/script/campaign/mod/fix_ingredient_ror")
+require("sm0/cbf/script/campaign/mod/fix_empire_spy_guilde")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_revitalizing_rite")

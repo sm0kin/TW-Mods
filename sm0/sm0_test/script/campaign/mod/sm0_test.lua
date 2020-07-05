@@ -523,8 +523,11 @@ function sm0_test()
     --    true
 	--)
 	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 1600)
-	cm:faction_add_pooled_resource(cm:get_local_faction(true), "cst_infamy", "wh2_dlc11_resource_factor_other", 5000)
+	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "cst_infamy", "wh2_dlc11_resource_factor_other", 5000)
 	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "grn_salvage", "wh2_dlc11_resource_factor_other", 5000)
+	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "dwf_oathgold", "wh2_main_resource_factor_missions", 5000)
+	cm:faction_add_pooled_resource(cm:get_local_faction(true), "emp_prestige", "wh2_dlc13_resource_factor_regions", 20000)
+
 	--cm:create_force(
 	--	"wh_main_chs_chaos",
 	--	"wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0,wh_main_chs_inf_chaos_marauders_0",
@@ -562,6 +565,7 @@ function sm0_test()
 					end
 				end
 				if cm:model():turn_number() == 2 then 
+					--empire_attempt_prestige_dilemma(context:faction())
 					--[[
 					local elector_faction_1 = cm:model():world():faction_by_key("wh_main_emp_nordland")
 					local elector_cqi_1 = elector_faction_1:command_queue_index()

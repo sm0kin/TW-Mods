@@ -53,7 +53,9 @@
 --# assume MCT_OPTION.get_finalized_setting: method() --> string | number | boolean 	                          --Getter for the "finalized_setting" for this mct_option.
 --# assume MCT_OPTION.set_default_value: method(default_value: string | number | boolean ) 	                    --Set the default selected setting when the mct_mod is first created and loaded.
 --# assume MCT_OPTION.get_selected_setting: method() --> string | number | boolean                              --Getter for the current selected setting.
---# assume MCT_OPTION.slider_set_values: method(min: number, max: number, current: number) 	                    --set-value wrapped for sliders.
+----# assume MCT_OPTION.slider_set_values: method(min: number, max: number, current: number) 	                  --set-value wrapped for sliders.
+--# assume MCT_OPTION.slider_set_min_max: method(min: number, max: number) 	                                    --set-value wrapped for sliders.
+--# assume MCT_OPTION.slider_set_step_size: method(step_size: number)                                           --defaults to 1 if unused
 --# assume MCT_OPTION.add_dropdown_values: method(dropdown_table: table)                                        --Method to set the dropdown_values.
 --# assume MCT_OPTION.add_dropdown_value: method(key: string, text: string, tt: string, is_default: boolean?) 	--Used to create a single dropdown_value; also called within mct_option:add_dropdown_values
 --# assume MCT_OPTION.get_key: method() --> string	                                                            --Getter for this option's key.

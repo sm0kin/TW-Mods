@@ -562,6 +562,7 @@
 --# assume CM.override_building_chain_display: method(building_chain: string, settlement_skin: string, region_name: string)
 --aux
 --# assume CM.show_shroud: method(opt: boolean)
+--# assume CM.make_region_visible_in_shroud: method(faction_key: string, region_key: string)
 --# assume CM.end_turn: method(opt: boolean)
 --# assume CM.whitelist_event_feed_event_type: method(event_type: string)
 --# assume CM.force_normal_character_locomotion_speed_for_turn: method(boolean)
@@ -872,6 +873,7 @@
 --# assume CA_FACTION.has_home_region: method() --> boolean
 --# assume CA_FACTION.factions_met: method() --> CA_FACTION_LIST
 --# assume CA_FACTION.factions_at_war_with: method() --> CA_FACTION_LIST
+--# assume CA_FACTION.factions_trading_with: method() --> CA_FACTION_LIST
 --# assume CA_FACTION.at_war: method() --> boolean
 --# assume CA_FACTION.has_pooled_resource: method(resource: string) --> boolean
 --# assume CA_FACTION.pooled_resources: method() --> CA_POOLED_LIST
