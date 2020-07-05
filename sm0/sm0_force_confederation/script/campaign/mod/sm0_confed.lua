@@ -127,45 +127,45 @@ local function init_force_confed_listeners(enable_value)
 					if confed_option_value == "free_confed" then
 						option.offer = true
 						option.accept = true
-						option.enable_payment = true
+						option.both_directions = true
 					elseif confed_option_value == "player_only" then
 						if faction:is_human() then
 							option.offer = true
 							option.accept = true
-							option.enable_payment = false
+							option.both_directions = false
 						else
 							option.offer = false
 							option.accept = true
-							option.enable_payment = false	
+							option.both_directions = false	
 						end
 					elseif confed_option_value == "disabled" then
 						option.offer = false
 						option.accept = false
-						option.enable_payment = false				
+						option.both_directions = false				
 					elseif confed_option_value == "no_tweak" or confed_option_value == nil then
 						option.offer = true
 						option.accept = true
-						option.enable_payment = false
+						option.both_directions = false
 						for i, subculture_confed in ipairs(subculture_confed_disabled) do
 							if subculture == subculture_confed then
 								option_sc.offer = false
 								option_sc.accept = false
-								option_sc.enable_payment = false
+								option_sc.both_directions = false
 							end
 						end	
 						if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then 
 							option_sc.offer = true
 							option_sc.accept = true
-							option_sc.enable_payment = false            
+							option_sc.both_directions = false            
 						end
 						if faction:has_pooled_resource("emp_loyalty") == true then
 							option.offer = false
 							option.accept = false
-							option.enable_payment = false
+							option.both_directions = false
 						end
 						if subculture == "wh_dlc05_sc_wef_wood_elves" then
 							option_sc.accept = false
-							option_sc.enable_payment = false        	
+							option_sc.both_directions = false        	
 							oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
 							if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
 								option_sc.offer = true
@@ -176,8 +176,12 @@ local function init_force_confed_listeners(enable_value)
 					end
 					cm:callback(
 						function(context)
-							cm:force_diplomacy("faction:" .. faction_name, "culture:" .. culture, "form confederation", option.offer, option.accept, option.enable_payment)
-							cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.enable_payment)
+							if option.offer and option.accept and option.both_directions then
+								cm:force_diplomacy("faction:" .. faction_name, "culture:" .. culture, "form confederation", option.offer, option.accept, option.both_directions)
+							end
+							if option_sc.offer and option_sc.accept and option_sc.both_directions then
+								cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.both_directions)
+							end
 
 							if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
 								cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
@@ -202,6 +206,14 @@ local function init_force_confed_listeners(enable_value)
 							if faction:is_human() and faction:has_pooled_resource("emp_loyalty") == true then
 								cm:force_diplomacy("faction:"..faction_name, "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false)
 								cm:force_diplomacy("faction:"..faction_name, "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false)
+							end
+							---hack fix to stop this re-enabling confederation when it needs to stay disabled
+							---please let's make this more robust!
+							if subculture == "wh2_main_sc_hef_high_elves" then
+								local grom_faction = cm:get_faction("wh2_dlc15_grn_broken_axe")
+								if grom_faction ~= false and grom_faction:is_human() then
+									cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false);
+								end
 							end
 						end, 1, "changeDiplomacyOptions"
 					)

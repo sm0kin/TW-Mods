@@ -9,26 +9,85 @@ enable:set_default_value(true)
 enable:set_text(loc_prefix.."a_enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."a_enable_tt", true)
 
-local restriction = recruit_defeated:add_new_option("b_restriction", "checkbox")
-restriction:set_default_value(true)
-restriction:set_text(loc_prefix.."b_restriction_txt", true)
-restriction:set_tooltip_text(loc_prefix.."b_restriction_tt", true)
+recruit_defeated:add_new_section("restrictions", "Restrictions")
+
+local lore_restriction = recruit_defeated:add_new_option("b_lore_restriction", "checkbox")
+lore_restriction:set_default_value(true)
+lore_restriction:set_text(loc_prefix.."b_lore_restriction_txt", true)
+lore_restriction:set_tooltip_text(loc_prefix.."b_lore_restriction_tt", true)
+
+local scope = recruit_defeated:add_new_option("c_scope", "dropdown")
+scope:set_text(loc_prefix.."c_scope_txt", true)
+scope:set_tooltip_text(loc_prefix.."c_scope_tt", true)
+--scope:add_dropdown_value("player_ai", loc_prefix.."c_scope_player_ai_txt", loc_prefix.."c_scope_player_ai_tt", true)
+--scope:add_dropdown_value("player", loc_prefix.."c_scope_player_txt", loc_prefix.."c_scope_player_tt")
+--scope:add_dropdown_value("ai", loc_prefix.."c_scope_ai_txt", loc_prefix.."c_scope_ai_tt")
+scope:add_dropdown_value("player_ai", "Player & AI", "")
+scope:add_dropdown_value("player", "Player only", "")
+scope:add_dropdown_value("ai", "AI only", "")
+
+local ai_delay = recruit_defeated:add_new_option("d_ai_delay", "slider")
+ai_delay:set_text(loc_prefix.."d_ai_delay_txt", true)
+ai_delay:set_tooltip_text(loc_prefix.."d_ai_delay_tt", true)
+ai_delay:slider_set_min_max(0, 200)
+ai_delay:set_default_value(50)
+ai_delay:slider_set_step_size(5)
+
+recruit_defeated:add_new_section("priorities", "Priorities")
+
+local preferance1 = recruit_defeated:add_new_option("a_preferance1", "dropdown")
+preferance1:set_text(loc_prefix.."a_preferance1_txt", true)
+preferance1:set_tooltip_text(loc_prefix.."a_preferance1_tt", true)
+preferance1:add_dropdown_value("disable", "", "")
+preferance1:add_dropdown_value("player", "", "")
+preferance1:add_dropdown_value("ai", "", "")
+preferance1:add_dropdown_value("relation", "", "")
+preferance1:add_dropdown_value("major", "", "")
+preferance1:add_dropdown_value("minor", "", "")
+
+local preferance2 = recruit_defeated:add_new_option("b_preferance2", "dropdown")
+preferance2:set_text(loc_prefix.."b_preferance2_txt", true)
+preferance2:set_tooltip_text(loc_prefix.."b_preferance2_tt", true)
+preferance2:add_dropdown_value("disable", "", "")
+preferance2:add_dropdown_value("player", "", "")
+preferance2:add_dropdown_value("ai", "", "")
+preferance2:add_dropdown_value("relation", "", "")
+preferance2:add_dropdown_value("major", "", "")
+preferance2:add_dropdown_value("minor", "", "")
+
+local preferance3 = recruit_defeated:add_new_option("c_preferance3", "dropdown")
+preferance3:set_text(loc_prefix.."c_preferance3_txt", true)
+preferance3:set_tooltip_text(loc_prefix.."c_preferance3_tt", true)
+preferance3:add_dropdown_value("disable", "", "")
+preferance3:add_dropdown_value("player", "", "")
+preferance3:add_dropdown_value("ai", "", "")
+preferance3:add_dropdown_value("relation", "", "")
+preferance3:add_dropdown_value("major", "", "")
+preferance3:add_dropdown_value("minor", "", "")
+
+local options_list = {
+    "b_lore_restriction",
+    "c_scope",
+    "d_ai_delay",
+    "a_preferance1",
+    "b_preferance2",
+    "c_preferance3"
+} --:vector<string>
 
 enable:add_option_set_callback(
     function(option) 
-        local val = option:get_selected_setting()
+        local val = option:get_selected_setting() 
         --# assume val: boolean
-        local restriction = option:get_mod():get_option_by_key("b_restriction")
-        restriction:set_uic_visibility(val)
+        local options = options_list
+
+        for i = 1, #options do
+            local option_obj = option:get_mod():get_option_by_key(options[i])
+            option_obj:set_uic_visibility(val)
+        end
     end
 )
 
 local recruit_defeated = mcm:register_mod("recruit_defeated", "Recruit Defeated Legendary Lords", "")
---if legacy_option then
---    local version = recruit_defeated:add_tweaker("version", "Mod Version", "Choose your prefered mod version.")
---    version:add_option("default", "Default", "This script uses confederation methods to transfer legendary lords from dead factions to the player/ai. Written by sm0kin.")
---    version:add_option("legacy", "Legacy", "DISCONTINUED VERSION!!!\nThis script uses spawn methods to create doppelganger lords and deletes the original legendary lords in case the faction gets revived. Written by Scipion. Originally by scipion, reworked by sm0kin.")
---end
 local lore_restriction = recruit_defeated:add_tweaker("lore_restriction", "Restriction", "Defines whether defeated Lords/Heroes can join any faction of the same subculture or if they are restricted from joining factions that make little to no sense considering their background.") --mcm_tweaker_recruit_defeated_lore_restriction_value
 lore_restriction:add_option("all", "Gotta Catch 'Em All", "No restrictions.")
 lore_restriction:add_option("lorefriendly", "Lorefriendly", "Restrictions are in place for the following factions:\n*Khemri: no Arkhan\n*Lybaras/Exiles of Nehek/Numas: no Settra, no Arkhan\n\nRecruit Defeated is disabled for the following cultures/factions:\n*Vampire Coast\n*Savage Orcs\n*Followers of Nagash")
