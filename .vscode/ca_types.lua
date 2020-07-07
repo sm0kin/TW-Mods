@@ -272,7 +272,7 @@
 --# assume CM.add_turn_countdown_event: method(faction_name: string, turn_offset: number, event_name: string, context_str: string?)
 --# assume CM.load_global_script: method(script_name: string)
 --random number
---# assume CM.random_number: method(max: number | int, min: number? | int?) --> number | int
+--# assume CM.random_number: method(max: number | int, min: number? | int?) --> int
 --message events
 --# assume CM.show_message_event_located: method(
 --#     faction_key: string,
@@ -1032,6 +1032,7 @@
 --# assume global is_surtha_ek: function(char: CA_CHAR) --> boolean
 --# assume global is_character: function(char: CA_CHAR) --> boolean
 --# assume global is_faction: function(char: CA_FACTION) --> boolean
+--# assume global is_factionlist: function(char: any) --> boolean
 --# assume global add_vow_progress: function(char: CA_CHAR, trait: string, ai: bool, agents: bool)
 
 -- CA LUA OBJECTS:
