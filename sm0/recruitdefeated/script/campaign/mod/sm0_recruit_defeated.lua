@@ -1149,6 +1149,45 @@ local subtype_immortality = {
     ["wh2_dlc11_cst_noctilus"] = true
 } --: map<string, boolean>
 
+local names_of_power_traits = {
+    "wh2_main_trait_def_name_of_power_co_01_blackstone",
+    "wh2_main_trait_def_name_of_power_co_02_wyrmscale",
+    "wh2_main_trait_def_name_of_power_co_03_poisonblade",
+    "wh2_main_trait_def_name_of_power_co_04_headreaper",
+    "wh2_main_trait_def_name_of_power_co_05_spiteheart",
+    "wh2_main_trait_def_name_of_power_co_06_soulblaze",
+    "wh2_main_trait_def_name_of_power_co_07_bloodscourge",
+    "wh2_main_trait_def_name_of_power_co_08_griefbringer",
+    "wh2_main_trait_def_name_of_power_co_09_the_hand_of_wrath",
+    "wh2_main_trait_def_name_of_power_co_10_fatedshield",
+    "wh2_main_trait_def_name_of_power_co_11_drakecleaver",
+    "wh2_main_trait_def_name_of_power_co_12_hydrablood",
+    "wh2_main_trait_def_name_of_power_ar_01_lifequencher",
+    "wh2_main_trait_def_name_of_power_ar_02_the_tempest_of_talons",
+    "wh2_main_trait_def_name_of_power_ar_03_shadowdart",
+    "wh2_main_trait_def_name_of_power_ar_04_barbstorm",
+    "wh2_main_trait_def_name_of_power_ar_05_beastbinder",
+    "wh2_main_trait_def_name_of_power_ar_06_fangshield",
+    "wh2_main_trait_def_name_of_power_ar_07_wrathbringer",
+    "wh2_main_trait_def_name_of_power_ar_08_moonshadow",
+    "wh2_main_trait_def_name_of_power_ar_09_granitestance",
+    "wh2_main_trait_def_name_of_power_ar_10_the_grey_vanquisher",
+    "wh2_main_trait_def_name_of_power_ar_11_krakenclaw",
+    "wh2_main_trait_def_name_of_power_ar_12_grimgaze",
+    "wh2_main_trait_def_name_of_power_ca_01_dreadtongue",
+    "wh2_main_trait_def_name_of_power_ca_02_darkpath",
+    "wh2_main_trait_def_name_of_power_ca_03_khainemarked",
+    "wh2_main_trait_def_name_of_power_ca_04_the_black_conqueror",
+    "wh2_main_trait_def_name_of_power_ca_05_leviathanrage",
+    "wh2_main_trait_def_name_of_power_ca_06_emeraldeye",
+    "wh2_main_trait_def_name_of_power_ca_07_barbedlash",
+    "wh2_main_trait_def_name_of_power_ca_08_pathguard",
+    "wh2_main_trait_def_name_of_power_ca_09_the_dark_marshall",
+    "wh2_main_trait_def_name_of_power_ca_10_the_dire_overseer",
+    "wh2_main_trait_def_name_of_power_ca_11_gatesmiter",
+    "wh2_main_trait_def_name_of_power_ca_12_the_tormentor"
+} --:vector<string>
+
 --v function(faction: CA_FACTION)
 local function immortality_backup(faction)
     local char_list = faction:character_list()
@@ -1721,7 +1760,14 @@ local function confed_revived(confederator, confederated)
                     local char = char_list:item_at(i)
                     local command_queue_index = char:command_queue_index()
                     local char_lookup = cm:char_lookup_str(char)
-                    if cm:char_is_agent(char) or cm:char_is_general(char) then cm:force_reset_skills(char_lookup) end
+                    if cm:char_is_agent(char) or cm:char_is_general(char) then 
+                        cm:force_reset_skills(char_lookup) 
+                        for i = 1, #names_of_power_traits do
+                            if char:has_trait(names_of_power_traits[i]) then 
+                                cm:force_remove_trait(char_lookup, names_of_power_traits[i])
+                            end
+                        end
+                    end
                     --if not char:has_military_force() and (cm:char_is_general(char) or cm:char_is_agent(char)) then cm:kill_character(command_queue_index, true, false) end --kill colonels
                     if confederator:is_human() then 
                         lord_event(confederator:name(), char, wh_agents)
