@@ -119,7 +119,12 @@ local function init_force_confed_listeners(enable_value)
 						confederation_options_mod = mct:get_mod_by_key("confederation_options")
 						if confederation_options_mod then 
 							local confed_option = confederation_options_mod:get_option_by_key(culture)
-							confed_option_value = confed_option:get_finalized_setting()
+							if confed_option then 
+								confed_option_value = confed_option:get_finalized_setting()
+							else
+								confed_option = confederation_options_mod:get_option_by_key(subculture)
+								confed_option_value = confed_option:get_finalized_setting()
+							end
 						end
 					end
 					local option = {}
@@ -176,10 +181,10 @@ local function init_force_confed_listeners(enable_value)
 					end
 					cm:callback(
 						function(context)
-							if option.offer and option.accept and option.both_directions then
+							if option.offer ~= nil and option.accept ~= nil and option.both_directions ~= nil then
 								cm:force_diplomacy("faction:" .. faction_name, "culture:" .. culture, "form confederation", option.offer, option.accept, option.both_directions)
 							end
-							if option_sc.offer and option_sc.accept and option_sc.both_directions then
+							if option_sc.offer ~= nil and option_sc.accept ~= nil and option_sc.both_directions ~= nil then
 								cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.both_directions)
 							end
 

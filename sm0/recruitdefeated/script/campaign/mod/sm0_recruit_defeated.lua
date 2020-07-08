@@ -1,3 +1,4 @@
+--mct/mcm variables
 local enable_value --:WHATEVER
 local lore_restriction_value --:WHATEVER
 local scope_value --:WHATEVER
@@ -1394,7 +1395,7 @@ local function spawn_missing_lords(confederator, confederated)
                                     false,
                                     function(cqi)
                                         local char = cm:get_character_by_cqi(cqi)
-                                        --sm0_log("["..n..".] spawn_lord|subtype: "..char:character_subtype_key().." |Forename: "..char:get_forename().." |Surname: "..char:get_surname().." | CQI: "..cqi)
+                                        --sm0_log("["..n..".] spawn_lord | subtype: "..char:character_subtype_key().." | Forename: "..char:get_forename().." | Surname: "..char:get_surname().." | CQI: "..cqi)
                                         for k = 1, #locked_ai_generals do
                                             if char:character_subtype(locked_ai_generals[k].subtype) and not cm:get_saved_value(locked_ai_generals[k].subtype.."_spawned") then
                                                 --cm:set_character_immortality(cm:char_lookup_str(cqi), true)
@@ -1558,7 +1559,12 @@ local function apply_diplomacy(faction_name)
             confederation_options_mod = mct:get_mod_by_key("confederation_options")
             if confederation_options_mod then 
                 local confed_option = confederation_options_mod:get_option_by_key(culture)
-                confed_option_value = confed_option:get_finalized_setting()
+                if confed_option then 
+                    confed_option_value = confed_option:get_finalized_setting()
+                else
+                    confed_option = confederation_options_mod:get_option_by_key(subculture)
+                    confed_option_value = confed_option:get_finalized_setting()
+                end
             end
         end
         local option = {}
@@ -1615,13 +1621,12 @@ local function apply_diplomacy(faction_name)
         end
         cm:callback(
             function(context)
-                if option.offer and option.accept and option.both_directions then
+                if option.offer ~= nil and option.accept ~= nil and option.both_directions ~= nil then
                     cm:force_diplomacy("faction:" .. faction_name, "culture:" .. culture, "form confederation", option.offer, option.accept, option.both_directions)
                 end
-                if option_sc.offer and option_sc.accept and option_sc.both_directions then
+                if option_sc.offer ~= nil and option_sc.accept ~= nil and option_sc.both_directions ~= nil then
                     cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.both_directions)
                 end
-
                 if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
                     cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
                     cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
@@ -1920,6 +1925,7 @@ end
 
 --v function(faction_list: any, preferance_type: string, faction: CA_FACTION) --> vector<string>
 local function get_prefered_faction_list(faction_list, preferance_type, faction)
+    --sm0_log("get_prefered_faction_list | preferance_type: "..tostring(preferance_type).." | faction: "..tostring(faction:name()))
     local prefered_factions = {}
     local factions_of_same_subculture = {}
     if not is_table(faction_list) and not is_factionlist(faction_list) then
@@ -1934,8 +1940,11 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                 table.insert(factions_of_same_subculture, faction_current:name())
             end
         end
+    elseif is_table(faction_list) then
+        --# assume factions_of_same_subculture: any
+        factions_of_same_subculture = faction_list
     end
-
+    
     if preferance_type == "met" then
         -- preferance: met
         if is_table(factions_of_same_subculture) then
@@ -1947,12 +1956,11 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                     local faction_met = factions_met_list:item_at(j)
                     if faction_met:name() == faction:name() then
                         table.insert(prefered_factions, faction_current:name())
-                        --sm0_log("factions_of_same_subculture|Faction: "..prefered_faction_relation:name().." | Diplomatic Standing: "..tostring(saved_standing))
                     end
                 end
             end
         else
-            sm0_log("something went wrong")
+            sm0_log("preferance: met | something went wrong")
         end
     elseif preferance_type == "relation" then
         -- preferance: relation
@@ -1962,22 +1970,24 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             for i = 1, #factions_of_same_subculture do
                 local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
                 local standing = faction:diplomatic_standing_with(subculture_faction:name())
+                --sm0_log("relation | factions_of_same_subculture: "..tostring(factions_of_same_subculture[i]).." | faction: "..tostring(faction:name()).." | standing: "..tostring(standing))
                 if not is_number(saved_standing) or standing > saved_standing then
                     saved_standing = standing
                 end
             end
+            --sm0_log("relation | preferance_type: "..tostring(preferance_type).." | saved_standing: "..tostring(saved_standing))
             if saved_standing then
                 for i = 1, #factions_of_same_subculture do
                     local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
                     local standing = faction:diplomatic_standing_with(subculture_faction:name())
-                    if standing >= saved_standing then
+                    if standing >= saved_standing then                       
                         table.insert(prefered_factions, subculture_faction:name())
-                        --sm0_log("factions_met_list/factions_of_same_subculture|Faction: "..prefered_faction_relation:name().." | Diplomatic Standing: "..tostring(saved_standing))
+                        --sm0_log("factions_met_list/factions_of_same_subculture | Faction: "..prefered_faction_relation:name().." | Diplomatic Standing: "..tostring(saved_standing))
                     end
                 end
             end
         else
-            sm0_log("something went wrong")
+            sm0_log("preferance: relation | something went wrong")
         end
     elseif preferance_type == "major" then
         -- preferance: major
@@ -1993,7 +2003,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                 end
             end
         else
-            sm0_log("something went wrong")
+            sm0_log("preferance: major | something went wrong")
         end
     elseif preferance_type == "minor" then
         -- preferance: minor
@@ -2010,7 +2020,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                 end
             end
         else
-            sm0_log("something went wrong")
+            sm0_log("preferance: minor | something went wrong")
         end
     elseif preferance_type == "player" then
         -- preferance: player
@@ -2018,13 +2028,14 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         if is_table(factions_of_same_subculture) then
             --# assume factions_of_same_subculture: vector<string>
             for i = 1, #factions_of_same_subculture do
+                --sm0_log("player | factions_of_same_subculture: "..tostring(factions_of_same_subculture[i]))
                 local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
                 if subculture_faction:is_human() then
                     table.insert(prefered_factions, subculture_faction:name())
                 end
             end
         else
-            sm0_log("something went wrong")
+            sm0_log("preferance: player | something went wrong")
         end
     elseif preferance_type == "ai" then
         -- preferance: ai
@@ -2038,21 +2049,28 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                 end
             end
         else
-            sm0_log("something went wrong")
+            sm0_log("preferance: ai | something went wrong")
         end
     else
         -- preferance: nil
         if is_table(factions_of_same_subculture) then
             prefered_factions = factions_of_same_subculture
         else
-            sm0_log("something went wrong")
+            sm0_log("preferance: nil | something went wrong")
         end
     end
     
-    if not prefered_factions then
+    if next(prefered_factions) == nil then
+        -- prefered_factions is empty
         prefered_factions = factions_of_same_subculture
-        sm0_log("something went wrong")
+        --sm0_log("preferance_type: "..tostring(preferance_type).." | no faction fulfills the condition -> reset table to previous preference level")
     end
+
+    --sm0_log("prefered_factions = "..tostring(prefered_factions))
+    --for i, faction in ipairs(prefered_factions) do
+    --    --# assume faction: string
+    --    sm0_log("return | "..tostring(preferance_type).." | prefered_factions["..i.."]: "..tostring(faction))
+    --end
     return prefered_factions
 end
 
@@ -2076,6 +2094,7 @@ local function init_recruit_defeated_listeners(enable_value)
     core:remove_listener("recruit_defeated_UITriggerScriptEvent")
     core:remove_listener("recruit_defeated_confederation_listener")
     core:remove_listener("confederation_listener")
+    
     --data.pack script/campaign/wh_campaign_setup.lua vanilla listener
     core:add_listener(
 		"confederation_listener",
@@ -2330,15 +2349,16 @@ local function init_recruit_defeated_listeners(enable_value)
                             if preferance3_value and preferance3_value ~= "disabled" then
                                 prefered_factions = get_prefered_faction_list(prefered_factions, preferance3_value, current_faction)
                             end
-                            if preferance1_value == "disabled" and preferance1_value == "disabled" and preferance1_value == "disabled" then
-                                prefered_factions = get_prefered_faction_list(nil, nil, current_faction)
+                            if preferance1_value == "disabled" and preferance2_value == "disabled" and preferance3_value == "disabled" then
+                                prefered_factions = get_prefered_faction_list(nil, nil, current_faction) -- returns factions_of_same_subculture as vector<string>
                             end
                             local rng_index = cm:random_number(#prefered_factions)
                             local prefered_faction_key = prefered_factions[rng_index]
                             local prefered_faction = cm:get_faction(prefered_faction_key)
+                            --sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
 
-                            if not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name()
-                            and prefered_faction and prefered_faction:name() == faction_P1:name() then
+                            if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
+                            and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
                                 if not cm:get_saved_value("faction_P1") and confed_penalty(faction_P1) == "" and player_confederation_count <= player_confederation_limit
                                 and (scope_value == "player_ai" or scope_value == "player") and (not lore_restriction_value or (lore_restriction_value 
                                 and faction_P1:name() ~= "wh2_dlc09_tmb_followers_of_nagash")) then
@@ -2359,8 +2379,8 @@ local function init_recruit_defeated_listeners(enable_value)
                                     end
                                     player_confederation_count = player_confederation_count + 1
                                 end
-                            elseif cm:is_multiplayer() and not faction_P2:is_dead() and current_faction:subculture() == faction_P2:subculture() and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P2:name()
-                            and prefered_faction and prefered_faction:name() == faction_P2:name() then
+                            elseif prefered_faction and cm:is_multiplayer() and not faction_P2:is_dead() and current_faction:subculture() == faction_P2:subculture() 
+                            and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P2:name() and prefered_faction:name() == faction_P2:name() then
                                 if not cm:get_saved_value("faction_P2") and confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit
                                 and (scope_value == "player_ai"  or scope_value == "player") and (not lore_restriction_value or (lore_restriction_value 
                                 and faction_P2:name() ~= "wh2_dlc09_tmb_followers_of_nagash")) then
@@ -2383,7 +2403,7 @@ local function init_recruit_defeated_listeners(enable_value)
                                 end
                             else --ai
                                 if scope_value == "player_ai" or scope_value == "ai" then 
-                                    if ai_confederation_count <= ai_confederation_limit and prefered_faction and (not lore_restriction_value or (lore_restriction_value 
+                                    if prefered_faction and ai_confederation_count <= ai_confederation_limit and (not lore_restriction_value or (lore_restriction_value 
                                     and prefered_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() ~= "wh2_dlc09_tmb_the_sentinels")) 
                                     and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" then -- disabled for beastmen/savage orcs because they are able to respawn anyways
                                         if not faked_death(prefered_faction) then
@@ -2684,18 +2704,18 @@ core:add_listener(
         ai_delay_value = d_ai_delay:get_finalized_setting()
         local a_preferance1 = recruit_defeated_mod:get_option_by_key("a_preferance1")
         preferance1_value = a_preferance1:get_finalized_setting()
-        local a_preferance2 = recruit_defeated_mod:get_option_by_key("a_preferance2")
-        preferance2_value = a_preferance1:get_finalized_setting()
-        local a_preferance3 = recruit_defeated_mod:get_option_by_key("a_preferance3")
-        preferance3_value = a_preferance1:get_finalized_setting()
+        local b_preferance2 = recruit_defeated_mod:get_option_by_key("b_preferance2")
+        preferance2_value = b_preferance2:get_finalized_setting()
+        local c_preferance3 = recruit_defeated_mod:get_option_by_key("c_preferance3")
+        preferance3_value = c_preferance3:get_finalized_setting()
         
-        --mct:log("sm0_abandon/recruit_defeated_MctInitialized/enable_value = "..tostring(enable_value))
-        --mct:log("sm0_abandon/recruit_defeated_MctInitialized/lore_restriction_value = "..tostring(lore_restriction_value))
-        --mct:log("sm0_abandon/recruit_defeated_MctInitialized/scope_value = "..tostring(scope_value))
-        --mct:log("sm0_abandon/recruit_defeated_MctInitialized/ai_delay_value = "..tostring(ai_delay_value))
-        --mct:log("sm0_abandon/recruit_defeated_MctInitialized/preferance1_value = "..tostring(preferance1_value))
-        --mct:log("sm0_abandon/recruit_defeated_MctInitialized/preferance2_value = "..tostring(preferance2_value))
-        --mct:log("sm0_abandon/recruit_defeated_MctInitialized/preferance3_value = "..tostring(preferance3_value))
+        mct:log("recruit_defeated_MctInitialized/enable_value = "..tostring(enable_value))
+        mct:log("recruit_defeated_MctInitialized/lore_restriction_value = "..tostring(lore_restriction_value))
+        mct:log("recruit_defeated_MctInitialized/scope_value = "..tostring(scope_value))
+        mct:log("recruit_defeated_MctInitialized/ai_delay_value = "..tostring(ai_delay_value))
+        mct:log("recruit_defeated_MctInitialized/preferance1_value = "..tostring(preferance1_value))
+        mct:log("recruit_defeated_MctInitialized/preferance2_value = "..tostring(preferance2_value))
+        mct:log("recruit_defeated_MctInitialized/preferance3_value = "..tostring(preferance3_value))
 
     end,
     true
@@ -2745,6 +2765,11 @@ function sm0_recruit_defeated()
 			tk_value = tk_option:get_finalized_setting()
 			if tk_value == "no_tweak" then
 				cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+            end
+            local cst_value = confederation_options_mod:get_option_by_key("wh2_dlc11_cst_vampire_coast")
+			cst_value = cst_value:get_finalized_setting()
+			if tk_value == "no_tweak" then
+				cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
 			end
 			local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")
 			emp_value = emp_option:get_finalized_setting() -- no teb / kislev subculture?
@@ -2756,7 +2781,11 @@ function sm0_recruit_defeated()
 		local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
 		if not tk_value or tk_value == "yield" then
 			cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
-		end
+        end
+        local cst_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc11_cst_vampire_coast_value")
+        if not cst_value or cst_value == "yield" then
+            cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
+        end
 		local emp_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") -- no teb / kislev subculture?
 		if (not emp_value or emp_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
 			cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
