@@ -3,9 +3,9 @@ force_require("script/table_save")
 local loadButton = nil --:CA_UIC
 local saveButton = nil --:CA_UIC
 local resetButton = nil --:CA_UIC
-local resetIconPath = "ui/icon_stats_reset_small.png"
-local saveIconPath = "ui/icon_quick_save.png"
-local loadIconPath = "ui/icon_load.png"
+local resetIconPath = effect.get_skinned_image_path("icon_stats_reset_small.png")
+local saveIconPath = effect.get_skinned_image_path("icon_quick_save.png")
+local loadIconPath = effect.get_skinned_image_path("icon_load.png")
 
 local camTableReset = {
     ["apply_player"] = {    
@@ -180,6 +180,7 @@ local function createUI()
     loadButton = UIComponent(camera_buttons:Find("loadButton"))
     camera_buttons:Adopt(loadButton:Address())
     loadButton:PropagatePriority(referenceButton:Priority())
+    local loadIconPath = effect.get_skinned_image_path("icon_load.png")
     loadButton:SetImagePath(loadIconPath) 
     loadButton:Resize(referenceButtonW, referenceButtonH)
     loadButton:MoveTo(referenceButtonX, referenceButtonY + referenceButtonH + 25)
@@ -207,6 +208,7 @@ local function createUI()
     saveButton = UIComponent(camera_buttons:Find("saveButton"))
     camera_buttons:Adopt(saveButton:Address())
     saveButton:PropagatePriority(referenceButton:Priority())
+    local saveIconPath = effect.get_skinned_image_path("icon_quick_save.png")
     saveButton:SetImagePath(saveIconPath) 
     saveButton:Resize(referenceButtonW, referenceButtonH)
     saveButton:MoveTo(referenceButtonX - referenceButtonW - 1, referenceButtonY + referenceButtonH + 25)
@@ -230,6 +232,7 @@ local function createUI()
     resetButton = UIComponent(camera_buttons:Find("resetButton"))
     camera_buttons:Adopt(resetButton:Address())
     resetButton:PropagatePriority(referenceButton:Priority())
+    local resetIconPath = effect.get_skinned_image_path("icon_stats_reset_small.png")
     resetButton:SetImagePath(resetIconPath) 
     resetButton:Resize(referenceButtonW, referenceButtonH)
     resetButton:MoveTo(referenceButtonX - 2*referenceButtonW - 2, referenceButtonY + referenceButtonH + 25)
@@ -252,13 +255,6 @@ end
 --v function()
 function sm0_save_cam()
     if not cm:is_multiplayer() then
-        local playerFaction = cm:get_faction(cm:get_local_faction(true))
-        local playerCultureStr = playerFaction:culture()
-        if string.find(playerCultureStr, "wh2_") then
-            resetIconPath = "ui/icon_stats_reset_small2.png"
-            saveIconPath = "ui/icon_quick_save2.png"
-            loadIconPath = "ui/icon_load2.png"
-        end
         if cm:is_new_game() then
             local loadTable, err = table.load("cameraPreferences.txt")
             if not err then
