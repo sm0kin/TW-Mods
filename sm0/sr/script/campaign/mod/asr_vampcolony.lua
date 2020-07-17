@@ -1,4 +1,4 @@
-local function sr_vladcolony()
+local function sr_vampcolony()
 	if cm:model():campaign_name("main_warhammer") then
 		if cm:is_new_game() then
 			if cm:get_faction("wh_main_vmp_schwartzhafen"):is_human() then
@@ -42,7 +42,7 @@ if not (not mcm) and not mct then
 	mcm:add_post_process_callback(
 		function(context)
 			if cm:get_saved_value("mcm_tweaker_ovn_vladcolony_value") == "enable" then
-				sr_vladcolony()
+				sr_vampcolony()
 			end
 		end
 	)
@@ -55,14 +55,14 @@ cm:add_first_tick_callback(
 			local enable = sr:get_option_by_key("enable")
 			enable:set_read_only(true)
 			enable_setting = enable:get_finalized_setting()
-			local vladcolony = sr:get_option_by_key("vladcolony")
-			vladcolony:set_read_only(true)
-			vladcolony_setting = vladcolony:get_finalized_setting()
-			if enable_setting and vladcolony_setting then 
-				sr_vladcolony()
+			local vampcolony = sr:get_option_by_key("vampcolony")
+			vampcolony:set_read_only(true)
+			vampcolony_setting = vampcolony:get_finalized_setting()
+			if enable_setting and vampcolony_setting then 
+				sr_vampcolony()
 			end
 		elseif not mcm or cm:get_saved_value("mcm_tweaker_ovn_vladcolony_value") == "enable" then
-			sr_vladcolony()
+			sr_vampcolony()
 		end
 	end
 )

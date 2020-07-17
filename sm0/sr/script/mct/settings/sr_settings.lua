@@ -1,7 +1,7 @@
 local loc_prefix = "sr_"
 local sr = mct:register_mod("sr")
 sr:set_title(loc_prefix.."mod_title", true)
-sr:set_author("shaky_rivers")
+sr:set_author("shakyrivers")
 sr:set_description(loc_prefix.."mod_desc", true)
 
 local enable = sr:add_new_option("enable", "checkbox")
