@@ -155,7 +155,7 @@
 --# assume CA_BUILDING_CONTEXT.garrison_residence: method() --> CA_GARRISON_RESIDENCE
 
 -- UIC
---# assume CA_UIC.Address: method() --> CA_Component
+--# assume CA_UIC.Address: method() --> CA_Component -- only used for parent_uic:Adopt(child_uic:Address()), grabs the UIC's memory address
 --# assume CA_UIC.Adopt: method(pointer: CA_Component)
 --# assume CA_UIC.ChildCount: method() --> number
 --# assume CA_UIC.ClearSound: method()
@@ -201,15 +201,18 @@
 --# assume CA_UIC.Width: method() --> number
 --# assume CA_UIC.SetImageRotation:  method(unknown: number, rotation: number)
 --# assume CA_UIC.ResizeTextResizingComponentToInitialSize: method(width: number, height: number)
+--# assume CA_UIC.TextDimensionsForText: method(text: string) --> (number, number, number)
 --# assume CA_UIC.SimulateLClick:method(x: number?, y: number?)
 --# assume CA_UIC.SimulateRClick: method(x: number?, y: number?)
 --# assume CA_UIC.SimulateDblLClick: method(x: number?, y: number?)
 --# assume CA_UIC.SimulateDblRClick: method(x: number?, y: number?)
+--# assume CA_UIC.LockPriority: method(priority: number?) -- keep at specific z-axis prio
+--# assume CA_UIC.UnLockPriority: method() -- allow prio to change
 
 --# assume CA_UIC.Divorce: method()
 --# assume CA_UIC.GetImagePath: method(index_num: number?) --> string
 --# assume CA_UIC.SetMoveable: method(enable: boolean)
---# assume CA_UIC.CopyComponent: method(uicomponent: string) --> string
+--# assume CA_UIC.CopyComponent: method(uicomponent: string) --> CA_Component
 -- CurrentStateImage
 --# assume CA_UIC.GetCurrentStateImageIndex: method(state_image_index: number) --> number
 --# assume CA_UIC.NumCurrentStateImages: method() --> number
@@ -517,7 +520,7 @@
 --# assume CM.trigger_incident: method(factionName: string, incidentKey: string, fireImmediately: boolean?, whitelist: boolean?)
 --# assume CM.trigger_mission: method(faction_key: string, mission_key: string, trigger_immediately: boolean)
 --# assume CM.cancel_custom_mission: method(faction_key: string, mission_key: string)
---# assume CM.disable_event_feed_events: method(disable: boolean, categories: string, subcategories: string, events: string)
+--# assume CM.disable_event_feed_events: method(disable: boolean, categories: string?, subcategories: string?, events: string?)
 --# assume CM.complete_scripted_mission_objective: method(mission_key: string, objective_key: string, success: boolean)
 --locks and unlocks
 --# assume CM.lock_technology: method(faction_key: string, tech_key: string)
@@ -1177,7 +1180,7 @@
 -----------------
 -----------------
 
---List of all valid methods for the UIC game object! I've tried to write it as clearly as I can. If I've messed anything up, or forgotten anything, or need to clarify, do let me know.
+--    List of all valid methods for the UIC game object! I've tried to write it as clearly as I can. If I've messed anything up, or forgotten anything, or need to clarify, do let me know.
 --
 --    Whatever is within the first brackets are arguments for the method; after the --> is the return values. I've tried to limit descriptors to what is actually necessary.
 --    
@@ -1210,27 +1213,12 @@
 --    -- Triggered upon the creation of a new UIC object.
     
     
---    --# assume CA_UIC.Visible() --> (is_visible: boolean)
---    --# assume CA_UIC.ChildCount() --> (num_children: number)
---    --# assume CA_UIC.TextDimensions() --> (width: number, height: number)
 --    --# assume CA_UIC.NumImages() --> (num_images: number) 
---    --# assume CA_UIC.GetImagePath(index_num: number) --> (image_path: string)
 --    --# assume CA_UIC.NumStates() --> (num_states: number)
 --    --# assume CA_UIC.GetStateByIndex(index_num: number) --> (state: string)
---    --# assume CA_UIC.CurrentState() --> (current_state: string)
---    --# assume CA_UIC.Id() --> (id: string)
---    --# assume CA_UIC.Parent() --> (parent: UIC)
---    --# assume CA_UIC.Position() --> (x: number, y: number)
---    --# assume CA_UIC.Height() --> (height: number)
---    --# assume CA_UIC.Width() --> (width: number)
---    --# assume CA_UIC.Bounds() --> (width: number, height: number)
---    --# assume CA_UIC.Dimensions() --> (width: number, height: number)
 --    
---    --# assume CA_UIC.GetStateText() --> (state_text: string)
---    --# assume CA_UIC.GetTooltipText() --> (tooltip_text: string)
---    --# assume CA_UIC.Address() --> (address: string) -- only used for parent_uic:Adopt(child_uic:Address()), grabs the UIC's memory address
+
 --    --# assume CA_UIC.Opacity() --> (opacity: number) -- 0-100, I believe
---    --# assume CA_UIC.Priority() --> (priority: number) -- z-axis priority
 --    --# assume CA_UIC.IsInteractive() --> (is_interactive: boolean)
 --    --# assume CA_UIC.IsMoveable() --> (is_moveable: boolean)
 --    --# assume CA_UIC.Find(index: number) --> (child: UIC) -- gets the child UIC at specified index. starts at 0
@@ -1246,26 +1234,15 @@
 --    ------------
 --    
 --    --# assume CA_UIC.SetImageRotation(unknown1: number, unknown2: number)
---    --# assume CA_UIC.SetImage(image_path: string, index_num: number?)
---    --# assume CA_UIC.SetCanResizeHeight(enable: boolean)
---    --# assume CA_UIC.SetCanResizeWidth(enable: boolean)
---    
---    --# assume CA_UIC.MoveTo(x_pos: number, y_pos: number)
---    
+
 --    --# assume CA_UIC.SetContextObject(obj_key: string) -- Unknown usage, probably super powerful
 --    --# assume CA_UIC.SetProperty(property_key: string, value: string)
 --    
---    --# assume CA_UIC.SetOpacity -- unknown args
 --    --# assume CA_UIC.PropagateOpacity -- unknown args
 --    --# assume CA_UIC.PropagateVisibility -- unknown args
---    --# assume CA_UIC.SetInteractive(enable: boolean)
---    --# assume CA_UIC.SetTooltipText(tooltip_text: string, enable: boolean)
---    --# assume CA_UIC.PropagatePriority(priority: number)
 --    --# assume CA_UIC.Resize(width: number, height: number) -- use SetCanResizeHeight/Width prior and after
 --    --# assume CA_UIC.SetDockingPoint
 --    --# assume CA_UIC.SetMoveable(enable: boolean)
---    --# assume CA_UIC.LockPriority(priority: number) -- keep at specific z-axis prio
---    --# assume CA_UIC.UnLockPriority() -- allow prio to change
 --    --# assume CA_UIC.SetDisabled(disable: boolean)
 --    
 --    
@@ -1274,21 +1251,11 @@
 --    ------------
 --    
 --    --# assume CA_UIC.Highlight(should_highlight: boolean, unknown1: boolean, unknown2: boolean)
-
-
---    
 --    
 --    --# assume CA_UIC.CreateComponent(id: string, layout_file: string) -- makes a new child of the targeted UIC, with specified ID and layout file. Use `UIComponent(uic:CreateComponent(a, b))` to return the UIC created
 --    --# assume CA_UIC.Adopt(address: string) -- makes the targeted address (use uic:Address()) UIC a child of the one being called
 --    --# assume CA_UIC.Divorce(address: string) -- removes the targeted address (ditto) UIC a non-child of the one being called
---    --# assume CA_UIC.DestroyChildren() -- destroys all children of this UIC.
---    
---    --# assume CA_UIC.RegisterTopMost() -- keep on top
---    --# assume CA_UIC.RemoveTopMost() -- stop being on top
---    
---    --# assume CA_UIC.ResizeTextResizingComponentToInitialSize(width: number, height: number) -- force the text to a specified size, useful when changing state text
---    
---    
+
 --    ------------
 --    ---- UNKNOWN
 --    ------------
@@ -1296,7 +1263,6 @@
 --    --# assume CA_UIC.Layout -- returns the layout file path?
 --    --# assume CA_UIC.SetTooltipTextWithRLSKey
 --    
---    --# assume CA_UIC.new -- unusable
 --    
 --    --# assume CA_UIC.TextShaderTechniqueSet
 --    --# assume CA_UIC.InterfaceFunction
@@ -1338,7 +1304,7 @@
 --# assume CA_EFFECT.clear_advice_session_history: function()
 --# assume CA_EFFECT.CharacterCharacterTargetAction: function()
 
---# assume CORE.get_or_create_component: method(key: string, template: string, parent: CA_UIC) --> CA_UIC
+--# assume CORE.get_or_create_component: method(key: string, template: string, parent: CA_UIC?) --> CA_UIC
 --# assume CORE.get_static_object: method(key: string) --> WHATEVER
 --# assume CORE.is_battle: method() --> boolean 
 --# assume CORE.is_frontend: method() --> boolean

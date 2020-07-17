@@ -1762,9 +1762,9 @@ local function confed_revived(confederator, confederated)
                     local char_lookup = cm:char_lookup_str(char)
                     if cm:char_is_agent(char) or cm:char_is_general(char) then 
                         cm:force_reset_skills(char_lookup) 
-                        for i = 1, #names_of_power_traits do
-                            if char:has_trait(names_of_power_traits[i]) then 
-                                cm:force_remove_trait(char_lookup, names_of_power_traits[i])
+                        for j = 1, #names_of_power_traits do
+                            if char:has_trait(names_of_power_traits[j]) then 
+                                cm:force_remove_trait(char_lookup, names_of_power_traits[j])
                             end
                         end
                     end
@@ -1806,14 +1806,18 @@ local function confed_revived(confederator, confederated)
                     end
                 end
                 if confederated:name() == "wh2_main_hef_eataine" and not cm:get_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked") then
-                    local char_list = confederated:character_list()
                     local char_found = false
-                    for k = 0, char_list:num_items() - 1 do
-                        local current_char = char_list:item_at(k)
-                        if current_char:character_subtype_key() == "wh2_main_hef_prince_alastar" then
-                            char_found = true
-                        end
-                    end      
+                    local faction_list = cm:model():world():faction_list()
+                    for i = 0, faction_list:num_items() - 1 do
+                        local current_faction = faction_list:item_at(i)
+                        local char_list = current_faction:character_list()
+                        for j = 0, char_list:num_items() - 1 do
+                            local current_char = char_list:item_at(j)
+                            if current_char:character_subtype_key() == "wh2_main_hef_prince_alastar" then
+                                char_found = true
+                            end
+                        end      
+                    end
                     if not char_found then  
                         sm0_log("spawn_missing_lords: ".."wh2_main_hef_prince_alastar".." spawned!")         
                         cm:spawn_character_to_pool(confederator:name(), "names_name_2147360555", "names_name_2147360560", "", "", 18, true, "general", "wh2_main_hef_prince_alastar", true, "")
@@ -1982,7 +1986,9 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         --# assume faction_list: CA_FACTION_LIST
         for i = 0, faction_list:num_items() - 1 do
             local faction_current = faction_list:item_at(i)
-            if faction_current:subculture() == faction:subculture() and not faction_current:is_dead() and not is_faction_exempted(faction_current) and not is_human_and_rejected_faction(faction_current, faction) then 
+            if faction_current:subculture() == faction:subculture() and not faction_current:is_dead() and not is_faction_exempted(faction_current) 
+            and not is_human_and_rejected_faction(faction_current, faction) and ((faction_current:is_human() and (scope_value == "player" or scope_value == "player_ai")) 
+            or (not faction_current:is_human() and (scope_value == "ai" or scope_value == "player_ai"))) then 
                 table.insert(factions_of_same_subculture, faction_current:name())
             end
         end
@@ -2068,7 +2074,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         else
             sm0_log("preferance: minor | something went wrong")
         end
-    elseif preferance_type == "player" then
+    elseif preferance_type == "player" then --and (scope_value == "player" or scope_value == "player_ai") then
         -- preferance: player
         local saved_standing = nil --:number
         if is_table(factions_of_same_subculture) then
@@ -2083,7 +2089,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         else
             sm0_log("preferance: player | something went wrong")
         end
-    elseif preferance_type == "ai" then
+    elseif preferance_type == "ai" then --and (scope_value == "ai" or scope_value == "player_ai") then
         -- preferance: ai
         local saved_standing = nil --:number
         if is_table(factions_of_same_subculture) then
@@ -2401,7 +2407,7 @@ local function init_recruit_defeated_listeners(enable_value)
                             local rng_index = cm:random_number(#prefered_factions)
                             local prefered_faction_key = prefered_factions[rng_index]
                             local prefered_faction = cm:get_faction(prefered_faction_key)
-                            --sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
+                            sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
 
                             if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
@@ -2838,13 +2844,13 @@ function sm0_recruit_defeated()
         end
         
         enable_value = true
-        if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "all" then
-            lore_restriction_value = true
-        else
+        if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
             lore_restriction_value = false
+        else
+            lore_restriction_value = true
         end
         scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
-        ai_delay_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_ai_delay_value") or 50
+        ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
         preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
         if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
             preferance2_value = "major"
@@ -2852,6 +2858,10 @@ function sm0_recruit_defeated()
             preferance2_value = "relation"
         end
         preferance3_value = nil
+
+        --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
+        --" | lore_restriction_value = "..tostring(lore_restriction_value).." | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
+        --" | preferance1_value = "..tostring(preferance1_value).." | preferance2_value = "..tostring(preferance2_value).." | preferance3_value = "..tostring(preferance3_value))
 
 		if not not mcm then
             local recruit_defeated = mcm:register_mod("recruit_defeated", "Recruit Defeated Legendary Lords", "")
@@ -2871,23 +2881,23 @@ function sm0_recruit_defeated()
             preferance:add_option("player", "Prefer Player", "Defeated Lords/Heroes will always join a player-led faction.")
             preferance:add_option("ai", "Prefer AI", "As long as a AI factions is left defeated Lords/Heroes will prefer them over the player.")
             preferance:add_option("disable", "Disable", "No AI/Player preferance.")
-            local preferance2 = recruit_defeated:add_tweaker("preferance2", "Preference (2. Level)", "Which factions defeated lords/heroes prefer to join (superseded by \"Preference (1. Level)\"?") --mcm_tweaker_recruit_defeated_preferance2_value
+            local preferance2 = recruit_defeated:add_tweaker("preferance2", "Preference (2. Level)", "Determines the criteria used to decide which faction is chosen to receive the refugee dilemma (superseded by \"Preference (1. Level)\"") --mcm_tweaker_recruit_defeated_preferance2_value
             preferance2:add_option("relation", "Relation based", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.")
             preferance2:add_option("power", "Prefer Major Factions", "Defeated Lords/Heroes will prefer Major Factions.")
             --local diplo = recruit_defeated:add_tweaker("diplo", "Lords/Heroes join factions based on diplomatic standing", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.") --mcm_tweaker_recruit_defeated_diplo_value
-            --diplo:add_option("enable", "Enable", "") 
+            --diplo:add_option("enable", "Enable", "")
             --diplo:add_option("disable", "Disable", "")
             local ai_delay = recruit_defeated:add_variable("ai_delay", 0, 200, 50, 5, "AI Turn Delay", "Determines at which turn the AI starts to get Lords/Heroes from defeated factions.")
             mcm:add_post_process_callback(
                 function()
                     sm0_log("Mod Version: default/mcm".." ("..version_number..")")
-                    if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "all" then
-                        lore_restriction_value = true
-                    else
+                    if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
                         lore_restriction_value = false
+                    else
+                        lore_restriction_value = true
                     end
                     scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
-                    ai_delay_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_ai_delay_value") or 50
+                    ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
                     preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
                     if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
                         preferance2_value = "major"
@@ -2895,6 +2905,10 @@ function sm0_recruit_defeated()
                         preferance2_value = "relation"
                     end
                     preferance3_value = nil
+
+                    --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
+                    --" | lore_restriction_value = "..tostring(lore_restriction_value).." | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
+                    --" | preferance1_value = "..tostring(preferance1_value).." | preferance2_value = "..tostring(preferance2_value).." | preferance3_value = "..tostring(preferance3_value))
                 end
             )
         else

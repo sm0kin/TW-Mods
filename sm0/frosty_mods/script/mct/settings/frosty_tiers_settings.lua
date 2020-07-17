@@ -1,37 +1,34 @@
+local loc_prefix = "mct_frosty_tiers_"
 local frosty_tiers = mct:register_mod("frosty_tiers")
-frosty_tiers:set_title("Higher Starting Tier: Capitals & Hordes", false)
+frosty_tiers:set_title(loc_prefix.."mod_title", true) --"Higher Starting Tier: Capitals & Hordes"
 frosty_tiers:set_author("FrostyDemise & sm0kin")
---local description_row_1 = "With this mod your starting settlements/horde can be set at a higher tier from the get-go."
---local description_row_2 = "\n\n[[col:red]]There is currently an issue with Eltharion so he's exempted from the mod.[[/col]]"
-
-frosty_tiers:set_description("With this mod your starting settlements/horde can be set at a higher tier from the get-go.", false)
+frosty_tiers:set_description(loc_prefix.."mod_desc", true) --"With this mod your starting settlements/horde can be set at a higher tier from the get-go."
 
 local _01_enableorDisable = frosty_tiers:add_new_option("_01_enableorDisable", "checkbox")
 _01_enableorDisable:set_default_value(true)
-_01_enableorDisable:set_text("Mod Enable", false)
-_01_enableorDisable:set_tooltip_text("Enables or disables the mod.", false)
-_01_enableorDisable:set_read_only(false)
+_01_enableorDisable:set_text(loc_prefix.."_01_enableorDisable_txt", true) --"Mod Enable"
+_01_enableorDisable:set_tooltip_text(loc_prefix.."_01_enableorDisable_tt", true) --"Enables or disables the mod."
 
 local options_list = {
     {
         key = "_02_settlementTier",
-        text = "Capital Tier (Players)",
-        tt = "Set the Settlement Starting Tier. Keep in mind that a few of the playable factions (e.g. Skarsnik) start with just a minor settlement and these are set at their max tier of III instead."
+        text = loc_prefix.."_02_settlementTier_txt", --"Capital Tier (Players)"
+        tt = loc_prefix.."_02_settlementTier_tt" --"Set the Settlement Starting Tier. Keep in mind that a few of the playable factions (e.g. Skarsnik) start with just a minor settlement and these are set at their max tier of III instead."
     },
     {
         key = "_03_AI_settlementTier",
-        text = "Capital Tier (Main Factions)",
-        tt = "Set the Settlement Starting Tier of the different main factions. Also includes a few select cities with high est. populations in the lore such as Nuln, Itza, Kislev, Miragliano, etc."
+        text = loc_prefix.."_03_AI_settlementTier_txt", --"Capital Tier (Main Factions)"
+        tt = loc_prefix.."_03_AI_settlementTier_tt" --"Set the Settlement Starting Tier of the different main factions. Also includes a few select cities with high est. populations in the lore such as Nuln, Itza, Kislev, Miragliano, etc."
     },
     {
         key = "_04_hordeTier",
-        text = "Horde Tier (Players)",
-        tt = "Set the Horde Starting Tier (only relevant if you are playing as a horde)."
+        text = loc_prefix.."_04_hordeTier_txt", --"Horde Tier (Players)"
+        tt = loc_prefix.."_04_hordeTier_tt" --"Set the Horde Starting Tier (only relevant if you are playing as a horde)."
     },   
     {
         key = "_05_settlementScope",
-        text = "Include Other City Types? (not recommended)",
-        tt = "This means not just the main capitals but the capitals of every province is upgraded. For the Hardcore who want every province to be a challenge."
+        text = loc_prefix.."_05_settlementScope_txt", --"Include Other City Types? (not recommended)"
+        tt = loc_prefix.."_05_settlementScope_tt" --"This means not just the main capitals but the capitals of every province is upgraded. For the Hardcore who want every province to be a challenge."
     }
 }
 
@@ -64,7 +61,7 @@ local dropdown_options = {
     }
 }
 
-frosty_tiers:add_new_section("settlement_options", "Settlement - Options")
+frosty_tiers:add_new_section("settlement_options", loc_prefix.."section_settlement_options") --"Settlement - Options"
 
 _01_enableorDisable:add_option_set_callback(
     function(option) 
@@ -87,8 +84,8 @@ for i = 1, #options_list do
     local tooltip = options_list[i].tt
 
     -- set the text for the option, displays on the left of the dropdown
-    option_obj:set_text(text, false)
-    option_obj:set_tooltip_text(tooltip, false)
+    option_obj:set_text(text, true)
+    option_obj:set_tooltip_text(tooltip, true)
     option_obj:set_uic_visibility(true)
 
     -- add the above table as dropdown values
@@ -102,6 +99,6 @@ for i = 1, #options_list do
     end
 end
 
-frosty_tiers:add_new_section("horde_options", "Horde - Options")
+frosty_tiers:add_new_section("horde_options", loc_prefix.."section_horde_options") --"Horde - Options"
 local horde_option = frosty_tiers:get_option_by_key("_04_hordeTier")
 horde_option:set_assigned_section("horde_options")

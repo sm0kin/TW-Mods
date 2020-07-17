@@ -110,9 +110,9 @@ local function create_abandon_frame(abandon_region_key)
 
     local icon_treasury_path = effect.get_skinned_image_path("icon_treasury.png")
     confirm_button.uic:SetTooltipText(confirm_button_tooltip_hover1.." " .. region_onscreen_name .. " " ..confirm_button_tooltip_hover2.. " [[img:" ..icon_treasury_path.. "]] " .. money .. ".", "", false)
-    confirm_button:SetState("active")
+    --confirm_button:SetState("active")
     if region:garrison_residence():is_under_siege() then
-        confirm_button:SetDisabled(true)
+        confirm_button:SetState("inactive")
         confirm_button.uic:SetTooltipText(confirm_button_tooltip_disabled, "", false)
     end
     local region_owner = region:owning_faction()
@@ -131,7 +131,7 @@ local function create_abandon_frame(abandon_region_key)
                 ..region_to_send.."<"..money_to_send..">"..tostring(penalty_value).."~".."^"..tostring(penalty_scope_value).."°"..tostring(penalty_tier_value).."$"..tostring(delay_value))
                 abandon_frame:Delete()
                 abandon_frame = nil
-                abandon_button:SetDisabled(true)
+                abandon_button:SetState("inactive")
             else
                 if not cm:get_saved_value("abandon_"..region_key.."_"..region_owner:name()) then
                     confirm_button:SetState("selected_hover")
@@ -163,7 +163,7 @@ local function create_abandon_button()
         abandon_button:PositionRelativeTo(rename_button, rename_button:Width() + 1, 0)
         abandon_button:SetState("hover")
         abandon_button.uic:SetTooltipText(abandon_button_tooltip, "", false)
-        abandon_button:SetState("active")
+        --abandon_button:SetState("active")
         abandon_button:RegisterForClick(
             function(context)
                 abandon_region_key = region_key
@@ -220,10 +220,10 @@ local function init_abandon_region_listeners(enable_value)
                 local region = cm:get_region(region_key)
                 local current_faction_key = region:owning_faction():name()
                 if current_faction_key ~= player_faction_key then
-                    abandon_button:SetDisabled(true)
+                    abandon_button:SetState("inactive")
                     abandon_button.uic:SetTooltipText(abandon_button_tooltip, "", false)
                 else
-                    abandon_button:SetDisabled(false)
+                    abandon_button:SetState("active")
                 end
             end,
             true
@@ -259,10 +259,10 @@ local function init_abandon_region_listeners(enable_value)
                             local rename_button = find_uicomponent(core:get_ui_root(), "settlement_panel", "button_rename")
                             abandon_button:PositionRelativeTo(rename_button, rename_button:Width() + 1, 0)
                             if current_faction_key ~= player_faction_key then
-                                abandon_button:SetDisabled(true)
+                                abandon_button:SetState("inactive")
                                 abandon_button.uic:SetTooltipText(abandon_button_tooltip, "", false)
                             else
-                                abandon_button:SetDisabled(false)
+                                abandon_button:SetState("active")
                             end
                         end
                     end, 0, "waitForUI"

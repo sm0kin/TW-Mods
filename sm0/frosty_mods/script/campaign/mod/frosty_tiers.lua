@@ -251,6 +251,31 @@ local function upgrade_horde(player_tier, ai_tier)
     end
 end
 
+core:add_listener(
+    "frosty_tiers_MctFinalized",
+    "MctFinalized",
+    true,
+    function(context)       
+        local frosty_tiers = mct:get_mod_by_key("frosty_tiers")
+        local settings_table = frosty_tiers:get_settings()
+        local _01_enableorDisable_value = settings_table._01_enableorDisable --# assume _01_enableorDisable_value: string
+        local _02_settlementTier_value = settings_table._02_settlementTier
+        local _03_AI_settlementTier_value = settings_table._03_AI_settlementTier
+        local _04_hordeTier_value = settings_table._04_hordeTier
+        local _05_settlementScope_value = settings_table._05_settlementScope
+        --# assume _02_settlementTier_value: string
+        --# assume _03_AI_settlementTier_value: string
+        --# assume _04_hordeTier_value: string
+        --# assume _05_settlementScope_value: string
+        if cm:is_new_game() and _01_enableorDisable_value then 
+            upgrade_capitals(_02_settlementTier_value, _03_AI_settlementTier_value, _05_settlementScope_value)    
+            upgrade_horde(_04_hordeTier_value, nil)
+        end 
+
+    end,
+    true
+)
+
 --v function()
 function frosty_tiers()
 
@@ -349,22 +374,13 @@ function frosty_tiers()
         if cm:is_new_game() and settings_table._01_enableorDisable then 
             upgrade_capitals(settings_table._02_settlementTier, settings_table._03_AI_settlementTier, settings_table._05_settlementScope)    
             upgrade_horde(settings_table._04_hordeTier, nil)
+        else
+            local options = frosty_tiers:get_options()
+            for option_key, option in pairs(options) do
+                option:set_read_only(true)
+                mct:log("frosty_tiers/"..option_key.."/read_only = "..tostring(option:get_read_only()))
+            end
         end
-        core:add_listener(
-            "frosty_tiers_MctOptionSettingFinalized",
-            "MctOptionSettingFinalized",
-            true,
-            function(context)
-                local settings_table = frosty_tiers:get_settings()
-                local _01_enableorDisable = frosty_tiers:get_option_by_key("_01_enableorDisable")
-
-                if cm:is_new_game() and _01_enableorDisable:get_selected_setting() then 
-                    upgrade_capitals(settings_table._02_settlementTier, settings_table._03_AI_settlementTier, settings_table._05_settlementScope)    
-                    upgrade_horde(settings_table._04_hordeTier, nil)
-                end
-            end,
-            true
-        )
     end
 
     ------------------------------------------------

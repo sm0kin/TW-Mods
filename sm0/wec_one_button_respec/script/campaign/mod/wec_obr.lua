@@ -1,5 +1,4 @@
 local llr = {}
-llr.button = nil --:BUTTON
 --# assume llr.enable: WHATEVER
 --# assume llr.limit: WHATEVER
 --# assume llr.en_cost: WHATEVER
@@ -59,140 +58,138 @@ function llr.log(text)
     popLog:close()
 end
 
+--v function(uic: CA_UIC)
+local function deleteUIC(uic)
+    local root = core:get_ui_root()
+    root:CreateComponent("Garbage", "UI/campaign ui/script_dummy")
+    local component = root:Find("Garbage")
+    local garbage = UIComponent(component)
+    garbage:Adopt(uic:Address())
+    garbage:DestroyChildren()
+end
+
 --v function(cqi: CA_CQI)
 local function are_you_sure(cqi)
-    local ConfirmFrame = Frame.new(effect.get_localised_string("obr_frame_title"))
-    ConfirmFrame:Resize(600, 300)
-    Util.centreComponentOnScreen(ConfirmFrame)
-    local parchment = find_uicomponent(ConfirmFrame.uic, "parchment")
-    local fX, fY = ConfirmFrame.uic:Position()
-    local fW, fH = ConfirmFrame.uic:Bounds()
-    local pW, pH = parchment:Bounds()
-    local gapX, gapY = fW - pW, fH - pH
-    parchment:MoveTo(fX + gapX/2, fY + gapY/2)
-    local ConfirmText = Text.new("confirm_txt", ConfirmFrame, "HEADER", effect.get_localised_string("obr_ConfirmText"))
-    ConfirmText:Resize(420, 100)
-    tW, tH = ConfirmText:Bounds()
-    local ButtonYes = TextButton.new("confirm_yes", ConfirmFrame, "TEXT", effect.get_localised_string("obr_confirm_yes_txt"))
+    llr.ConfirmFrame = core:get_or_create_component("obr_ConfirmFrame", "ui/common ui/dialogue_box")
+    dy_text = find_uicomponent(llr.ConfirmFrame, "DY_text")
+    dy_text:SetStateText("")
+    local event_messages = find_uicomponent(core:get_ui_root(), "layout", "radar_things", "dropdown_parent", "events_dropdown", "panel", "panel_clip", "header", "tx_title")
+    llr.ConfirmText = UIComponent(event_messages:CopyComponent("obr_tx_title"))
+    local ConfirmFrame_X, ConfirmFrame_Y = llr.ConfirmFrame:Bounds()
+    dy_text:Adopt(llr.ConfirmText:Address())
+    llr.ConfirmText:SetStateText(effect.get_localised_string("obr_ConfirmText"))
+    local dy_text_X, dy_text_Y = dy_text:Position()   
+    llr.ConfirmText:ResizeTextResizingComponentToInitialSize(dy_text:Width(), llr.ConfirmText:Height() * 1.5)
+    local test_text_W, test_text_H, test_text_L = dy_text:TextDimensionsForText("test123")
+    llr.ConfirmText:MoveTo(dy_text_X, dy_text_Y - test_text_H + dy_text:Height() / 2)
+    llr.ConfirmText:PropagatePriority(dy_text:Priority())
+
+    core:remove_listener("obr_ConfirmFrame_yes_no_ComponentLClickUp") 
+    core:add_listener(
+        "obr_ConfirmFrame_yes_no_ComponentLClickUp",
+        "ComponentLClickUp",
+        function(context)
+            local button = UIComponent(context.component)
+            return (button:Id() == "button_tick" or button:Id() == "button_cancel") and UIComponent(UIComponent(button:Parent()):Parent()):Id() == "obr_ConfirmFrame"
+        end,
+        function(context)
+            local button = UIComponent(context.component)
+            local id = context.string
+
+            if id == "button_tick" then
+                CampaignUI.TriggerCampaignScriptEvent(cqi, "LegendaryLordRespec|" ..llr.en_cost.."<"..tostring(llr.cost))
+            else
+               --close  
+               core:remove_listener("obr_ConfirmFrame_yes_no_ComponentLClickUp")                       
+            end
+        end,
+        true
+    )
     local char = cm:get_character_by_cqi(cqi)
+    local ButtonYes = find_uicomponent(llr.ConfirmFrame, "button_tick")
+
     if llr.en_cost == "enabled" or (llr.en_cost == "firstforfree" and cm:get_saved_value("llr_respec_" .. tostring(cqi))) then
         local respec_cost = (char:rank() - 1) * llr.cost
         if respec_cost <= char:faction():treasury() then
             ButtonYes:SetState("hover")
-            ButtonYes.uic:SetTooltipText(effect.get_localised_string("obr_confirm_yes_money1_tt")..respec_cost..effect.get_localised_string("obr_confirm_yes_money2_tt"), "", false)
-            --ButtonYes.uic:SetTooltipText("Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]!", "", false)
+            ButtonYes:SetTooltipText(effect.get_localised_string("obr_confirm_yes_money1_tt")..respec_cost..effect.get_localised_string("obr_confirm_yes_money2_tt"), "", true)
+            --ButtonYes:SetTooltipText("Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]!", "", false)
             ButtonYes:SetState("active")
         else
-            ButtonYes:SetDisabled(true)
-            ButtonYes.uic:SetTooltipText(effect.get_localised_string("obr_confirm_yes_no_money1_tt")..respec_cost..effect.get_localised_string("obr_confirm_yes_no_money2_tt"), "", false)
-            --ButtonYes.uic:SetTooltipText("[[col:red]]You don't have enough funds![[/col]] \n Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]", "", false)
+            --ButtonYes:SetDisabled(true)
+            ButtonYes:SetState("inactive")
+            ButtonYes:SetTooltipText(effect.get_localised_string("obr_confirm_yes_no_money1_tt").."\n"..effect.get_localised_string("obr_confirm_yes_no_money2_tt")
+            ..respec_cost..effect.get_localised_string("obr_confirm_yes_no_money3_tt"), "", false)
+            --ButtonYes:SetTooltipText("[[col:red]]You don't have enough funds![[/col]] \n Respeccing this character would cost you: "..respec_cost.."[[img:icon_money]]", "", false)
         end
     else
         ButtonYes:SetState("hover")
-        ButtonYes.uic:SetTooltipText(effect.get_localised_string("obr_confirm_yes_free_tt"), "", false)
-        --ButtonYes.uic:SetTooltipText("Respec your lord/hero.", "", false)
+        ButtonYes:SetTooltipText(effect.get_localised_string("obr_confirm_yes_free_tt"), "", true)
+        --ButtonYes:SetTooltipText("Respec your lord/hero.", "", false)
         ButtonYes:SetState("active")
     end
     if char:rank() == 1 then
-        ButtonYes:SetDisabled(true)
-        ButtonYes.uic:SetTooltipText(effect.get_localised_string("obr_confirm_yes_no_skills_tt"), "", false)
-        --ButtonYes.uic:SetTooltipText("No skill points allocated.", "", false)
+        ButtonYes:SetState("inactive")
+        ButtonYes:SetTooltipText(effect.get_localised_string("obr_confirm_yes_no_skills_tt"), "", false)
+        --ButtonYes:SetTooltipText("No skill points allocated.", "", false)
     end
-    ButtonYes:Resize(300, 45)
-    local ButtonNo = TextButton.new("confirm_no", ConfirmFrame, "TEXT", effect.get_localised_string("obr_confirm_no_txt"))
-    ButtonNo:SetState("hover")
-    ButtonNo.uic:SetTooltipText(effect.get_localised_string("obr_confirm_no_tt"), "", true)
-    --ButtonNo.uic:SetTooltipText("Cancel", "", true)
-    ButtonNo:SetState("active")
-    ButtonNo:Resize(300, 45)
-    ConfirmFrame:AddComponent(ConfirmText)
-    ConfirmFrame:AddComponent(ButtonYes)
-    ConfirmFrame:AddComponent(ButtonNo)
-    --v function()
-    local function onYes()
-        ConfirmFrame:Delete()
-        --this is meant to be used to send a CQI, but it can take any integer!
-        CampaignUI.TriggerCampaignScriptEvent(cqi, "LegendaryLordRespec|" ..llr.en_cost.."<"..tostring(llr.cost))
-    end
-    ButtonYes:RegisterForClick(
-        function()
-            local ok, err = pcall(onYes)
-            if not ok then
-                llr.log("Error in reset function!")
-                llr.log(tostring(err))
-            end
-        end
-    )
-    --v function()
-    local function onNo()
-        ConfirmFrame:Delete()
-    end
-    ButtonNo:RegisterForClick(
-        function()
-            onNo()
-        end
-    )
-    Util.centreComponentOnComponent(ConfirmText, parchment)
-    local tX, tY = ConfirmText:Position()
-    ConfirmText:MoveTo(tX, tY - tH/2)
-    ButtonYes:PositionRelativeTo(ConfirmText, tW/2 - 150, 60)
-    ButtonNo:PositionRelativeTo(ButtonYes, 0, 60)
 end
 
 --v function(cqi: CA_CQI)
 function llr.create_button(cqi)
     local character_details_panel = find_uicomponent(core:get_ui_root(), "character_details_panel")
     if character_details_panel then
-        if llr.button then
-            llr.button:Delete()
-        end
+        llr.button = find_uicomponent(core:get_ui_root(), "obr_button")
+        if llr.button then deleteUIC(llr.button) end
+        llr.button = core:get_or_create_component("obr_button", "ui/templates/round_medium_button") -- square_medium_button
         local char = cm:get_character_by_cqi(cqi)
 
+        character_details_panel:Adopt(llr.button:Address())
         local icon_path = effect.get_skinned_image_path("icon_home.png")
-
-        llr.button = Button.new("RespecButtonLLR", character_details_panel, "CIRCULAR", icon_path)
+        llr.button:SetImagePath(icon_path) 
         local button_ok = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_ok")
         local bW, bH = button_ok:Bounds()
+        local bX, bY = button_ok:Position()
         llr.button:Resize(bW, bH)
-        llr.button:PositionRelativeTo(button_ok, llr.button:Width() - character_details_panel:Width() / 2, 0)
+
         local effects_window = find_uicomponent(core:get_ui_root(),"character_details_panel", "effects_parent", "campaign_effects_window")
         local effects_window_XPos = effects_window:Position()
-        llr.button:MoveTo(effects_window_XPos + effects_window:Width() / 2 - llr.button:Width() / 2, llr.button:YPos())
-        if llr.en_cost ~= "disabled" then
-            if cm:get_saved_value("llr_respec_" .. tostring(cqi)) and llr.limit then
-                llr.button:SetDisabled(true)
-                llr.button.uic:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_disabled_tt"), "", false)
-                --llr.button.uic:SetTooltipText("[[col:red]]You have already respec'd this character. This cannot be done twice! [[/col]]", "", false)
+        llr.button:MoveTo(effects_window_XPos + effects_window:Width() / 2 - llr.button:Width() / 2, bY)       
+        llr.button:PropagatePriority(button_ok:Priority())
+
+        if llr.limit then
+            if cm:get_saved_value("llr_respec_" .. tostring(cqi)) then
+                llr.button:SetState("inactive")
+                llr.button:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_disabled_tt"), "", false)
+                --llr.button:SetTooltipText("[[col:red]]You have already respec'd this character. This cannot be done twice! [[/col]]", "", false)
             else
                 llr.button:SetState("hover")
-                llr.button.uic:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_limited_tt"), "", false)
-                --llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. This can only be done once! [[/col]]", "", false)
+                llr.button:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_limited_tt"), "", true)
+                --llr.button:SetTooltipText("[[col:green]]Respec your lord/hero. This can only be done once! [[/col]]", "", false)
                 llr.button:SetState("active")
-                llr.button:RegisterForClick(
-                    function(context)
-                        local button_ok = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_ok")
-                        if button_ok then
-                            button_ok:SimulateLClick()
-                        end
-                        are_you_sure(cqi)
-                    end
-                )
             end
         else
             llr.button:SetState("hover")
-            llr.button.uic:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_unlimited_tt"), "", false)
-            --llr.button.uic:SetTooltipText("[[col:green]]Respec your lord/hero. [[/col]]", "", false)
+            llr.button:SetTooltipText(effect.get_localised_string("obr_RespecButtonLLR_unlimited_tt"), "", true)
+            --llr.button:SetTooltipText("[[col:green]]Respec your lord/hero. [[/col]]", "", false)
             llr.button:SetState("active")
-            llr.button:RegisterForClick(
-                function(context)
-                    local button_ok = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_ok")
-                    if button_ok then
-                        button_ok:SimulateLClick()
-                    end
-                    are_you_sure(cqi)
-                end
-            )
         end
+        core:remove_listener("obr_button_yes_no_ComponentLClickUp")
+        core:add_listener(
+            "obr_button_yes_no_ComponentLClickUp",
+            "ComponentLClickUp",
+            function(context)
+                return context.string == "obr_button"
+            end,
+            function(context)
+                local button_ok = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_ok")
+                if button_ok then
+                    button_ok:SimulateLClick()
+                end
+                are_you_sure(cqi)
+            end,
+            true
+        )
     end
 end
 
@@ -286,7 +283,7 @@ local function init_obr_listeners(enable_value)
             end,
             function(context)
                 if llr.button then
-                    llr.button:Delete()
+                    deleteUIC(llr.button)
                     llr.button = nil
                 end
             end,

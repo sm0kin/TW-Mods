@@ -362,6 +362,7 @@ local function deletePlayerSubcultureFactions()
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
 				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
 			else
+				if cm:random_number(1, 1) == 1 then
 				--local regionList = faction:region_list()
 				--for i = 0, regionList:num_items() - 1 do
 				--	local currentRegion = regionList:item_at(i)
@@ -380,6 +381,7 @@ local function deletePlayerSubcultureFactions()
 				--	--if not currentChar:character_type("colonel") then cm:kill_character(currentChar:command_queue_index(), true, false) end
 				--	cm:kill_character(currentChar:command_queue_index(), true, false)
 				--end
+				end
 			end
 		end
 	end
@@ -656,7 +658,7 @@ function sm0_test()
 			--if cm:model():turn_number() == 2 then cm:unlock_starting_general_recruitment("2140784146", "wh_main_vmp_vampire_counts") end
 			--if cm:model():turn_number() == 2 then cm:force_confederation("wh_main_grn_teef_snatchaz","wh_main_grn_orcs_of_the_bloody_hand") end
 			--if cm:model():turn_number() == 4 then kill_faction("wh_main_grn_teef_snatchaz") end
-			--deletePlayerSubcultureFactions()
+			deletePlayerSubcultureFactions()
 
 			--item test
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then
@@ -764,4 +766,14 @@ function sm0_test()
     --    end,
     --    true
 	--)
+
+	-- trigger a popup to either close with unsaved changes, or cancel the close procedure
+	--local uic = core:get_or_create_component("mct_attention", "ui/common ui/dialogue_box")
+
+	-- grey out the rest of the world
+	--uic:LockPriority()
+
+	--local tx = find_uicomponent(uic, "DY_text")
+	--tx:SetStateText("[[col:red]]New MCT Settings available![[/col]]\n\n"..
+	--"There are new campaign specific settings available for \"Legendary Confederations\", \"Example mod 2\" and \"Example mod 3\".\n\nTo open and configure the Mod Configuration Tool, press accept. \nPress Cancel to use default settings!")
 end
