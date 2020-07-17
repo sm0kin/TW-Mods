@@ -140,6 +140,11 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 require("sm0/sm0_delete/script/campaign/mod/sm0_delete")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_delete")
 
+--gates of chaos
+require("sm0/gates of chaos/script/export_helpers__chaos_gates")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__chaos_gates")
+
+
 --cbf
 require("sm0/cbf/script/campaign/mod/sm0_missing_anc")
 require("sm0/cbf/script/campaign/mod/sm0_horde")

@@ -1037,8 +1037,8 @@
 --# assume global is_faction: function(char: CA_FACTION) --> boolean
 --# assume global is_factionlist: function(char: any) --> boolean
 --# assume global add_vow_progress: function(char: CA_CHAR, trait: string, ai: bool, agents: bool)
+--# assume global table_contains: function(table: WHATEVER, obj: WHATEVER) --> boolean
 
--- CA LUA OBJECTS:
 --RITES UNLOCK OBJECT
 --# assume global class RITE_UNLOCK
 --# assume RITE_UNLOCK.new: method(rite_key: string, event_name: string, condition: function(context: WHATEVER, faction_name: string)--> boolean, faction: string?) --> RITE_UNLOCK
