@@ -313,6 +313,7 @@
 --# assume CM.force_remove_ancillary_from_faction: method(faction: CA_FACTION, ancillary: string)
 --# assume CM.add_ancillary_to_faction: method(faction: CA_FACTION, ancillary: string, suppress_event_feed: boolean)
 --More character commands
+--# assume CM.disable_movement_for_character: method(lookup: string)
 --# assume CM.add_experience_to_units_commanded_by_character: method(char_lookup_str: string, level: int) --add_experience_to_units_commanded_by_character("faction:f,type:t,ability:a,surname:s,forename:f,garrison:g,x:1,y:2,r:3", level)
 --# assume CM.kill_character: method(lookup: CA_CQI | string, kill_army: boolean, throughcq: boolean)
 --# assume CM.kill_character_and_commanded_unit: method(lookup: CA_CQI | string, kill_army: boolean, throughcq: boolean)
@@ -419,6 +420,7 @@
 --# assume CM.spawn_agent_at_settlement: method(owning_faction: CA_FACTION, target_settlement: CA_SETTLEMENT, agent_type: string, agent_subtype_record: string?)
 --# assume CM.spawn_agent_at_position: method(owning_faction: CA_FACTION, x: number, y: number, agent_type: string, agent_subtype_record: string?)
 --# assume CM.embed_agent_in_force: method(agent: CA_CHAR, military_force: CA_MILITARY_FORCE)
+--# assume CM.add_unit_model_overrides: method(character_lookup: string, model_key: string)
 --spawn location finding
 --# assume CM.find_valid_spawn_location_for_character_from_settlement: method(faction_key: string, settlement_region_key: string, on_sea: boolean, in_same_region: boolean, preferred_spawn_distance: number?) --> (number, number)
 --# assume CM.find_valid_spawn_location_for_character_from_character: method(faction_key: string, character_lookup: string, in_same_region: boolean, preferred_spawn_distance: number?) --> (number, number)
@@ -471,6 +473,8 @@
 --# assume CM.faction_has_nap_with_faction: method(first_faction: CA_FACTION, second_faction: CA_FACTION)
 --# assume CM.force_confederation: method(confederator: string, confederated: string)
 --# assume CM.force_alliance: method(faction: string, other_faction: string, is_military_alliance: boolean)
+--# assume CM.apply_dilemma_diplomatic_bonus: method(faction: string, other_faction: string, value: number)
+--# assume CM.force_grant_military_access: method(granting_faction: string, recipient_faction: string, is_hard_access: boolean)
 --pending battle commands
 --# assume CM.pending_battle_cache_get_defender: method(pos: int) --> (CA_CQI, CA_CQI, string) -- string: faction
 --# assume CM.pending_battle_cache_get_attacker: method(pos: int) --> (CA_CQI, CA_CQI, string) 
@@ -500,7 +504,7 @@
 --# assume CM.set_public_order_disabled_for_province_for_region_for_all_factions_and_set_default: method(region_key: string, bool: boolean)
 --# assume CM.exempt_province_from_tax_for_all_factions_and_set_default: method(region_key: string, bool: boolean)
 --# assume CM.region_slot_instantly_upgrade_building: method (slot: CA_SLOT, target_building_key: string) --> CA_BUILDING
---# assume CM.region_slot_instantly_dismantle_building: method (slot: string) --<region_key>:<slot_number>
+--# assume CM.region_slot_instantly_dismantle_building: method (slot: CA_SLOT) --<region_key>:<slot_number>
 --# assume CM.instantly_set_settlement_primary_slot_level: method (settlement: CA_SETTLEMENT, level: number) --> CA_BUILDING
 --# assume CM.region_slot_instantly_repair_building: method (slot: string) --<region_key>:<slot_number>
 --# assume CM.foreign_slot_instantly_upgrade_building: method (slot: CA_FOREIGN_SLOT, upgrade_building_key: string) 
@@ -602,6 +606,18 @@
 --#    factionKey: string?,
 --#    subcultureKey: string?
 --# )
+
+--# assume CM.force_religion_factors: method(
+--#    region_key: string, 
+--#    religion_1_key: string, 
+--#    religion_1_propotion: number,
+--#    religion_2_key: string?, 
+--#    religion_2_propotion: number?,
+--#    religion_3_key: string?, 
+--#    religion_3_propotion: number?,
+--#    religion_4_key: string?, 
+--#    religion_4_propotion: number?
+--# ) --map<string, number>...  --Extra religion key/religion proportion pairs of arguments, if desired.
 
 --# assume CM.start_faction_region_change_monitor: method(faction_name: string)
 --# assume CM.add_foreign_slot_set_to_region_for_faction: method(faction_cqi: CA_CQI, region_cqi: CA_CQI, slot_set: string)

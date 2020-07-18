@@ -491,8 +491,8 @@ function sm0_test()
 	--end
 	
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
-	cm:transfer_region_to_faction("wh2_main_eagle_gate", cm:get_local_faction(true))
-	cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction(true))
+	--cm:transfer_region_to_faction("wh2_main_eagle_gate", cm:get_local_faction(true))
+	--cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction(true))
 	--cm:spawn_agent_at_settlement(cm:get_faction(cm:get_local_faction(true)), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
 	--local characterList = cm:get_faction(cm:get_local_faction(true)):character_list()
     --for i = 0, characterList:num_items() - 1 do
@@ -776,4 +776,9 @@ function sm0_test()
 	--local tx = find_uicomponent(uic, "DY_text")
 	--tx:SetStateText("[[col:red]]New MCT Settings available![[/col]]\n\n"..
 	--"There are new campaign specific settings available for \"Legendary Confederations\", \"Example mod 2\" and \"Example mod 3\".\n\nTo open and configure the Mod Configuration Tool, press accept. \nPress Cancel to use default settings!")
+
+
+	--local button_slaves = find_uicomponent(core:get_ui_root(), "layout", "faction_buttons_docker", "button_group_management", "button_slaves")
+	--sm0_log("button_slaves path = "..tostring(button_slaves:GetImagePath()))
+
 end

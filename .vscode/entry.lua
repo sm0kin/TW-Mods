@@ -19,7 +19,6 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 require("sm0/sm0_test/script/campaign/mod/sm0_test")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_test")
 
-
 -- HIDDEN LEGENDARIES
 require("sm0/@hidden_legendaries/script/campaign/mod/sm0_hidden_legendaries")
 
@@ -39,19 +38,16 @@ require("sm0/sm0_mixedlores/script/ml_tables/ml_lzd_lord_huinitenuchli")
 require("sm0/sm0_mixedlores/script/ml_tables/ml_hef_belannaer")
 --require("sm0/sm0_mixedlores/script/ml_coloured_text_button")
 
-
 -- FACTION UNLOCKER / ULTIMATE CHAOS - COMPATIBILITY MOD
 require("sm0/!!unlocker_uc/script/campaign/mod/unlocker_uc")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/unlocker_uc")
 --require("sm0/!!unlocker_uc/script/campaign/main_warhammer/wh_chaos_invasion")
-
 
 -- ULTIMATE CHAOS
 --require("sm0/_ultimate_chaos_wh2/script/campaign/mod/ultimate_chaos")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/ultimate_chaos")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_dlc08_norscan_gods")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/main_warhammer/wh_chaos_invasion")
-
 
 -- ADJUSTABLE BATTLE SPEED
 require("sm0/sm0_battle_speed/script/battle/mod/battle_speed")
@@ -66,15 +62,12 @@ require("sm0/!!!sm0_log/script/frontend/mod/sm0_f_log")
 require("sm0/!!!sm0_log/script/battle/mod/sm0_b_log")
 require("sm0/!!!sm0_log/script/campaign/mod/sm0_c_log")
 
-
 -- BETTER FACTION SELECTION
 --require("sm0/sm0_frontend/script/frontend/mod/sm0_faction_selection")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/frontend/mod/sm0_faction_selection")
 
-
 -- Grant Independance / Revive Faction
 require("sm0/grant independance/script/campaign/mod/sm0_revive")
-
 
 -- OTHER MODDERS
 --require("sm0/z_BETA/!genevieve/script/export_helpers_why_grudge")
@@ -130,7 +123,6 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 require("sm0/sm0_difficulty/script/campaign/mod/sm0_difficulty")
 --require("sm0/sm0_difficulty/script/export_helpers_sm0_difficulty")
 
-
 --slann options
 require("sm0/sm0_slann_options/script/campaign/mod/sm0_slann_options")
 require("sm0/sm0_slann_options/script/campaign/wh2_slann_selection")
@@ -143,7 +135,6 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --gates of chaos
 require("sm0/gates of chaos/script/export_helpers__chaos_gates")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/export_helpers__chaos_gates")
-
 
 --cbf
 require("sm0/cbf/script/campaign/mod/sm0_missing_anc")
@@ -201,7 +192,13 @@ require("sm0/sm0_chaos/script/campaign/main_warhammer/wh_chaos_invasion")
 require("sm0/amazons/script/campaign/mod/amazons_faction")
 require("sm0/amazons/script/campaign/mod/amazons_missions")
 require("sm0/amazons/script/campaign/mod/amazons_ror_units")
----- ai exp
+
+-- ai exp
 require("sm0/sm0_ai_exp/script/campaign/mod/sm0_ai_exp")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_ai_exp")
 
+--shaky
+require("sm0/lost_factions/script/campaign/mod/!ovn_me_lost_factions_start")
+require("sm0/lost_factions/script/campaign/mod/!ovn_vor_lost_factions_start")
+require("sm0/lost_factions/script/campaign/mod/sr_chaos")
+require("sm0/lost_factions/script/mct/settings/lost_factions_settings")

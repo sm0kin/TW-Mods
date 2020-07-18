@@ -41,6 +41,7 @@
 --MCT_OPTION
 --mct_option:new (mod, option_key, type) 	                                                                      --For internal use only.
 --mct_option:is_val_valid_for_type (val) 	                                                                      --Internal checker to see if the values passed through mct_option methods are valid.
+--# assume MCT_OPTION.set_selected_setting: method(val: any) 
 --# assume MCT_OPTION.get_read_only: method() --> boolean 	                                                    --Read whether this mct_option can be edited or not at the moment.
 --# assume MCT_OPTION.set_read_only: method(enabled: boolean) 	                                                --Set whether this mct_option can be edited or not at the moment.
 --# assume MCT_OPTION.set_assigned_section: method(section_key: string) 	                                      --Assigns the section_key that this option is a member of.
