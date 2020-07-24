@@ -64,6 +64,34 @@ local LEGENDARY_LORD_DEFEATED_TRAITS = {
 	["wh2_dlc15_grn_grom_the_paunch"] = 		"wh2_dlc15_trait_defeated_grom"							-- Grom the Paunch
 };
 
+
+
+-----------------------------------
+---- DEFEATING LEGENDARY LORDS ----
+-----------------------------------
+events.CharacterCompletedBattle[#events.CharacterCompletedBattle+1] =
+function (context)
+	local character = context:character();
+
+	if cm:char_is_general_with_army(character) and character:won_battle() then
+		local LL_enemies = Get_Enemy_Legendary_Lords_In_Last_Battle(character);
+		
+		for i = 1, #LL_enemies do
+			local LL_trait = LEGENDARY_LORD_DEFEATED_TRAITS[LL_enemies[i]];
+			
+			if LL_trait ~= nil then
+				if LL_trait == "wh2_dlc09_trait_defeated_settra" and is_surtha_ek(character) then
+					Give_Trait(character, "wh2_dlc09_trait_defeated_settra_as_surtha");
+				else
+					Give_Trait(character, LL_trait);
+				end
+			elseif LL_enemies[i] == "surtha_ek" and character:character_subtype("wh2_dlc09_tmb_settra") then
+				Give_Trait(character, "wh2_dlc09_trait_defeated_surtha_as_settra");
+			end
+		end
+	end
+end
+
 function Get_Enemy_Legendary_Lords_In_Last_Battle(character)
 	local pb = cm:model():pending_battle();
 	local LL_attackers = {};
@@ -73,7 +101,7 @@ function Get_Enemy_Legendary_Lords_In_Last_Battle(character)
 	local num_attackers = cm:pending_battle_cache_num_attackers();
 	local num_defenders = cm:pending_battle_cache_num_defenders();
 
-	if pb:night_battle() == true then --or pb:ambush_battle() == true
+	if pb:night_battle() == true or pb:ambush_battle() == true then
 		num_attackers = 1;
 		num_defenders = 1;
 	end
@@ -117,4 +145,11 @@ function Get_Enemy_Legendary_Lords_In_Last_Battle(character)
 		end
 	end
 	return LL_defenders;
+end
+
+function is_surtha_ek(char_obj)
+	if char_obj:forename("names_name_2147345608") == true and char_obj:surname("names_name_2147345760") == true then
+		return true;
+	end
+	return false;
 end

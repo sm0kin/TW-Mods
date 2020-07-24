@@ -100,6 +100,7 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/legendary_confeds")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/frosty_tiers")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/make_karl_great_again")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/lords_of_change")
 
 --ships
 require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_lokhir")
@@ -187,6 +188,10 @@ require("sm0/cbf/script/campaign/wh2_campaign_faction_renaming")
 --chaos
 require("sm0/sm0_chaos/script/campaign/mod/sm0_chaos")
 require("sm0/sm0_chaos/script/campaign/main_warhammer/wh_chaos_invasion")
+
+--loreful empires
+require("sm0/loreful_empires/script/campaign/mod/wec_loreful_empires")
+require("sm0/loreful_empires/script/mct/settings/loreful_empires_settings")
 
 --deco
 require("sm0/amazons/script/campaign/mod/amazons_faction")

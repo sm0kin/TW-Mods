@@ -1698,6 +1698,10 @@ local function apply_diplomacy(faction_name)
                         cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false);
                     end
                 end
+                if (confed_option_value == "no_tweak" or confed_option_value == nil) and vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
+                    cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
+                    cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
+                end
             end, 1, "changeDiplomacyOptions"
         )
     end
@@ -2807,6 +2811,11 @@ function sm0_recruit_defeated()
         end
     end
 
+    if vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
+        cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
+        cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
+    end
+
     if mct then
         -- MCT new --
         --mct:log("sm0_confed/mct/enable_value = "..tostring(enable_value))
@@ -2915,5 +2924,5 @@ function sm0_recruit_defeated()
             sm0_log("Mod Version: default".." ("..version_number..")")
         end	
 	end
-	init_recruit_defeated_listeners(enable_value)
+    init_recruit_defeated_listeners(enable_value)
 end

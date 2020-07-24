@@ -1,3 +1,52 @@
+--v [NO_CHECK] method (force_key: string, unit_count: {number, number}, return_as_table: boolean?, no_limit: boolean) --> string
+--- @function 
+--- @desc This generates a force randomly, first taking into account the mandatory unit and then making random selection of units based on weighting. Returns an array of unit keys or a comma separated string for use in the create_force function if the last boolean value is passed as true
+--- @p string key of the force
+--- @p number amount of units
+--- @p boolean pass true to return the force as a table, false to get a comma separated string
+--- @return object Either a table containing the unit keys, or a comma separated string of units
+function random_army_manager:generate_force(force_key, unit_count, return_as_table, no_limit)
+	local force = {};
+	local faction = "";
+	
+	if is_table(unit_count) then
+		unit_count = cm:random_number(math.max(unit_count[1], unit_count[2]), math.min(unit_count[1], unit_count[2]));
+	end;
+
+	if not no_limit then
+		unit_count = math.min(19, unit_count);
+	end
+	
+	out.design("Random Army Manager: Getting Random Force for army [" .. force_key .. "] with size [" .. unit_count .. "]");
+	
+	for i = 1, #self.force_list do
+		if force_key == self.force_list[i].key then			
+			local mandatory_units_added = 0;
+			
+			for j = 1, #self.force_list[i].mandatory_units do
+				table.insert(force, self.force_list[i].mandatory_units[j]);
+				mandatory_units_added = mandatory_units_added + 1;
+			end
+			
+			for k = 1, unit_count - mandatory_units_added do
+				local unit_index = cm:random_number(#self.force_list[i].units);
+				table.insert(force, self.force_list[i].units[unit_index]);
+			end
+
+			faction = self.force_list[i].faction;
+		end
+	end
+	
+	if #force == 0 then
+		script_error("Random Army Manager: Did not add any units to force with force_key [" .. force_key .. "] - was the force created?");
+		return false;
+	elseif return_as_table then
+		return force, faction;
+	else
+		return table.concat(force, ","), faction;
+	end
+end
+
 function sm0_chaos()
 	core:add_listener(
 		"sm0_rank_up_chaos_units",
@@ -161,52 +210,4 @@ function sm0_chaos()
 		end,
 		true
 	)
-end
-
---- @function 
---- @desc This generates a force randomly, first taking into account the mandatory unit and then making random selection of units based on weighting. Returns an array of unit keys or a comma separated string for use in the create_force function if the last boolean value is passed as true
---- @p string key of the force
---- @p number amount of units
---- @p boolean pass true to return the force as a table, false to get a comma separated string
---- @return object Either a table containing the unit keys, or a comma separated string of units
-function random_army_manager:generate_force(force_key, unit_count, return_as_table, no_limit)
-	local force = {};
-	local faction = "";
-	
-	if is_table(unit_count) then
-		unit_count = cm:random_number(math.max(unit_count[1], unit_count[2]), math.min(unit_count[1], unit_count[2]));
-	end;
-
-	if not no_limit then
-		unit_count = math.min(19, unit_count);
-	end
-	
-	out.design("Random Army Manager: Getting Random Force for army [" .. force_key .. "] with size [" .. unit_count .. "]");
-	
-	for i = 1, #self.force_list do
-		if force_key == self.force_list[i].key then			
-			local mandatory_units_added = 0;
-			
-			for j = 1, #self.force_list[i].mandatory_units do
-				table.insert(force, self.force_list[i].mandatory_units[j]);
-				mandatory_units_added = mandatory_units_added + 1;
-			end
-			
-			for k = 1, unit_count - mandatory_units_added do
-				local unit_index = cm:random_number(#self.force_list[i].units);
-				table.insert(force, self.force_list[i].units[unit_index]);
-			end
-
-			faction = self.force_list[i].faction;
-		end
-	end
-	
-	if #force == 0 then
-		script_error("Random Army Manager: Did not add any units to force with force_key [" .. force_key .. "] - was the force created?");
-		return false;
-	elseif return_as_table then
-		return force, faction;
-	else
-		return table.concat(force, ","), faction;
-	end
 end

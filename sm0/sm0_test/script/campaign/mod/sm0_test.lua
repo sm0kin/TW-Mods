@@ -686,7 +686,9 @@ function sm0_test()
 			--	local region = region_list:item_at(i)
 			--	--cm:set_region_abandoned(region:name())
 			--	cm:transfer_region_to_faction(region:name(), cm:get_local_faction(true))	
-			--	cm:heal_garrison(region:cqi())				
+			--	cm:heal_garrison(region:cqi())		
+			----	local settlement = region:settlement()
+			----	cm:instantly_set_settlement_primary_slot_level(settlement, 3)			
 			--end
 			--expCheat()
 			--if cm:model():turn_number() == 2 then expCheat() end
@@ -780,5 +782,6 @@ function sm0_test()
 
 	--local button_slaves = find_uicomponent(core:get_ui_root(), "layout", "faction_buttons_docker", "button_group_management", "button_slaves")
 	--sm0_log("button_slaves path = "..tostring(button_slaves:GetImagePath()))
+
 
 end
