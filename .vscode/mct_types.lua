@@ -19,7 +19,7 @@
 
 --MCT_MOD
 --mct_mod:new (key) 	                                                                                          --For internal use, called by the MCT Manager.
---# assume MCT_MOD.get_settings: method() --> map<string, string | number | boolean >                           --Returns the finalized_settings field of this mct_mod.
+--# assume MCT_MOD.get_settings: method() --> map<string, any >                                                 --Returns the finalized_settings field of this mct_mod.
 --# assume MCT_MOD.add_new_section: method(section_key: string, localised_name: string) 	                      --Add a new section to the mod's settings view, to separate them into several categories.
 --# assume MCT_MOD.get_options_by_section: method(section_key: string) --> map<string, MCT_OPTION>              --Returns a k/v table of {optionkey=optionobj} for options that are linked to this section.
 --# assume MCT_MOD.get_sections: method() --> map<string, string>	                                              --Returns a table of all "sections" within the mct_mod.
@@ -41,7 +41,11 @@
 --MCT_OPTION
 --mct_option:new (mod, option_key, type) 	                                                                      --For internal use only.
 --mct_option:is_val_valid_for_type (val) 	                                                                      --Internal checker to see if the values passed through mct_option methods are valid.
---# assume MCT_OPTION.set_selected_setting: method(val: any) 
+--# assume MCT_OPTION.get_local_only: method() 	                                                                --Read whether this mct_option is edited exclusively for the client, instead of passed between both PC's.
+--# assume MCT_OPTION.set_local_only: method(enabled: boolean) 	                                                --Set whether this mct_option is edited for just the local PC, or sent to both PC's.
+--# assume MCT_OPTION.get_mp_disabled: method() 	                                                              --Read whether this mct_option is available in multiplayer.
+--# assume MCT_OPTION.set_mp_disabled: method(enabled: boolean) 	                                              --Set whether this mct_option exists for MP campaigns.
+----# assume MCT_OPTION.set_selected_setting: method(val: any)                                                  --internal
 --# assume MCT_OPTION.get_read_only: method() --> boolean 	                                                    --Read whether this mct_option can be edited or not at the moment.
 --# assume MCT_OPTION.set_read_only: method(enabled: boolean) 	                                                --Set whether this mct_option can be edited or not at the moment.
 --# assume MCT_OPTION.set_assigned_section: method(section_key: string) 	                                      --Assigns the section_key that this option is a member of.
@@ -51,12 +55,14 @@
 --# assume MCT_OPTION.get_uic_visibility: method() --> boolean	                                                --Get the current visibility for this mct_option.
 --# assume MCT_OPTION.add_option_set_callback: method(callback: function(context: MCT_OPTION)) 	                --Create a callback triggered whenever this option's setting changes within the MCT UI.
 --# assume MCT_OPTION.override_position: method(x: number, y: number) 	                                        --Manually set the x/y position for this option, within its section.
---# assume MCT_OPTION.get_finalized_setting: method() --> string | number | boolean 	                          --Getter for the "finalized_setting" for this mct_option.
---# assume MCT_OPTION.set_default_value: method(default_value: string | number | boolean ) 	                    --Set the default selected setting when the mct_mod is first created and loaded.
---# assume MCT_OPTION.get_selected_setting: method() --> string | number | boolean                              --Getter for the current selected setting.
-----# assume MCT_OPTION.slider_set_values: method(min: number, max: number, current: number) 	                  --set-value wrapped for sliders.
---# assume MCT_OPTION.slider_set_min_max: method(min: number, max: number) 	                                    --set-value wrapped for sliders.
---# assume MCT_OPTION.slider_set_step_size: method(step_size: number)                                           --defaults to 1 if unused
+--# assume MCT_OPTION.get_finalized_setting: method() --> any 	                                                --Getter for the "finalized_setting" for this mct_option.
+--# assume MCT_OPTION.set_default_value: method(default_value: any ) 	                                          --Set the default selected setting when the mct_mod is first created and loaded.
+--# assume MCT_OPTION.set_uic_locked: method(enable: boolean) 	                                                --Set this option as disabled in the UI, so the user can't interact with it.
+--# assume MCT_OPTION.ui_lock_option: method() 	                                                                --Internal function to set the option UIC as disabled, for read-only/mp-disabled.
+--# assume MCT_OPTION.get_selected_setting: method() --> any                                                    --Getter for the current selected setting.
+--# assume MCT_OPTION.slider_set_min_max: method(min: number, max: number) 	                                    --Setter for the minimum and maximum values for the slider.
+--# assume MCT_OPTION.slider_set_step_size: method(step_size: number, step_size_precision: number)              --Set function to set the step size for moving left/right through the slider. If the step size is 0.2, for instance, the precision would be 1, for one-decimal-place.)
+--# assume MCT_OPTION.slider_set_precision: method(precision: number) 	                                        --Setter for the precision on the slider's displayed value. The number should be how many decimal places you want, ie. if you are using one decimal place, send 1 to this function; if you are using none, send 0.
 --# assume MCT_OPTION.add_dropdown_values: method(dropdown_table: table)                                        --Method to set the dropdown_values.
 --# assume MCT_OPTION.add_dropdown_value: method(key: string, text: string, tt: string, is_default: boolean?) 	--Used to create a single dropdown_value; also called within mct_option:add_dropdown_values
 --# assume MCT_OPTION.get_key: method() --> string	                                                            --Getter for this option's key.

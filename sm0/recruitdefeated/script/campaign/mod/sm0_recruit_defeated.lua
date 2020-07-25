@@ -1666,41 +1666,42 @@ local function apply_diplomacy(faction_name)
                 if option_sc.offer ~= nil and option_sc.accept ~= nil and option_sc.both_directions ~= nil then
                     cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.both_directions)
                 end
-                if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
-                    cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
-                    cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
-                end
-                if (confed_option_value == "no_tweak" or confed_option_value == nil) and subculture == "wh_main_sc_brt_bretonnia" and faction:is_human() 
-                and faction_name ~= "wh2_dlc14_brt_chevaliers_de_lyonesse" then
-                    local bret_confederation_tech = {
-                        {tech = "tech_dlc07_brt_heraldry_artois", faction = "wh_main_brt_artois"},
-                        {tech = "tech_dlc07_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
-                        {tech = "tech_dlc07_brt_heraldry_bordeleaux", faction = "wh_main_brt_bordeleaux"},
-                        {tech = "tech_dlc07_brt_heraldry_bretonnia", faction = "wh_main_brt_bretonnia"},
-                        {tech = "tech_dlc07_brt_heraldry_carcassonne", faction = "wh_main_brt_carcassonne"},
-                        {tech = "tech_dlc07_brt_heraldry_lyonesse", faction = "wh_main_brt_lyonesse"},
-                        {tech = "tech_dlc07_brt_heraldry_parravon", faction = "wh_main_brt_parravon"}
-                    } --:vector<map<string, string>>
-                    for i = 1, #bret_confederation_tech do
-                        local has_tech = faction:has_technology(bret_confederation_tech[i].tech)
-                        cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true)
+                if confed_option_value == "no_tweak" or confed_option_value == nil then
+                    if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
+                        cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
+                        cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
                     end
-                end
-                if faction:is_human() and faction:has_pooled_resource("emp_loyalty") == true then
-                    cm:force_diplomacy("faction:"..faction_name, "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false)
-                    cm:force_diplomacy("faction:"..faction_name, "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false)
-                end
-                ---hack fix to stop this re-enabling confederation when it needs to stay disabled
-                ---please let's make this more robust!
-                if subculture == "wh2_main_sc_hef_high_elves" then
-                    local grom_faction = cm:get_faction("wh2_dlc15_grn_broken_axe")
-                    if grom_faction ~= false and grom_faction:is_human() then
-                        cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false);
+                    if subculture == "wh_main_sc_brt_bretonnia" and faction:is_human() and faction_name ~= "wh2_dlc14_brt_chevaliers_de_lyonesse" then
+                        local bret_confederation_tech = {
+                            {tech = "tech_dlc07_brt_heraldry_artois", faction = "wh_main_brt_artois"},
+                            {tech = "tech_dlc07_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
+                            {tech = "tech_dlc07_brt_heraldry_bordeleaux", faction = "wh_main_brt_bordeleaux"},
+                            {tech = "tech_dlc07_brt_heraldry_bretonnia", faction = "wh_main_brt_bretonnia"},
+                            {tech = "tech_dlc07_brt_heraldry_carcassonne", faction = "wh_main_brt_carcassonne"},
+                            {tech = "tech_dlc07_brt_heraldry_lyonesse", faction = "wh_main_brt_lyonesse"},
+                            {tech = "tech_dlc07_brt_heraldry_parravon", faction = "wh_main_brt_parravon"}
+                        } --:vector<map<string, string>>
+                        for i = 1, #bret_confederation_tech do
+                            local has_tech = faction:has_technology(bret_confederation_tech[i].tech)
+                            cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true)
+                        end
                     end
-                end
-                if (confed_option_value == "no_tweak" or confed_option_value == nil) and vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
-                    cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
-                    cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
+                    if faction:is_human() and faction:has_pooled_resource("emp_loyalty") == true then
+                        cm:force_diplomacy("faction:"..faction_name, "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false)
+                        cm:force_diplomacy("faction:"..faction_name, "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false)
+                    end
+                    ---hack fix to stop this re-enabling confederation when it needs to stay disabled
+                    ---please let's make this more robust!
+                    if subculture == "wh2_main_sc_hef_high_elves" then
+                        local grom_faction = cm:get_faction("wh2_dlc15_grn_broken_axe")
+                        if grom_faction ~= false and grom_faction:is_human() then
+                            cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false);
+                        end
+                    end
+                    if vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
+                        cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
+                        cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
+                    end
                 end
             end, 1, "changeDiplomacyOptions"
         )
@@ -2411,7 +2412,7 @@ local function init_recruit_defeated_listeners(enable_value)
                             local rng_index = cm:random_number(#prefered_factions)
                             local prefered_faction_key = prefered_factions[rng_index]
                             local prefered_faction = cm:get_faction(prefered_faction_key)
-                            sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
+                            --sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
 
                             if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
