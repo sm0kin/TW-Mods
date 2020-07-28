@@ -44,6 +44,6 @@ enable:add_option_set_callback(
             local option_obj = option:get_mod():get_option_by_key(options[i])
             option_obj:set_uic_visibility(val)
         end
-        --option:get_mod():set_section_visibility("respec_options", val)
+        --option:get_mod():set_section_visibility("advanced_options", val)
     end
 )

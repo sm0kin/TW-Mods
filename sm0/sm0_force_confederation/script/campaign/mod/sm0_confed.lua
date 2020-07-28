@@ -128,7 +128,8 @@ local function init_force_confed_listeners(enable_value)
 						end
 					end
 					local option = {}
-					local option_sc = {}
+					option.source = "faction:" .. faction_name        
+					option.target = "culture:" .. culture
 					if confed_option_value == "free_confed" then
 						option.offer = true
 						option.accept = true
@@ -153,15 +154,17 @@ local function init_force_confed_listeners(enable_value)
 						option.both_directions = false
 						for i, subculture_confed in ipairs(subculture_confed_disabled) do
 							if subculture == subculture_confed then
-								option_sc.offer = false
-								option_sc.accept = false
-								option_sc.both_directions = false
+								option.target = "subculture:" .. subculture
+								option.offer = false
+								option.accept = false
+								option.both_directions = false
 							end
 						end	
-						if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then 
-							option_sc.offer = true
-							option_sc.accept = true
-							option_sc.both_directions = false            
+						if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then
+							option.target = "subculture:" .. subculture 
+							option.offer = true
+							option.accept = true
+							option.both_directions = false            
 						end
 						if faction:has_pooled_resource("emp_loyalty") == true then
 							option.offer = false
@@ -169,23 +172,21 @@ local function init_force_confed_listeners(enable_value)
 							option.both_directions = false
 						end
 						if subculture == "wh_dlc05_sc_wef_wood_elves" then
-							option_sc.accept = false
-							option_sc.both_directions = false        	
+							option.target = "subculture:" .. subculture
+							option.accept = false
+							option.both_directions = false        	
 							oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
 							if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
-								option_sc.offer = true
+								option.offer = true
 							else
-								option_sc.offer = false
+								option.offer = false
 							end  
 						end
 					end
 					cm:callback(
 						function(context)
 							if option.offer ~= nil and option.accept ~= nil and option.both_directions ~= nil then
-								cm:force_diplomacy("faction:" .. faction_name, "culture:" .. culture, "form confederation", option.offer, option.accept, option.both_directions)
-							end
-							if option_sc.offer ~= nil and option_sc.accept ~= nil and option_sc.both_directions ~= nil then
-								cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.both_directions)
+								cm:force_diplomacy(option.source, option.target, "form confederation", option.offer, option.accept, option.both_directions)
 							end
 							if confed_option_value == "no_tweak" or confed_option_value == nil then
 								if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
@@ -216,8 +217,12 @@ local function init_force_confed_listeners(enable_value)
 								if subculture == "wh2_main_sc_hef_high_elves" then
 									local grom_faction = cm:get_faction("wh2_dlc15_grn_broken_axe")
 									if grom_faction ~= false and grom_faction:is_human() then
-										cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false);
+										cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false)
 									end
+								end
+								if vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
+									cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
+									cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
 								end
 							end
 						end, 1, "changeDiplomacyOptions"

@@ -17,7 +17,7 @@ local enable_value --:WHATEVER
 local zzz03_tHeatre_value --:WHATEVER
 local zzz04_deadlyAlliances_value --:WHATEVER
 local zzz05_restriction_value --:WHATEVER
-local enabled_factions --:map<string, string> -- {["faction]" = "human_faction"}
+local enabled_factions = {} --:map<string, string> -- {["target_faction]", "human_faction"}
 
 -- factions with legendary lords
 ------------------------------------------------------------------
@@ -274,7 +274,7 @@ local function confed_factions(subcultures_factions_table)
         if subcultures_factions_table[subculture] then 
             for _, faction in ipairs(subcultures_factions_table[subculture]) do
                 local factionCA = cm:get_faction(faction)
-                if factionCA and not factionCA:is_dead() and not factionCA:is_human() and cm:get_saved_value("mcm_tweaker_frostyConfed_player"..i.."|"..faction.."_value") ~= "b2_Disable" then
+                if factionCA and not factionCA:is_dead() and not factionCA:is_human() and enabled_factions[faction] == humanFaction then
                     local army_table = {} --:WHATEVER
                     local char_cqi_table --:vector<CA_CQI>
                     local faction_home_region
@@ -285,7 +285,7 @@ local function confed_factions(subcultures_factions_table)
                         faction_home_region = factionCA:military_force_list():item_at(0):general_character():region() 
                     end
                     -- faction respawn prep
-                    if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz03_tHeatre_value") ~= "c1_theatre_Enable" then      
+                    if not zzz03_tHeatre_value then      
                         local mfList = factionCA:military_force_list()
                         for j = 0, mfList:num_items() - 1 do
                             local mf = mfList:item_at(j)    
@@ -327,7 +327,7 @@ local function confed_factions(subcultures_factions_table)
                             return context:confederation():name() == humanFactions[i] and context:faction():name() == faction
                         end,
                         function(context)
-                            if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz03_tHeatre_value") ~= "c1_theatre_Enable" then
+                            if not zzz03_tHeatre_value then
                                 if wh_faction_is_horde(factionCA) then
                                     for _, char_cqi in ipairs(char_cqi_table) do
                                         cm:kill_character(char_cqi, true, false) 
@@ -398,12 +398,10 @@ local function confed_factions(subcultures_factions_table)
                         false
                     )
                     if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then 
-                        if (cm:get_saved_value("mcm_tweaker_frostyConfed_zzz05_restriction_value") ~= "restricted") or (humanFactions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" 
-                        and faction ~= "wh2_dlc09_tmb_khemri" and faction ~= "wh2_dlc09_tmb_followers_of_nagash") or cm:get_saved_value("mcm_tweaker_frostyConfed_zzz05_restriction_value") == "unrestricted" then 
-                            if vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") then 
-                                delete_armies(faction)
-                                cm:force_confederation(humanFactions[i], faction) 
-                            end
+                        if ((humanFactions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" and faction ~= "wh2_dlc09_tmb_khemri" and faction ~= "wh2_dlc09_tmb_followers_of_nagash") 
+                        or not zzz05_restriction_value) and vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") then 
+                            delete_armies(faction)
+                            cm:force_confederation(humanFactions[i], faction) 
                         end
                     else
                         cm:force_confederation(humanFactions[i], faction)
@@ -412,7 +410,7 @@ local function confed_factions(subcultures_factions_table)
             end
         end
         --THEATRES OF WAR
-        if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz03_tHeatre_value") == "c1_theatre_Enable" then              
+        if zzz03_tHeatre_value then              
             --check
             if humanFaction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" and humanFaction:subculture() ~= "wh2_dlc11_sc_cst_vampire_coast" 
             or (vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") and humanFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
@@ -427,7 +425,7 @@ local function confed_factions(subcultures_factions_table)
                         or (humanFaction:name() == "wh2_dlc09_tmb_the_sentinels" and faction_of_same_subculture:name() == "wh2_dlc09_tmb_followers_of_nagash") or
                         (humanFaction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and humanFaction:name() ~= "wh2_dlc09_tmb_the_sentinels" 
                         and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_the_sentinels") 
-                        or cm:get_saved_value("mcm_tweaker_frostyConfed_zzz05_restriction_value") == "unrestricted" then
+                        or not zzz05_restriction_value then
                             if humanFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then delete_armies(faction_of_same_subculture:name()) end
                             cm:force_confederation(humanFactions[i], faction_of_same_subculture:name())
                         end
@@ -444,10 +442,10 @@ local function confed_factions(subcultures_factions_table)
             if (not cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture) 
             or (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= subculture and cm:get_faction(humanFactions[2]):subculture() ~= subculture) then
                 --DEADLY ALLIANCES
-                if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz04_deadlyAlliances_value") == "d1_deadly_Enable" then                     
+                if zzz04_deadlyAlliances_value == "d1_deadly_Enable" then                     
                     if factions[1] and cm:get_faction(factions[1]) then spawnMissingLords(factions[1]) end
                     for i = 1, #factions do
-                        if factions[i] and subcultures_factions[subculture][1] ~= factions[i] and (cm:get_saved_value("mcm_tweaker_frostyConfed_zzz05_restriction_value") == "unrestricted"
+                        if factions[i] and subcultures_factions[subculture][1] ~= factions[i] and (not zzz05_restriction_value
                         or (factions[i] ~= "wh2_dlc09_tmb_followers_of_nagash" and factions[i] ~= "wh2_dlc09_tmb_the_sentinels")) then 
                             if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then delete_armies(factions[i]) end
                             cm:force_confederation(subcultures_factions[subculture][1], factions[i])
@@ -455,14 +453,14 @@ local function confed_factions(subcultures_factions_table)
                     end
                 end
                 --WORLD WAR
-                if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz04_deadlyAlliances_value") == "d2_deadly_Enable_worldwar" then
+                if zzz04_deadlyAlliances_value == "d2_deadly_Enable_worldwar" then
                     if factions[1] and cm:get_faction(factions[1]) then 
                         spawnMissingLords(factions[1])
                         local faction1 = cm:get_faction(factions[1])
                         local factions_of_same_subculture = faction1:factions_of_same_subculture()
                         for i = 0, factions_of_same_subculture:num_items() - 1 do
                             local faction_of_same_subculture = factions_of_same_subculture:item_at(i)
-                            if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz05_restriction_value") == "unrestricted" or (faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_the_sentinels") then
+                            if not zzz05_restriction_value or (faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_the_sentinels") then
                                 if subculture == "wh2_dlc09_sc_tmb_tomb_kings" then  delete_armies(faction_of_same_subculture:name()) end
                                 cm:force_confederation(subcultures_factions[subculture][1], faction_of_same_subculture:name())
                             end
@@ -541,8 +539,7 @@ local function apply_bundles(leaderFactions_table)
         local faction_obj = cm:get_faction(current_leaderFaction)
         --set is human true to test 
         if faction_obj and faction_obj:is_human() == false and cm:is_new_game() == true then
-            if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz04_deadlyAlliances_value") == "d1_deadly_Enable" or 
-            cm:get_saved_value("mcm_tweaker_frostyConfed_zzz04_deadlyAlliances_value") == "d2_deadly_Enable_worldwar" then
+            if zzz04_deadlyAlliances_value == "d1_deadly_Enable" or zzz04_deadlyAlliances_value == "d2_deadly_Enable_worldwar" then
                 local army_list = faction_obj:military_force_list();
                 for j = 0, army_list:num_items() - 1 do
                     local army = army_list:item_at(j);
@@ -823,151 +820,144 @@ end
 --v function()
 function legendary_confeds()
     local mcm = _G.mcm
-    local mct = core:get_static_object("mod_configuration_tool")
+    local mct = core:get_static_object("mod_configuration_tool") --:MCT
     local humanFactions = cm:get_human_factions()
 
     if mct then
-        -- MCT new --
-        --mct:log("sm0_confed/mct/enable_value = "..tostring(enable_value))
-		--mct:log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
-		local confederation_options_mod = mct:get_mod_by_key("confederation_options")
-		if confederation_options_mod and cm:is_new_game() then
-			local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_tmb_tomb_kings")
-			tk_value = tk_option:get_finalized_setting()
-			if tk_value == "no_tweak" then
-				cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
-			end
-			local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")
-			emp_value = emp_option:get_finalized_setting() -- no teb / kislev subculture?
-			if emp_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
-				cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
-			end
-        end
+        -- MCT 2 --
+        local frosty_confeds_mod = mct:get_mod_by_key("frosty_confeds")
+        local settings_table = frosty_confeds_mod:get_settings() 
+
         if cm:is_new_game() then
-            if not cm:is_multiplayer() or (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture()) then
-                local frosty_confeds_mod = mct:get_mod_by_key("frosty_confeds")
-                local settings_table = frosty_confeds_mod:get_settings() 
+            local confederation_options_mod = mct:get_mod_by_key("confederation_options")
+            if confederation_options_mod then
+                local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_tmb_tomb_kings")
+                tk_value = tk_option:get_finalized_setting()
+                if tk_value == "no_tweak" then
+                    cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+                end
+                local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")
+                emp_value = emp_option:get_finalized_setting() -- no teb / kislev subculture?
+                if emp_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
+                    cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
+                end
+            end
 
-                frosty_confeds_mod:add_new_section("faction_options", "Faction Options") 
-                test_option = frosty_confeds_mod:add_new_option("test_option", "dropdown")
+            --v function(index: integer, target_faction: string)
+            local function setup_dynamic_options(index, target_faction)
+                local target_faction_obj = cm:get_faction(target_faction)
+                if target_faction_obj and not target_faction_obj:is_dead() and not target_faction_obj:is_human() then 
+                    local player_faction_loc = effect.get_localised_string("factions_screen_name_"..humanFactions[index])
+                    local target_faction_loc = effect.get_localised_string("factions_screen_name_"..target_faction)
+                    local player_confed_string = "Confederation with "..target_faction_loc                                      --get_full_char_name(faction_CA:faction_leader())
 
-                for i = 1, #humanFactions do
-                    local humanFaction = cm:get_faction(humanFactions[i])
-                    local subculture = humanFaction:subculture()
-                    if subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" and subculture ~= "wh2_dlc11_sc_cst_vampire_coast" 
-                    or (vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") and subculture == "wh2_dlc09_sc_tmb_tomb_kings") 
-                    or (vfs.exists("script/campaign/mod/legendary_confeds_cst.lua") and subculture == "wh2_dlc11_sc_cst_vampire_coast")  then 
-                        --TOMB KINGS/VAMPIRE COAST MODULE
-                        if subcultures_factions[subculture] then 
-                            for _, faction in ipairs(subcultures_factions[subculture]) do
-                                local faction_CA = cm:get_faction(faction)
-                                if faction_CA and not faction_CA:is_dead() and not faction_CA:is_human() then 
-                                    local loc_prefix = "mct_frosty_confeds_"
-                                    local player_confed_string = "Player-"..i.."Confederation with "..get_full_char_name(faction_CA:faction_leader())
-                                    local frosty_confeds_option = frosty_confeds_mod:get_option_by_key("player_faction_"..faction, "dropdown")
-                                    if frosty_confeds_option then
-                                        frosty_confeds_option:add_dropdown_value("player_"..i, "Player "..i, player_confed_string)
-                                    else
-                                        frosty_confeds_option = frosty_confeds_mod:add_new_option("player_faction_"..faction, "dropdown")
-                                        frosty_confeds_option:set_text("Confederation with "..get_full_char_name(faction_CA:faction_leader()), false)
-                                        frosty_confeds_option:set_tooltip_text("Confederation with "..get_full_char_name(faction_CA:faction_leader()), false)
-                                        frosty_confeds_option:add_dropdown_value("player_"..i, "Player "..i, player_confed_string, true)
-                                        frosty_confeds_option:add_dropdown_value("disabled", "Disabled", "")
+                    if cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture() then
+                        player_confed_string =  player_faction_loc..": Confederation with "..target_faction_loc                 --get_full_char_name(faction_CA:faction_leader())
+                        local frosty_confeds_option = frosty_confeds_mod:get_option_by_key(humanFactions[index].."_dynamic_"..target_faction)
+                        if frosty_confeds_option and (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture()) then
+                            frosty_confeds_option:add_dropdown_value("player_"..index, player_faction_loc, player_confed_string)
+                        else
+                            frosty_confeds_option = frosty_confeds_mod:add_new_option(humanFactions[index].."_dynamic_"..target_faction, "dropdown")
+                            frosty_confeds_option:set_assigned_section("faction_options_1")
+                            frosty_confeds_option:set_text("Confederation with "..target_faction_loc, false)                    --get_full_char_name(faction_CA:faction_leader()
+                            frosty_confeds_option:set_tooltip_text("Confederation with "..target_faction_loc, false)            --get_full_char_name(faction_CA:faction_leader()
+                            frosty_confeds_option:add_dropdown_value("player_"..index, player_faction_loc, player_confed_string, true)
+                            frosty_confeds_option:add_dropdown_value("disabled", "Disabled", "")
 
-                                        if (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture())
-                                        or (humanFactions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (humanFactions[2] == "wh2_dlc09_tmb_followers_of_nagash")
-                                        or (faction == "wh2_dlc09_tmb_khemri") or faction == "wh2_dlc09_tmb_followers_of_nagash" then 
-                                            frosty_confeds_option:set_default_value("disabled")
-                                        end
-                                    end
-                                end
+                            if (humanFactions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (humanFactions[2] == "wh2_dlc09_tmb_followers_of_nagash")
+                            or (target_faction == "wh2_dlc09_tmb_khemri") or target_faction == "wh2_dlc09_tmb_followers_of_nagash" then 
+                                frosty_confeds_option:set_default_value("disabled")
                             end
                         end
-
-                        --COMPATIBILITY BRIDGE: MIXU module
-                        if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") and mixu1_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 1 (script path might change)
-                            for _, faction in ipairs(mixu1_subcultures_factions[subculture]) do
-                            local faction_CA = cm:get_faction(faction)
-                                if faction_CA and not faction_CA:is_dead() and not faction_CA:is_human() then
-                                    local loc_prefix = "mct_frosty_confeds_"
-                                    local player_confed_string = "Player-"..i.."Confederation with "..get_full_char_name(faction_CA:faction_leader())
-                                    local frosty_confeds_option = frosty_confeds_mod:get_option_by_key("player_faction_"..faction, "dropdown")
-                                    if frosty_confeds_option then
-                                        frosty_confeds_option:add_dropdown_value("player_"..i, "Player "..i, player_confed_string)
-                                    else
-                                        local frosty_confeds_option = frosty_confeds_mod:add_new_option("player_faction_"..faction, "dropdown")
-                                        frosty_confeds_option:set_text("Confederation with "..get_full_char_name(faction_CA:faction_leader()), false)
-                                        frosty_confeds_option:set_tooltip_text("Confederation with "..get_full_char_name(faction_CA:faction_leader()), false)
-                                        frosty_confeds_option:add_dropdown_value("player_"..i, "Player "..i, player_confed_string, true)
-                                        frosty_confeds_option:add_dropdown_value("disabled", "Disabled", "")
-
-                                        if (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture())
-                                        or (humanFactions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (humanFactions[2] == "wh2_dlc09_tmb_followers_of_nagash")
-                                        or (faction == "wh2_dlc09_tmb_khemri") or faction == "wh2_dlc09_tmb_followers_of_nagash" then 
-                                            frosty_confeds_option:set_default_value("disabled")
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                        --COMPATIBILITY BRIDGE: MIXU module 2
-                        if vfs.exists("script/campaign/mod/mixu_darkhand.lua") and mixu2_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 2 (script path might change)
-                            for _, faction in ipairs(mixu2_subcultures_factions[subculture]) do
-                                local faction_CA = cm:get_faction(faction)
-                                if faction_CA and not faction_CA:is_dead() and not faction_CA:is_human() then 
-                                    local loc_prefix = "mct_frosty_confeds_"
-                                    local player_confed_string = "Player-"..i.."Confederation with "..get_full_char_name(faction_CA:faction_leader())
-                                    local frosty_confeds_option = frosty_confeds_mod:get_option_by_key("player_faction_"..faction, "dropdown")
-                                    if frosty_confeds_option then
-                                        frosty_confeds_option:add_dropdown_value("player_"..i, "Player "..i, player_confed_string)
-                                    else
-                                        local frosty_confeds_option = frosty_confeds_mod:add_new_option("player_faction_"..faction, "dropdown")
-                                        frosty_confeds_option:set_text("Confederation with "..get_full_char_name(faction_CA:faction_leader()), false)
-                                        frosty_confeds_option:set_tooltip_text("Confederation with "..get_full_char_name(faction_CA:faction_leader()), false)
-                                        frosty_confeds_option:add_dropdown_value("player_"..i, "Player "..i, player_confed_string, true)
-                                        frosty_confeds_option:add_dropdown_value("disabled", "Disabled", "")
-
-                                        if (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture())
-                                        or (humanFactions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (humanFactions[2] == "wh2_dlc09_tmb_followers_of_nagash")
-                                        or (faction == "wh2_dlc09_tmb_khemri") or faction == "wh2_dlc09_tmb_followers_of_nagash" then 
-                                            frosty_confeds_option:set_default_value("disabled")
-                                        end
-                                    end
-                                end
-                            end
+                    else
+                        local frosty_confeds_option = frosty_confeds_mod:add_new_option(humanFactions[index].."_dynamic_"..target_faction, "checkbox")
+                        frosty_confeds_option:set_assigned_section("faction_options_"..index)
+                        frosty_confeds_option:set_default_value(true)
+                        frosty_confeds_option:set_text("Confederation with "..target_faction_loc, false)                        --get_full_char_name(faction_CA:faction_leader()
+                        frosty_confeds_option:set_tooltip_text("Confederation with "..target_faction_loc, false)                --get_full_char_name(faction_CA:faction_leader()
+                        if (humanFactions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (target_faction == "wh2_dlc09_tmb_khemri") or target_faction == "wh2_dlc09_tmb_followers_of_nagash" then 
+                            frosty_confeds_option:set_default_value(false)
                         end
                     end
                 end
-
-                pulse_uicomponent(find_uicomponent(core:get_ui_root(), "sp_frame", "menu_bar", "button_mct_options"), true, 10, false, "active")
-                ---- MCT2 Listener
-                ------------------------------------------------------------------
-                core:add_listener(
-                    "frosty_confeds_MctFinalized",
-                    "MctFinalized",
-                    true,
-                    function(context)
-                        local mct = get_mct()
-                        local frosty_confeds_mod = mct:get_mod_by_key("frosty_confeds")
-                        local settings_table = frosty_confeds_mod:get_settings() 
-                        enable_value = settings_table._01_enableorDisable
-                        zzz03_tHeatre_value = settings_table.zzz03_tHeatre
-                        zzz04_deadlyAlliances_value = settings_table.zzz04_deadlyAlliances
-                        zzz05_restriction_value = settings_table.zzz05_restriction
-
-                        pulse_uicomponent(find_uicomponent(core:get_ui_root(), "sp_frame", "menu_bar", "button_mct_options"), false, 10, false, "active")
-                        start_confeds()
-                        --set_read_only
-
-                    end,
-                    false
-                )
-                -- save game listener to force mctfinalized
             end
-        else
-            --set_read_only
-        end
 
+            if not cm:is_multiplayer() or (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture()) then
+                frosty_confeds_mod:add_new_section("faction_options_1", "Faction Options") 
+            else
+                frosty_confeds_mod:add_new_section("faction_options_1", "Faction Options - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[1]):name()))
+                frosty_confeds_mod:add_new_section("faction_options_2", "Faction Options - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[2]):name()))
+            end
+
+            for i = 1, #humanFactions do
+                local humanFaction = cm:get_faction(humanFactions[i])
+                local subculture = humanFaction:subculture()
+                if subculture ~= "wh2_dlc09_sc_tmb_tomb_kings" and subculture ~= "wh2_dlc11_sc_cst_vampire_coast" 
+                or (vfs.exists("script/campaign/mod/legendary_confeds_tk.lua") and subculture == "wh2_dlc09_sc_tmb_tomb_kings") 
+                or (vfs.exists("script/campaign/mod/legendary_confeds_cst.lua") and subculture == "wh2_dlc11_sc_cst_vampire_coast") then
+                    --ALL FACTIONS/TOMB KINGS/VAMPIRE COAST MODULE
+                    if subcultures_factions[subculture] then 
+                        for _, target_faction in ipairs(subcultures_factions[subculture]) do
+                            setup_dynamic_options(i, target_faction)
+                        end
+                    end
+                    --COMPATIBILITY BRIDGE: MIXU module
+                    if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") and mixu1_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 1 (script path might change)
+                        for _, target_faction in ipairs(mixu1_subcultures_factions[subculture]) do
+                            setup_dynamic_options(i, target_faction)
+                        end
+                    end
+                    --COMPATIBILITY BRIDGE: MIXU module 2
+                    if vfs.exists("script/campaign/mod/mixu_darkhand.lua") and mixu2_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 2 (script path might change)
+                        for _, target_faction in ipairs(mixu2_subcultures_factions[subculture]) do
+                            setup_dynamic_options(i, target_faction)
+                        end
+                    end
+                end
+            end
+
+            ---- MCT2 Listener
+            ------------------------------------------------------------------
+            core:add_listener(
+                "frosty_confeds_MctFinalized",
+                "MctFinalized",
+                true,
+                function(context)
+                    local mct = get_mct()
+                    local frosty_confeds_mod = mct:get_mod_by_key("frosty_confeds")
+                    local settings_table = frosty_confeds_mod:get_settings() 
+                    enable_value = settings_table._01_enableorDisable
+                    zzz03_tHeatre_value = settings_table.zzz03_tHeatre
+                    zzz04_deadlyAlliances_value = settings_table.zzz04_deadlyAlliances
+                    zzz05_restriction_value = settings_table.zzz05_restriction
+
+                    if enable_value then
+                        local options = frosty_confeds_mod:get_options()
+                        for option_name, option in pairs(options) do
+                            option:set_read_only(true)
+                            local human_faction_end = string.find(option_name, "_dynamic_")
+                            if human_faction_end ~= nil then
+                                human_faction = string.sub(option_name, 1, human_faction_end - 1)
+                                dynamic_string_len = string.len("_dynamic_")
+                                target_faction = string.sub(option_name, human_faction_end + dynamic_string_len)
+                                enabled_factions[target_faction] = human_faction
+                            end
+                        end
+
+                        start_confeds()
+                        core:remove_listener("frosty_confeds_MctFinalized")
+                    end
+                end,
+                true
+            )
+        else
+            if frosty_confeds_mod then
+                local options = frosty_confeds_mod:get_options()
+                for option_name, option in pairs(options) do
+                    option:set_read_only(true)
+                end
+            end
+        end
     else
         local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
 		if not tk_value or tk_value == "yield" then

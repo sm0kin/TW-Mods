@@ -1607,7 +1607,8 @@ local function apply_diplomacy(faction_name)
             end
         end
         local option = {}
-        local option_sc = {}
+        option.source = "faction:" .. faction_name        
+        option.target = "culture:" .. culture
         if confed_option_value == "free_confed" then
             option.offer = true
             option.accept = true
@@ -1632,15 +1633,17 @@ local function apply_diplomacy(faction_name)
             option.both_directions = false
             for i, subculture_confed in ipairs(subculture_confed_disabled) do
                 if subculture == subculture_confed then
-                    option_sc.offer = false
-                    option_sc.accept = false
-                    option_sc.both_directions = false
+                    option.target = "subculture:" .. subculture
+                    option.offer = false
+                    option.accept = false
+                    option.both_directions = false
                 end
             end	
-            if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then 
-                option_sc.offer = true
-                option_sc.accept = true
-                option_sc.both_directions = false            
+            if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then
+                option.target = "subculture:" .. subculture 
+                option.offer = true
+                option.accept = true
+                option.both_directions = false            
             end
             if faction:has_pooled_resource("emp_loyalty") == true then
                 option.offer = false
@@ -1648,23 +1651,21 @@ local function apply_diplomacy(faction_name)
                 option.both_directions = false
             end
             if subculture == "wh_dlc05_sc_wef_wood_elves" then
-                option_sc.accept = false
-                option_sc.both_directions = false        	
+                option.target = "subculture:" .. subculture
+                option.accept = false
+                option.both_directions = false        	
                 oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
                 if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
-                    option_sc.offer = true
+                    option.offer = true
                 else
-                    option_sc.offer = false
+                    option.offer = false
                 end  
             end
         end
         cm:callback(
             function(context)
                 if option.offer ~= nil and option.accept ~= nil and option.both_directions ~= nil then
-                    cm:force_diplomacy("faction:" .. faction_name, "culture:" .. culture, "form confederation", option.offer, option.accept, option.both_directions)
-                end
-                if option_sc.offer ~= nil and option_sc.accept ~= nil and option_sc.both_directions ~= nil then
-                    cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. subculture, "form confederation", option_sc.offer, option_sc.accept, option_sc.both_directions)
+                    cm:force_diplomacy(option.source, option.target, "form confederation", option.offer, option.accept, option.both_directions)
                 end
                 if confed_option_value == "no_tweak" or confed_option_value == nil then
                     if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
@@ -1695,7 +1696,7 @@ local function apply_diplomacy(faction_name)
                     if subculture == "wh2_main_sc_hef_high_elves" then
                         local grom_faction = cm:get_faction("wh2_dlc15_grn_broken_axe")
                         if grom_faction ~= false and grom_faction:is_human() then
-                            cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false);
+                            cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false)
                         end
                     end
                     if vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
@@ -2150,112 +2151,6 @@ local function init_recruit_defeated_listeners(enable_value)
     core:remove_listener("recruit_defeated_ScriptEventConfederationExpired")
     core:remove_listener("recruit_defeated_UITriggerScriptEvent")
     core:remove_listener("recruit_defeated_confederation_listener")
-    core:remove_listener("confederation_listener")
-    
-    --data.pack script/campaign/wh_campaign_setup.lua vanilla listener
-    core:add_listener(
-		"confederation_listener",
-		"FactionJoinsConfederation",
-		true,
-		function(context)
-			local faction = context:confederation();
-			local faction_name = faction:name();
-			local faction_culture = faction:culture();
-			local faction_subculture = faction:subculture();
-			local faction_human = faction:is_human();
-			local confederation_timeout = 5;
-			
-			-- exclude Empire, Beastmen, Norsca and Bretonnia - they can confederate as often as they like but only if they aren't AI
-			if faction_human == false or (faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and (faction_culture ~= "wh_main_brt_bretonnia" or faction_name == "wh2_dlc14_brt_chevaliers_de_lyonesse") and faction_subculture ~= "wh_main_sc_nor_norsca") then
-				if faction_human == false then
-					confederation_timeout = 10;
-				end
-
-				out("Restricting confederation between [faction:" .. faction_name .. "] and [subculture:" .. faction_subculture .. "]");
-				cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. faction_subculture, "form confederation", false, true, false);
-				cm:add_turn_countdown_event(faction_name, confederation_timeout, "ScriptEventConfederationExpired", faction_name);
-			end
-			
-			local source_faction = context:faction();
-			local source_faction_name = source_faction:name();
-			
-			-- remove deathhag after confederating/being confedrated with cult of pleasure
-			if source_faction:culture() == "wh2_main_def_dark_elves" and faction_name == "wh2_main_def_cult_of_pleasure" then
-				local char_list = faction:character_list();
-				
-				for i = 0, char_list:num_items() - 1 do
-					local current_char = char_list:item_at(i);
-					
-					if current_char:has_skill("wh2_main_skill_all_dummy_agent_actions_def_death_hag") then
-						cm:kill_character(current_char:command_queue_index(), true, true);
-					end
-				end
-			elseif faction_culture == "wh2_main_def_dark_elves" and source_faction_name == "wh2_main_def_cult_of_pleasure" then
-				local char_list = faction:character_list();
-				
-				for i = 0, char_list:num_items() - 1 do
-					local current_char = char_list:item_at(i);
-					
-					if current_char:has_skill("wh2_main_skill_all_dummy_agent_actions_def_death_hag_chs") then
-						cm:kill_character(current_char:command_queue_index(), true, true);
-					end
-				end
-			elseif faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
-				local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan");
-				
-				cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
-				cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
-
-				if defender_faction:is_null_interface() == false then
-					if defender_faction:is_dead() == true and faction:has_home_region() == true then
-						local home_region = faction:home_region():name();
-
-						local x, y = cm:find_valid_spawn_location_for_character_from_settlement(
-							"wh2_dlc13_lzd_defenders_of_the_great_plan",
-							home_region,
-							false,
-							true
-						);
-
-						cm:create_force(
-							"wh2_dlc13_lzd_defenders_of_the_great_plan",
-							"wh2_main_lzd_inf_skink_cohort_0",
-							home_region,
-							x, y,
-							true,
-							function(char_cqi, force_cqi)
-								handover_nakai_region();
-								cm:kill_character(char_cqi, true, true);
-							end
-						);
-					else
-						handover_nakai_region();
-					end
-					
-					if defender_faction:is_vassal() == false then
-						cm:force_make_vassal("wh2_dlc13_lzd_spirits_of_the_jungle", "wh2_dlc13_lzd_defenders_of_the_great_plan");
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "all", false, false, false);
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "war", false, false, true);
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "break vassal", false, false, true);
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "war", false, true, false);
-						cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "peace", false, true, false);
-					end
-				end
-	
-				cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1);
-				cm:callback(function() cm:disable_event_feed_events(false, "", "","diplomacy_treaty_negotiated_vassal") end, 1);
-			elseif source_faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
-				cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
-				cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
-
-				cm:force_confederation(faction_name, "wh2_dlc13_lzd_defenders_of_the_great_plan");
-
-				cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1);
-				cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_treaty_negotiated_vassal") end, 1);
-			end
-		end,
-		true
-	);
 
 	if enable_value then
         core:add_listener(
@@ -2676,7 +2571,7 @@ local function init_recruit_defeated_listeners(enable_value)
                     local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
                     
                     cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
-                    cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
+                    cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal")
 
                     if defender_faction:is_null_interface() == false then
                         if defender_faction:is_dead() == true and faction:has_home_region() == true then
@@ -2715,16 +2610,16 @@ local function init_recruit_defeated_listeners(enable_value)
                     end
         
                     cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1)
-                    cm:callback(function() cm:disable_event_feed_events(false, "", "","diplomacy_treaty_negotiated_vassal") end, 1);
+                    cm:callback(function() cm:disable_event_feed_events(false, "", "","diplomacy_treaty_negotiated_vassal") end, 1)
                 elseif source_faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
                     if not cm:get_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle") then
                         cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
-                        cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
+                        cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal")
         
                         cm:force_confederation(faction_name, "wh2_dlc13_lzd_defenders_of_the_great_plan")
         
                         cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1)
-                        cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_treaty_negotiated_vassal") end, 1);
+                        cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_treaty_negotiated_vassal") end, 1)
                     else
                         cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", false)
                     end
