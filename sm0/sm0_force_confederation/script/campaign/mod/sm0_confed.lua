@@ -7,22 +7,35 @@ local occupation_option_id = {
 	["1913039133"] = "wh2_sm0_sc_def_dark_elves_occupation_decision_confederate",
 	["1913039134"] = "wh2_sm0_sc_dwf_dwarfs_occupation_decision_confederate",
 	["1913039135"] = "wh2_sm0_sc_emp_empire_occupation_decision_confederate",
+	--["1913039136"] = "", -- prev grn
 	["1913039137"] = "wh2_sm0_sc_hef_high_elves_occupation_decision_confederate",
 	["1913039138"] = "wh2_sm0_sc_wef_wood_elves_occupation_decision_confederate",
 	["1913039139"] = "wh2_sm0_sc_vmp_vampire_counts_occupation_decision_confederate",
 	["1913039140"] = "wh2_sm0_sc_tmb_tomb_kings_occupation_decision_confederate",
-	["1913039141"] = "wh2_sm0_sc_teb_teb_occupation_decision_confederate"
+	["1913039141"] = "wh2_sm0_sc_teb_teb_occupation_decision_confederate",
+	["1913039142"] = "wh2_sm0_sc_vampire_coast_occupation_decision_confederate"
 } --: map<string, string>
 
+local subtype_immortality = { 
+    ["wh2_dlc09_tmb_arkhan"] = true,
+    ["wh2_dlc09_tmb_khalida"] = true,
+    ["wh2_dlc09_tmb_khatep"] = true,
+    ["wh2_dlc09_tmb_settra"] = true,
+    ["wh2_dlc11_cst_aranessa"] = true,
+    ["wh2_dlc11_cst_cylostra"] = true,
+    ["wh2_dlc11_cst_harkon"] = true,
+    ["wh2_dlc11_cst_noctilus"] = true
+} --: map<string, boolean>
+
 --v function(faction: CA_FACTION)
-local function add_tk_immortality(faction)
-	local character_list = faction:character_list()
-	for i = 0, character_list:num_items() - 1 do
-		local current_char = character_list:item_at(i)			
-		if current_char:is_wounded() and cm:char_is_general(current_char) then
-			cm:set_character_immortality(cm:char_lookup_str(current_char:command_queue_index()), true) 
-		end
-	end
+local function immortality_backup(faction)
+    local char_list = faction:character_list()
+    for i = 0, char_list:num_items() - 1 do 
+        local char = char_list:item_at(i)
+        if subtype_immortality[char:character_subtype_key()] then 
+            cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), true) 
+        end 
+    end       
 end
 
 --v function(faction: CA_FACTION)
@@ -45,10 +58,10 @@ local function force_confed(char, faction)
 	cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
 	cm:force_confederation(winner_faction_name, loser_faction_name)
 	cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
-	if char:faction():subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
+	if char:faction():subculture() == "wh2_dlc09_sc_tmb_tomb_kings" or char:faction():subculture() == "wh2_dlc11_sc_cst_vampire_coast" then
 		cm:callback(
 			function(context)
-				add_tk_immortality(char:faction())
+				immortality_backup(char:faction())
 			end, 1, "wait for character list to update"
 		)
 	end
@@ -390,6 +403,11 @@ function sm0_confed()
 			tk_value = tk_option:get_finalized_setting()
 			if tk_value == "no_tweak" then
 				cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+            end
+            local cst_value = confederation_options_mod:get_option_by_key("wh2_dlc11_cst_vampire_coast")
+			cst_value = cst_value:get_finalized_setting()
+			if tk_value == "no_tweak" then
+				cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
 			end
 			local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")
 			emp_value = emp_option:get_finalized_setting() -- no teb / kislev subculture?
@@ -401,7 +419,11 @@ function sm0_confed()
 		local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
 		if not tk_value or tk_value == "yield" then
 			cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
-		end
+        end
+        local cst_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc11_cst_vampire_coast_value")
+        if not cst_value or cst_value == "yield" then
+            cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
+        end
 		local emp_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") -- no teb / kislev subculture?
 		if (not emp_value or emp_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
 			cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
