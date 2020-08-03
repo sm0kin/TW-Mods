@@ -61,7 +61,7 @@
 --# assume MCT_OPTION.ui_lock_option: method() 	                                                                --Internal function to set the option UIC as disabled, for read-only/mp-disabled.
 --# assume MCT_OPTION.get_selected_setting: method() --> any                                                    --Getter for the current selected setting.
 --# assume MCT_OPTION.slider_set_min_max: method(min: number, max: number) 	                                    --Setter for the minimum and maximum values for the slider.
---# assume MCT_OPTION.slider_set_step_size: method(step_size: number, step_size_precision: number)              --Set function to set the step size for moving left/right through the slider. If the step size is 0.2, for instance, the precision would be 1, for one-decimal-place.)
+--# assume MCT_OPTION.slider_set_step_size: method(step_size: number, step_size_precision: number?)             --Set function to set the step size for moving left/right through the slider. If the step size is 0.2, for instance, the precision would be 1, for one-decimal-place.)
 --# assume MCT_OPTION.slider_set_precision: method(precision: number) 	                                        --Setter for the precision on the slider's displayed value. The number should be how many decimal places you want, ie. if you are using one decimal place, send 1 to this function; if you are using none, send 0.
 --# assume MCT_OPTION.add_dropdown_values: method(dropdown_table: table)                                        --Method to set the dropdown_values.
 --# assume MCT_OPTION.add_dropdown_value: method(key: string, text: string, tt: string, is_default: boolean?) 	--Used to create a single dropdown_value; also called within mct_option:add_dropdown_values

@@ -1846,6 +1846,7 @@ local function confed_revived(confederator, confederated)
                         end
                     end
                 end
+                cm:set_saved_value("rd_confed", true)
                 core:add_listener(
                     "sm0_confed_revived_FactionJoinsConfederation",
                     "FactionJoinsConfederation",
@@ -1867,6 +1868,7 @@ local function confed_revived(confederator, confederated)
                         if cqi and cm:get_character_by_cqi(cqi) then cm:kill_character(cqi, true, false) end
                         cm:callback(function() 
                             cm:kill_character(faction_leader_cqi, true, false)  
+                            cm:set_saved_value("rd_confed", false)
                         end, 0.5)  
                         --cm:kill_character_and_commanded_unit(cm:char_lookup_str(cqi), true, false)    
                         --cm:kill_character_and_commanded_unit(cm:char_lookup_str(faction_leader_cqi), true, false)  
@@ -2431,7 +2433,7 @@ local function init_recruit_defeated_listeners(enable_value)
             true,
             function(context)
                 cm:set_saved_value("sought_refuge_"..context:faction():name(), context:confederation():name())
-                sm0_log("Diplomatic/Norscan/Greenskin Confederation: "..context:confederation():name().." :confederated: "..context:faction():name())
+                if not cm:get_saved_value("rd_confed") then sm0_log("Diplomatic/Norscan/Greenskin Confederation: "..context:confederation():name().." :confederated: "..context:faction():name()) end
                 
                 --if context:confederation():subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then
                 --    local characterList = context:confederation():character_list()
@@ -2723,9 +2725,9 @@ function sm0_recruit_defeated()
 			if tk_value == "no_tweak" then
 				cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
             end
-            local cst_value = confederation_options_mod:get_option_by_key("wh2_dlc11_cst_vampire_coast")
-			cst_value = cst_value:get_finalized_setting()
-			if tk_value == "no_tweak" then
+            local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_cst_vampire_coast")
+			cst_value = cst_option:get_finalized_setting()
+			if cst_value == "no_tweak" then
 				cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
 			end
 			local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")

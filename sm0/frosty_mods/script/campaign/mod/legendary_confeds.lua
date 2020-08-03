@@ -842,9 +842,9 @@ function legendary_confeds()
                 if tk_value == "no_tweak" then
                     cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
                 end
-                local cst_value = confederation_options_mod:get_option_by_key("wh2_dlc11_cst_vampire_coast")
-                cst_value = cst_value:get_finalized_setting()
-                if tk_value == "no_tweak" then
+                local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_cst_vampire_coast")
+                cst_value = cst_option:get_finalized_setting()
+                if cst_value == "no_tweak" then
                     cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
                 end
                 local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")
