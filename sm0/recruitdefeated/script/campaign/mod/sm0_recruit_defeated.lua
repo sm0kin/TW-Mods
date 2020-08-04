@@ -1986,6 +1986,8 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
     --sm0_log("get_prefered_faction_list | preferance_type: "..tostring(preferance_type).." | faction: "..tostring(faction:name()))
     local prefered_factions = {}
     local factions_of_same_subculture = {}
+    local human_factions = cm:get_human_factions()
+
     if not is_table(faction_list) and not is_factionlist(faction_list) then
         --# assume faction_list: CA_FACTION_LIST
         faction_list = faction:factions_of_same_subculture()
@@ -2084,7 +2086,6 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     elseif preferance_type == "player" then --and (scope_value == "player" or scope_value == "player_ai") then
         -- preferance: player
-        local saved_standing = nil --:number
         if is_table(factions_of_same_subculture) then
             --# assume factions_of_same_subculture: vector<string>
             for i = 1, #factions_of_same_subculture do
@@ -2099,7 +2100,6 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     elseif preferance_type == "ai" then --and (scope_value == "ai" or scope_value == "player_ai") then
         -- preferance: ai
-        local saved_standing = nil --:number
         if is_table(factions_of_same_subculture) then
             --# assume factions_of_same_subculture: vector<string>
             for i = 1, #factions_of_same_subculture do
@@ -2110,6 +2110,20 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             end
         else
             sm0_log("preferance: ai | something went wrong")
+        end
+    elseif preferance_type == "alternate" then
+        -- preferance: player alternate (only applies to mp same subculture)
+        if is_table(factions_of_same_subculture) then
+            --# assume factions_of_same_subculture: vector<string>
+            for i = 1, #factions_of_same_subculture do
+                local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
+                if not subculture_faction:is_human() or (subculture_faction:name() == human_factions[1] and not cm:get_saved_value("faction_P1")) 
+                or (subculture_faction:name() == human_factions[2] and not cm:get_saved_value("faction_P2")) then
+                    table.insert(prefered_factions, subculture_faction:name())
+                end
+            end
+        else
+            sm0_log("preferance: alternate | something went wrong")
         end
     else
         -- preferance: nil
@@ -2313,9 +2327,9 @@ local function init_recruit_defeated_listeners(enable_value)
 
                             if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
-                                if not cm:get_saved_value("faction_P1") and confed_penalty(faction_P1) == "" and player_confederation_count <= player_confederation_limit
+                                if confed_penalty(faction_P1) == "" and player_confederation_count <= player_confederation_limit
                                 and (scope_value == "player_ai" or scope_value == "player") and (not lore_restriction_value or (lore_restriction_value 
-                                and faction_P1:name() ~= "wh2_dlc09_tmb_followers_of_nagash")) then
+                                and faction_P1:name() ~= "wh2_dlc09_tmb_followers_of_nagash")) and context:faction():name() == faction_P1:name() then
                                     if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                     if are_lords_missing(current_faction) then
                                         sm0_log("["..player_confederation_count.."] Player 1 intends to intends to spawn missing lords for: "..current_faction:name())
@@ -2330,14 +2344,14 @@ local function init_recruit_defeated_listeners(enable_value)
                                             cm:set_saved_value("faction_P1", true)
                                             cm:set_saved_value("faction_P2", false)
                                         end
+                                        player_confederation_count = player_confederation_count + 1
                                     end
-                                    player_confederation_count = player_confederation_count + 1
                                 end
                             elseif prefered_faction and cm:is_multiplayer() and not faction_P2:is_dead() and current_faction:subculture() == faction_P2:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P2:name() and prefered_faction:name() == faction_P2:name() then
-                                if not cm:get_saved_value("faction_P2") and confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit
+                                if confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit
                                 and (scope_value == "player_ai"  or scope_value == "player") and (not lore_restriction_value or (lore_restriction_value 
-                                and faction_P2:name() ~= "wh2_dlc09_tmb_followers_of_nagash")) then
+                                and faction_P2:name() ~= "wh2_dlc09_tmb_followers_of_nagash")) and context:faction():name() == faction_P2:name() then
                                     if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                     if are_lords_missing(current_faction) then
                                         sm0_log("["..player_confederation_count.."] Player 2 intends to intends to spawn missing lords for: "..current_faction:name())
@@ -2352,8 +2366,9 @@ local function init_recruit_defeated_listeners(enable_value)
                                             cm:set_saved_value("faction_P2", true)
                                             cm:set_saved_value("faction_P1", false)                                
                                         end
+                                        player_confederation_count = player_confederation_count + 1
                                     end
-                                    player_confederation_count = player_confederation_count + 1
+
                                 end
                             else --ai
                                 if scope_value == "player_ai" or scope_value == "ai" then 
@@ -2371,8 +2386,8 @@ local function init_recruit_defeated_listeners(enable_value)
                                                 else
                                                     sm0_log("["..ai_confederation_count.."] AI: "..prefered_faction:name().." intends to confederate: "..current_faction:name())
                                                     confed_revived(prefered_faction, current_faction)
+                                                    ai_confederation_count = ai_confederation_count + 1
                                                 end
-                                                ai_confederation_count = ai_confederation_count + 1
                                             --else
                                             --    if not cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) then --if not cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) then 
                                             --        cm:set_saved_value("sm0_rd_delay_"..current_faction:name(), ai_delay - 1) --cm:set_saved_value("sm0_rd_delay_"..current_faction:name(), ai_delay - 1)
@@ -2757,14 +2772,14 @@ function sm0_recruit_defeated()
             lore_restriction_value = true
         end
         scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
-        ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
+        ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 0
         preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
+        preferance2_value = "alternate"
         if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
-            preferance2_value = "major"
+            preferance3_value = "major"
         else
-            preferance2_value = "relation"
+            preferance3_value = "relation"
         end
-        preferance3_value = nil
 
         --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
         --" | lore_restriction_value = "..tostring(lore_restriction_value).." | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
@@ -2806,12 +2821,12 @@ function sm0_recruit_defeated()
                     scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
                     ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
                     preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
+                    preferance2_value = "alternate"
                     if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
-                        preferance2_value = "major"
+                        preferance3_value = "major"
                     else
-                        preferance2_value = "relation"
+                        preferance3_value = "relation"
                     end
-                    preferance3_value = nil
 
                     --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
                     --" | lore_restriction_value = "..tostring(lore_restriction_value).." | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..

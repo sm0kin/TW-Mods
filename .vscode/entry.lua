@@ -89,8 +89,9 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/lords_of_change")
 
 --ships
---require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_lokhir")
---require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_alberic")
+require("sm0/lokhir/script/campaign/mod/black_ark_lokhir")
+require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/black_ark_lokhir")
+--require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_salberic")
 --require("sm0/ships - alberic, wulfrik, lokhir/script/campaign/mod/new_wulfrik")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/new_lokhir")
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/new_alberic")
