@@ -742,10 +742,7 @@
 --# assume CA_MILITARY_FORCE.active_stance: method() --> string
 --# assume CA_MILITARY_FORCE.faction: method() --> CA_FACTION
 --# assume CA_MILITARY_FORCE.is_null_interface: method() --> boolean
-
-----# assume CA_MILITARY_FORCE.force_type: method() --> FORCE_TYPE
-
-
+--# assume CA_MILITARY_FORCE.force_type: method() --> string --FORCE_TYPE
 
 -- MILITARY FORCE LIST
 --# assume CA_MILITARY_FORCE_LIST.num_items: method() --> number

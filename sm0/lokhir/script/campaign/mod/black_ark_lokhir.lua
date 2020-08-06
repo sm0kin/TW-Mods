@@ -1,22 +1,11 @@
---local building_list = {}
-
-local function get_horde_buildings_from_ui()
-	local building_list = {}
-	local settlement_parent = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "horde_building_frame", "settlement_parent")
-	if settlement_parent then 
-		for i = 0, settlement_parent:ChildCount() - 1 do
-			local settlement_child = UIComponent(settlement_parent:Find(i))
-			if string.find(settlement_child:Id(), "building_slot_") then 
-				for j = 0, settlement_child:ChildCount() - 1 do
-					local building = UIComponent(settlement_child:Find(j))
-					table.insert(building_list, building:Id()) 					
-				end
-			end
-		end
-	end
-	if building_list == nil then out("ERROR | building_list == nil") end
-	return building_list
-end
+--# assume global reveal_all_sea_regions: function(faction_name: string)
+local ship_art_sets = {
+	["wh2_main_horde_def_settlement_1"] = "wh2_sm0_art_set_def_black_ark_lokhir_1",
+	["wh2_main_horde_def_settlement_2"] = "wh2_sm0_art_set_def_black_ark_lokhir_1",
+	["wh2_main_horde_def_settlement_3"] = "wh2_sm0_art_set_def_black_ark_lokhir_2",
+	["wh2_main_horde_def_settlement_4"] = "wh2_sm0_art_set_def_black_ark_lokhir_2",
+	["wh2_main_horde_def_settlement_5"] = "wh2_sm0_art_set_def_black_ark_lokhir_3"
+} --:map<string, string>
 
 function black_ark_lokhir()
 	if not cm:get_saved_value("black_ark_lokhir") then
@@ -33,60 +22,43 @@ function black_ark_lokhir()
 			end      
 		end
 	end
-
 	core:add_listener(
-		"black_ark_lokhir_CharacterFinishedMovingEvent",
-		"CharacterFinishedMovingEvent",
+		"black_ark_lokhir_MilitaryForceBuildingCompleteEvent",
+		"MilitaryForceBuildingCompleteEvent",
 		function(context)
-			local current_faction = cm:whose_turn_is_it()
-			return context:character():character_subtype("wh2_dlc11_def_lokhir") and current_faction == context:character():faction():name()
+			return not context:character():is_null_interface() and context:character():character_subtype_key() == "wh2_dlc11_def_lokhir"
 		end,
-		function(context)
-			local building_list = {}
-			out("sm0/CharacterFinishedMovingEvent")
-			building_list = get_horde_buildings_from_ui()
-			if context:character():is_at_sea() then
-				out("sm0/CharacterFinishedMovingEvent/is_at_sea")
-				cm:convert_force_to_type(context:character():military_force(), "SEA_LOCKED_HORDE")
-				cm:add_building_to_force(context:character():military_force():command_queue_index(), building_list)
+		function(context) 
+			local art_set = ship_art_sets[context:building()]
+			local cqi = context:character():command_queue_index()
+			if art_set and cqi then
+				cm:add_unit_model_overrides("character_cqi:"..cqi, art_set)
 			end
-			if context:character():garrison_residence():has_army() then
-				out("sm0/CharacterFinishedMovingEvent/has_army")
-			end
-			if context:character():garrison_residence():has_navy() then
-				out("sm0/CharacterFinishedMovingEvent/has_navy")
-				cm:convert_force_to_type(context:character():military_force(), "CHARACTER_BOUND_HORDE")
-				cm:add_building_to_force(context:character():military_force():command_queue_index(), building_list)			
+			if context:building() == "wh2_sm0_special_ship_lokhir_1" then
+				cm:set_saved_value("black_ark_lokhir_replenish_action_points", 4) --25%
+			elseif context:building() == "wh2_sm0_special_ship_lokhir_2" then
+				cm:set_saved_value("black_ark_lokhir_replenish_action_points", 2) --50%
+			elseif context:building() == "wh2_sm0_special_ship_lokhir_3" then
+				reveal_all_sea_regions(context:character():faction():name())
+				cm:set_saved_value("black_ark_lokhir_replenish_action_points", 1) --100%
 			end
 		end,
 		true
-	)
-	--core:add_listener(
-	--	"black_ark_lokhir_BMilitaryForceBuildingCompleteEvent",
-	--	"MilitaryForceBuildingCompleteEvent",
-	--	function(context)
-	--		return context:character():character_subtype("wh2_dlc11_def_lokhir")
-	--	end,
-	--	function(context)
-	--		out("sm0/MilitaryForceBuildingCompleteEvent/"..tostring(context:building()))
-	--		table.insert(building_list, context:building())
-	--	end,
-	--	true
-	--)
+	)	
+	core:add_listener(
+		"black_ark_lokhir_CharacterSackedSettlement",
+		"CharacterSackedSettlement",
+		function(context)
+			return not context:character():is_null_interface() and context:character():character_subtype_key() == "wh2_dlc11_def_lokhir"
+		end,
+		function(context) 
+			local cqi = context:character():command_queue_index()
+			local rnd = cm:random_number(100)
+			local settlement = context:garrison_residence():region():settlement()
+			if settlement:is_port() and cm:random_number(cm:get_saved_value("black_ark_lokhir_replenish_action_points")) == 1 then
+				cm:replenish_action_points("character_cqi:"..cqi)
+			end
+		end,
+		true
+	)	
 end
-
-
--- can't remove buildings ...
---cm:add_saving_game_callback(
---	function(context)
---		cm:save_named_value("black_ark_lokhir_building_list", building_list, context);
---	end
---)
---
---cm:add_loading_game_callback(
---	function(context)
---		if not cm:is_new_game() then
---			building_list = cm:load_named_value("black_ark_lokhir_building_list", building_list, context)
---		end
---	end
---)
