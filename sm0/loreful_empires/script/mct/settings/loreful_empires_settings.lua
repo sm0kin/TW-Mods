@@ -9,7 +9,7 @@ enable:set_default_value(true)
 enable:set_text(loc_prefix.."a_enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."a_enable_tt", true)
 
-loreful_empires:add_new_section("advanced_options", "Advanced - Options")
+loreful_empires:add_new_section("advanced_options", mct_loreful_empires_.."advanced_options", true)
 
 local autoconfed = loreful_empires:add_new_option("a_autoconfed", "checkbox")
 autoconfed:set_default_value(false)

@@ -1,3 +1,4 @@
+--# assume mct: MCT
 local loc_prefix = "mct_abandon_region_"
 local abandon_region = mct:register_mod("abandon_region")
 abandon_region:set_title(loc_prefix.."mod_title", true)
@@ -17,7 +18,7 @@ delay:set_tooltip_text(loc_prefix.."b_delay_tt", true)
 delay:add_dropdown_value("instant", "No delay", "Regions can be abandoned instantly.")
 delay:add_dropdown_value("one_turn", "One Turn", "Abandoning a region takes one turn.")
 
-abandon_region:add_new_section("po_penalty_options", loc_prefix.."section_po_penalty_options") --"Public Order - Options"
+abandon_region:add_new_section("po_penalty_options", loc_prefix.."section_po_penalty_options", true)
 
 local penalty = abandon_region:add_new_option("a_penalty", "checkbox")
 penalty:set_default_value(true)

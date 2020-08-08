@@ -20,7 +20,7 @@
 --MCT_MOD
 --mct_mod:new (key) 	                                                                                          --For internal use, called by the MCT Manager.
 --# assume MCT_MOD.get_settings: method() --> map<string, any >                                                 --Returns the finalized_settings field of this mct_mod.
---# assume MCT_MOD.add_new_section: method(section_key: string, localised_name: string) 	                      --Add a new section to the mod's settings view, to separate them into several categories.
+--# assume MCT_MOD.add_new_section: method(section_key: string, localised_name: string, is_localised: boolean?) --Add a new section to the mod's settings view, to separate them into several categories.
 --# assume MCT_MOD.get_options_by_section: method(section_key: string) --> map<string, MCT_OPTION>              --Returns a k/v table of {optionkey=optionobj} for options that are linked to this section.
 --# assume MCT_MOD.get_sections: method() --> map<string, string>	                                              --Returns a table of all "sections" within the mct_mod.
 --# assume MCT_MOD.get_section_by_key: method(section_key: string) --> MCT_SECTION 	                            --Return a specific section within the mct_mod.
@@ -72,7 +72,7 @@
 --# assume MCT_OPTION.get_tooltip_text: method() --> string                                                     --Getter for this option's text.
 
 -- GLOBAL VARIABLES
---# assume global mct: MCT
+----# assume global mct: MCT
     
 --[[
                                                .--.

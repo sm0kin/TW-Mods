@@ -1,3 +1,4 @@
+--# assume mct: MCT
 local loc_prefix = "mct_force_confederation_"
 local force_confed = mct:register_mod("force_confed")
 force_confed:set_title(loc_prefix.."mod_title", true)

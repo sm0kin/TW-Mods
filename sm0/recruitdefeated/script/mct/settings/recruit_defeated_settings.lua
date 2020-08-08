@@ -1,3 +1,4 @@
+--# assume mct: MCT
 local loc_prefix = "mct_recruit_defeated_"
 local recruit_defeated = mct:register_mod("recruit_defeated")
 recruit_defeated:set_title(loc_prefix.."mod_title", true)
@@ -9,7 +10,7 @@ enable:set_default_value(true)
 enable:set_text(loc_prefix.."a_enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."a_enable_tt", true)
 
-recruit_defeated:add_new_section("restrictions", loc_prefix.."section_restrictions")
+recruit_defeated:add_new_section("restrictions", loc_prefix.."section_restrictions", true)
 
 local lore_restriction = recruit_defeated:add_new_option("b_lore_restriction", "checkbox")
 lore_restriction:set_default_value(false)
@@ -33,7 +34,7 @@ ai_delay:slider_set_min_max(0, 200)
 ai_delay:set_default_value(50)
 ai_delay:slider_set_step_size(5)
 
-recruit_defeated:add_new_section("preferences", loc_prefix.."section_preferences")
+recruit_defeated:add_new_section("preferences", loc_prefix.."section_preferences", true)
 
 local preferance1 = recruit_defeated:add_new_option("a_preferance1", "dropdown")
 preferance1:set_text(loc_prefix.."a_preferance1_txt", true)
@@ -71,7 +72,7 @@ preferance3:add_dropdown_value("met", "Prefer Factions met", "")
 preferance3:add_dropdown_value("relation", "Relation based", "", true)
 preferance3:add_dropdown_value("alternate", "Dilemma alternates (MP only)", "Dilemma alternates between Players of the same subculture (applies to MP only)")
 
-recruit_defeated:add_new_section("specific_restriction", loc_prefix.."section_specific_restriction")
+recruit_defeated:add_new_section("specific_restriction", loc_prefix.."section_specific_restriction", true)
 
 --Defines whether defeated Lords/Heroes can join any faction of the same subculture or if they are restricted from joining factions that make little to no sense considering their background.
 --||Restrictions are in place for the following factions: 

@@ -1,3 +1,4 @@
+--# assume mct: MCT
 local loc_prefix = "mct_lost_factions_"
 local lost_factions = mct:register_mod("lost_factions")
 lost_factions:set_title(loc_prefix.."mod_title", true)
@@ -9,12 +10,11 @@ enable:set_default_value(true)
 enable:set_text(loc_prefix.."enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."enable_tt", true)
 
-lost_factions:add_new_section("lost_factions_options", loc_prefix.."section_options") 
+lost_factions:add_new_section("lost_factions_options", loc_prefix.."section_options", true) 
 
 local options_list = {
     "amazon",
     "araby",
-    "silver",
     "blood_dragon",
     "citadel",
     "halflings",

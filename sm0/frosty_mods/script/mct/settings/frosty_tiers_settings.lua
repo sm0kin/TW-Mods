@@ -1,3 +1,4 @@
+--# assume mct: MCT
 local loc_prefix = "mct_frosty_tiers_"
 local frosty_tiers = mct:register_mod("frosty_tiers")
 frosty_tiers:set_title(loc_prefix.."mod_title", true) --"Higher Starting Tier: Capitals & Hordes"
@@ -61,7 +62,7 @@ local dropdown_options = {
     }
 }
 
-frosty_tiers:add_new_section("settlement_options", loc_prefix.."section_settlement_options") --"Settlement - Options"
+frosty_tiers:add_new_section("settlement_options", loc_prefix.."section_settlement_options", true) 
 
 _01_enableorDisable:add_option_set_callback(
     function(option) 
@@ -99,6 +100,6 @@ for i = 1, #options_list do
     end
 end
 
-frosty_tiers:add_new_section("horde_options", loc_prefix.."section_horde_options") --"Horde - Options"
+frosty_tiers:add_new_section("horde_options", loc_prefix.."section_horde_options", true)
 local horde_option = frosty_tiers:get_option_by_key("_04_hordeTier")
 horde_option:set_assigned_section("horde_options")

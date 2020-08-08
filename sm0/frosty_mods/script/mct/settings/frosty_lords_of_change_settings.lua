@@ -1,3 +1,4 @@
+--# assume mct: MCT
 local loc_prefix = "mct_lords_of_change_"
 local lords_of_change = mct:register_mod("lords_of_change")
 lords_of_change:set_title(loc_prefix.."mod_title", true)
@@ -9,7 +10,7 @@ enable:set_default_value(true)
 enable:set_text(loc_prefix.."a_enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."a_enable_tt", true)
 
-lords_of_change:add_new_section("advanced_options", "Advanced - Options")
+lords_of_change:add_new_section("advanced_options", mct_lords_of_change_.."section_advanced_options", true)
 
 local which_bird = lords_of_change:add_new_option("a_which_bird", "dropdown")
 which_bird:set_text(loc_prefix.."a_which_bird_txt", true)

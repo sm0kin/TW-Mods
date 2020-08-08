@@ -1,3 +1,4 @@
+--# assume mct: MCT
 local loc_prefix = "mct_frosty_confeds_"
 local frosty_confeds = mct:register_mod("frosty_confeds")
 frosty_confeds:set_title(loc_prefix.."mod_title", true) --"Higher Starting Tier: Capitals & Hordes"
@@ -9,7 +10,7 @@ _01_enableorDisable:set_default_value(true)
 _01_enableorDisable:set_text(loc_prefix.."_01_enableorDisable_txt", true) --"Mod Enable"
 _01_enableorDisable:set_tooltip_text(loc_prefix.."_01_enableorDisable_tt", true) --"Enables or disables the mod."
 
-frosty_confeds:add_new_section("advanced_options", loc_prefix.."section_advanced_options") 
+frosty_confeds:add_new_section("advanced_options", loc_prefix.."section_advanced_options", true) 
 
 local zzz03_tHeatre = frosty_confeds:add_new_option("zzz03_tHeatre", "checkbox")
 zzz03_tHeatre:set_default_value(false)

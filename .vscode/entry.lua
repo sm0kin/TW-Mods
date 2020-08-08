@@ -183,7 +183,7 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/sm0_ai_exp")
 
 --shaky
---require("sm0/lost_factions/script/campaign/mod/!ovn_me_lost_factions_start")
---require("sm0/lost_factions/script/campaign/mod/!ovn_vor_lost_factions_start")
---require("sm0/lost_factions/script/campaign/mod/sr_chaos")
---require("sm0/lost_factions/script/mct/settings/lost_factions_settings")
+require("sm0/lost_factions/script/campaign/mod/!ovn_me_lost_factions_start")
+require("sm0/lost_factions/script/campaign/mod/!ovn_vor_lost_factions_start")
+require("sm0/lost_factions/script/campaign/mod/sr_chaos")
+require("sm0/lost_factions/script/mct/settings/lost_factions_settings")

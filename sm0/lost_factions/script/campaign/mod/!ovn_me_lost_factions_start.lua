@@ -1,6 +1,7 @@
 local new_forces_file = require("script/ovn_tables/new_forces")
 local new_forces = new_forces_file["main_warhammer"]
 
+local mct = core:get_static_object("mod_configuration_tool")
 local settings_table --:map<string, WHATEVER>
 local factions = {}
 

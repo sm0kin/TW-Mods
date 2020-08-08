@@ -9,11 +9,11 @@ enable:set_default_value(true)
 enable:set_text(loc_prefix.."enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."enable_tt", true)
 
-sr:add_new_section("sr_options", loc_prefix.."section_options") 
+sr:add_new_section("sr_options", loc_prefix.."section_options", true) 
+
 local options_list = {
     "vampcolony",
     "worldroots",
-    --"ovn_sightseeing",
     "crusade_plus",
     "delfcolonies",
     "dwarfcolonies",
