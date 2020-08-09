@@ -9,7 +9,7 @@ enable:set_default_value(true)
 enable:set_text(loc_prefix.."a_enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."a_enable_tt", true)
 
-obr:add_new_section("respec_options", loc_prefix.."section_respec_options")
+obr:add_new_section("respec_options", loc_prefix.."section_respec_options", true)
 
 local limit = obr:add_new_option("a_limit", "checkbox")
 limit:set_default_value(true)
