@@ -1521,28 +1521,9 @@ end
 local function lord_event(confederator, character, agents)
     for _, agent in ipairs(agents) do
         local subtype = agent.subtype
+        local faction = cm:get_faction(confederator)
         if subtype == character:character_subtype_key() and (not is_string(agent.dlc) or (is_string(agent.dlc) and cm:is_dlc_flag_enabled(agent.dlc))) then
-            local picture = faction_event_picture[confederator]
-            if not is_number(picture) then 
-                picture = subculture_event_picture[cm:get_faction(confederator):subculture()] 
-            end
-            local char_type = "legendary_lord"
-            if cm:char_is_agent(character) then char_type = "legendary_hero" end
-            --sm0_log("Faction event picture | Number: "..tostring(picture))
-            --sm0_log("Faction event Title 1: "..effect.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
-            --sm0_log("Faction event Title 2: "..effect.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
-            --sm0_log("Faction event Description: "..effect.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))
-            if picture and effect.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
-            and effect.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
-                cm:show_message_event(
-                    confederator,
-                    "event_feed_strings_text_title_event_" .. char_type .. "_available",
-                    "event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked",
-                    "event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked",
-                    true,
-                    picture
-                )
-            end
+            CampaignUI.TriggerCampaignScriptEvent(faction:command_queue_index(), "RD|"..tostring(character:command_queue_index())..":"..subtype)
         end
     end    
 end
@@ -2497,16 +2478,43 @@ local function init_recruit_defeated_listeners(enable_value)
                 return context:trigger():starts_with("RD|")
             end,
             function(context)
+                local faction_cqi = context:faction_cqi()
                 local str = context:trigger() --:string
                 local info = string.gsub(str, "RD|", "")
-                local cqi_end = string.find(info, ":")
-                local cqi = string.sub(info, 1, cqi_end - 1) 
-                local anc = string.sub(info, cqi_end + 1)
-                --# assume cqi: CA_CQI
-                local character = cm:get_character_by_cqi(cqi)
-                cm:disable_event_feed_events(true, "", "", "character_ancillary_gained")
-                cm:force_add_ancillary(character, anc, true, false) 
-                cm:disable_event_feed_events(false, "", "", "character_ancillary_gained")
+                local char_cqi_end = string.find(info, ":")
+                local char_cqi = string.sub(info, 1, char_cqi_end - 1) 
+                local subtype = string.sub(info, char_cqi_end + 1)
+                --# assume char_cqi: CA_CQI
+                local character = cm:get_character_by_cqi(char_cqi)
+                local confederator
+                local human_factions = cm:get_human_factions()
+                for i = 1, #human_factions do
+                    local human_faction = cm:get_faction(human_factions[i])
+                    if human_faction:command_queue_index() == faction_cqi then
+                        confederator = human_factions[i]
+                    end
+                end
+                local picture = faction_event_picture[confederator]
+                if not is_number(picture) then 
+                    picture = subculture_event_picture[cm:get_faction(confederator):subculture()] 
+                end
+                local char_type = "legendary_lord"
+                if cm:char_is_agent(character) then char_type = "legendary_hero" end
+                --sm0_log("Faction event picture | Number: "..tostring(picture))
+                --sm0_log("Faction event Title 1: "..effect.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
+                --sm0_log("Faction event Title 2: "..effect.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
+                --sm0_log("Faction event Description: "..effect.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))
+                if picture and effect.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
+                and effect.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
+                    cm:show_message_event(
+                        confederator,
+                        "event_feed_strings_text_title_event_" .. char_type .. "_available",
+                        "event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked",
+                        "event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked",
+                        true,
+                        picture
+                    )
+                end
             end,
             true
         )
