@@ -7,6 +7,8 @@ local ship_art_sets = {
 	["wh2_main_horde_def_settlement_5"] = "wh2_sm0_art_set_def_black_ark_lokhir_3"
 } --:map<string, string>
 
+local movement_correction_value = true
+
 --v function(char: CA_CHAR)
 local function respawn_character_with_army(char)
 	local subtype = char:character_subtype_key()
@@ -61,6 +63,53 @@ local function respawn_character_with_army(char)
         out("ERROR | respawn_character_with_army - Something went wrong.")
     end
 end
+--v function(char: CA_CHAR)
+local function manage_naval_movement_range(char)
+	local custom_upkeep_bundle = cm:create_new_custom_effect_bundle("wh_sm0_increased_movement_range")
+	custom_upkeep_bundle:set_duration(-1)
+	local additional_range
+	if cm:get_saved_value("black_ark_lokhir_replenish_action_points") == 4 then -- == "wh2_sm0_special_ship_lokhir_1"
+		custom_upkeep_bundle:add_effect("wh_sm0_effect_force_all_naval_movement_range", "force_to_force_own", 10)
+		additional_range = 0.1
+	elseif cm:get_saved_value("black_ark_lokhir_replenish_action_points") == 2 then -- == "wh2_sm0_special_ship_lokhir_1"
+		custom_upkeep_bundle:add_effect("wh_sm0_effect_force_all_naval_movement_range", "force_to_force_own", 15)
+		additional_range = 0.15
+	elseif cm:get_saved_value("black_ark_lokhir_replenish_action_points") == 1 then -- == "wh2_sm0_special_ship_lokhir_1"
+		custom_upkeep_bundle:add_effect("wh_sm0_effect_force_all_naval_movement_range", "force_to_force_own", 20)
+		additional_range = 0.2
+	end
+	if char:is_at_sea() then
+		if not char:military_force():has_effect_bundle("wh_sm0_increased_movement_range") then
+			cm:callback(function()
+				cm:apply_custom_effect_bundle_to_force(custom_upkeep_bundle, char:military_force())
+				if cm:get_saved_value("sm0_movement_range_correction_sea_needed") and movement_correction_value then 
+					--out("sm0/SEA/action_points_remaining_percent = "..tostring(char:action_points_remaining_percent()))
+					--out("sm0/SEA/additional_range = "..tostring(additional_range))
+					--out("sm0/SEA/movement_correction = "..tostring(movement_correction))
+					local movement_correction = (char:action_points_remaining_percent() / 100) + additional_range
+					cm:replenish_action_points("character_cqi:"..char:command_queue_index(), movement_correction)
+					cm:set_saved_value("sm0_movement_range_correction_sea", false)
+					cm:set_saved_value("sm0_movement_range_correction_land", true)
+				end
+			end, 0.1)
+		end
+	else
+		cm:remove_effect_bundle_from_characters_force("wh_sm0_increased_movement_range", char:command_queue_index())
+		--if not cm:get_saved_value("sm0_movement_range_correction_land_needed") and char:faction():is_human() and movement_correction_value then
+		--	cm:callback(function()
+		--		out("sm0/LAND/action_points_remaining_percent = "..tostring(char:action_points_remaining_percent()))
+		--		out("sm0/LAND/additional_range = "..tostring(additional_range))
+		--		out("sm0/LAND/movement_correction = "..tostring(movement_correction))
+		--		local movement_correction = (char:action_points_remaining_percent() / 100) - additional_range
+		--		if movement_correction > 0 then 
+		--		cm:replenish_action_points("character_cqi:"..char:command_queue_index(), movement_correction)
+		--		end
+		--		cm:set_saved_value("sm0_movement_range_correction_land", false)
+		--		cm:set_saved_value("sm0_movement_range_correction_sea", true)
+		--	end, 0.1)
+		--end
+	end
+end
 
 function black_ark_lokhir()
 	if not cm:get_saved_value("black_ark_lokhir") then
@@ -96,11 +145,14 @@ function black_ark_lokhir()
 			end
 			if context:building() == "wh2_sm0_special_ship_lokhir_1" then
 				cm:set_saved_value("black_ark_lokhir_replenish_action_points", 4) --25%
+				manage_naval_movement_range(context:character())
 			elseif context:building() == "wh2_sm0_special_ship_lokhir_2" then
 				cm:set_saved_value("black_ark_lokhir_replenish_action_points", 2) --50%
+				manage_naval_movement_range(context:character())
 			elseif context:building() == "wh2_sm0_special_ship_lokhir_3" then
 				reveal_all_sea_regions(context:character():faction():name())
 				cm:set_saved_value("black_ark_lokhir_replenish_action_points", 1) --100%
+				manage_naval_movement_range(context:character())
 			end
 		end,
 		true
@@ -138,4 +190,33 @@ function black_ark_lokhir()
 		end,
 		true
 	)	
+	core:add_listener(
+		"black_ark_lokhir_CharacterFinishedMovingEvent",
+		"CharacterFinishedMovingEvent",
+		function(context)
+			local current_faction = cm:whose_turn_is_it()
+			return context:character():character_subtype("wh2_dlc11_def_lokhir") and current_faction == context:character():faction():name()
+		end,
+		function(context)
+			manage_naval_movement_range(context:character())
+		end,
+		true
+	)
+	core:add_listener(
+		"black_ark_lokhir_CCharacterTurnStart",
+		"CharacterTurnStart",
+		function(context)
+			return context:character():character_subtype("wh2_dlc11_def_lokhir")
+		end,
+		function(context)
+			if context:character():is_at_sea() then 
+				cm:set_saved_value("sm0_movement_range_correction_sea_needed", false) 
+				cm:set_saved_value("sm0_movement_range_correction_land", true)
+			else
+				cm:set_saved_value("sm0_movement_range_correction_sea_needed", true) 
+				cm:set_saved_value("sm0_movement_range_correction_land", false)
+			end
+		end,
+		true
+	)
 end

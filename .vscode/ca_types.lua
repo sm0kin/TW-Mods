@@ -322,7 +322,7 @@
 --# assume CM.set_character_unique: method(lookup: string, unique: boolean)
 --# assume CM.kill_all_armies_for_faction: method(factionName: CA_FACTION)
 --# assume CM.teleport_to: method(character_lookup: string, xPos: number, yPos: number, useCommandQueue: boolean)
---# assume CM.replenish_action_points: method(lookup: string) -- A unary AP proportion (0-1) may optionally be specified.
+--# assume CM.replenish_action_points: method(lookup: string, proportion: number?) -- A unary AP proportion (0-1) may optionally be specified.
 --# assume CM.stop_character_convalescing: method(character_cqi: CA_CQI)
 --# assume CM.cancel_actions_for: method(character_lookup: string)
 --# assume CM.convert_force_to_type: method(military_force: CA_MILITARY_FORCE, force_type: string)
@@ -837,6 +837,8 @@
 --# assume CA_GARRISON_RESIDENCE.faction: method() --> CA_FACTION
 --# assume CA_GARRISON_RESIDENCE.is_under_siege: method() --> boolean
 --# assume CA_GARRISON_RESIDENCE.settlement_interface: method() --> CA_SETTLEMENT
+--# assume CA_GARRISON_RESIDENCE.has_army: method() --> boolean
+--# assume CA_GARRISON_RESIDENCE.has_navy: method() --> boolean
 --# assume CA_GARRISON_RESIDENCE.army: method() --> CA_MILITARY_FORCE
 --# assume CA_GARRISON_RESIDENCE.command_queue_index: method() --> CA_CQI
 --# assume CA_GARRISON_RESIDENCE.unit_count: method() --> number
