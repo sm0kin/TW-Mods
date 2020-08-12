@@ -315,13 +315,13 @@
 --More character commands
 --# assume CM.disable_movement_for_character: method(lookup: string)
 --# assume CM.add_experience_to_units_commanded_by_character: method(char_lookup_str: string, level: int) --add_experience_to_units_commanded_by_character("faction:f,type:t,ability:a,surname:s,forename:f,garrison:g,x:1,y:2,r:3", level)
---# assume CM.kill_character: method(lookup: CA_CQI | string, kill_army: boolean, throughcq: boolean)
---# assume CM.kill_character_and_commanded_unit: method(lookup: CA_CQI | string, kill_army: boolean, throughcq: boolean)
---# assume CM.wound_character: method(lookup: CA_CQI | string, turns: number, throughcq: boolean)
+--# assume CM.kill_character: method(char_cqi: CA_CQI | string, kill_army: boolean, throughcq: boolean)
+--# assume CM.kill_character_and_commanded_unit: method(char_cqi: CA_CQI | string, kill_army: boolean, throughcq: boolean)
+--# assume CM.wound_character: method(char_cqi: CA_CQI | string, turns: number, throughcq: boolean)
 --# assume CM.set_character_immortality: method(lookup: string, immortal: boolean)
 --# assume CM.set_character_unique: method(lookup: string, unique: boolean)
 --# assume CM.kill_all_armies_for_faction: method(factionName: CA_FACTION)
---# assume CM.teleport_to: method(charString: string, xPos: number, yPos: number, useCommandQueue: boolean)
+--# assume CM.teleport_to: method(character_lookup: string, xPos: number, yPos: number, useCommandQueue: boolean)
 --# assume CM.replenish_action_points: method(lookup: string) -- A unary AP proportion (0-1) may optionally be specified.
 --# assume CM.stop_character_convalescing: method(character_cqi: CA_CQI)
 --# assume CM.cancel_actions_for: method(character_lookup: string)

@@ -274,11 +274,11 @@ local blacklisted_subtypes = {
 	"cst_bloodline_dreng_gunddadrak",
 	"cst_bloodline_khoskog",
 	-- bug fixes
-	"wh2_dlc09_tmb_tomb_king",
-	"tmb_liche_high_priest_death",
-	"tmb_liche_high_priest_light",
-	"tmb_liche_high_priest_nehekhara",
-	"tmb_liche_high_priest_shadow"
+	--"wh2_dlc09_tmb_tomb_king",
+	--"tmb_liche_high_priest_death",
+	--"tmb_liche_high_priest_light",
+	--"tmb_liche_high_priest_nehekhara",
+	--"tmb_liche_high_priest_shadow"
 } --:vector<string>
 
 local immortal_subtypes = {
@@ -378,17 +378,17 @@ local function create_trash_ui()
 	if units_dropdown:Find("trash_bin_button") then 
 		local trash_bin_button = UIComponent(units_dropdown:Find("trash_bin_button"))
 		delete_UIC(trash_bin_button)
-		core:remove_listener("sm0_trash_bin_button")
+		core:remove_listener("sm0_delete_trash_bin_button_ComponentLClickUp")
 	end
 	if units_dropdown:Find("cross_trash_button") then 
 		local cross_trash_button = UIComponent(units_dropdown:Find("cross_trash_button"))
 		delete_UIC(cross_trash_button)
-		core:remove_listener("sm0_cross_trash_button")
+		core:remove_listener("sm0_delete_cross_trash_button_ComponentLClickUp")
 	end
 	if units_dropdown:Find("check_trash_button") then 
 		local check_trash_button = UIComponent(units_dropdown:Find("check_trash_button"))
 		delete_UIC(check_trash_button)
-		core:remove_listener("sm0_check_trash_button")
+		core:remove_listener("sm0_delete_check_trash_button_ComponentLClickUp")
 	end
 	local reference_title = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "units_dropdown", "panel", "tx_title")
 	local sort_type = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "units_dropdown", "panel", "panel_clip", "sortable_list_units", "headers", "sort_type")
@@ -419,13 +419,16 @@ local function create_trash_ui()
 		local character_row_len = string.len("character_row_")
 		local cqi_string = string.sub(character_row:Id(), character_row_len + 1) 
 		--sm0_log("sm0/cqi: "..tostring(cqi_string))
-		local reference_uic = find_uicomponent(character_row, "indent_parent", "icon_wounded")
+		local reference_uic = find_uicomponent(character_row, "indent_parent", "soldiers")
 		local reference_uic_W, reference_uic_H = reference_uic:Bounds()
 		local reference_uic_X, reference_uic_Y = reference_uic:Position()
+		local reference_uic_2 = find_uicomponent(character_row, "indent_parent", "icon_wounded") 
+		local reference_uic_2_X, reference_uic_2_Y = reference_uic_2:Position()
+
 		if character_row:Find("checkbox_toggle_"..cqi_string) then 
 			local checkbox_toggle = UIComponent(character_row:Find("checkbox_toggle_"..cqi_string))
 			delete_UIC(checkbox_toggle)
-			core:remove_listener("sm0_checkbox_toggle_"..cqi_string)
+			core:remove_listener("sm0_delete_checkbox_toggle_"..cqi_string.."_ComponentLClickUp")
 		end
 		character_row:CreateComponent("checkbox_toggle_"..cqi_string, "ui/templates/checkbox_toggle")
 		local checkbox_toggle = UIComponent(character_row:Find("checkbox_toggle_"..cqi_string))
@@ -435,9 +438,11 @@ local function create_trash_ui()
 		checkbox_toggle:SetCanResizeWidth(true)
 		checkbox_toggle:Resize(trash_bin_button_W, trash_bin_button_H)
 		local checkbox_toggle_W, checkbox_toggle_H = checkbox_toggle:Bounds()
-		checkbox_toggle:MoveTo(reference_uic_X - reference_uic_W - 2, reference_uic_Y + reference_uic_H / 2 - checkbox_toggle_H / 2)
+		checkbox_toggle:MoveTo(reference_uic_X + reference_uic_W / 2 - checkbox_toggle_W / 2 - 5, reference_uic_2_Y + reference_uic_H/2 + 1)
+		reference_uic:MoveTo(reference_uic_X, reference_uic_2_Y - reference_uic_H/2 - 1)
+
 		core:add_listener(
-			"sm0_checkbox_toggle_"..cqi_string,
+			"sm0_delete_checkbox_toggle_"..cqi_string.."_ComponentLClickUp",
 			"ComponentLClickUp",
 			function(context)
 				return context.string == "checkbox_toggle_"..cqi_string
@@ -513,7 +518,7 @@ local function create_trash_ui()
 		end
 	end
 	core:add_listener(
-		"sm0_trash_bin_button",
+		"sm0_delete_trash_bin_button_ComponentLClickUp",
 		"ComponentLClickUp",
 		function(context)
 			return context.string == "trash_bin_button"
@@ -537,7 +542,7 @@ local function create_trash_ui()
 				cross_trash_button:SetTooltipText(cross_trash_button_hover, "", false) 
 				cross_trash_button:SetState("active")
 				core:add_listener(
-					"sm0_cross_trash_button",
+					"sm0_delete_cross_trash_button_ComponentLClickUp",
 					"ComponentLClickUp",
 					function(context)
 						return context.string == "cross_trash_button"
@@ -590,13 +595,14 @@ local function create_trash_ui()
 				end
 
 				core:add_listener(
-					"sm0_check_trash_button",
+					"sm0_delete_check_trash_button_ComponentLClickUp",
 					"ComponentLClickUp",
 					function(context)
 						return context.string == "check_trash_button"
 					end,
 					function(context)
 						--cm:autosave_at_next_opportunity()
+						local delay = 0.1
 						local list_box = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "units_dropdown", "panel", "panel_clip", "sortable_list_units", "list_clip", "list_box")
 						for i = 0, list_box:ChildCount() - 1 do
 							local character_row = UIComponent(list_box:Find(i))
@@ -616,7 +622,12 @@ local function create_trash_ui()
 										break
 									end
 								end
-								if not is_blacklisted then CampaignUI.TriggerCampaignScriptEvent(cqi, "sm0_delete|") end
+								if not is_blacklisted then 
+									cm:callback(function()
+										CampaignUI.TriggerCampaignScriptEvent(cqi, "sm0_delete|")
+									end, delay)
+								end
+								delay = delay + 0.1
 							end
 						end
 						local cross_trash_button = UIComponent(units_dropdown:Find("cross_trash_button"))
@@ -644,9 +655,42 @@ function sm0_delete()
 		sm0_log_reset()
 		cm:set_saved_value("sm0_log_reset", true)
 	end
-	if not cm:get_saved_value("sm0_immortal_count") then cm:set_saved_value("sm0_immortal_count", 0) end
+
+	-- TESTCODE: Use CharacterConvalescedOrKilled/stop_character_convalescing bug to delete characters
+	-- multiplayer listener
+    core:add_listener(
+        "sm0_delete_UITriggerScriptEvent",
+        "UITriggerScriptEvent",
+        function(context)
+            return context:trigger():starts_with("sm0_delete|")
+        end,
+		function(context)
+			local cqi = context:faction_cqi()
+			local char_lookup = cm:char_lookup_str(cqi)
+			local character = cm:get_character_by_cqi(cqi)
+			cm:disable_event_feed_events(true, "", "", "character_ready_for_duty")
+			sm0_log("sm0_delete_UITriggerScriptEvent | "..char_lookup)
+			core:add_listener(
+				"sm0_delete_CharacterConvalescedOrKilled",
+				"CharacterConvalescedOrKilled",
+				function(context)
+					return true 
+				end,
+					function(context)
+					sm0_log("sm0_delete_CharacterConvalescedOrKilled | "..char_lookup)
+					cm:stop_character_convalescing(cqi)
+					cm:callback(function() cm:disable_event_feed_events(false, "", "", "character_ready_for_duty") end, 10)
+				end,
+				false
+			)
+			cm:kill_character(cqi, false, true)
+        end,
+        true
+	)
+	--TESTCODE: end
+
 	core:add_listener(
-		"units_dropdown_PanelOpenedCampaign",
+		"sm0_delete_units_dropdown_PanelOpenedCampaign",
 		"PanelOpenedCampaign",
 		function(context)		
 			return true --appoint_new_general
@@ -667,7 +711,7 @@ function sm0_delete()
 		true
 	)
 	core:add_listener(
-		"units_dropdown_PanelClosedCampaign",
+		"sm0_delete_units_dropdown_PanelClosedCampaign",
 		"PanelClosedCampaign",
 		function(context)		
 			return true --appoint_new_general
@@ -688,7 +732,7 @@ function sm0_delete()
 		true
 	)
 	core:add_listener(
-		"units_dropdown_ComponentLClickUp",
+		"sm0_delete_units_dropdown_ComponentLClickUp",
 		"ComponentLClickUp",
 		function(context)
 			return context.string == "tab_units"
@@ -707,6 +751,9 @@ function sm0_delete()
 		end,
 		true
 	)
+	
+	--[[
+	if not cm:get_saved_value("sm0_immortal_count") then cm:set_saved_value("sm0_immortal_count", 0) end
 	-- multiplayer listener
     core:add_listener(
         "sm0_delete_UITriggerScriptEvent",
@@ -726,7 +773,7 @@ function sm0_delete()
     )
 	-- immortality skill
 	core:add_listener(
-		"sm0_immortal_CharacterSkillPointAllocated",
+		"sm0_delete_immortal_CharacterSkillPointAllocated",
 		"CharacterSkillPointAllocated",
 		function(context)
 			return (context:skill_point_spent_on() == "wh2_dlc09_skill_tmb_hidden_king_title"
@@ -747,7 +794,7 @@ function sm0_delete()
 		true
 	)
 	core:add_listener(
-		"sm0_immortal_skill_CharacterCreated",
+		"sm0_delete_immortal_skill_CharacterCreated",
 		"CharacterCreated",
 		function(context)
 			return context:character():has_skill("wh2_dlc09_skill_tmb_hidden_king_title")
@@ -774,7 +821,7 @@ function sm0_delete()
 	)
 	-- turn 1 immortality
 	core:add_listener(
-		"sm0_immortal_FactionTurnStart",
+		"sm0_delete_immortal_FactionTurnStart",
 		"FactionTurnStart",
 		function(context)
 			local human_factions = cm:get_human_factions()
@@ -807,7 +854,7 @@ function sm0_delete()
 	)
 	-- immortality tech
 	core:add_listener(
-		"sm0_immortal_tech_ResearchCompleted",
+		"sm0_delete_immortal_tech_ResearchCompleted",
 		"ResearchCompleted",
 		function(context)
 			return context:faction():name() == "wh2_dlc13_lzd_spirits_of_the_jungle" or context:faction():subculture() == "wh_main_sc_nor_norsca"
@@ -843,7 +890,7 @@ function sm0_delete()
 		true
 	)
 	core:add_listener(
-		"sm0_immortal_tech_CharacterCreated",
+		"sm0_delete_immortal_tech_CharacterCreated",
 		"CharacterCreated",
 		function(context)
 			return context:character():faction():name() == "wh2_dlc13_lzd_spirits_of_the_jungle" or context:character():faction():subculture() == "wh_main_sc_nor_norsca"
@@ -871,7 +918,7 @@ function sm0_delete()
 		true
 	)
 	core:add_listener(
-		"sm0_immortal_tech_FactionJoinsConfederation",
+		"sm0_delete_immortal_tech_FactionJoinsConfederation",
 		"FactionJoinsConfederation",
 		function(context)
 			return context:confederation():name() == "wh2_dlc13_lzd_spirits_of_the_jungle" or context:confederation():subculture() == "wh_main_sc_nor_norsca"
@@ -908,7 +955,7 @@ function sm0_delete()
 	)	
 	-- immortality vow
 	core:add_listener(
-		"sm0_immortal_ScriptEventBretonniaGrailVowCompleted",
+		"sm0_delete_immortal_ScriptEventBretonniaGrailVowCompleted",
 		"ScriptEventBretonniaGrailVowCompleted",
 		true,
 		function(context)
@@ -923,7 +970,7 @@ function sm0_delete()
 		true
 	)	
 	core:add_listener(
-		"sm0_immortal_character_rank_up_vows_per_level_ai",
+		"sm0_delete_immortal_character_rank_up_vows_per_level_ai_CharacterRankUp",
 		"CharacterRankUp",
 		true,
 		function(context)
@@ -942,7 +989,7 @@ function sm0_delete()
 		true
 	)
 	core:add_listener(
-		"sm0_immortal_character_created_bret_ai",
+		"sm0_delete_immortal_character_created_bret_ai_CharacterCreated",
 		"CharacterCreated",
 		true,
 		function(context)
@@ -962,7 +1009,7 @@ function sm0_delete()
 	)
 	-- immortality vow (paladin)
 	core:add_listener(
-		"sm0_immortal_IncidentOccuredEvent",
+		"sm0_delete_immortal_IncidentOccuredEvent",
 		"IncidentOccuredEvent",
 		true,
 		function(context)
@@ -987,7 +1034,7 @@ function sm0_delete()
 	)
 	-- ex faction leader after confederation
 	--core:add_listener(
-	--	"sm0_immortal_FactionLeader_FactionJoinsConfederation",
+	--	"sm0_delete_immortal_FactionLeader_FactionJoinsConfederation",
 	--	"FactionJoinsConfederation",
 	--	true,
 	--	function(context)
@@ -1003,7 +1050,7 @@ function sm0_delete()
 
 	-- new
 	core:add_listener(
-		"sm0_immortal_changes_FactionTurnStart",
+		"sm0_delete_immortal_changes_FactionTurnStart",
 		"FactionTurnStart",
 		true,
 		function(context)
@@ -1041,7 +1088,7 @@ function sm0_delete()
 	)
 	-- pre battle: enable immortality if eligible
 	core:add_listener(
-		"sm0_immortal_changes_PendingBattle",
+		"sm0_delete_immortal_changes_PendingBattle",
 		"PendingBattle",
 		true,
 		function(context)
@@ -1087,7 +1134,7 @@ function sm0_delete()
 	)
 	-- post battle: disable immortality
 	core:add_listener(
-		"sm0_immortal_changes_BattleCompleted",
+		"sm0_delete_immortal_changes_BattleCompleted",
 		"BattleCompleted",
 		true,
 		function()			
@@ -1116,7 +1163,7 @@ function sm0_delete()
 	)
 	-- skill point reset
 	core:add_listener(
-		"skill_reset_LClickUp",
+		"sm0_delete_skill_reset_ComponentLClickUp",
 		"ComponentLClickUp",
 		function(context)
 			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel")
@@ -1149,7 +1196,7 @@ function sm0_delete()
 		true
 	)
 	core:add_listener(
-		"llrRespec",
+		"sm0_delete_llrRespec_UITriggerScriptEvent",
 		"UITriggerScriptEvent",
 		function(context)
 			return context:trigger() == "LegendaryLordRespec"
@@ -1198,7 +1245,7 @@ function sm0_delete()
 		end, 0.1)
 	end
 	core:add_listener(
-		"rename_immortal_heroes_PanelOpenedCampaign",
+		"sm0_delete_rename_immortal_heroes_PanelOpenedCampaign",
 		"PanelOpenedCampaign",
 		function(context)
 			return context.string == "character_details_panel"
@@ -1209,7 +1256,7 @@ function sm0_delete()
 		true
 	)
 	core:add_listener(
-		"rename_immortal_heroes_ComponentLClickUp",
+		"sm0_delete_rename_immortal_heroes_ComponentLClickUp",
 		"ComponentLClickUp",
 		function(context)
 			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel")
@@ -1221,7 +1268,7 @@ function sm0_delete()
 		true
 	)	
 	core:add_listener(
-		"rename_immortal_heroes_ShortcutPressed",
+		"sm0_delete_rename_immortal_heroes_ShortcutPressed",
 		"ShortcutPressed",
 		function(context)
 			local panel = find_uicomponent(core:get_ui_root(), "character_details_panel")
@@ -1232,4 +1279,5 @@ function sm0_delete()
 		end,
 		true
 	)
+	--]]
 end

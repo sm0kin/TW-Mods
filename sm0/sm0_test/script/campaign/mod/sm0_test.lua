@@ -458,8 +458,6 @@ local function unlockLords()
     end
 end
 
-
-
 -- init
 --v function()
 function sm0_test()
@@ -467,6 +465,76 @@ function sm0_test()
 		sm0_log_reset()
 		cm:set_saved_value("sm0_log_reset", true)
 	end	
+	local local_faction = cm:get_faction(cm:get_local_faction(true))
+	--local blessed_dread = cm:get_faction("wh2_dlc11_def_the_blessed_dread")
+	--local lokhir = blessed_dread:faction_leader()
+	--core:add_listener(
+	--	"testtest_CharacterConvalescedOrKilled",
+	--	"CharacterConvalescedOrKilled",
+	--	function(context)
+	--		return true --context:character():character_subtype_key() == "wh2_main_def_black_ark"
+	--	end,
+	--		function(context)
+	--		--cm:callback(function()
+	--			local cqi
+    --    	    local char_list = local_faction:character_list()
+    --    	    for i = 0, char_list:num_items() - 1 do
+    --    	        local current_char = char_list:item_at(i)
+    --    	        --if current_char:character_subtype("wh2_main_def_black_ark") and current_char:is_wounded() then
+    --    	            cqi = current_char:command_queue_index()
+	--					cm:stop_character_convalescing(cqi) 
+	--					break
+    --    	        --end
+    --    	    end
+	--		--end, 0.1)
+	--	end,
+	--	true
+	--)
+	--local char_list =  local_faction:character_list()
+	--for i = 0, char_list:num_items() - 1 do
+	--	local current_char = char_list:item_at(i)
+	--	--if current_char:character_subtype("wh2_main_def_black_ark") or current_char:character_subtype("wh2_dlc11_def_lokhir") then
+	--		cm:kill_character(current_char:command_queue_index(), true, false)
+	--	--end
+	--end
+--
+	--local char_list =  local_faction:character_list()
+	--for i = 0, char_list:num_items() - 1 do
+	--	local current_char = char_list:item_at(i)
+	--	out("sm0/current_char/subtype = "..current_char:character_subtype_key())
+	--end
+	--local char_list =  blessed_dread:character_list()
+	--for i = 0, char_list:num_items() - 1 do
+	--	local current_char = char_list:item_at(i)
+	--	if current_char:character_subtype("wh2_dlc11_def_lokhir") and current_char:is_wounded() then
+	--		cqi = current_char:command_queue_index()
+	--		cm:stop_character_convalescing(cqi) 
+	--	end
+	--end
+
+	--cm:add_building_to_force(lokhir:military_force():command_queue_index(), "wh2_main_horde_def_settlement_5")	
+
+	--respawn_character_with_army(lokhir)
+
+	--local x
+	--local y
+	--local mf_list = blessed_dread:military_force_list()
+	--local admiral
+	--for i = 0, mf_list:num_items() - 1 do
+	--	local mf = mf_list:item_at(i)
+	--	if mf:general_character():character_subtype("wh2_main_def_black_ark") then
+	--		cqi = mf:general_character():command_queue_index()
+	--		x = mf:general_character():logical_position_x()
+	--		y = mf:general_character():logical_position_y()
+	--	end
+	--end
+	--cm:kill_character(cqi, true, false)
+	--cm:teleport_to(cm:char_lookup_str(lokhir), x, y, false)
+	--cm:add_building_to_force(lokhir:military_force():command_queue_index(), "wh2_main_horde_def_settlement_5")	
+	--cm:add_unit_model_overrides("character_cqi:"..lokhir:command_queue_index(), "wh2_sm0_art_set_def_black_ark_lokhir_3")
+	--cm:set_saved_value("black_ark_lokhir_ship_art_sets", "wh2_sm0_art_set_def_black_ark_lokhir_3")
+	--cm:force_confederation(cm:get_local_faction(true),"wh2_dlc11_def_the_blessed_dread")	
+	--cm:force_alliance(cm:get_local_faction(true), "wh2_dlc11_def_the_blessed_dread", true)
 	--local top_knots = cm:get_faction("wh_main_grn_top_knotz")
 	--local mf_list = top_knots:military_force_list()
 	--for i = 0, mf_list:num_items() - 1 do
@@ -545,7 +613,13 @@ function sm0_test()
 		"refugee_FactionTurnStart",
 		"FactionTurnStart",
 		true,
-		function(context)
+		function(context)				
+			--if cm:model():turn_number() == 2 and context:faction():name() == "wh2_dlc11_def_the_blessed_dread" then 
+			--	local blessed_dread = cm:get_faction("wh2_dlc11_def_the_blessed_dread")
+			--	local lokhir = blessed_dread:faction_leader()
+			--	cm:add_building_to_force(lokhir:military_force():command_queue_index(), "wh2_main_horde_def_settlement_5")
+			--	sm0_log("add_building_to_force = wh2_main_horde_def_settlement_5")
+			--end
 			if context:faction():is_human() then
 				local factionList = cm:model():world():faction_list()
 				for i = 0, factionList:num_items() - 1 do

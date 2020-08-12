@@ -707,10 +707,10 @@ local vor_subtype_anc = {
         {"", "mixu_anc_weapon_emp_elspeth_von_draken_the_pale_scythe", "", 17},
         {"", "mixu_anc_arcane_item_emp_elspeth_von_draken_deaths_timekeeper", "", 12}
     },
-    ["mixu_katarin_the_ice_queen"] = {
-        {"", "mixu_anc_enchanted_item_ksl_katarin_the_ice_queen_crystal_cloak", "", 9},
-        {"", "mixu_anc_weapon_ksl_katarin_the_ice_queen_fearfrost", "", 15}
-    },
+    --["mixu_katarin_the_ice_queen"] = {
+    --    {"", "mixu_anc_enchanted_item_ksl_katarin_the_ice_queen_crystal_cloak", "", 9},
+    --    {"", "mixu_anc_weapon_ksl_katarin_the_ice_queen_fearfrost", "", 15}
+    --},
     ["emp_theoderic_gausser"] = {
         {"", "mixu_anc_enchanted_item_emp_theoderic_gausser_sea_dragon_cloak", "", 10}
     },
@@ -1036,7 +1036,6 @@ local me_subtype_anc = {
         {"mission", "wh2_main_anc_armour_helm_of_the_kraken", "wh2_dlc11_lokhir_helm_of_the_kraken_stage_1", 11, "wh2_dlc11_lokhir_fellheart_helm_of_the_kraken_mp"},
         {"mission", "wh2_dlc11_anc_weapon_red_blades", "wh2_dlc11_def_lokhir_red_blades_stage_1", 2}
     },
-
     --mixu
     ["brt_adalhard"] = {
         {"", "mixu_anc_armour_brt_adalhard_lions_cloak", "", 12}
@@ -1055,10 +1054,10 @@ local me_subtype_anc = {
         {"", "mixu_anc_weapon_emp_elspeth_von_draken_the_pale_scythe", "", 17},
         {"", "mixu_anc_arcane_item_emp_elspeth_von_draken_deaths_timekeeper", "", 12}
     },
-    ["mixu_katarin_the_ice_queen"] = {
-        {"", "mixu_anc_enchanted_item_ksl_katarin_the_ice_queen_crystal_cloak", "", 9},
-        {"", "mixu_anc_weapon_ksl_katarin_the_ice_queen_fearfrost", "", 15}
-    },
+    --["mixu_katarin_the_ice_queen"] = {
+    --    {"", "mixu_anc_enchanted_item_ksl_katarin_the_ice_queen_crystal_cloak", "", 9},
+    --    {"", "mixu_anc_weapon_ksl_katarin_the_ice_queen_fearfrost", "", 15}
+    --},
     ["emp_theoderic_gausser"] = {
         {"", "mixu_anc_enchanted_item_emp_theoderic_gausser_sea_dragon_cloak", "", 10}
     },
