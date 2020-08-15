@@ -410,7 +410,8 @@ local function create_trash_ui()
 	--trash_bin_button:SetState("hover")
 	--trash_bin_button:SetTooltipText("Execute selected Lords and Heroes.")
 	--trash_bin_button:SetState("active")
-	trash_bin_button:SetDisabled(true)
+	--trash_bin_button:SetDisabled(true)
+	trash_bin_button:SetState("inactive")
 	trash_bin_button:SetOpacity(50)
 	trash_bin_button:SetTooltipText(trash_bin_button_disabled, "", false) 
 
@@ -462,13 +463,14 @@ local function create_trash_ui()
 				if units_dropdown:Find("check_trash_button") then 
 					local check_trash_button = UIComponent(units_dropdown:Find("check_trash_button"))
 					if chars_selected >= 1 then
-						check_trash_button:SetDisabled(false)
+						--check_trash_button:SetDisabled(false)
 						check_trash_button:SetOpacity(255)
 						check_trash_button:SetState("hover")
 						check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2, "", false) 
 						check_trash_button:SetState("active")
 					else
-						check_trash_button:SetDisabled(true)
+						--check_trash_button:SetDisabled(true)
+						check_trash_button:SetState("inactive")
 						check_trash_button:SetOpacity(50)
 						check_trash_button:SetTooltipText(check_trash_button_disabled, "", false) 
 					end
@@ -476,13 +478,14 @@ local function create_trash_ui()
 				if units_dropdown:Find("trash_bin_button") then 
 					local trash_bin_button = UIComponent(units_dropdown:Find("trash_bin_button"))
 					if chars_selected >= 1 then
-						trash_bin_button:SetDisabled(false)
+						--trash_bin_button:SetDisabled(false)
 						trash_bin_button:SetOpacity(255)
 						trash_bin_button:SetState("hover")
 						trash_bin_button:SetTooltipText(trash_bin_button_hover_1..chars_selected..trash_bin_button_hover_2, "", false) 
 						trash_bin_button:SetState("active")
 					else
-						trash_bin_button:SetDisabled(true)
+						--trash_bin_button:SetDisabled(true)
+						trash_bin_button:SetState("inactive")
 						trash_bin_button:SetOpacity(50)
 						trash_bin_button:SetTooltipText(trash_bin_button_disabled, "", false) 
 					end
@@ -503,11 +506,12 @@ local function create_trash_ui()
 			checkbox_toggle:SetTooltipText(checkbox_toggle_hero_selected_hover, "", false) 
 		end
 		checkbox_toggle:SetState("active")
-		checkbox_toggle:SetDisabled(false)
+		--checkbox_toggle:SetDisabled(false)
 		checkbox_toggle:SetOpacity(255)
 		for _, subtype in ipairs(blacklisted_subtypes) do
 			if char:character_subtype(subtype) then
-				checkbox_toggle:SetDisabled(true)
+				checkbox_toggle:SetState("inactive")
+				--checkbox_toggle:SetDisabled(true)
 				checkbox_toggle:SetOpacity(150)
 				if cm:char_is_general(char) then 
 					checkbox_toggle:SetTooltipText(checkbox_toggle_lord_disabled, "", false) 
@@ -583,13 +587,14 @@ local function create_trash_ui()
 					end
 				end
 				if chars_selected >= 1 then
-					check_trash_button:SetDisabled(false)
+					--check_trash_button:SetDisabled(false)
 					check_trash_button:SetOpacity(255)
 					check_trash_button:SetState("hover")
 					check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2, "", false) 
 					check_trash_button:SetState("active")
 				else
-					check_trash_button:SetDisabled(true)
+					--check_trash_button:SetDisabled(true)
+					check_trash_button:SetState("inactive")
 					check_trash_button:SetOpacity(50)
 					check_trash_button:SetTooltipText(check_trash_button_disabled, "", false) 
 				end
@@ -602,7 +607,7 @@ local function create_trash_ui()
 					end,
 					function(context)
 						--cm:autosave_at_next_opportunity()
-						local delay = 0.1
+						--local delay = 0 --:number
 						local list_box = find_uicomponent(core:get_ui_root(),"layout", "radar_things", "dropdown_parent", "units_dropdown", "panel", "panel_clip", "sortable_list_units", "list_clip", "list_box")
 						for i = 0, list_box:ChildCount() - 1 do
 							local character_row = UIComponent(list_box:Find(i))
@@ -623,11 +628,11 @@ local function create_trash_ui()
 									end
 								end
 								if not is_blacklisted then 
-									cm:callback(function()
+									--cm:callback(function()
 										CampaignUI.TriggerCampaignScriptEvent(cqi, "sm0_delete|")
-									end, delay)
+									--end, delay)
 								end
-								delay = delay + 0.1
+								--delay = delay + 0.1
 							end
 						end
 						local cross_trash_button = UIComponent(units_dropdown:Find("cross_trash_button"))
@@ -671,12 +676,14 @@ function sm0_delete()
 			cm:disable_event_feed_events(true, "", "", "character_ready_for_duty")
 			sm0_log("sm0_delete_UITriggerScriptEvent | "..char_lookup)
 			core:add_listener(
-				"sm0_delete_CharacterConvalescedOrKilled",
+				"sm0_delete_"..cqi.."_CharacterConvalescedOrKilled",
 				"CharacterConvalescedOrKilled",
 				function(context)
-					return true 
+					return cqi == context:character():command_queue_index()
 				end,
-					function(context)
+				function(context)
+					local cqi = context:character():command_queue_index()
+					local char_lookup = cm:char_lookup_str(cqi)
 					sm0_log("sm0_delete_CharacterConvalescedOrKilled | "..char_lookup)
 					cm:stop_character_convalescing(cqi)
 					cm:callback(function() cm:disable_event_feed_events(false, "", "", "character_ready_for_duty") end, 10)
