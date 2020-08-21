@@ -5,6 +5,9 @@ frosty_tiers:set_title(loc_prefix.."mod_title", true) --"Higher Starting Tier: C
 frosty_tiers:set_author("FrostyDemise & sm0kin")
 frosty_tiers:set_description(loc_prefix.."mod_desc", true) --"With this mod your starting settlements/horde can be set at a higher tier from the get-go."
 
+local default_section = frosty_tiers:get_section_by_key("default")
+default_section:set_localised_text(loc_prefix.."section_mod_status_options", true)
+
 local _01_enableorDisable = frosty_tiers:add_new_option("_01_enableorDisable", "checkbox")
 _01_enableorDisable:set_default_value(true)
 _01_enableorDisable:set_text(loc_prefix.."_01_enableorDisable_txt", true) --"Mod Enable"
@@ -62,7 +65,7 @@ local dropdown_options = {
     }
 }
 
-frosty_tiers:add_new_section("settlement_options", loc_prefix.."section_settlement_options", true) 
+frosty_tiers:add_new_section("z_01_settlement_options", loc_prefix.."section_settlement_options", true) 
 
 _01_enableorDisable:add_option_set_callback(
     function(option) 
@@ -100,6 +103,6 @@ for i = 1, #options_list do
     end
 end
 
-frosty_tiers:add_new_section("horde_options", loc_prefix.."section_horde_options", true)
+frosty_tiers:add_new_section("z_02_horde_options", loc_prefix.."section_horde_options", true) --"Horde - Options"
 local horde_option = frosty_tiers:get_option_by_key("_04_hordeTier")
-horde_option:set_assigned_section("horde_options")
+horde_option:set_assigned_section("z_02_horde_options")

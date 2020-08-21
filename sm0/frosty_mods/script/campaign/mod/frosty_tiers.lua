@@ -268,11 +268,16 @@ core:add_listener(
         --# assume _03_AI_settlementTier_value: string
         --# assume _04_hordeTier_value: string
         --# assume _05_settlementScope_value: string
-        if cm:is_new_game() and _01_enableorDisable_value then 
+        if cm:is_new_game() and _01_enableorDisable_value and not cm:get_saved_value("frosty_tiers_MctFinalized") then 
             upgrade_capitals(_02_settlementTier_value, _03_AI_settlementTier_value, _05_settlementScope_value)    
             upgrade_horde(_04_hordeTier_value, nil)
+            cm:set_saved_value("frosty_tiers_MctFinalized", true)
+            local options = frosty_tiers:get_options()
+            for option_key, option in pairs(options) do
+                option:set_read_only(true)
+                --mct:log("frosty_tiers/"..option_key.."/read_only = "..tostring(option:get_read_only()))
+            end
         end 
-
     end,
     true
 )
@@ -379,7 +384,7 @@ function frosty_tiers()
             local options = frosty_tiers:get_options()
             for option_key, option in pairs(options) do
                 option:set_read_only(true)
-                mct:log("frosty_tiers/"..option_key.."/read_only = "..tostring(option:get_read_only()))
+                --mct:log("frosty_tiers/"..option_key.."/read_only = "..tostring(option:get_read_only()))
             end
         end
     end

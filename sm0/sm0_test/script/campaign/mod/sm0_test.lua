@@ -856,6 +856,15 @@ function sm0_test()
 
 	--local button_slaves = find_uicomponent(core:get_ui_root(), "layout", "faction_buttons_docker", "button_group_management", "button_slaves")
 	--sm0_log("button_slaves path = "..tostring(button_slaves:GetImagePath()))
+	local function check_shit()
+		local interface = cm.game_interface
+		for k, v in pairs(interface) do
+			if is_function(v) then
+				sm0_log("Function found: "..k.."()")
+			end
+		end
+	end
+	--check_shit()
 
 
 end

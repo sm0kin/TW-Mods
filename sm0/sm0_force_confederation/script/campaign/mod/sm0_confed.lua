@@ -402,17 +402,17 @@ function sm0_confed()
 		--mct:log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
 		local confederation_options_mod = mct:get_mod_by_key("confederation_options")
 		if confederation_options_mod and cm:is_new_game() then
-			local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_tmb_tomb_kings")
+			local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")
 			tk_value = tk_option:get_finalized_setting()
 			if tk_value == "no_tweak" then
 				cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
             end
-            local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_cst_vampire_coast")
+            local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_sc_cst_vampire_coast")
 			cst_value = cst_option:get_finalized_setting()
 			if tk_value == "no_tweak" then
 				cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
 			end
-			local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")
+			local emp_option = confederation_options_mod:get_option_by_key("wh_main_sc_teb_teb") --wh_main_sc_emp_empire
 			emp_value = emp_option:get_finalized_setting() -- no teb / kislev subculture?
 			if emp_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
 				cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)

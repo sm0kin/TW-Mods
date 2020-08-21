@@ -10,7 +10,7 @@ enable:set_default_value(true)
 enable:set_text(loc_prefix.."a_enable_txt", true)
 enable:set_tooltip_text(loc_prefix.."a_enable_tt", true)
 
-lords_of_change:add_new_section("advanced_options", mct_lords_of_change_.."section_advanced_options", true)
+lords_of_change:add_new_section("advanced_options", loc_prefix.."section_advanced_options", true)
 
 local which_bird = lords_of_change:add_new_option("a_which_bird", "dropdown")
 which_bird:set_text(loc_prefix.."a_which_bird_txt", true)

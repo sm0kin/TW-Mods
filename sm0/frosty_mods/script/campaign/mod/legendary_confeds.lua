@@ -805,22 +805,25 @@ end
 
 --v function()
 local function start_confeds()
-    init_frosty_confeds_listeners(true)
-    --CLEAR EVENT LOG
-    cm:disable_event_feed_events(true)
-    --FIRE IN THE HOLE
-    confed_factions(subcultures_factions)
-    if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed_factions(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
-    if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then confed_factions(mixu2_subcultures_factions) end -- compatibility for mixu's legendary lords 2 (script path might change)     
-    --CLEAR EVENT LOG
-    cm:callback(function() 
-        remove_confed_penalties(subcultures_factions)
-        heal_garrisons()
-        apply_bundles(subcultures_factions)
-        reapply_immortality()
-        cm:disable_event_feed_events(false) 
-        init_frosty_confeds_listeners(false)
-    end, 3)
+    if not cm:get_saved_value("frosty_start_confeds") then
+        init_frosty_confeds_listeners(true)
+        --CLEAR EVENT LOG
+        cm:disable_event_feed_events(true)
+        --FIRE IN THE HOLE
+        confed_factions(subcultures_factions)
+        if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed_factions(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
+        if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then confed_factions(mixu2_subcultures_factions) end -- compatibility for mixu's legendary lords 2 (script path might change)     
+        --CLEAR EVENT LOG
+        cm:callback(function() 
+            remove_confed_penalties(subcultures_factions)
+            heal_garrisons()
+            apply_bundles(subcultures_factions)
+            reapply_immortality()
+            cm:disable_event_feed_events(false) 
+            init_frosty_confeds_listeners(false)
+        end, 3)
+        cm:set_saved_value("frosty_start_confeds", true)
+    end
 end
 
 --v function()
@@ -837,17 +840,17 @@ function legendary_confeds()
         if cm:is_new_game() then
             local confederation_options_mod = mct:get_mod_by_key("confederation_options")
             if confederation_options_mod and cm:is_new_game() then
-                local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_tmb_tomb_kings")
+                local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")
                 tk_value = tk_option:get_finalized_setting()
                 if tk_value == "no_tweak" then
                     cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
                 end
-                local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_cst_vampire_coast")
+                local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_sc_cst_vampire_coast")
                 cst_value = cst_option:get_finalized_setting()
                 if cst_value == "no_tweak" then
                     cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
                 end
-                local emp_option = confederation_options_mod:get_option_by_key("wh_main_emp_empire")
+                local emp_option = confederation_options_mod:get_option_by_key("wh_main_sc_teb_teb")
                 emp_value = emp_option:get_finalized_setting() -- no teb / kislev subculture?
                 if emp_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
                     cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
@@ -861,19 +864,19 @@ function legendary_confeds()
                 if target_faction_obj and not target_faction_obj:is_dead() and not target_faction_obj:is_human() then 
                     local player_faction_loc = effect.get_localised_string("factions_screen_name_"..human_factions[index])
                     local target_faction_loc = effect.get_localised_string("factions_screen_name_"..target_faction)
-                    local player_confed_string = "Confederation with "..target_faction_loc                                      --get_full_char_name(faction_CA:faction_leader())
+                    local player_confed_string = "Confederation with "..get_full_char_name(target_faction_obj:faction_leader())                                       --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader())
 
                     if cm:is_multiplayer() and cm:get_faction(human_factions[1]):subculture() == cm:get_faction(human_factions[2]):subculture() then
-                        player_confed_string =  player_faction_loc..": Confederation with "..target_faction_loc                 --get_full_char_name(faction_CA:faction_leader())
+                        player_confed_string =  player_faction_loc..": Confederation with "..get_full_char_name(target_faction_obj:faction_leader())                  --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader())
                         local frosty_confeds_option = frosty_confeds_mod:get_option_by_key(human_factions[index].."_dynamic_"..target_faction)
                         if frosty_confeds_option and (cm:is_multiplayer() and cm:get_faction(human_factions[1]):subculture() == cm:get_faction(human_factions[2]):subculture()) then
                             frosty_confeds_option:add_dropdown_value("player_"..index, player_faction_loc, player_confed_string)
                         else
                             frosty_confeds_option = frosty_confeds_mod:add_new_option(human_factions[index].."_dynamic_"..target_faction, "dropdown")
                             frosty_confeds_option:set_assigned_section("faction_options_1")
-                            frosty_confeds_option:set_text("Confederation with "..target_faction_loc, false)                    --get_full_char_name(faction_CA:faction_leader()
-                            frosty_confeds_option:set_tooltip_text("Confederation with "..target_faction_loc, false)            --get_full_char_name(faction_CA:faction_leader()
-                            frosty_confeds_option:add_dropdown_value("player_"..index, player_faction_loc, player_confed_string, true)
+                            frosty_confeds_option:set_text("Confederation with "..get_full_char_name(target_faction_obj:faction_leader()) , false)                    --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader()
+                            frosty_confeds_option:set_tooltip_text("Confederation with "..get_full_char_name(target_faction_obj:faction_leader()) , false)            --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader()
+                            frosty_confeds_option:add_dropdown_value("player_"..index, get_full_char_name(target_faction_obj:faction_leader()) , player_confed_string, true)
                             frosty_confeds_option:add_dropdown_value("disabled", "Disabled", "")
 
                             if (human_factions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (human_factions[2] == "wh2_dlc09_tmb_followers_of_nagash")
@@ -885,8 +888,8 @@ function legendary_confeds()
                         local frosty_confeds_option = frosty_confeds_mod:add_new_option(human_factions[index].."_dynamic_"..target_faction, "checkbox")
                         frosty_confeds_option:set_assigned_section("faction_options_"..index)
                         frosty_confeds_option:set_default_value(true)
-                        frosty_confeds_option:set_text("Confederation with "..target_faction_loc, false)                        --get_full_char_name(faction_CA:faction_leader()
-                        frosty_confeds_option:set_tooltip_text("Confederation with "..target_faction_loc, false)                --get_full_char_name(faction_CA:faction_leader()
+                        frosty_confeds_option:set_text("Confederation with "..get_full_char_name(target_faction_obj:faction_leader()) , false)                        --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader()
+                        frosty_confeds_option:set_tooltip_text("Confederation with "..get_full_char_name(target_faction_obj:faction_leader()) , false)                --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader()
                         if (human_factions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (target_faction == "wh2_dlc09_tmb_khemri") or target_faction == "wh2_dlc09_tmb_followers_of_nagash" then 
                             frosty_confeds_option:set_default_value(false)
                         end
@@ -948,14 +951,17 @@ function legendary_confeds()
                         for option_name, option in pairs(options) do
                             option:set_read_only(true)
                             local human_faction_end = string.find(option_name, "_dynamic_")
-                            if human_faction_end ~= nil then
+                            if human_faction_end ~= nil and option:get_finalized_setting() then
                                 human_faction = string.sub(option_name, 1, human_faction_end - 1)
                                 dynamic_string_len = string.len("_dynamic_")
                                 target_faction = string.sub(option_name, human_faction_end + dynamic_string_len)
                                 enabled_factions[target_faction] = human_faction
                             end
                         end
-
+                        for target_faction, human_faction in pairs(enabled_factions) do
+                            out("sm0/target_faction = "..target_faction)
+                            out("sm0/human_faction = "..human_faction)
+                        end
                         start_confeds()
                         core:remove_listener("frosty_confeds_MctFinalized")
                     end
