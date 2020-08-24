@@ -1649,6 +1649,8 @@ local function apply_diplomacy(faction_name)
             function(context)
                 if option.offer ~= nil and option.accept ~= nil and option.both_directions ~= nil then
                     cm:force_diplomacy(option.source, option.target, "form confederation", option.offer, option.accept, option.both_directions)
+                    sm0_log("force_diplomacy|form confederation: source = "..option.source..", target = "..option.target..", offer = "..tostring(option.offer)
+                    ..", accept = "..tostring(option.accept)..", both_directions = "..tostring(option.both_directions))
                 end
                 if confed_option_value == "no_tweak" or confed_option_value == nil then
                     if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then

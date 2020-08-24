@@ -79,7 +79,7 @@ local function manage_naval_movement_range(char)
 		additional_range = 0.2
 	end
 	if char:is_at_sea() then
-		if not char:military_force():has_effect_bundle("wh_sm0_increased_movement_range") then
+		if not char:military_force():has_effect_bundle("wh_sm0_increased_movement_range") and is_number(additional_range) then
 			cm:callback(function()
 				cm:apply_custom_effect_bundle_to_force(custom_upkeep_bundle, char:military_force())
 				if cm:get_saved_value("sm0_movement_range_correction_sea_needed") and movement_correction_value then 

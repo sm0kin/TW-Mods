@@ -339,7 +339,7 @@ local function get_selected_char_CQI()
             end     
         end
     end
-    return charCQI
+	return charCQI
 end
 
 --v function()
