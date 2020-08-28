@@ -123,7 +123,9 @@ function black_ark_lokhir()
 					if not cm:is_new_game() then
 						cm:convert_force_to_type(current_char:military_force(), "CHARACTER_BOUND_HORDE")
 					else
-						cm:callback(function() respawn_character_with_army(current_char) end, 1)
+						cm:callback(function() 
+							respawn_character_with_army(current_char) 
+						end, 0.5)
 					end
 					cm:set_saved_value("black_ark_lokhir", true)
 				end
