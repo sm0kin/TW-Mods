@@ -112,26 +112,26 @@ local function manage_naval_movement_range(char)
 end
 
 function black_ark_lokhir()
-	if not cm:get_saved_value("black_ark_lokhir") then
-		local faction_list = cm:model():world():faction_list()
-		for i = 0, faction_list:num_items() - 1 do
-			local current_faction = faction_list:item_at(i)
-			local char_list = current_faction:character_list()
-			for j = 0, char_list:num_items() - 1 do
-				local current_char = char_list:item_at(j)
-				if current_char:character_subtype_key() == "wh2_dlc11_def_lokhir" then
-					if not cm:is_new_game() then
-						cm:convert_force_to_type(current_char:military_force(), "CHARACTER_BOUND_HORDE")
-					else
-						cm:callback(function() 
-							respawn_character_with_army(current_char) 
-						end, 0.5)
+	cm:callback(function() 
+		if not cm:get_saved_value("black_ark_lokhir") then
+			local faction_list = cm:model():world():faction_list()
+			for i = 0, faction_list:num_items() - 1 do
+				local current_faction = faction_list:item_at(i)
+				local char_list = current_faction:character_list()
+				for j = 0, char_list:num_items() - 1 do
+					local current_char = char_list:item_at(j)
+					if current_char:character_subtype_key() == "wh2_dlc11_def_lokhir" then
+						if not cm:is_new_game() then
+							cm:convert_force_to_type(current_char:military_force(), "CHARACTER_BOUND_HORDE")
+						else
+							respawn_character_with_army(current_char) 						
+						end
+						cm:set_saved_value("black_ark_lokhir", true)
 					end
-					cm:set_saved_value("black_ark_lokhir", true)
-				end
-			end      
+				end      
+			end
 		end
-	end
+	end, 1)
 	core:add_listener(
 		"black_ark_lokhir_MilitaryForceBuildingCompleteEvent",
 		"MilitaryForceBuildingCompleteEvent",
