@@ -1,14 +1,3 @@
-
-
-core:add_listener(
-	"output_uicomponent_on_click",
-	"ComponentLClickUp",
-	true,
-	function(context) sm0_print_all_uicomponent_children(UIComponent(context.component), true) end,
-	true
-)
-
-
 local function sm0_print_all_uicomponent_children(uic)
 	out(uicomponent_to_str(uic))
 	for i = 0, uic:ChildCount() - 1 do
@@ -17,6 +6,13 @@ local function sm0_print_all_uicomponent_children(uic)
 	end
 end
 
+core:add_listener(
+	"output_uicomponent_on_click",
+	"ComponentLClickUp",
+	true,
+	function(context) sm0_print_all_uicomponent_children(UIComponent(context.component), true) end,
+	true
+)
 
 local mixu = {
 	"Marius Leitdorf",
