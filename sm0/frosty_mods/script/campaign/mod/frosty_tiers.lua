@@ -256,7 +256,8 @@ core:add_listener(
     "MctFinalized",
     true,
     function(context)
-        --# assume mct: MCT       
+        --# assume mct: MCT    
+        local mct = get_mct()   
         local frosty_tiers = mct:get_mod_by_key("frosty_tiers")
         local settings_table = frosty_tiers:get_settings()
         local _01_enableorDisable_value = settings_table._01_enableorDisable --# assume _01_enableorDisable_value: string
