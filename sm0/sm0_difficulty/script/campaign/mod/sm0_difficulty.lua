@@ -53,19 +53,6 @@ function campaign_manager:get_difficulty(return_as_string)
 	return difficulty;
 end;
 
-function sm0_difficulty()
-    local model = cm:model()
-
-    function model:difficulty_level()
-        local difficulty = self:combined_difficulty_level()
-    
-        if difficulty == -2 then	-- very hard
-            difficulty = -3			-- legendary
-        end
-        return difficulty
-    end
-end
-
 --local wrapped_model = {}
 --
 --function wrapped_model:__index(key) 
@@ -112,7 +99,7 @@ end
 --end
 --
 --function wrapped_model:difficulty_level()
---    local difficulty = self:combined_difficulty_level()
+--    local difficulty = self:combined_difficulty_level() --self:difficulty_level()
 --
 --    if difficulty == -2 then
 --        difficulty = -3
@@ -133,3 +120,7 @@ end
 --        return false;
 --    end;
 --end
+
+function sm0_difficulty()
+
+end

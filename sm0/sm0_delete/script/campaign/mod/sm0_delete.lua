@@ -661,6 +661,7 @@ local function init_delete_listeners(enable)
 					end,
 					false
 				)
+				cm:set_character_immortality(char_lookup, false)
 				cm:kill_character(cqi, false, true)
 			end,
 			true

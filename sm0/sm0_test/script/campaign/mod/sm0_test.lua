@@ -866,5 +866,16 @@ function sm0_test()
 	end
 	--check_shit()
 
+	--local env = getfenv()
+    --
+    --for k, v in pairs(env) do
+    --    print(tostring(k).."\t"..tostring(v).."\n")
+    --    if type(env[k]) == "table" then
+    --        for K, V in pairs(env[k]) do
+    --            print("\t\t"..tostring(K).."\t"..tostring(V).."\n")
+    --        end
+    --    end    
+    --end
+
 
 end
