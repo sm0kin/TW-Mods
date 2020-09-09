@@ -76,7 +76,6 @@ _01_enableorDisable:add_option_set_callback(
             local i_option_key = options[i].key
             local i_option = option:get_mod():get_option_by_key(i_option_key)
             i_option:set_uic_visibility(val)
-            i_option:set_read_only(false)
         end
     end
 )

@@ -289,7 +289,7 @@ local function confed_factions(subcultures_factions_table)
                         local mfList = factionCA:military_force_list()
                         for j = 0, mfList:num_items() - 1 do
                             local mf = mfList:item_at(j)    
-                            if mf:has_general() and not mf:is_armed_citizenry() then
+                            if mf:has_general() and not mf:is_armed_citizenry() and mf:has_general():has_region() then
                                 local army = {}
                                 army.home_region = mf:general_character():region():name() 
                                 local general = mf:general_character()
@@ -931,8 +931,14 @@ function legendary_confeds()
                 end
             end
 
+
             ---- MCT2 Listener
             ------------------------------------------------------------------
+
+
+            --alternatively you can listen for the panel being opened and then use mct_option:set_selected_setting(whatever) 
+            --and it will register that change and the "Finalize Settings" button will popup
+            
             core:add_listener(
                 "frosty_confeds_MctFinalized",
                 "MctFinalized",

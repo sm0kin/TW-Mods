@@ -2488,34 +2488,36 @@ local function init_recruit_defeated_listeners(enable_value)
                 local subtype = string.sub(info, char_cqi_end + 1)
                 --# assume char_cqi: CA_CQI
                 local character = cm:get_character_by_cqi(char_cqi)
-                local confederator
-                local human_factions = cm:get_human_factions()
-                for i = 1, #human_factions do
-                    local human_faction = cm:get_faction(human_factions[i])
-                    if human_faction:command_queue_index() == faction_cqi then
-                        confederator = human_factions[i]
+                if character then     
+                    local confederator
+                    local human_factions = cm:get_human_factions()
+                    for i = 1, #human_factions do
+                        local human_faction = cm:get_faction(human_factions[i])
+                        if human_faction:command_queue_index() == faction_cqi then
+                            confederator = human_factions[i]
+                        end
                     end
-                end
-                local picture = faction_event_picture[confederator]
-                if not is_number(picture) then 
-                    picture = subculture_event_picture[cm:get_faction(confederator):subculture()] 
-                end
-                local char_type = "legendary_lord"
-                if cm:char_is_agent(character) then char_type = "legendary_hero" end
-                --sm0_log("Faction event picture | Number: "..tostring(picture))
-                --sm0_log("Faction event Title 1: "..effect.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
-                --sm0_log("Faction event Title 2: "..effect.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
-                --sm0_log("Faction event Description: "..effect.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))
-                if picture and effect.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
-                and effect.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
-                    cm:show_message_event(
-                        confederator,
-                        "event_feed_strings_text_title_event_" .. char_type .. "_available",
-                        "event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked",
-                        "event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked",
-                        true,
-                        picture
-                    )
+                    local picture = faction_event_picture[confederator]
+                    if not is_number(picture) then 
+                        picture = subculture_event_picture[cm:get_faction(confederator):subculture()] 
+                    end
+                    local char_type = "legendary_lord"
+                    if cm:char_is_agent(character) then char_type = "legendary_hero" end
+                    --sm0_log("Faction event picture | Number: "..tostring(picture))
+                    --sm0_log("Faction event Title 1: "..effect.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
+                    --sm0_log("Faction event Title 2: "..effect.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
+                    --sm0_log("Faction event Description: "..effect.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))
+                    if picture and effect.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
+                    and effect.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
+                        cm:show_message_event(
+                            confederator,
+                            "event_feed_strings_text_title_event_" .. char_type .. "_available",
+                            "event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked",
+                            "event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked",
+                            true,
+                            picture
+                        )
+                    end
                 end
             end,
             true
@@ -2534,7 +2536,7 @@ local function init_recruit_defeated_listeners(enable_value)
                 for i = 0, char_list:num_items() - 1 do
                     local current_char = char_list:item_at(i)
                     if current_char:character_subtype_key() == character_subtype and current_char:has_military_force() then
-                        script_error("Tried to unlock legendary lord with character_subtype [" .. character_subtype .. "], but that legendary lord already has a military force (i.e. is on the map) - how can this happen?")
+                        --script_error("Tried to unlock legendary lord with character_subtype [" .. character_subtype .. "], but that legendary lord already has a military force (i.e. is on the map) - how can this happen?")
                         return false
                     end
                 end

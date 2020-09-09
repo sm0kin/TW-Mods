@@ -13,7 +13,10 @@ local movement_correction_value = true
 local function respawn_character_with_army(char)
 	local subtype = char:character_subtype_key()
 	local faction = char:faction()
-    local region = char:region()
+	local region = char:region()
+	if char:is_at_sea() then
+		region = char:faction():home_region()
+	end  
     local x = char:logical_position_x()
 	local y = char:logical_position_y()
 	local army = ""
@@ -63,6 +66,7 @@ local function respawn_character_with_army(char)
         out("ERROR | respawn_character_with_army - Something went wrong.")
     end
 end
+
 --v function(char: CA_CHAR)
 local function manage_naval_movement_range(char)
 	local custom_upkeep_bundle = cm:create_new_custom_effect_bundle("wh_sm0_increased_movement_range")
