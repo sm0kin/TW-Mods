@@ -289,7 +289,7 @@ local function confed_factions(subcultures_factions_table)
                         local mfList = factionCA:military_force_list()
                         for j = 0, mfList:num_items() - 1 do
                             local mf = mfList:item_at(j)    
-                            if mf:has_general() and not mf:is_armed_citizenry() and mf:has_general():has_region() then
+                            if mf:has_general() and not mf:is_armed_citizenry() and mf:general_character():has_region() then
                                 local army = {}
                                 army.home_region = mf:general_character():region():name() 
                                 local general = mf:general_character()
@@ -837,7 +837,7 @@ function legendary_confeds()
         local frosty_confeds_mod = mct:get_mod_by_key("frosty_confeds")
         local settings_table = frosty_confeds_mod:get_settings() 
 
-        if cm:is_new_game() then
+       -- if cm:is_new_game() then
             local confederation_options_mod = mct:get_mod_by_key("confederation_options")
             if confederation_options_mod and cm:is_new_game() then
                 local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")
@@ -857,6 +857,23 @@ function legendary_confeds()
                 end
             end
 
+            local loc_prefix = "mct_frosty_confeds_"
+            local enable_option = frosty_confeds_mod:add_new_option("_01_enableorDisable", "checkbox")
+            enable_option:set_default_value(false)
+            enable_option:set_text(loc_prefix.."_01_enableorDisable_txt", true) --"Mod Enable"
+            enable_option:set_tooltip_text(loc_prefix.."_01_enableorDisable_tt", true) --"Enables or disables the mod."
+            enable_option:set_assigned_section("default")
+            enable_option:add_option_set_callback(
+                function(option) 
+                    local val = option:get_selected_setting()
+                    local options = option:get_mod():get_options()
+
+                    for option_key, option_obj in pairs(options) do
+                        if option_key ~= "_01_enableorDisable" then option_obj:set_uic_visibility(val) end
+                    end
+                end
+            )
+
             --v function(index: integer, target_faction: string)
             local function setup_dynamic_options(index, target_faction)
                 local target_faction_obj = cm:get_faction(target_faction)
@@ -869,16 +886,16 @@ function legendary_confeds()
                     if cm:is_multiplayer() and cm:get_faction(human_factions[1]):subculture() == cm:get_faction(human_factions[2]):subculture() then
                         player_confed_string =  player_faction_loc..": Confederation with "..get_full_char_name(target_faction_obj:faction_leader())                  --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader())
                         local frosty_confeds_option = frosty_confeds_mod:get_option_by_key(human_factions[index].."_dynamic_"..target_faction)
-                        if frosty_confeds_option and (cm:is_multiplayer() and cm:get_faction(human_factions[1]):subculture() == cm:get_faction(human_factions[2]):subculture()) then
+                        if frosty_confeds_option then
                             frosty_confeds_option:add_dropdown_value("player_"..index, player_faction_loc, player_confed_string)
                         else
                             frosty_confeds_option = frosty_confeds_mod:add_new_option(human_factions[index].."_dynamic_"..target_faction, "dropdown")
-                            frosty_confeds_option:set_assigned_section("faction_options_1")
+                            frosty_confeds_option:set_assigned_section("z_faction_options_1")
                             frosty_confeds_option:set_text("Confederation with "..get_full_char_name(target_faction_obj:faction_leader()) , false)                    --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader()
                             frosty_confeds_option:set_tooltip_text("Confederation with "..get_full_char_name(target_faction_obj:faction_leader()) , false)            --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader()
                             frosty_confeds_option:add_dropdown_value("player_"..index, get_full_char_name(target_faction_obj:faction_leader()) , player_confed_string, true)
                             frosty_confeds_option:add_dropdown_value("disabled", "Disabled", "")
-
+                            
                             if (human_factions[1] == "wh2_dlc09_tmb_followers_of_nagash") or (human_factions[2] == "wh2_dlc09_tmb_followers_of_nagash")
                             or (target_faction == "wh2_dlc09_tmb_khemri") or target_faction == "wh2_dlc09_tmb_followers_of_nagash" then 
                                 frosty_confeds_option:set_default_value("disabled")
@@ -886,7 +903,7 @@ function legendary_confeds()
                         end
                     else
                         local frosty_confeds_option = frosty_confeds_mod:add_new_option(human_factions[index].."_dynamic_"..target_faction, "checkbox")
-                        frosty_confeds_option:set_assigned_section("faction_options_"..index)
+                        frosty_confeds_option:set_assigned_section("z_faction_options_"..index)
                         frosty_confeds_option:set_default_value(true)
                         frosty_confeds_option:set_text("Confederation with "..get_full_char_name(target_faction_obj:faction_leader()) , false)                        --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader()
                         frosty_confeds_option:set_tooltip_text("Confederation with "..get_full_char_name(target_faction_obj:faction_leader()) , false)                --target_faction_loc --get_full_char_name(target_faction_obj:faction_leader()
@@ -898,10 +915,10 @@ function legendary_confeds()
             end
 
             if not cm:is_multiplayer() or (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture()) then
-                frosty_confeds_mod:add_new_section("faction_options_1", "Faction Options") 
+                frosty_confeds_mod:add_new_section("z_faction_options_1", "Faction Options") 
             else
-                frosty_confeds_mod:add_new_section("faction_options_1", "Faction Options - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[1]):name()))
-                frosty_confeds_mod:add_new_section("faction_options_2", "Faction Options - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[2]):name()))
+                frosty_confeds_mod:add_new_section("z_faction_options_1", "Faction Options - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[1]):name()))
+                frosty_confeds_mod:add_new_section("z_faction_options_2", "Faction Options - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[2]):name()))
             end
 
             for i = 1, #humanFactions do
@@ -931,13 +948,8 @@ function legendary_confeds()
                 end
             end
 
-
             ---- MCT2 Listener
             ------------------------------------------------------------------
-
-
-            --alternatively you can listen for the panel being opened and then use mct_option:set_selected_setting(whatever) 
-            --and it will register that change and the "Finalize Settings" button will popup
             
             core:add_listener(
                 "frosty_confeds_MctFinalized",
@@ -974,14 +986,14 @@ function legendary_confeds()
                 end,
                 true
             )
-        else
-            if frosty_confeds_mod then
-                local options = frosty_confeds_mod:get_options()
-                for option_name, option in pairs(options) do
-                    option:set_read_only(true)
-                end
-            end
-        end
+        --else
+        --    if frosty_confeds_mod then
+        --        local options = frosty_confeds_mod:get_options()
+        --        for option_name, option in pairs(options) do
+        --            option:set_read_only(true)
+        --        end
+        --    end
+        --end
     else
 		local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
 		if not tk_value or tk_value == "yield" then

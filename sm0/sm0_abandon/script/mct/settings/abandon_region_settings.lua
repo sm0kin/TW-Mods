@@ -45,10 +45,10 @@ local options_list = {
     "b_penalty_tier"
 } --:vector<string>
 
-local po_option_list = {
-    "c_penalty_scope",
-    "b_penalty_tier"
-} --:vector<string>
+--local po_option_list = {
+--    "c_penalty_scope",
+--    "b_penalty_tier"
+--} --:vector<string>
 
 enable:add_option_set_callback(
     function(option) 
@@ -64,19 +64,19 @@ enable:add_option_set_callback(
     end
 )
 
-penalty:add_option_set_callback(
-    function(option) 
-        local val = option:get_selected_setting()
-        --# assume val: boolean
-        local options = po_option_list
-
-        local enable_obj = option:get_mod():get_option_by_key("a_enable")
-        local enable_val = enable_obj:get_selected_setting()
-        if enable_val then
-            for i = 1, #po_option_list do
-                local option_obj = option:get_mod():get_option_by_key(options[i])
-                option_obj:set_uic_visibility(val)
-            end
-        end
-    end
-)
+--penalty:add_option_set_callback(
+--    function(option) 
+--        local val = option:get_selected_setting()
+--        --# assume val: boolean
+--        local options = po_option_list
+--
+--        local enable_obj = option:get_mod():get_option_by_key("a_enable")
+--        local enable_val = enable_obj:get_selected_setting()
+--        if enable_val then
+--            for i = 1, #po_option_list do
+--                local option_obj = option:get_mod():get_option_by_key(options[i])
+--                option_obj:set_uic_visibility(val)
+--            end
+--        end
+--    end
+--)

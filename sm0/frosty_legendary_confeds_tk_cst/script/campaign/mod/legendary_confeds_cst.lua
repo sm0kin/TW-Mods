@@ -1,0 +1,1 @@
+-- main script checks if this file exist (vfs.exists("script/campaign/mod/legendary_confeds_cst.lua"))

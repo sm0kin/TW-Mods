@@ -12,11 +12,6 @@ enable:set_tooltip_text(loc_prefix.."a_enable_tt", true)
 
 recruit_defeated:add_new_section("restrictions", loc_prefix.."section_restrictions", true)
 
-local lore_restriction = recruit_defeated:add_new_option("b_lore_restriction", "checkbox")
-lore_restriction:set_default_value(false)
-lore_restriction:set_text(loc_prefix.."b_lore_restriction_txt", true)
-lore_restriction:set_tooltip_text(loc_prefix.."b_lore_restriction_tt", true)
-
 local scope = recruit_defeated:add_new_option("c_scope", "dropdown")
 scope:set_text(loc_prefix.."c_scope_txt", true)
 scope:set_tooltip_text(loc_prefix.."c_scope_tt", true)
@@ -82,12 +77,12 @@ recruit_defeated:add_new_section("specific_restriction", loc_prefix.."section_sp
 --|| - Vampire Coast, Savage Orcs, Followers of Nagash
 
 local tmb_restriction = recruit_defeated:add_new_option("a_tmb_restriction", "checkbox")
-tmb_restriction:set_default_value(true)
+tmb_restriction:set_default_value(false)
 tmb_restriction:set_text(loc_prefix.."a_tmb_restriction_txt", true)
 tmb_restriction:set_tooltip_text(loc_prefix.."a_tmb_restriction_tt", true)
 
 local cst_restriction = recruit_defeated:add_new_option("b_cst_restriction", "checkbox")
-cst_restriction:set_default_value(true)
+cst_restriction:set_default_value(false)
 cst_restriction:set_text(loc_prefix.."b_cst_restriction_txt", true)
 cst_restriction:set_tooltip_text(loc_prefix.."b_cst_restriction_tt", true)
 
@@ -97,7 +92,6 @@ cst_restriction:set_tooltip_text(loc_prefix.."b_cst_restriction_tt", true)
 --savage_restriction:set_tooltip_text(loc_prefix.."c_savage_restriction_tt", true)
 
 local options_list = {
-    "b_lore_restriction",
     "c_scope",
     "d_ai_delay",
     "a_preferance1",
@@ -124,28 +118,5 @@ enable:add_option_set_callback(
         --for i = 1, #sections do
         --    option:get_mod():set_section_visibility(sections[i], val)
         --end
-    end
-)
-
-local restriction_list = {
-    "a_tmb_restriction",
-    --"c_savage_restriction",
-    "b_cst_restriction"
-} --:vector<string>
-
-lore_restriction:add_option_set_callback(
-    function(option) 
-        local val = option:get_selected_setting()
-        --# assume val: boolean
-        local options = restriction_list
-
-        local enable_obj = option:get_mod():get_option_by_key("a_enable")
-        local enable_val = enable_obj:get_selected_setting()
-        if enable_val then
-            for i = 1, #restriction_list do
-                local option_obj = option:get_mod():get_option_by_key(options[i])
-                option_obj:set_uic_visibility(val)
-            end
-        end
     end
 )
