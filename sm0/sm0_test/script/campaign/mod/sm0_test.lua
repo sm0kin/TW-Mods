@@ -596,7 +596,9 @@ function sm0_test()
 	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "cst_infamy", "wh2_dlc11_resource_factor_other", 5000)
 	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "grn_salvage", "wh2_dlc11_resource_factor_other", 5000)
 	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "dwf_oathgold", "wh2_main_resource_factor_missions", 5000)
-	cm:faction_add_pooled_resource(cm:get_local_faction(true), "emp_prestige", "wh2_dlc13_resource_factor_regions", 20000)
+	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "emp_prestige", "wh2_dlc13_resource_factor_regions", 20000)
+	--cm:faction_add_pooled_resource("wh2_main_hef_yvresse", "yvresse_defence", "wh2_dlc15_resource_factor_yvresse_defence_settlement", 50)
+	cm:faction_add_pooled_resource("wh2_main_hef_yvresse", "wardens_supply", "wh2_dlc15_resource_factor_wardens_supply_executed_prisoners", 100)
 
 	--cm:create_force(
 	--	"wh_main_chs_chaos",

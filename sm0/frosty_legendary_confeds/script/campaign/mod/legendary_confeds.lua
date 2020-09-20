@@ -863,6 +863,8 @@ function legendary_confeds()
             enable_option:set_text(loc_prefix.."_01_enableorDisable_txt", true) --"Mod Enable"
             enable_option:set_tooltip_text(loc_prefix.."_01_enableorDisable_tt", true) --"Enables or disables the mod."
             enable_option:set_assigned_section("default")
+            local default_section = frosty_confeds_mod:get_section_by_key("default")
+            default_section:set_localised_text(loc_prefix.."section_mod_status_options", true)
             enable_option:add_option_set_callback(
                 function(option) 
                     local val = option:get_selected_setting()

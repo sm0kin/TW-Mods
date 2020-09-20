@@ -1,5 +1,3 @@
-local Grom_faction = "wh2_dlc15_grn_broken_axe";
-
 local encounter_sea_location_set = {
 	["main_warhammer"] = {
 		{
@@ -565,11 +563,11 @@ core:add_listener(
 			cm:disable_event_feed_events(true, "","","diplomacy_faction_destroyed");
 			cm:disable_event_feed_events(true, "wh_event_category_character", "", "");
 		elseif found_encounter_faction ~= true and encounter_listener_info[3] then
-			-- local uim = cm:get_campaign_ui_manager();
-			-- uim:override("retreat"):unlock();
-			-- encounter_listener_info[3] = false;
-			-- encounter_listener_info[6] = "";
-			-- encounter_listener_info[7] = "";
+			local uim = cm:get_campaign_ui_manager();
+			uim:override("retreat"):unlock();
+			encounter_listener_info[3] = false;
+			encounter_listener_info[6] = "";
+			encounter_listener_info[7] = "";
 		end
 	end,
 	true
@@ -583,9 +581,6 @@ function TriggerEncounter(index, context)
 	encounter_target = character:command_queue_index();
 	local dont_remove_encounter = false;
 	if faction:is_human() and cm:model():world():whose_turn_is_it():is_human() then
-		if faction:name() == Grom_faction then
-			core:trigger_event("ScriptEventSeaEncounterTriggeredByPlayerThatIsPlayingGrom");
-		end
 		if encounter_sea_spots[index]["occupied"] == "treasure" then
 			local incident = encounter_sea_spots[index]["event"];
 			out("this is "..incident);
@@ -699,7 +694,7 @@ function SetupEncounterPostbattle(incident, faction)
 		out(loot);
 		cm:callback(function() cm:disable_event_feed_events(false, "","","diplomacy_faction_destroyed") end, 1);
 		cm:callback(function() cm:disable_event_feed_events(false, "wh_event_category_character", "", "") end, 1);
-		if encounter_listener_info[3] then
+		if found_encounter_faction == true and encounter_listener_info[3] then
 			local uim = cm:get_campaign_ui_manager();
 			uim:override("retreat"):unlock();
 			encounter_listener_info[3] = false;
@@ -732,6 +727,7 @@ core:add_listener(
 	"MissionSucceeded",
 	true,
 	function(context)
+		lokhir_faction = context:mission():faction():name() -- added by sm0kin
 		local mission_key = "";
 		local next_mission_key = "";
 		local lokhir_mission_happened = false;
@@ -762,18 +758,20 @@ core:add_listener(
 			core:add_listener(
 			"Lokhir_mission_listener",
 			"AreaEntered", 
-			function(context)
-				return context:character():faction():is_human()
-			end,
+			true,
 			function(context)
 				local index = tonumber(string.sub(context:area_key(), 13));
 				if not index then
+					out("not an encounter!");
 				else
+					out("an encounter!");
 					local character = context:character();
 					local faction = character:faction();
 					local faction_name = faction:name();
-					
+					out("acessing lokhir check");
+					out(faction_name);
 					if lokhir_faction == faction_name then
+						out("it is lokhir");
 						cm:complete_scripted_mission_objective(mission_key, "joys_mission", true);
 						cm:trigger_mission(lokhir_faction, next_mission_key, true);
 						encounter_listener_info[1] = false;
@@ -806,17 +804,35 @@ function ReconstructListeners()
 		"AreaEntered", 
 		function(context)
 			out.design("checking lokhir mission existing or not");
-			return context:character():faction():is_human()
+			return true;
 		end,
 		function(context)
 			local index = tonumber(string.sub(context:area_key(), 13));
 			if not index then
+				out("not an encounter!");
 			else
+				out("an encounter!");
 				local character = context:character();
 				local faction = character:faction();
 				local faction_name = faction:name();
-				
-				if lokhir_faction == faction_name then
+				out("acessing lokhir check");
+				out(faction_name);
+				-- added by sm0kin
+				-------------------------------------------------------------------------------------
+				local it_is_lokhir = false
+				local char_list = faction:character_list()
+				for i = 0, char_list:num_items() - 1 do
+					local current_char = char_list:item_at(i)
+					if current_char:character_subtype_key() == "wh2_dlc11_def_lokhir" then
+						lokhir_faction = current_char:faction():name()
+						it_is_lokhir = true
+						break
+					end
+				end
+				if it_is_lokhir then 
+				-------------------------------------------------------------------------------------
+				--if lokhir_faction == faction_name then
+					out("it is lokhir");
 					cm:complete_scripted_mission_objective(mission_key, "joys_mission", true);
 					cm:trigger_mission(lokhir_faction, next_mission_key, true);
 					encounter_listener_info[1] = false;
@@ -913,7 +929,8 @@ function GenerateEncounterPirate(character, loc, unit)
 				true,
 				function(context)
 					local faction = context:character():faction():name();
-					
+					out(faction);
+					out(encounter_listener_info[6]);
 					if faction == encounter_pirate_faction then
 						if not force_leader:is_at_sea() then
 							script_error("Tried to spawn an army for an encounter at sea, but the army is on land - how can this be?");

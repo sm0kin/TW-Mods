@@ -1507,14 +1507,5 @@ set_ritual_chain_unlocked
 
 -- Da Nutz ‘N’ Boltz Update
 
---- @function pending_battle_cache_get_attacker_subtype
---- @desc Returns just the subtype of a particular attacker in the cached pending battle. The attacker is specified by numerical index, with the first being accessible at record 1.
---- @p @number index of attacker
---- @return @string subtype
 --function campaign_manager:pending_battle_cache_get_attacker_subtype(index)
-
---- @function pending_battle_cache_get_defender_subtype
---- @desc Returns just the subtype of a particular defender in the cached pending battle. The defender is specified by numerical index, with the first being accessible at record 1.
---- @p @number index of defender
---- @return @string subtype
 --function campaign_manager:pending_battle_cache_get_defender_subtype(index)

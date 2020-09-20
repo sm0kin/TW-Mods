@@ -148,6 +148,7 @@ require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/da
 --require("sm0/cbf/script/campaign/wh2_campaign_faction_renaming")
 --require("sm0/sm0_liberate/script/campaign/mod/sm0_liberate_missing_anc")
 --require("sm0/cbf/script/campaign/mod/fix_brt_grn_incursion")
+require("sm0/cbf/script/campaign/wh2_dlc15_eltharion_lair")
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_minor_elven_colonies")
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/fix_revitalizing_rite")
@@ -187,6 +188,5 @@ require("sm0/lost_factions/script/campaign/mod/!ovn_me_lost_factions_start")
 require("sm0/lost_factions/script/campaign/mod/!ovn_vor_lost_factions_start")
 require("sm0/lost_factions/script/campaign/mod/sr_chaos")
 require("sm0/lost_factions/script/mct/settings/lost_factions_settings")
-
 
 require("C:/Program Files (x86)/Steam/steamapps/common/Total War WARHAMMER II/data/script/campaign/mod/ws_beastbasha")
