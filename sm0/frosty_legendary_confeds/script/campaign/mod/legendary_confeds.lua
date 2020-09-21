@@ -423,10 +423,12 @@ local function confed_factions(subcultures_factions_table)
                     for j = 0, factions_of_same_subculture:num_items() - 1 do
                         local faction_of_same_subculture = factions_of_same_subculture:item_at(j)
                         if ((humanFaction:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction_of_same_subculture:name() == "wh2_dlc09_tmb_the_sentinels") 
-                        or (humanFaction:name() == "wh2_dlc09_tmb_the_sentinels" and faction_of_same_subculture:name() == "wh2_dlc09_tmb_followers_of_nagash") or
-                        (humanFaction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and humanFaction:name() ~= "wh2_dlc09_tmb_the_sentinels" 
+                        or (humanFaction:name() == "wh2_dlc09_tmb_the_sentinels" and faction_of_same_subculture:name() == "wh2_dlc09_tmb_followers_of_nagash") 
+                        or (humanFaction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and humanFaction:name() ~= "wh2_dlc09_tmb_the_sentinels" 
                         and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_of_same_subculture:name() ~= "wh2_dlc09_tmb_the_sentinels") 
-                        or not zzz05_restriction_value) and enabled_factions[faction_of_same_subculture:name()] == humanFactions[i] then
+                        or not zzz05_restriction_value) and (enabled_factions[faction_of_same_subculture:name()] == humanFactions[i] 
+                        or (zzz04_deadlyAlliances_value == "d2_deadly_Enable_worldwar" and (not cm:is_multiplayer() 
+                        or cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture()))) then
                             if humanFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then delete_armies(faction_of_same_subculture:name()) end
                             cm:force_confederation(humanFactions[i], faction_of_same_subculture:name())
                         end
@@ -808,7 +810,7 @@ local function start_confeds()
     if not cm:get_saved_value("frosty_start_confeds") then
         init_frosty_confeds_listeners(true)
         --CLEAR EVENT LOG
-        cm:disable_event_feed_events(true)
+        cm:disable_event_feed_events(true, "all", "", "")
         --FIRE IN THE HOLE
         confed_factions(subcultures_factions)
         if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed_factions(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
@@ -819,9 +821,9 @@ local function start_confeds()
             heal_garrisons()
             apply_bundles(subcultures_factions)
             reapply_immortality()
-            cm:disable_event_feed_events(false) 
+            cm:disable_event_feed_events(false, "all", "", "")
             init_frosty_confeds_listeners(false)
-        end, 3)
+        end, 5)
         cm:set_saved_value("frosty_start_confeds", true)
     end
 end
@@ -1009,7 +1011,7 @@ function legendary_confeds()
 		if (not emp_value or emp_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
 			cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
         end
-		enable_value = true
+        enable_value = true
         -- OPTIONS
         if mcm then
             local frostyConfed = mcm:register_mod("frostyConfed", "Legendary Confederations", "Start your next grand campaign with the legendary lords already rallied to your side or have the enemy legendary lords unite against you!")
@@ -1100,9 +1102,9 @@ function legendary_confeds()
                         if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz03_tHeatre_value") == "c1_theatre_Enable" then 
                             zzz03_tHeatre_value = true
                         end
-                        zzz04_deadlyAlliances =  cm:get_saved_value("mcm_tweaker_frostyConfed_zzz04_deadlyAlliances_value") 
+                        zzz04_deadlyAlliances_value =  cm:get_saved_value("mcm_tweaker_frostyConfed_zzz04_deadlyAlliances_value") 
                         if cm:get_saved_value("mcm_tweaker_frostyConfed_zzz05_restriction_value") == "restricted" then 
-                            zzz05_restriction = true
+                            zzz05_restriction_value = true
                         end
 
                         for i = 1, #humanFactions do
@@ -1136,6 +1138,27 @@ function legendary_confeds()
         else
             if cm:is_new_game() then
                 if not cm:is_multiplayer() or (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture()) then
+                    zzz03_tHeatre_value = false
+                    zzz04_deadlyAlliances_value = "d3_deadly_Disable"
+                    zzz05_restriction_value = true
+                    for i = 1, #humanFactions do
+                        local humanFaction = cm:get_faction(humanFactions[i])
+                        local subculture = humanFaction:subculture()
+                        for _, faction in ipairs(subcultures_factions[subculture]) do
+                            enabled_factions[faction] = humanFactions[i]
+                        end
+
+                        if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") and mixu1_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 1 (script path might change)
+                            for _, faction in ipairs(mixu1_subcultures_factions[subculture]) do
+                                enabled_factions[faction] = humanFactions[i]
+                            end
+                        end
+                        if vfs.exists("script/campaign/mod/mixu_darkhand.lua") and mixu2_subcultures_factions[subculture] then -- compatibility for mixu's legendary lords 2 (script path might change)
+                            for _, faction in ipairs(mixu2_subcultures_factions[subculture]) do
+                                enabled_factions[faction] = humanFactions[i]
+                            end
+                        end
+                    end
                     start_confeds()
                 end
             end
