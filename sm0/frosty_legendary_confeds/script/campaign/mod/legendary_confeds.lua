@@ -276,7 +276,7 @@ local function confed_factions(subcultures_factions_table)
                 local factionCA = cm:get_faction(faction)
                 if factionCA and not factionCA:is_dead() and not factionCA:is_human() and enabled_factions[faction] == humanFactions[i] then
                     local army_table = {} --:WHATEVER
-                    local char_cqi_table --:vector<CA_CQI>
+                    local char_cqi_table = {} --:vector<CA_CQI>
                     local faction_home_region
                     local regionList = factionCA:region_list()
                     if factionCA:has_home_region() then 
@@ -810,7 +810,16 @@ local function start_confeds()
     if not cm:get_saved_value("frosty_start_confeds") then
         init_frosty_confeds_listeners(true)
         --CLEAR EVENT LOG
-        cm:disable_event_feed_events(true, "all", "", "")
+        --cm:disable_event_feed_events(true, "all", "", "")
+        cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
+        cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
+        cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
+        cm:disable_event_feed_events(true, "", "", "conquest_province_secured")
+        cm:disable_event_feed_events(true, "", "", "conquest_province_contested")
+        cm:disable_event_feed_events(true, "", "", "faction_resource_lost")
+        cm:disable_event_feed_events(true, "", "", "conquest_sea_region_controlled")
+        cm:disable_event_feed_events(true, "", "", "conquest_sea_region_contested")
+        cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
         --FIRE IN THE HOLE
         confed_factions(subcultures_factions)
         if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then confed_factions(mixu1_subcultures_factions) end -- compatibility for mixu's legendary lords 1 (script path might change)
@@ -821,7 +830,16 @@ local function start_confeds()
             heal_garrisons()
             apply_bundles(subcultures_factions)
             reapply_immortality()
-            cm:disable_event_feed_events(false, "all", "", "")
+            --cm:disable_event_feed_events(false, "all", "", "")
+            cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
+            cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered")
+            cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing")
+            cm:disable_event_feed_events(false, "", "", "conquest_province_secured")
+            cm:disable_event_feed_events(false, "", "", "conquest_province_contested")
+            cm:disable_event_feed_events(false, "", "", "faction_resource_lost")
+            cm:disable_event_feed_events(false, "", "", "conquest_sea_region_controlled")
+            cm:disable_event_feed_events(false, "", "", "conquest_sea_region_contested")
+            cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "")
             init_frosty_confeds_listeners(false)
         end, 5)
         cm:set_saved_value("frosty_start_confeds", true)

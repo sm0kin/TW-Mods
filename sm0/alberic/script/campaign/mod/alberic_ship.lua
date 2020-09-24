@@ -49,7 +49,7 @@ local function respawn_character_with_army(char)
 				x,
 				y,
 				function(cqi)
-					cm:disable_event_feed_events(false, "all", "", "")
+					cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "")
 				end
 			)
 			end, 0.1)
@@ -57,7 +57,7 @@ local function respawn_character_with_army(char)
 		false
 	)
 	if army and region and x and y then
-		cm:disable_event_feed_events(true, "all", "", "")
+		cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
 		cm:kill_character(char:command_queue_index(), true, false)
 	else
 		out("ERROR | respawn_character_with_army - Something went wrong.")
