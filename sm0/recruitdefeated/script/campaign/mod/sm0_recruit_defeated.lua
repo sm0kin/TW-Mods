@@ -5,6 +5,9 @@ local ai_delay_value --:WHATEVER
 local preferance1_value --:WHATEVER 
 local preferance2_value --:WHATEVER 
 local preferance3_value --:WHATEVER 
+local preferance4_value --:WHATEVER 
+local preferance5_value --:WHATEVER 
+local preferance6_value --:WHATEVER 
 local tmb_restriction_value --:WHATEVER 
 local cst_restriction_value --:WHATEVER 
 --local savage_restriction_value --:WHATEVER 
@@ -1945,6 +1948,7 @@ local function is_faction_exempted(faction)
     or faction:name():find("_waaagh") or faction:name():find("_brayherd") or faction:name():find("_unknown") or faction:name():find("_incursion")
     or faction:name():find("_qb") or faction:name():find("_separatists") or faction:name():find("_dil") or faction:name():find("_blood_voyage") 
     or faction:name():find("_encounters") or faction:name():find("rebel") or faction:name():find("_intervention") or faction:name():find("_invasion") 
+    or (faction:name() == "wh2_dlc11_vmp_the_barrow_legion" and vfs.exists("script/campaign/main_warhammer/mod/liche_init.lua"))
     or faction:is_quest_battle_faction() then
         is_exempted = true
     else
@@ -2306,7 +2310,17 @@ local function init_recruit_defeated_listeners(enable_value)
                             if preferance3_value and preferance3_value ~= "disabled" then
                                 prefered_factions = get_prefered_faction_list(prefered_factions, preferance3_value, current_faction)
                             end
-                            if preferance1_value == "disabled" and preferance2_value == "disabled" and preferance3_value == "disabled" then
+                            if preferance4_value and preferance4_value ~= "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance4_value, current_faction)
+                            end
+                            if preferance5_value and preferance5_value ~= "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance5_value, current_faction)
+                            end
+                            if preferance6_value and preferance6_value ~= "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance6_value, current_faction)
+                            end
+                            if preferance1_value == "disabled" and preferance2_value == "disabled" and preferance3_value == "disabled" 
+                            and preferance4_value == "disabled" and preferance5_value == "disabled" and preferance6_value == "disabled" then
                                 prefered_factions = get_prefered_faction_list(nil, nil, current_faction) -- returns factions_of_same_subculture as vector<string>
                             end
                             local rng_index = cm:random_number(#prefered_factions)
@@ -2317,11 +2331,11 @@ local function init_recruit_defeated_listeners(enable_value)
                             if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
                                 if confed_penalty(faction_P1) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai" or scope_value == "player") 
-                                and ((not tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
+                                and context:faction():name() == faction_P1:name() and (current_faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" 
+                                or (not tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
                                 or (tmb_restriction_value and faction_P1:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_P1:name() ~= "wh2_dlc09_tmb_the_sentinels") 
                                 or (tmb_restriction_value and current_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction_P1:name() == "wh2_dlc09_tmb_the_sentinels") 
-                                or (tmb_restriction_value and faction_P1:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels")) 
-                                and context:faction():name() == faction_P1:name() then
+                                or (tmb_restriction_value and faction_P1:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels")) then
                                     if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                     if are_lords_missing(current_faction) then
                                         sm0_log("["..player_confederation_count.."] Player 1 intends to intends to spawn missing lords for: "..current_faction:name())
@@ -2342,11 +2356,11 @@ local function init_recruit_defeated_listeners(enable_value)
                             elseif prefered_faction and cm:is_multiplayer() and not faction_P2:is_dead() and current_faction:subculture() == faction_P2:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P2:name() and prefered_faction:name() == faction_P2:name() then
                                 if confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai"  or scope_value == "player") 
-                                and ((not tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
+                                and context:faction():name() == faction_P2:name() and (current_faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" 
+                                or (not tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
                                 or (tmb_restriction_value and faction_P2:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_P2:name() ~= "wh2_dlc09_tmb_the_sentinels")
                                 or (tmb_restriction_value and current_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction_P2:name() == "wh2_dlc09_tmb_the_sentinels") 
-                                or (tmb_restriction_value and faction_P2:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels"))  
-                                and context:faction():name() == faction_P2:name() then
+                                or (tmb_restriction_value and faction_P2:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels")) then
                                     if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                     if are_lords_missing(current_faction) then
                                         sm0_log("["..player_confederation_count.."] Player 2 intends to intends to spawn missing lords for: "..current_faction:name())
@@ -2366,12 +2380,13 @@ local function init_recruit_defeated_listeners(enable_value)
                                 end
                             else --ai
                                 if scope_value == "player_ai" or scope_value == "ai" then 
-                                    if prefered_faction and ai_confederation_count <= ai_confederation_limit and ((not tmb_restriction_value
-                                    and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") or (tmb_restriction_value and prefered_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash"
-                                    and prefered_faction:name() ~= "wh2_dlc09_tmb_the_sentinels")
+                                    if prefered_faction and ai_confederation_count <= ai_confederation_limit 
+                                    and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" -- disabled for beastmen/savage orcs because they are able to respawn anyways
+                                    and (current_faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings"
+                                    or (not tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
+                                    or (tmb_restriction_value and prefered_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() ~= "wh2_dlc09_tmb_the_sentinels")
                                     or (tmb_restriction_value and current_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() == "wh2_dlc09_tmb_the_sentinels") 
-                                    or (tmb_restriction_value and prefered_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels")) 
-                                    and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" then -- disabled for beastmen/savage orcs because they are able to respawn anyways
+                                    or (tmb_restriction_value and prefered_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels")) then 
                                         if not faked_death(prefered_faction) then
                                             if ai_delay_value == 0 or cm:model():turn_number() > ai_delay_value then --if ai_delay == 0 or cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) == 0 then
                                                 if are_lords_missing(current_faction) then
@@ -2700,6 +2715,12 @@ core:add_listener(
         preferance2_value = b_preferance2:get_finalized_setting()
         local c_preferance3 = recruit_defeated_mod:get_option_by_key("c_preferance3")
         preferance3_value = c_preferance3:get_finalized_setting()
+        local d_preferance4 = recruit_defeated_mod:get_option_by_key("d_preferance4")
+        preferance4_value = d_preferance4:get_finalized_setting()
+        local e_preferance5 = recruit_defeated_mod:get_option_by_key("e_preferance5")
+        preferance5_value = e_preferance5:get_finalized_setting()
+        local f_preferance6 = recruit_defeated_mod:get_option_by_key("f_preferance6")
+        preferance6_value = f_preferance6:get_finalized_setting()
         local a_tmb_restriction = recruit_defeated_mod:get_option_by_key("a_tmb_restriction")
         tmb_restriction_value = a_tmb_restriction:get_finalized_setting()
         local b_cst_restriction = recruit_defeated_mod:get_option_by_key("b_cst_restriction")
@@ -2713,6 +2734,9 @@ core:add_listener(
         mct:log("recruit_defeated_MctInitialized/preferance1_value = "..tostring(preferance1_value))
         mct:log("recruit_defeated_MctInitialized/preferance2_value = "..tostring(preferance2_value))
         mct:log("recruit_defeated_MctInitialized/preferance3_value = "..tostring(preferance3_value))
+        mct:log("recruit_defeated_MctInitialized/preferance4_value = "..tostring(preferance4_value))
+        mct:log("recruit_defeated_MctInitialized/preferance5_value = "..tostring(preferance5_value))
+        mct:log("recruit_defeated_MctInitialized/preferance6_value = "..tostring(preferance6_value))
         mct:log("recruit_defeated_MctInitialized/tmb_restriction_value = "..tostring(tmb_restriction_value))
         mct:log("recruit_defeated_MctInitialized/cst_restriction_value = "..tostring(cst_restriction_value))
         --mct:log("recruit_defeated_MctInitialized/savage_restriction_value = "..tostring(savage_restriction_value))
@@ -2734,6 +2758,9 @@ core:add_listener(
         preferance1_value = settings_table.a_preferance1
         preferance2_value = settings_table.b_preferance2
         preferance3_value = settings_table.c_preferance3
+        preferance4_value = settings_table.c_preferance4
+        preferance5_value = settings_table.c_preferance5
+        preferance6_value = settings_table.c_preferance6
         tmb_restriction_value = settings_table.a_tmb_restriction
         cst_restriction_value = settings_table.b_cst_restriction
         --savage_restriction_value = settings_table.c_savage_restriction
@@ -2811,12 +2838,14 @@ function sm0_recruit_defeated()
         ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 0
         preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
         preferance2_value = "alternate"
+        preferance3_value = "met"
         if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
-            preferance3_value = "major"
+            preferance4_value = "major"
         else
-            preferance3_value = "relation"
+            preferance4_value = "relation"
         end
-
+        preferance5_value = "major"
+        preferance6_value = "disable"
         --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
         --" | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
         --" | preferance1_value = "..tostring(preferance1_value).." | preferance2_value = "..tostring(preferance2_value).." | preferance3_value = "..tostring(preferance3_value))
@@ -2862,11 +2891,14 @@ function sm0_recruit_defeated()
                     ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
                     preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
                     preferance2_value = "alternate"
+                    preferance3_value = "met"
                     if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
-                        preferance3_value = "major"
+                        preferance4_value = "major"
                     else
-                        preferance3_value = "relation"
+                        preferance4_value = "relation"
                     end
+                    preferance5_value = "major"
+                    preferance6_value = "disable"
 
                     --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
                     --" | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..

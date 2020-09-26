@@ -58,14 +58,50 @@ preferance2:add_dropdown_value("alternate", "Dilemma alternates (MP only)", "Dil
 local preferance3 = recruit_defeated:add_new_option("c_preferance3", "dropdown")
 preferance3:set_text(loc_prefix.."c_preferance3_txt", true)
 preferance3:set_tooltip_text(loc_prefix.."c_preferance3_tt", true)
-preferance3:add_dropdown_value("disable", "Disable", "Preference Level-3 disabled.", true)
+preferance3:add_dropdown_value("disable", "Disable", "Preference Level-3 disabled.")
 preferance3:add_dropdown_value("player", "Prefer Player", "Factions led by a Player will be prefered over AI factions.")
 preferance3:add_dropdown_value("ai", "Prefer AI", "Factions led by the AI will be prefered over player-led factions.")
 preferance3:add_dropdown_value("major", "Prefer Major Factions", "Playable Factions (Major) will be prefered over Minor factions.")
 preferance3:add_dropdown_value("minor", "Prefer Minor Factions", "Minor Factions will be prefered over playable (Major) factions")
-preferance3:add_dropdown_value("met", "Prefer Factions met", "Defeated factions preferably join factions they they met before (discovered factions).")
-preferance3:add_dropdown_value("relation", "Relation based", "Defeated factions prefer to join factions they they had the best diplomatic relations with.", true)
+preferance3:add_dropdown_value("met", "Prefer Factions met", "Defeated factions preferably join factions they they met before (discovered factions).", true)
+preferance3:add_dropdown_value("relation", "Relation based", "Defeated factions prefer to join factions they they had the best diplomatic relations with.")
 preferance3:add_dropdown_value("alternate", "Dilemma alternates (MP only)", "Dilemma alternates between Players of the same subculture (applies to MP only)")
+
+local preferance4 = recruit_defeated:add_new_option("d_preferance4", "dropdown")
+preferance4:set_text(loc_prefix.."d_preferance4_txt", true)
+preferance4:set_tooltip_text(loc_prefix.."d_preferance4_tt", true)
+preferance4:add_dropdown_value("disable", "Disable", "Preference Level-4 disabled.")
+preferance4:add_dropdown_value("player", "Prefer Player", "Factions led by a Player will be prefered over AI factions.")
+preferance4:add_dropdown_value("ai", "Prefer AI", "Factions led by the AI will be prefered over player-led factions.")
+preferance4:add_dropdown_value("major", "Prefer Major Factions", "Playable Factions (Major) will be prefered over Minor factions.")
+preferance4:add_dropdown_value("minor", "Prefer Minor Factions", "Minor Factions will be prefered over playable (Major) factions")
+preferance4:add_dropdown_value("met", "Prefer Factions met", "Defeated factions preferably join factions they they met before (discovered factions).")
+preferance4:add_dropdown_value("relation", "Relation based", "Defeated factions prefer to join factions they they had the best diplomatic relations with.", true)
+preferance4:add_dropdown_value("alternate", "Dilemma alternates (MP only)", "Dilemma alternates between Players of the same subculture (applies to MP only)")
+
+local preferance5 = recruit_defeated:add_new_option("e_preferance5", "dropdown")
+preferance5:set_text(loc_prefix.."e_preferance5_txt", true)
+preferance5:set_tooltip_text(loc_prefix.."e_preferance5_tt", true)
+preferance5:add_dropdown_value("disable", "Disable", "Preference Level-5 disabled.")
+preferance5:add_dropdown_value("player", "Prefer Player", "Factions led by a Player will be prefered over AI factions.")
+preferance5:add_dropdown_value("ai", "Prefer AI", "Factions led by the AI will be prefered over player-led factions.")
+preferance5:add_dropdown_value("major", "Prefer Major Factions", "Playable Factions (Major) will be prefered over Minor factions.", true)
+preferance5:add_dropdown_value("minor", "Prefer Minor Factions", "Minor Factions will be prefered over playable (Major) factions")
+preferance5:add_dropdown_value("met", "Prefer Factions met", "Defeated factions preferably join factions they they met before (discovered factions).")
+preferance5:add_dropdown_value("relation", "Relation based", "Defeated factions prefer to join factions they they had the best diplomatic relations with.")
+preferance5:add_dropdown_value("alternate", "Dilemma alternates (MP only)", "Dilemma alternates between Players of the same subculture (applies to MP only)")
+
+local preferance6 = recruit_defeated:add_new_option("f_preferance6", "dropdown")
+preferance6:set_text(loc_prefix.."f_preferance6_txt", true)
+preferance6:set_tooltip_text(loc_prefix.."f_preferance6_tt", true)
+preferance6:add_dropdown_value("disable", "Disable", "Preference Level-6 disabled.", true)
+preferance6:add_dropdown_value("player", "Prefer Player", "Factions led by a Player will be prefered over AI factions.")
+preferance6:add_dropdown_value("ai", "Prefer AI", "Factions led by the AI will be prefered over player-led factions.")
+preferance6:add_dropdown_value("major", "Prefer Major Factions", "Playable Factions (Major) will be prefered over Minor factions.")
+preferance6:add_dropdown_value("minor", "Prefer Minor Factions", "Minor Factions will be prefered over playable (Major) factions")
+preferance6:add_dropdown_value("met", "Prefer Factions met", "Defeated factions preferably join factions they they met before (discovered factions).")
+preferance6:add_dropdown_value("relation", "Relation based", "Defeated factions prefer to join factions they they had the best diplomatic relations with.")
+preferance6:add_dropdown_value("alternate", "Dilemma alternates (MP only)", "Dilemma alternates between Players of the same subculture (applies to MP only)")
 
 recruit_defeated:add_new_section("specific_restriction", loc_prefix.."section_specific_restriction", true)
 
@@ -96,7 +132,10 @@ local options_list = {
     "d_ai_delay",
     "a_preferance1",
     "b_preferance2",
-    "c_preferance3"
+    "c_preferance3",
+    "d_preferance4",
+    "e_preferance5",
+    "f_preferance6"
 } --:vector<string>
 
 local sections_list = {
