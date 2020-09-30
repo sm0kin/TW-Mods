@@ -281,17 +281,27 @@ local function confed_factions(subcultures_factions_table)
                     local regionList = factionCA:region_list()
                     if factionCA:has_home_region() then 
                         faction_home_region = factionCA:home_region()
-                    else
+                    elseif factionCA:military_force_list():item_at(0):general_character():has_region() then
                         faction_home_region = factionCA:military_force_list():item_at(0):general_character():region() 
+                    else
+                        if cm:get_campaign_name() == "main_warhammer" then
+                            faction_home_region = cm:get_region("wh_main_goromandy_mountains_baersonlings_camp")
+                        else
+                            faction_home_region = cm:get_region("wh2_main_vor_aghol_wastelands_palace_of_princes")
+                        end
                     end
                     -- faction respawn prep
                     if not zzz03_tHeatre_value then      
                         local mfList = factionCA:military_force_list()
                         for j = 0, mfList:num_items() - 1 do
                             local mf = mfList:item_at(j)    
-                            if mf:has_general() and not mf:is_armed_citizenry() and mf:general_character():has_region() then
+                            if mf:has_general() and not mf:is_armed_citizenry() then
                                 local army = {}
-                                army.home_region = mf:general_character():region():name() 
+                                if mf:general_character():has_region() then
+                                    army.home_region = mf:general_character():region():name() 
+                                else
+                                    army.home_region = faction_home_region:name()
+                                end
                                 local general = mf:general_character()
                                 army.xPos = general:logical_position_x()
                                 army.yPos = general:logical_position_y()

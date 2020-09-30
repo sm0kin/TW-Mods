@@ -1986,7 +1986,12 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             local faction_current = faction_list:item_at(i)
             if faction_current:subculture() == faction:subculture() and not faction_current:is_dead() and not is_faction_exempted(faction_current) 
             and not is_human_and_rejected_faction(faction_current, faction) and ((faction_current:is_human() and (scope_value == "player" or scope_value == "player_ai")) 
-            or (not faction_current:is_human() and (scope_value == "ai" or scope_value == "player_ai"))) then 
+            or (not faction_current:is_human() and (scope_value == "ai" or scope_value == "player_ai"))) 
+            and (faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" or (not tmb_restriction_value and faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
+            or (tmb_restriction_value and faction_current:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" 
+            and faction:name() ~= "wh2_dlc09_tmb_the_sentinels" and faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash")
+            or (tmb_restriction_value and faction_current:name() == "wh2_dlc09_tmb_the_sentinels" and faction:name() == "wh2_dlc09_tmb_followers_of_nagash") 
+            or (tmb_restriction_value and faction_current:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction:name() == "wh2_dlc09_tmb_the_sentinels")) then 
                 table.insert(factions_of_same_subculture, faction_current:name())
             end
         end
@@ -2331,11 +2336,7 @@ local function init_recruit_defeated_listeners(enable_value)
                             if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
                                 if confed_penalty(faction_P1) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai" or scope_value == "player") 
-                                and context:faction():name() == faction_P1:name() and (current_faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" 
-                                or (not tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
-                                or (tmb_restriction_value and faction_P1:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_P1:name() ~= "wh2_dlc09_tmb_the_sentinels") 
-                                or (tmb_restriction_value and current_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction_P1:name() == "wh2_dlc09_tmb_the_sentinels") 
-                                or (tmb_restriction_value and faction_P1:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels")) then
+                                and context:faction():name() == faction_P1:name() then
                                     if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                     if are_lords_missing(current_faction) then
                                         sm0_log("["..player_confederation_count.."] Player 1 intends to intends to spawn missing lords for: "..current_faction:name())
@@ -2356,11 +2357,7 @@ local function init_recruit_defeated_listeners(enable_value)
                             elseif prefered_faction and cm:is_multiplayer() and not faction_P2:is_dead() and current_faction:subculture() == faction_P2:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P2:name() and prefered_faction:name() == faction_P2:name() then
                                 if confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai"  or scope_value == "player") 
-                                and context:faction():name() == faction_P2:name() and (current_faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" 
-                                or (not tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
-                                or (tmb_restriction_value and faction_P2:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and faction_P2:name() ~= "wh2_dlc09_tmb_the_sentinels")
-                                or (tmb_restriction_value and current_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction_P2:name() == "wh2_dlc09_tmb_the_sentinels") 
-                                or (tmb_restriction_value and faction_P2:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels")) then
+                                and context:faction():name() == faction_P2:name() then
                                     if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                     if are_lords_missing(current_faction) then
                                         sm0_log("["..player_confederation_count.."] Player 2 intends to intends to spawn missing lords for: "..current_faction:name())
@@ -2381,12 +2378,7 @@ local function init_recruit_defeated_listeners(enable_value)
                             else --ai
                                 if scope_value == "player_ai" or scope_value == "ai" then 
                                     if prefered_faction and ai_confederation_count <= ai_confederation_limit 
-                                    and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" -- disabled for beastmen/savage orcs because they are able to respawn anyways
-                                    and (current_faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings"
-                                    or (not tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
-                                    or (tmb_restriction_value and prefered_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() ~= "wh2_dlc09_tmb_the_sentinels")
-                                    or (tmb_restriction_value and current_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and prefered_faction:name() == "wh2_dlc09_tmb_the_sentinels") 
-                                    or (tmb_restriction_value and prefered_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() == "wh2_dlc09_tmb_the_sentinels")) then 
+                                    and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" then -- disabled for beastmen/savage orcs because they are able to respawn anyways
                                         if not faked_death(prefered_faction) then
                                             if ai_delay_value == 0 or cm:model():turn_number() > ai_delay_value then --if ai_delay == 0 or cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) == 0 then
                                                 if are_lords_missing(current_faction) then
