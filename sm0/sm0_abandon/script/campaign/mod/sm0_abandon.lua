@@ -247,9 +247,15 @@ local function init_abandon_region_listeners(enable_value)
             true,
             function(context)
                 region_key = context:garrison_residence():region():name()
-                
                 local current_faction_key = context:garrison_residence():faction():name()
-                cm:callback(
+
+                real_timer.register_singleshot("next_tick", 0)
+                core:add_listener(
+                    "next_tick",
+                    "RealTimeTrigger",
+                    function(context)
+                        return context.string == "next_tick"
+                    end,
                     function(context)
                         if abandon_frame then
                             abandon_frame:Delete()
@@ -265,7 +271,8 @@ local function init_abandon_region_listeners(enable_value)
                                 abandon_button:SetState("active")
                             end
                         end
-                    end, 0, "waitForUI"
+                    end,
+                    false
                 )
             end,
             true

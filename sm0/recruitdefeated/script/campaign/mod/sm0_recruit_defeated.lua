@@ -356,7 +356,7 @@ local mixu1_agents = {
     {["faction"] = "wh_main_dwf_karak_azul", ["subtype"] = "dwf_kazador_dragonslayer"},
     {["faction"] = "wh_main_dwf_karak_azul", ["subtype"] = "dwf_thorek_ironbrow"},
     {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "mixu_elspeth_von_draken"},
-    {["faction"] = "wh_main_ksl_kislev", ["subtype"] = "ksl_katarin_the_ice_queen"},
+    --{["faction"] = "wh_main_ksl_kislev", ["subtype"] = "ksl_katarin_the_ice_queen"},
     {["faction"] = "wh_dlc05_wef_torgovann", ["subtype"] = "wef_daith"},
     {["faction"] = "wh_main_emp_averland", ["subtype"] = "emp_marius_leitdorf"},
     {["faction"] = "wh_main_emp_hochland", ["subtype"] = "emp_aldebrand_ludenhof"},

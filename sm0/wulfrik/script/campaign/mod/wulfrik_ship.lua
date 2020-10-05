@@ -75,7 +75,7 @@ function wulfrik_ship()
 					local current_char = char_list:item_at(j)
 					if current_char:character_subtype_key() == "wh_dlc08_nor_wulfrik" then
 						if not cm:is_new_game() then
-							cm:convert_force_to_type(current_char:military_force(), "CHARACTER_BOUND_HORDE")
+							cm:convert_force_to_type(current_char:military_force(), "WULFRIK_BOUND_HORDE")
 						else
 							respawn_character_with_army(current_char) 						
 						end

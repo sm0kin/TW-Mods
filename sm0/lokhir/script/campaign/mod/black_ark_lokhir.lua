@@ -133,8 +133,9 @@ function black_ark_lokhir()
 				for j = 0, char_list:num_items() - 1 do
 					local current_char = char_list:item_at(j)
 					if current_char:character_subtype_key() == "wh2_dlc11_def_lokhir" then
-						if not cm:is_new_game() then
-							cm:convert_force_to_type(current_char:military_force(), "CHARACTER_BOUND_HORDE")
+						local nagarythe = cm:get_faction("wh2_main_hef_nagarythe")
+						if not cm:is_new_game() or not current_faction:is_human() or nagarythe:is_human() then
+							cm:convert_force_to_type(current_char:military_force(), "CHARACTER_BOUND_HORDE") --LOKHIR_BOUND_HORDE
 						else
 							respawn_character_with_army(current_char) 						
 						end
