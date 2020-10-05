@@ -1570,7 +1570,10 @@ local function apply_diplomacy(faction_name)
         "wh2_main_rogue_worldroot_rangers",
         "wh2_main_rogue_wrath_of_nature",
         -- 
-        "wh2_dlc11_sc_cst_vampire_coast"
+        "wh2_dlc11_sc_cst_vampire_coast",
+        --ovn
+        "wh_main_sc_emp_araby"
+        --"wh_main_sc_nor_fimir"
     } --:vector<string>
     local faction = cm:get_faction(faction_name)
     if faction then
@@ -1948,7 +1951,11 @@ local function is_faction_exempted(faction)
     or faction:name():find("_waaagh") or faction:name():find("_brayherd") or faction:name():find("_unknown") or faction:name():find("_incursion")
     or faction:name():find("_qb") or faction:name():find("_separatists") or faction:name():find("_dil") or faction:name():find("_blood_voyage") 
     or faction:name():find("_encounters") or faction:name():find("rebel") or faction:name():find("_intervention") or faction:name():find("_invasion") 
-    or (faction:name() == "wh2_dlc11_vmp_the_barrow_legion" and vfs.exists("script/campaign/main_warhammer/mod/liche_init.lua"))
+    or faction:name():find("_rogue_")
+    -- ovn
+    or faction:subculture() == "wh_main_sc_nor_warp" or faction:subculture() == "wh_main_sc_nor_troll" or faction:subculture() == "wh_main_sc_nor_albion"
+    or faction:subculture() == "wh_main_sc_lzd_amazon" or faction:subculture() == "wh_main_sc_nor_fimir"
+    or (faction:name() == "wh2_dlc11_vmp_the_barrow_legion" and vfs.exists("script/campaign/main_warhammer/mod/liche_init.lua")) --hobo
     or faction:is_quest_battle_faction() then
         is_exempted = true
     else
@@ -2133,7 +2140,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         --sm0_log("preferance_type: "..tostring(preferance_type).." | no faction fulfills the condition -> reset table to previous preference level")
     end
 
-    --sm0_log("prefered_factions = "..tostring(prefered_factions))
+    --sm0_log("prefered_factions ("..faction:name()..") = "..tostring(prefered_factions))
     --for i, faction in ipairs(prefered_factions) do
     --    --# assume faction: string
     --    sm0_log("return | "..tostring(preferance_type).." | prefered_factions["..i.."]: "..tostring(faction))
@@ -2328,9 +2335,12 @@ local function init_recruit_defeated_listeners(enable_value)
                             and preferance4_value == "disabled" and preferance5_value == "disabled" and preferance6_value == "disabled" then
                                 prefered_factions = get_prefered_faction_list(nil, nil, current_faction) -- returns factions_of_same_subculture as vector<string>
                             end
-                            local rng_index = cm:random_number(#prefered_factions)
-                            local prefered_faction_key = prefered_factions[rng_index]
-                            local prefered_faction = cm:get_faction(prefered_faction_key)
+                            local prefered_faction = nil
+                            if prefered_factions and #prefered_factions >= 1 then
+                                local rng_index = cm:random_number(#prefered_factions)
+                                local prefered_faction_key = prefered_factions[rng_index]
+                                prefered_faction = cm:get_faction(prefered_faction_key)
+                            end
                             --sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
 
                             if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
@@ -2786,21 +2796,34 @@ function sm0_recruit_defeated()
 		--mct:log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
 		local confederation_options_mod = mct:get_mod_by_key("confederation_options")
 		if confederation_options_mod and cm:is_new_game() then
-			local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")
-			tk_value = tk_option:get_finalized_setting()
-			if tk_value == "no_tweak" then
-				cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+            local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")
+            if tk_option then
+                local tk_value = tk_option:get_finalized_setting()
+                if tk_value == "no_tweak" then
+                    cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+                end
             end
             local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_sc_cst_vampire_coast")
-			cst_value = cst_option:get_finalized_setting()
-			if cst_value == "no_tweak" then
-				cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
-			end
-			local emp_option = confederation_options_mod:get_option_by_key("wh_main_sc_teb_teb") --wh_main_sc_emp_empire
-			emp_value = emp_option:get_finalized_setting() -- no teb / kislev subculture?
-			if emp_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
-				cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
-			end
+            if cst_option then
+                local cst_value = cst_option:get_finalized_setting()
+                if cst_value == "no_tweak" then
+                    cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
+                end
+            end
+            local teb_option = confederation_options_mod:get_option_by_key("wh_main_sc_teb_teb")
+            if teb_option then
+                local teb_value = teb_option:get_finalized_setting()
+                if teb_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
+                    cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
+                end
+            end
+            local araby_option = confederation_options_mod:get_option_by_key("wh_main_sc_emp_araby")
+            if araby_option then
+                local araby_value = araby_option:get_finalized_setting() 
+                if araby_value == "no_tweak" then
+                    cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
+                end
+            end
 		end
     else
 		local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
@@ -2811,9 +2834,13 @@ function sm0_recruit_defeated()
         if not cst_value or cst_value == "yield" then
             cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
         end
-		local emp_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") -- no teb / kislev subculture?
-		if (not emp_value or emp_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
+		local teb_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") 
+		if (not teb_value or teb_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
 			cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
+        end
+        local araby_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_sc_emp_araby") 
+		if (not araby_value or emp_value == "yield") then
+			cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
         end
         
         enable_value = true
