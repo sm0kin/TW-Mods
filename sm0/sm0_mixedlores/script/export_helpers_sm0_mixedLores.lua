@@ -1584,12 +1584,19 @@ if buttonLocation_charPanel then
 			return context.string == "button_cycle_right" and is_uicomponent(panel)
 		end,
 		function(context)
-			cm:callback(
+			real_timer.register_singleshot("next_tick", 0)
+			core:add_listener(
+				"ml_next_tick",
+				"RealTimeTrigger",
 				function(context)
-					updateButtonVisibility_charPanel()
-					deleteLoreFrame()
-				end, 0, "checkNamePanelText"
-			)		
+					return context.string == "next_tick"
+				end,
+				function(context)
+						updateButtonVisibility_charPanel()
+						deleteLoreFrame()
+					end,
+				false
+			)			
 		end,
 		true
 	)
@@ -1602,12 +1609,19 @@ if buttonLocation_charPanel then
 			return context.string == "button_cycle_left" and is_uicomponent(panel)
 		end,
 		function(context)
-			cm:callback(
+			real_timer.register_singleshot("next_tick", 0)
+			core:add_listener(
+				"ml_next_tick",
+				"RealTimeTrigger",
 				function(context)
-					updateButtonVisibility_charPanel()
-					deleteLoreFrame()
-				end, 0, "checkNamePanelText"
-			)	
+					return context.string == "next_tick"
+				end,
+				function(context)
+						updateButtonVisibility_charPanel()
+						deleteLoreFrame()
+					end,
+				false
+			)
 		end,
 		true
 	)
@@ -1620,12 +1634,19 @@ if buttonLocation_charPanel then
 			return context.string == "select_next" and is_uicomponent(panel)
 		end,
 		function(context)
-			cm:callback(
+			real_timer.register_singleshot("next_tick", 0)
+			core:add_listener(
+				"ml_next_tick",
+				"RealTimeTrigger",
 				function(context)
-					updateButtonVisibility_charPanel()
-					deleteLoreFrame()
-				end, 0, "checkNamePanelText"
-			)	
+					return context.string == "next_tick"
+				end,
+				function(context)
+						updateButtonVisibility_charPanel()
+						deleteLoreFrame()
+					end,
+				false
+			)
 		end,
 		true
 	)
@@ -1638,12 +1659,19 @@ if buttonLocation_charPanel then
 			return context.string == "select_prev" and is_uicomponent(panel)
 		end,
 		function(context)
-			cm:callback(
+			real_timer.register_singleshot("next_tick", 0)
+			core:add_listener(
+				"ml_next_tick",
+				"RealTimeTrigger",
 				function(context)
-					updateButtonVisibility_charPanel()
-					deleteLoreFrame()
-				end, 0, "checkNamePanelText"
-			)	
+					return context.string == "next_tick"
+				end,
+				function(context)
+						updateButtonVisibility_charPanel()
+						deleteLoreFrame()
+					end,
+				false
+			)
 		end,
 		true
 	)

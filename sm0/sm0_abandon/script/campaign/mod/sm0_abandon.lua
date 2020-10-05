@@ -251,7 +251,7 @@ local function init_abandon_region_listeners(enable_value)
 
                 real_timer.register_singleshot("next_tick", 0)
                 core:add_listener(
-                    "next_tick",
+                    "abandon_region_next_tick",
                     "RealTimeTrigger",
                     function(context)
                         return context.string == "next_tick"

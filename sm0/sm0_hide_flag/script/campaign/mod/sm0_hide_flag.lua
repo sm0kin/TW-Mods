@@ -118,10 +118,19 @@ function sm0_hide_flag()
 			return context.string == "settlement_panel" 
 		end,
 		function(context)
-			cm:callback(function() 
-				--sm0_log("sm0_flag_checkbox_toggle_PanelOpenedCampaign")
-				create_checkbox_toggle()
-			end, 0.1) 	
+			real_timer.register_singleshot("next_tick", 0)
+			core:add_listener(
+				"sm0_flag_next_tick",
+				"RealTimeTrigger",
+				function(context)
+					return context.string == "next_tick"
+				end,
+				function(context)
+						--sm0_log("sm0_flag_checkbox_toggle_PanelOpenedCampaign")
+						create_checkbox_toggle()
+					end,
+				false
+			)	
 		end,
 		true
 	)
@@ -130,14 +139,23 @@ function sm0_hide_flag()
 		"SettlementSelected",
 		true,
 		function()
-			cm:callback(function() 
-				--sm0_log("sm0_flag_checkbox_toggle_SettlementSelected")
-				if cm:get_saved_value("sm0_hide_flag_toggle") then
-					toggle_flag(true)
-				else
-					toggle_flag(false)
-				end
-			end, 0.1) 	
+			real_timer.register_singleshot("next_tick", 0)
+			core:add_listener(
+				"sm0_flag_next_tick",
+				"RealTimeTrigger",
+				function(context)
+					return context.string == "next_tick"
+				end,
+				function(context)
+					--sm0_log("sm0_flag_checkbox_toggle_SettlementSelected")
+					if cm:get_saved_value("sm0_hide_flag_toggle") then
+						toggle_flag(true)
+					else
+						toggle_flag(false)
+					end
+				end,
+				false
+			)	
 		end,
 		true
 	)

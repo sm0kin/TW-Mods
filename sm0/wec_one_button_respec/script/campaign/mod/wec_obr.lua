@@ -197,7 +197,7 @@ end
 local function get_selected_char_CQI()
     local charCQI = cm:get_campaign_ui_manager():get_char_selected_cqi()
     local char = cm:get_character_by_cqi(charCQI)
-    if char:has_military_force() then
+    if char and char:has_military_force() then
         local unitsUIC = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "units")
         for i = 0, unitsUIC:ChildCount() - 1 do
             local uic_child = UIComponent(unitsUIC:Find(i))
@@ -230,11 +230,18 @@ local function init_obr_listeners(enable_value)
                 return (context.string == "button_cycle_right" or context.string == "button_cycle_left") and is_uicomponent(panel) and not cm:model():pending_battle():is_active()
             end,
             function(context)
-                cm:callback(
+                real_timer.register_singleshot("next_tick", 0)
+                core:add_listener(
+                    "obr_next_tick",
+                    "RealTimeTrigger",
                     function(context)
-                        llr.current_lord = get_selected_char_CQI()
-                        if llr.current_lord then llr.create_button(llr.current_lord) end
-                    end, 0, "waitForUI"
+                        return context.string == "next_tick"
+                    end,
+                    function(context)
+                            llr.current_lord = get_selected_char_CQI()
+                            if llr.current_lord then llr.create_button(llr.current_lord) end
+                        end,
+                    false
                 )	
             end,
             true
@@ -248,11 +255,18 @@ local function init_obr_listeners(enable_value)
                 return (context.string == "select_next" or context.string == "select_prev") and is_uicomponent(panel) and not cm:model():pending_battle():is_active()
             end,
             function(context)
-                cm:callback(
+                real_timer.register_singleshot("next_tick", 0)
+                core:add_listener(
+                    "obr_next_tick",
+                    "RealTimeTrigger",
                     function(context)
-                        llr.current_lord = get_selected_char_CQI()
-                        if llr.current_lord then llr.create_button(llr.current_lord) end
-                    end, 0, "waitForUI"
+                        return context.string == "next_tick"
+                    end,
+                    function(context)
+                            llr.current_lord = get_selected_char_CQI()
+                            if llr.current_lord then llr.create_button(llr.current_lord) end
+                        end,
+                    false
                 )		
             end,
             true
@@ -265,12 +279,19 @@ local function init_obr_listeners(enable_value)
                 return context.string == "character_details_panel" and not cm:model():pending_battle():is_active()
             end,
             function(context)
-                cm:callback(
+                real_timer.register_singleshot("next_tick", 0)
+                core:add_listener(
+                    "obr_next_tick",
+                    "RealTimeTrigger",
                     function(context)
-                        llr.current_lord = get_selected_char_CQI()
-                        if llr.current_lord then llr.create_button(llr.current_lord) end
-                    end, 0, "waitForUI"
-                )
+                        return context.string == "next_tick"
+                    end,
+                    function(context)
+                            llr.current_lord = get_selected_char_CQI()
+                            if llr.current_lord then llr.create_button(llr.current_lord) end
+                        end,
+                    false
+                )	
             end,
             true
         )

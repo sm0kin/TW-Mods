@@ -674,17 +674,26 @@ local function init_delete_listeners(enable)
 			end,
 			function(context)
 				--sm0_log("sm0/PanelOpenedCampaign: "..context.string)
-				cm:callback(function() 
-					local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
-					if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down" 
-					or tab_units:CurrentState() == "down") then 
-						--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
-						create_trash_ui()
-					else
-						delete_trash_ui()
-						--sm0_log("sm0/tab_units|state: disabled")
-					end	
-				end, 0) 						
+				real_timer.register_singleshot("next_tick", 0)
+                core:add_listener(
+                    "sm0_delete_next_tick",
+                    "RealTimeTrigger",
+                    function(context)
+                        return context.string == "next_tick"
+                    end,
+                    function(context)
+						local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
+						if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down" 
+						or tab_units:CurrentState() == "down") then 
+							--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+							create_trash_ui()
+						else
+							delete_trash_ui()
+							--sm0_log("sm0/tab_units|state: disabled")
+						end	
+                    end,
+                    false
+                )						
 			end,
 			true
 		)
@@ -696,17 +705,26 @@ local function init_delete_listeners(enable)
 			end,
 			function(context)
 				--sm0_log("sm0/PanelClosedCampaign: "..context.string)
-				cm:callback(function() 
-					local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
-					if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down"
-					or tab_units:CurrentState() == "down") then 
-						--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
-						create_trash_ui()
-					else
-						delete_trash_ui()
-						--sm0_log("sm0/tab_units|state: disabled")
-					end	
-				end, 0) 						
+				real_timer.register_singleshot("next_tick", 0)
+                core:add_listener(
+                    "sm0_delete_next_tick",
+                    "RealTimeTrigger",
+                    function(context)
+                        return context.string == "next_tick"
+                    end,
+                    function(context)
+						local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
+						if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down"
+						or tab_units:CurrentState() == "down") then 
+							--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+							create_trash_ui()
+						else
+							delete_trash_ui()
+							--sm0_log("sm0/tab_units|state: disabled")
+						end	
+                    end,
+                    false
+                )							
 			end,
 			true
 		)
@@ -718,16 +736,25 @@ local function init_delete_listeners(enable)
 			end,
 			function(context)
 				--sm0_log("sm0/ComponentLClickUp: "..context.string)
-				cm:callback(function() 
-					local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
-					if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down") then 
-						--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
-						create_trash_ui()
-					else
-						delete_trash_ui()
-						--sm0_log("sm0/tab_units|state: disabled")
-					end	
-				end, 0) 	
+				real_timer.register_singleshot("next_tick", 0)
+                core:add_listener(
+                    "sm0_delete_next_tick",
+                    "RealTimeTrigger",
+                    function(context)
+                        return context.string == "next_tick"
+                    end,
+                    function(context)
+						local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
+						if tab_units and (tab_units:CurrentState() == "selected" or tab_units:CurrentState() == "selected_hover" or tab_units:CurrentState() == "selected_down") then 
+							--sm0_log("sm0/tab_units|state: "..tostring(tab_units:CurrentState())) 
+							create_trash_ui()
+						else
+							delete_trash_ui()
+							--sm0_log("sm0/tab_units|state: disabled")
+						end	
+                    end,
+                    false
+                )		
 			end,
 			true
 		)
