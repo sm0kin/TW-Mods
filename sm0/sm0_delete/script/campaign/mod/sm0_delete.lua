@@ -341,7 +341,7 @@ end
 
 --v function()
 local function create_trash_ui()
-	local player_faction = cm:get_faction(cm:get_local_faction(true)) 
+	local player_faction = cm:get_local_faction(true) 
 	local icon_delete = effect.get_skinned_image_path("icon_delete.png")	
 	local icon_cross = effect.get_skinned_image_path("icon_cross.png")
 	local icon_check = effect.get_skinned_image_path("icon_check.png")

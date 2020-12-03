@@ -187,7 +187,7 @@ local browserIconPath = "ui/icon_spell_browser2.png"
 local optionsIconPath = "ui/icon_options2.png"
 local resetIconPath = "ui/icon_stats_reset_small2.png"
 local shuffleIconPath = "ui/icon_swap_small2.png"
-local playerFaction = cm:get_faction(cm:get_local_faction(true))
+local playerFaction = cm:get_local_faction(true) 
 if string.find(playerFaction:culture(), "wh_") then
 	homeIconPath = "ui/icon_home_small.png"
 	bookIconPath = "ui/icon_lorebook.png"
@@ -366,7 +366,7 @@ local function applySpellDisableEffect(char, spellSlots)
 	end
 	local savedOption = cm:get_saved_value("ml_forename_"..char:get_forename().."_surname_"..char:get_surname().."_cqi_"..tostring(char:command_queue_index()).."_".."skill_option")
 	local charCqi = char:command_queue_index()
-	CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|"..tostring(charCqi))
+	CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), "MixedLores|"..tostring(charCqi))
 end
 
 --v [NO_CHECK] function(spellName: any, selectedSpellSlot: any, char: CA_CHAR) --> vector<string>
@@ -427,10 +427,10 @@ core:add_listener(
 				if ml_tables then
 					--sm0_log("CHAR: "..char:character_subtype_key())
 					if savedOption == "Spells for free" and char:has_military_force() and not char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
-						CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."apply".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
+						CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), "MixedLores|".."apply".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
 						cm:apply_effect_bundle_to_characters_force(ml_tables.enableAllBundle, charCqi, -1, false)
 					elseif savedOption ~= "Spells for free" and char:has_military_force() and char:military_force():has_effect_bundle(ml_tables.enableAllBundle) then
-						CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
+						CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..ml_tables.enableAllBundle)
 						cm:remove_effect_bundle_from_characters_force(ml_tables.enableAllBundle, charCqi)
 					end
 					for _, effectBundle in pairs(ml_tables.effectBundles) do
@@ -1452,7 +1452,7 @@ local function setupAICompletedBattleListener(char)
 				local charCqi = char:command_queue_index()
 				for _, effectBundle in pairs(ml_tables.effectBundles) do
 					if char:military_force():has_effect_bundle(effectBundle) then
-						CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..effectBundle)
+						CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), "MixedLores|".."remove".."<"..tostring(charCqi)..">"..effectBundle)
 						--cm:remove_effect_bundle_from_characters_force(effectBundle, charCqi)
 					end
 				end

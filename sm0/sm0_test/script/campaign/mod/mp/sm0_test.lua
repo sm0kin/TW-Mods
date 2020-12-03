@@ -14,7 +14,7 @@ local function deletePlayerSubcultureFactions(playerFaction)
 			or ((--faction:name() == "wh2_main_hef_caledor" or 
 			faction:name() == "wh2_dlc11_cst_vampire_coast" or faction:name() == "wh_main_emp_middenland" 
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
-				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
+				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction_name(true), faction:name()) end
 			else
 				if cm:random_number(1, 1) == 1 then
 				--local regionList = faction:region_list()
@@ -46,7 +46,7 @@ local function deletePlayerSubcultureFactions(playerFaction)
 			or faction:subculture() == playerFaction:subculture()--or faction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" 
 			or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh2_dlc11_cst_vampire_coast"
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
-				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
+				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction_name(true), faction:name()) end
 			else		
 				if cm:random_number(5, 1) == 1 then --playerFaction:subculture() == faction:subculture() 
 					--sm0_log("deleted Faction: "..faction:name())

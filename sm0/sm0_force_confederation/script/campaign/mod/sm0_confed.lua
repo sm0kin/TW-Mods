@@ -188,12 +188,12 @@ local function init_force_confed_listeners(enable_value)
 							option.target = "subculture:" .. subculture
 							option.accept = false
 							option.both_directions = false        	
-							oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
-							if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
-								option.offer = true
-							else
+							--oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
+							--if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
+							--	option.offer = true
+							--else
 								option.offer = false
-							end  
+							--end  
 						end
 					end
 					cm:callback(
@@ -237,6 +237,15 @@ local function init_force_confed_listeners(enable_value)
 									cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
 									cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
 								end
+								if faction:name() == "wh2_dlc16_wef_drycha" then
+									cm:force_diplomacy("faction:wh2_dlc16_wef_drycha", "culture:wh_dlc05_wef_wood_elves", "form confederation", false, false)
+									cm:force_diplomacy("faction:wh2_dlc16_wef_drycha", "faction:wh_dlc05_wef_argwylon", "form confederation", true, true)
+								end
+									--- only player(s) - excluding Drycha - can confederate
+								if subculture == "wh_dlc05_sc_wef_wood_elves" and faction:name() ~= "wh2_dlc16_wef_drycha" and faction:is_human() then
+									cm:force_diplomacy("culture:wh_dlc05_wef_wood_elves", "culture:wh_dlc05_wef_wood_elves", "form confederation", false, false)
+									cm:force_diplomacy("faction:"..faction:name(),"culture:wh_dlc05_wef_wood_elves","form confederation",true,true)
+								end
 							end
 						end, 1, "changeDiplomacyOptions"
 					)
@@ -272,7 +281,7 @@ local function init_force_confed_listeners(enable_value)
 				return context.string == "settlement_captured" 
 			end,
 			function(context)
-				player_faction = cm:get_faction(cm:get_local_faction(true))
+				player_faction = cm:get_local_faction(true) 
 				local icon = find_uicomponent(core:get_ui_root(), "settlement_captured", "icon_vassals")
 				if icon ~= nil then 
 					for current_id, _ in pairs(occupation_option_id) do

@@ -39,7 +39,7 @@ function sm0_ai_exp()
         function(context)
 			local char = context:character()
 			local character_subtype = char:character_subtype_key()
-            if cm:char_is_general(char) and character_subtype ~= "wh2_main_def_black_ark" and character_subtype ~= "wh2_main_skv_plague_priest_ritual" and character_subtype ~= "wh2_main_skv_warlock_engineer_ritual" 
+			if cm:char_is_general(char) and character_subtype ~= "wh2_dlc09_tmb_necrotect_ritual" and character_subtype ~= "wh2_main_skv_plague_priest_ritual" and character_subtype ~= "wh2_main_skv_warlock_engineer_ritual" 			
             and ((char:has_military_force() and not char:military_force():is_armed_citizenry() and char:rank() < 20) or (char:is_faction_leader() and char:rank() <= 30)) then
 				cm:add_agent_experience(cm:char_lookup_str(char:command_queue_index()), 500)
 				if char:is_faction_leader() then

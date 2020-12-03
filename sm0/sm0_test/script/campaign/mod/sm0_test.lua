@@ -27,7 +27,7 @@ end
 
 --v function()
 local function expCheat()
-	local playerFaction = cm:get_faction(cm:get_local_faction(true))
+	local playerFaction = cm:get_local_faction(true)
     local characterList = playerFaction:character_list()
     for i = 0, characterList:num_items() - 1 do
         local currentChar = characterList:item_at(i)	
@@ -169,7 +169,7 @@ local function unitCheat()
 						"wh2_dlc15_grn_mon_rogue_idol_0",
 						"wh2_dlc15_grn_mon_rogue_idol_0"} --:vector<string>					
 						
-	local playerFaction = cm:get_faction(cm:get_local_faction(true))
+	local playerFaction = cm:get_local_faction(true)
 	if playerFaction:subculture() == "wh_main_sc_nor_norsca" then
 		local characterList = playerFaction:character_list()
 		for i = 0, characterList:num_items() - 1 do
@@ -187,7 +187,7 @@ local function unitCheat()
 		end
 	elseif playerFaction:subculture() == "wh2_main_sc_skv_skaven" then
 		cm:spawn_agent_at_settlement(playerFaction, playerFaction:home_region():settlement(), "wizard", "wh2_main_skv_plague_priest")
-		cm:spawn_agent_at_settlement(cm:get_faction(cm:get_local_faction(true)), playerFaction:home_region():settlement(), "spy", "wh2_main_skv_assassin")
+		cm:spawn_agent_at_settlement(cm:get_local_faction(true), playerFaction:home_region():settlement(), "spy", "wh2_main_skv_assassin")
 		local characterList = playerFaction:character_list()
 		for i = 0, characterList:num_items() - 1 do
 			local currentChar = characterList:item_at(i)	
@@ -346,7 +346,7 @@ end
 --v function()
 local function deletePlayerSubcultureFactions()
 	if cm:model():turn_number() == 1 then cm:force_confederation("wh2_main_hef_caledor", "wh2_main_hef_avelorn") end
-	local playerFaction = cm:get_faction(cm:get_local_faction(true))
+	local playerFaction = cm:get_local_faction(true)
 	local factionList2 = playerFaction:factions_of_same_subculture()
 	local factionList = cm:model():world():faction_list()
 	for i = 0, factionList2:num_items() - 1 do
@@ -465,7 +465,7 @@ function sm0_test()
 		sm0_log_reset()
 		cm:set_saved_value("sm0_log_reset", true)
 	end	
-	local local_faction = cm:get_faction(cm:get_local_faction(true))
+	local local_faction = cm:get_local_faction(true)
 	--local blessed_dread = cm:get_faction("wh2_dlc11_def_the_blessed_dread")
 	--local lokhir = blessed_dread:faction_leader()
 	--core:add_listener(
@@ -561,8 +561,8 @@ function sm0_test()
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
 	--cm:transfer_region_to_faction("wh2_main_eagle_gate", cm:get_local_faction(true))
 	--cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction(true))
-	--cm:spawn_agent_at_settlement(cm:get_faction(cm:get_local_faction(true)), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
-	--local characterList = cm:get_faction(cm:get_local_faction(true)):character_list()
+	--cm:spawn_agent_at_settlement(cm:get_local_faction(true), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
+	--local characterList = cm:get_local_faction(true):character_list()
     --for i = 0, characterList:num_items() - 1 do
     --    local currentChar = characterList:item_at(i)	
     --    local cqi = currentChar:command_queue_index()

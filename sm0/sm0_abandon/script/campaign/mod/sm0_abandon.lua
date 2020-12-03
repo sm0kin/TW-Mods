@@ -127,7 +127,7 @@ local function create_abandon_frame(abandon_region_key)
             local region_to_send = region_key
             local money_to_send = calc_cost(cm:get_region(region_to_send))
             if delay_value ~= "one_turn" then
-                CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
+                CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), "burnitdown|"
                 ..region_to_send.."<"..money_to_send..">"..tostring(penalty_value).."~".."^"..tostring(penalty_scope_value).."°"..tostring(penalty_tier_value).."$"..tostring(delay_value))
                 abandon_frame:Delete()
                 abandon_frame = nil
@@ -136,11 +136,11 @@ local function create_abandon_frame(abandon_region_key)
                 if not cm:get_saved_value("abandon_"..region_key.."_"..region_owner:name()) then
                     confirm_button:SetState("selected_hover")
                     confirm_button.uic:SetTooltipText(region_onscreen_name.." "..confirm_button_tooltip_hover3, "", false)
-                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), "burnitdown|"
                     ..region_to_send.."<"..money_to_send..">"..tostring(penalty_value).."~".."^"..tostring(penalty_scope_value).."°"..tostring(penalty_tier_value).."$"..tostring(delay_value))
                 else
                     confirm_button:SetState("active")
-                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "burnitdown|"
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), "burnitdown|"
                     ..region_to_send.."<"..money_to_send..">"..tostring(penalty_value).."~remove".."^"..tostring(penalty_scope_value).."°"..tostring(penalty_tier_value).."$"..tostring(delay_value))
                 end
             end
@@ -206,7 +206,7 @@ local function init_abandon_region_listeners(enable_value)
     core:remove_listener("abandon_region_UITriggerScriptEvent")
 
     if enable_value then
-        local player_faction = cm:get_faction(cm:get_local_faction(true))
+        local player_faction = cm:get_local_faction(true)
         local player_faction_key = player_faction:name()
         
         core:add_listener(
@@ -405,7 +405,7 @@ local function init_abandon_region_listeners(enable_value)
             for i = 0, region_list:num_items() - 1 do
                 local current_region = region_list:item_at(i)
                 if cm:get_saved_value("abandon_"..current_region:name().."_"..player_faction:name()) then
-                    CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), cm:get_saved_value("abandon_"..current_region:name().."_"..player_faction:name()))
+                    CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), cm:get_saved_value("abandon_"..current_region:name().."_"..player_faction:name()))
                 end
             end
         end
