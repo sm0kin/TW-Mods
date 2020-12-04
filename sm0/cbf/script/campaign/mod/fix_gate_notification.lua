@@ -1,7 +1,7 @@
 function fix_gate_notification()
     local id = 810 --hef
 	
-	local culture = cm:get_faction(cm:get_local_faction(true)):culture()
+	local culture = cm:get_local_faction(true):culture()
 	
 	if culture == "wh2_main_def_dark_elves" then
 		id = 811

@@ -122,7 +122,7 @@ function add_hellebron_listeners()
 		);
 		core:add_listener(
 			"death_night_triggered",
-			"UITriggerScriptEvent",
+			"UITrigger",
 			function(context)
 				return context:trigger() == "death_night_event";
 			end,

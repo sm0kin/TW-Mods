@@ -345,7 +345,13 @@ local wh_agents = {
     {["faction"] = "wh2_main_skv_clan_eshin", ["subtype"] = "wh2_dlc14_skv_deathmaster_snikch", ["dlc"] = "TW_WH2_DLC14_SHADOW"},
     {["faction"] = "wh2_dlc15_grn_broken_axe", ["subtype"] = "wh2_dlc15_grn_grom_the_paunch", ["dlc"] = "TW_WH2_DLC15_WARDEN"},
     {["faction"] = "wh2_main_hef_yvresse", ["subtype"] = "wh2_dlc15_hef_eltharion", ["dlc"] = "TW_WH2_DLC15_WARDEN"},
-    {["faction"] = "wh2_dlc15_hef_imrik", ["subtype"] = "wh2_dlc15_hef_imrik", ["dlc"] = "TW_WH2_DLC15_IMRIK_FREE"}
+    {["faction"] = "wh2_dlc15_hef_imrik", ["subtype"] = "wh2_dlc15_hef_imrik", ["dlc"] = "TW_WH2_DLC15_IMRIK_FREE"},
+    {["faction"] = "wh2_main_skv_clan_moulder", ["subtype"] = "wh2_dlc16_skv_throt_the_unclean", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
+    {["faction"] = "wh2_main_skv_clan_moulder", ["subtype"] = "wh2_dlc16_skv_ghoritch", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
+    {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_drycha", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
+    {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_coeddil", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
+    {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_ariel", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
+    {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_sisters_of_twilight", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"}
 } --:vector<map<string, string>> 
     --MIXU Part 1--
 local mixu1_agents = {
@@ -563,7 +569,10 @@ local playable_factions = {
     "wh_main_chs_chaos",
     "wh2_dlc15_hef_imrik",
     "wh2_main_hef_yvresse",
-    "wh2_dlc15_grn_broken_axe"
+    "wh2_dlc15_grn_broken_axe",
+    "wh2_main_skv_clan_moulder",
+    "wh2_dlc16_wef_drycha",
+    "wh2_dlc16_wef_sisters_of_twilight"
 } --:vector<string>
 
 local vor_subtype_anc = {
@@ -652,6 +661,10 @@ local vor_subtype_anc = {
 		{"mission", "wh2_dlc14_anc_armour_the_cloak_of_shadows", "wh2_dlc14_vortex_skv_snikch_the_cloak_of_shadows_stage_1", 5, "wh2_dlc14_vortex_skv_snikch_the_cloak_of_shadows_stage_4_mpc"},
         {"mission", "wh2_dlc14_anc_weapon_whirl_of_weeping_blades", "wh2_dlc14_vortex_skv_snikch_whirl_of_weeping_blades_stage_1", 3}
     },
+    ["throt_quests"] = {
+		{"mission", "wh2_dlc16_anc_enchanted_item_whip_of_domination", "wh2_dlc16_skv_throt_vortex_whip_of_domination_stage_1", 5, "wh2_dlc16_skv_throt_vortex_whip_of_domination_stage_4_mpc"},
+		{"mission", "wh2_dlc16_anc_weapon_creature_killer", "wh2_dlc16_skv_throt_vortex_creature_killer_stage_1", 3}
+	},
     ["wh2_dlc09_tmb_settra"] = {
 		{"mission", "wh2_dlc09_anc_enchanted_item_the_crown_of_nehekhara", "wh2_dlc09_great_vortex_tmb_settra_the_crown_of_nehekhara_stage_1", 6, "wh2_dlc09_great_vortex_tmb_settra_the_crown_of_nehekhara_stage_5_mpc", "dlc09.camp.advice.quest.settra.the_crown_of_nehekhara.001"},
 		{"mission", "wh2_dlc09_anc_weapon_the_blessed_blade_of_ptra", "wh2_dlc09_great_vortex_tmb_settra_the_blessed_blade_of_ptra_stage_1", 13, "wh2_dlc09_great_vortex_tmb_settra_the_blessed_blade_of_ptra_stage_3_mpc", "dlc09.camp.advice.quest.settra.the_blessed_blade_of_ptra.001"}
@@ -691,6 +704,9 @@ local vor_subtype_anc = {
 		{"mission", "wh2_dlc15_anc_weapon_axe_of_grom", "wh2_dlc15_vortex_grn_grom_axe_of_grom_stage_1", 5,"wh2_dlc15_vortex_grn_grom_axe_of_grom_stage_4_mpc"},
 		{"mission", "wh2_dlc15_anc_enchanted_item_lucky_banner", "wh2_dlc15_main_grn_grom_lucky_banner_stage_1", 2}
     },
+    ["sisters_of_twilight_quests"] = {
+		{"mission", "wh2_dlc16_anc_mount_wef_cha_sisters_of_twilight_forest_dragon", "wh2_dlc16_great_vortex_wef_sisters_dragon_stage_1", 12,"wh2_dlc16_great_vortex_wef_sisters_dragon_stage_4_mpc"}
+	},
     --mixu
     ["brt_adalhard"] = {
         {"", "mixu_anc_armour_brt_adalhard_lions_cloak", "", 12}
@@ -899,6 +915,12 @@ local me_subtype_anc = {
     ["dlc05_wef_durthu"] = {
         {"mission", "wh_dlc05_anc_weapon_daiths_sword", "wh_dlc05_wef_durthu_sword_of_daith_stage_1", 8,"wh_dlc05_wef_durthu_sword_of_daith_stage_4a_mpc"}
     },
+    ["sisters_of_twilight_quests"] = {
+		{"mission", "wh2_dlc16_anc_mount_wef_cha_sisters_of_twilight_forest_dragon", "wh2_dlc16_wef_sisters_dragon_stage_1", 12,"wh2_dlc16_wef_sisters_dragon_stage_4_mpc"}
+	},
+	["drycha_quests"] = {
+		{"mission", "wh2_dlc16_anc_enchanted_item_fang_of_taalroth", "wh2_dlc16_wef_drycha_coeddil_unchained_stage_1", 5,"wh2_dlc16_wef_drycha_coeddil_unchained_stage_4_mpc"}
+	},
     ["dlc07_brt_fay_enchantress"] = {
 		{"mission", "wh_dlc07_anc_arcane_item_the_chalice_of_potions", "wh_dlc07_qb_brt_fay_enchantress_chalice_of_potions_stage_1", 9, "wh_dlc07_qb_brt_fay_enchantress_chalice_of_potions_stage_6_mpc"},
         {"mission", "wh2_dlc12_anc_arcane_item_brt_morgianas_mirror", "wh2_dlc12_brt_fay_morgianas_mirror", 6}
@@ -1002,6 +1024,10 @@ local me_subtype_anc = {
         {"mission", "wh2_dlc14_anc_armour_the_cloak_of_shadows", "wh2_dlc14_main_skv_snikch_the_cloak_of_shadows_stage_1", 5},
         {"mission", "wh2_dlc14_anc_weapon_whirl_of_weeping_blades", "wh2_dlc14_main_skv_snikch_whirl_of_weeping_blades_stage_1", 3}
     },
+    ["throt_quests"] = {
+		{"mission", "wh2_dlc16_anc_enchanted_item_whip_of_domination", "wh2_dlc16_skv_throt_main_whip_of_domination_stage_1", 5, "wh2_dlc16_skv_throt_main_whip_of_domination_stage_4_mpc"},
+		{"mission", "wh2_dlc16_anc_weapon_creature_killer", "wh2_dlc16_skv_throt_main_creature_killer_stage_1", 3}
+	},	
     ["wh2_dlc09_tmb_settra"] = {
 		{"mission", "wh2_dlc09_anc_enchanted_item_the_crown_of_nehekhara", "wh2_dlc09_tmb_settra_the_crown_of_nehekhara_stage_1", 6, "wh2_dlc09_tmb_settra_the_crown_of_nehekhara_stage_5_mpc"},
 		{"mission", "wh2_dlc09_anc_weapon_the_blessed_blade_of_ptra", "wh2_dlc09_tmb_settra_the_blessed_blade_of_ptra_stage_1", 13, "wh2_dlc09_tmb_settra_the_blessed_blade_of_ptra_stage_3_mpc"}
@@ -1642,20 +1668,18 @@ local function apply_diplomacy(faction_name)
                 option.target = "subculture:" .. subculture
                 option.accept = false
                 option.both_directions = false        	
-                oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
-                if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
-                    option.offer = true
-                else
+                --oak_region = cm:get_region("wh_main_yn_edri_eternos_the_oak_of_ages")
+                --if oak_region:building_exists("wh_dlc05_wef_oak_of_ages_3") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_4") or oak_region:building_exists("wh_dlc05_wef_oak_of_ages_5") then
+                --	option.offer = true
+                --else
                     option.offer = false
-                end  
+                --end  
             end
         end
         cm:callback(
             function(context)
                 if option.offer ~= nil and option.accept ~= nil and option.both_directions ~= nil then
                     cm:force_diplomacy(option.source, option.target, "form confederation", option.offer, option.accept, option.both_directions)
-                    sm0_log("force_diplomacy|form confederation: source = "..option.source..", target = "..option.target..", offer = "..tostring(option.offer)
-                    ..", accept = "..tostring(option.accept)..", both_directions = "..tostring(option.both_directions))
                 end
                 if confed_option_value == "no_tweak" or confed_option_value == nil then
                     if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
@@ -1692,6 +1716,15 @@ local function apply_diplomacy(faction_name)
                     if vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
                         cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
                         cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
+                    end
+                    if faction:name() == "wh2_dlc16_wef_drycha" then
+                        cm:force_diplomacy("faction:wh2_dlc16_wef_drycha", "culture:wh_dlc05_wef_wood_elves", "form confederation", false, false)
+                        cm:force_diplomacy("faction:wh2_dlc16_wef_drycha", "faction:wh_dlc05_wef_argwylon", "form confederation", true, true)
+                    end
+                        --- only player(s) - excluding Drycha - can confederate
+                    if subculture == "wh_dlc05_sc_wef_wood_elves" and faction:name() ~= "wh2_dlc16_wef_drycha" and faction:is_human() then
+                        cm:force_diplomacy("culture:wh_dlc05_wef_wood_elves", "culture:wh_dlc05_wef_wood_elves", "form confederation", false, false)
+                        cm:force_diplomacy("faction:"..faction:name(),"culture:wh_dlc05_wef_wood_elves","form confederation",true,true)
                     end
                 end
             end, 1, "changeDiplomacyOptions"
@@ -2165,7 +2198,7 @@ local function init_recruit_defeated_listeners(enable_value)
     core:remove_listener("recruit_defeated_DilemmaChoiceMadeEvent")
     core:remove_listener("recruit_defeated_FactionJoinsConfederation")
     core:remove_listener("recruit_defeated_ScriptEventConfederationExpired")
-    core:remove_listener("recruit_defeated_UITriggerScriptEvent")
+    core:remove_listener("recruit_defeated_UITrigger")
     core:remove_listener("recruit_defeated_confederation_listener")
 
 	if enable_value then
@@ -2489,8 +2522,8 @@ local function init_recruit_defeated_listeners(enable_value)
         )
         --Multiplayer listener
         core:add_listener(
-            "recruit_defeated_UITriggerScriptEvent",
-            "UITriggerScriptEvent",
+            "recruit_defeated_UITrigger",
+            "UITrigger",
             function(context)
                 return context:trigger():starts_with("RD|")
             end,

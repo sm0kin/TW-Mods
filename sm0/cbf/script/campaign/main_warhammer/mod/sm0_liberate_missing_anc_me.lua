@@ -307,7 +307,7 @@ function sm0_liberate_missing_anc_me()
                                         end
                                         if not mission_found then
                                             --sm0_log("force_add_ancillary: "..current_ancillary_key) 
-                                            CampaignUI.TriggerCampaignScriptEvent(cm:get_faction(cm:get_local_faction(true)):command_queue_index(), "anc|"..tostring(character:command_queue_index())..":"..current_ancillary_key)
+                                            CampaignUI.TriggerCampaignScriptEvent(cm:get_local_faction(true):command_queue_index(), "anc|"..tostring(character:command_queue_index())..":"..current_ancillary_key)
                                         end
                                     end
                                 end
@@ -329,8 +329,8 @@ function sm0_liberate_missing_anc_me()
     )
     --Multiplayer listener
     core:add_listener(
-        "sm0_backup_UITriggerScriptEvent",
-        "UITriggerScriptEvent",
+        "sm0_backup_UITrigger",
+        "UITrigger",
         function(context)
             return context:trigger():starts_with("anc|")
         end,

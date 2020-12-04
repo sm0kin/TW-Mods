@@ -628,15 +628,15 @@ end
 
 --v function(enable: boolean)
 local function init_delete_listeners(enable)
-	core:remove_listener("sm0_delete_UITriggerScriptEvent")
+	core:remove_listener("sm0_delete_UITrigger")
 	core:remove_listener("sm0_delete_units_dropdown_PanelOpenedCampaign")
 	core:remove_listener("sm0_delete_units_dropdown_PanelClosedCampaign")
 	core:remove_listener("sm0_delete_units_dropdown_ComponentLClickUp")
 	if enable then
 		-- multiplayer listener
 		core:add_listener(
-			"sm0_delete_UITriggerScriptEvent",
-			"UITriggerScriptEvent",
+			"sm0_delete_UITrigger",
+			"UITrigger",
 			function(context)
 				return context:trigger():starts_with("sm0_delete|")
 			end,
@@ -645,7 +645,7 @@ local function init_delete_listeners(enable)
 				local char_lookup = cm:char_lookup_str(cqi)
 				local character = cm:get_character_by_cqi(cqi)
 				cm:disable_event_feed_events(true, "", "", "character_ready_for_duty")
-				sm0_log("sm0_delete_UITriggerScriptEvent | "..char_lookup)
+				sm0_log("sm0_delete_UITrigger | "..char_lookup)
 				core:add_listener(
 					"sm0_delete_"..cqi.."_CharacterConvalescedOrKilled",
 					"CharacterConvalescedOrKilled",

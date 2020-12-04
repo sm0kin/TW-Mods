@@ -395,7 +395,7 @@ end
 --Multiplayer listener
 core:add_listener(
     "MixedLoresMultiplayer",
-    "UITriggerScriptEvent",
+    "UITrigger",
     function(context)
         return context:trigger():starts_with("MixedLores|")
     end,
@@ -1326,7 +1326,7 @@ core:add_listener(
 
 core:add_listener(
 	"llrRespec",
-	"UITriggerScriptEvent",
+	"UITrigger",
 	function(context)
 		return context:trigger() == "LegendaryLordRespec"
 	end,

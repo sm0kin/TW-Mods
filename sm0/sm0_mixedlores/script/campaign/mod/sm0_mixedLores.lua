@@ -1271,7 +1271,7 @@ core:add_listener(
 
 core:add_listener(
 	"llrRespec",
-	"UITriggerScriptEvent",
+	"UITrigger",
 	function(context)
 		return context:trigger() == "LegendaryLordRespec"
 	end,

@@ -255,8 +255,8 @@ function sm0_liberate_missing_anc_vor()
     )
     --Multiplayer listener
     core:add_listener(
-        "sm0_backup_UITriggerScriptEvent",
-        "UITriggerScriptEvent",
+        "sm0_backup_UITrigger",
+        "UITrigger",
         function(context)
             return context:trigger():starts_with("anc|")
         end,

@@ -820,7 +820,7 @@ function sm0_revive()
     --Multiplayer listener
     core:add_listener(
         "reviveMultiplayerCompatible",
-        "UITriggerScriptEvent",
+        "UITrigger",
         function(context)
             return context:trigger():starts_with("burnitdown|")
         end,

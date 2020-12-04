@@ -203,7 +203,7 @@ local function init_abandon_region_listeners(enable_value)
     core:remove_listener("abandon_region_PanelOpenedCampaign")
     core:remove_listener("abandon_region_PanelClosedCampaign")
     core:remove_listener("abandon_region_SettlementSelected")
-    core:remove_listener("abandon_region_UITriggerScriptEvent")
+    core:remove_listener("abandon_region_UITrigger")
 
     if enable_value then
         local player_faction = cm:get_local_faction(true)
@@ -280,8 +280,8 @@ local function init_abandon_region_listeners(enable_value)
 
         --Multiplayer listener
         core:add_listener(
-            "abandon_region_UITriggerScriptEvent",
-            "UITriggerScriptEvent",
+            "abandon_region_UITrigger",
+            "UITrigger",
             function(context)
                 return context:trigger():starts_with("burnitdown|")
             end,

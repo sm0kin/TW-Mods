@@ -219,7 +219,7 @@ local function init_obr_listeners(enable_value)
     core:remove_listener("obr_next_ShortcutPressed")
     core:remove_listener("obr_PanelOpenedCampaign")
     core:remove_listener("obr_PanelClosedCampaign")
-    core:remove_listener("obr_UITriggerScriptEvent")
+    core:remove_listener("obr_UITrigger")
 
     if enable_value then
         core:add_listener(
@@ -312,8 +312,8 @@ local function init_obr_listeners(enable_value)
         )
 
         core:add_listener(
-            "obr_UITriggerScriptEvent",
-            "UITriggerScriptEvent",
+            "obr_UITrigger",
+            "UITrigger",
             function(context)
                 return context:trigger():starts_with("LegendaryLordRespec|")
             end,

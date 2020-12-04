@@ -148,8 +148,8 @@ function add_eltharion_lair_listeners()
 		true
 	);
 	core:add_listener(
-		"lair_UITriggerScriptEvent",
-		"UITriggerScriptEvent",
+		"lair_UITrigger",
+		"UITrigger",
 		function(context)
 			return context:trigger() == "grom_invasion_event";
 		end,

@@ -41,7 +41,7 @@ function add_horde_reemergence_listeners()
 		function(context)
 			local allow_factions_to_reemerge = cm:get_saved_value("allow_factions_to_reemerge");
 			
-			local local_faction = cm:get_local_faction(true);
+			local local_faction = cm:get_local_faction_name(true);
 			
 			if local_faction and cm:get_faction(local_faction) then
 				local human_factions = cm:get_human_factions();
