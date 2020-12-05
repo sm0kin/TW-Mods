@@ -719,7 +719,7 @@ function sm0_test()
 	unitCheat()
 	--unlockLords()
 	--spamLords()
-	cm:treasury_mod(cm:get_local_faction(true), 100000)
+	cm:treasury_mod(cm:get_local_faction_name(true), 100000)
 	core:add_listener(
 		"human_FactionTurnEnd",
 		"FactionTurnEnd",

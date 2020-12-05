@@ -151,6 +151,12 @@ local blacklisted_subtypes = {
 	"wh2_dlc15_hef_imrik",
 	"wh2_dlc15_hef_eltharion",
 	"wh2_dlc15_grn_grom_the_paunch",
+	"wh2_dlc16_skv_throt_the_unclean",
+	"wh2_dlc16_skv_ghoritch",
+	"wh2_dlc16_wef_drycha",
+	"wh2_dlc16_wef_coeddil",
+	"wh2_dlc16_wef_ariel",
+	"wh2_dlc16_wef_sisters_of_twilight",
 	--mixu1
 	"brt_almaric_de_gaudaron",
 	"brt_chilfroy",

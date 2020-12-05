@@ -10,6 +10,7 @@ local preferance5_value --:WHATEVER
 local preferance6_value --:WHATEVER 
 local tmb_restriction_value --:WHATEVER 
 local cst_restriction_value --:WHATEVER 
+local wef_restriction_value --:WHATEVER 
 --local savage_restriction_value --:WHATEVER 
 
 --# assume global handover_nakai_region: function()
@@ -2027,11 +2028,17 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             if faction_current:subculture() == faction:subculture() and not faction_current:is_dead() and not is_faction_exempted(faction_current) 
             and not is_human_and_rejected_faction(faction_current, faction) and ((faction_current:is_human() and (scope_value == "player" or scope_value == "player_ai")) 
             or (not faction_current:is_human() and (scope_value == "ai" or scope_value == "player_ai"))) 
+            --tmb
             and (faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" or (not tmb_restriction_value and faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
             or (tmb_restriction_value and faction_current:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" 
             and faction:name() ~= "wh2_dlc09_tmb_the_sentinels" and faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash")
             or (tmb_restriction_value and faction_current:name() == "wh2_dlc09_tmb_the_sentinels" and faction:name() == "wh2_dlc09_tmb_followers_of_nagash") 
-            or (tmb_restriction_value and faction_current:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction:name() == "wh2_dlc09_tmb_the_sentinels")) then 
+            or (tmb_restriction_value and faction_current:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction:name() == "wh2_dlc09_tmb_the_sentinels"))
+            --wef
+            and (faction:subculture() ~= "wh_dlc05_sc_wef_wood_elves" or (not wef_restriction_value and faction:subculture() == "wh_dlc05_sc_wef_wood_elves") 
+            or (wef_restriction_value and faction:subculture() == "wh_dlc05_sc_wef_wood_elves" and (faction_current:name() == "wh_dlc05_wef_argwylon"
+            or (faction_current:name() == "wh2_dlc16_wef_drycha" and faction:name() == "wh_dlc05_wef_argwylon") 
+            or (faction_current:name() ~= "wh2_dlc16_wef_drycha" and faction:name() ~= "wh2_dlc16_wef_drycha")))) then 
                 table.insert(factions_of_same_subculture, faction_current:name())
             end
         end
@@ -2760,6 +2767,9 @@ core:add_listener(
         tmb_restriction_value = a_tmb_restriction:get_finalized_setting()
         local b_cst_restriction = recruit_defeated_mod:get_option_by_key("b_cst_restriction")
         cst_restriction_value = b_cst_restriction:get_finalized_setting()
+        local d_wef_restriction = recruit_defeated_mod:get_option_by_key("d_wef_restriction")
+        wef_restriction_value = d_wef_restriction:get_finalized_setting()
+
         --local c_savage_restriction = recruit_defeated_mod:get_option_by_key("c_savage_restriction")
         --savage_restriction_value = c_savage_restriction:get_finalized_setting()
         
@@ -2774,6 +2784,8 @@ core:add_listener(
         mct:log("recruit_defeated_MctInitialized/preferance6_value = "..tostring(preferance6_value))
         mct:log("recruit_defeated_MctInitialized/tmb_restriction_value = "..tostring(tmb_restriction_value))
         mct:log("recruit_defeated_MctInitialized/cst_restriction_value = "..tostring(cst_restriction_value))
+        mct:log("recruit_defeated_MctInitialized/wef_restriction_value = "..tostring(wef_restriction_value))
+
         --mct:log("recruit_defeated_MctInitialized/savage_restriction_value = "..tostring(savage_restriction_value))
     end,
     true
@@ -2798,6 +2810,7 @@ core:add_listener(
         preferance6_value = settings_table.c_preferance6
         tmb_restriction_value = settings_table.a_tmb_restriction
         cst_restriction_value = settings_table.b_cst_restriction
+        wef_restriction_value = settings_table.d_wef_restriction
         --savage_restriction_value = settings_table.c_savage_restriction
         
         init_recruit_defeated_listeners(enable_value)
@@ -2880,10 +2893,12 @@ function sm0_recruit_defeated()
         if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
             tmb_restriction_value = false
             cst_restriction_value = false
+            wef_restriction_value = false
             --savage_restriction_value = false
         else
             tmb_restriction_value = true
             cst_restriction_value = true
+            wef_restriction_value = true
             --savage_restriction_value = true
         end
         scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
@@ -2933,10 +2948,12 @@ function sm0_recruit_defeated()
                     if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
                         tmb_restriction_value = false
                         cst_restriction_value = false
+                        wef_restriction_value = false
                         --savage_restriction_value = false
                     else
                         tmb_restriction_value = true
                         cst_restriction_value = true
+                        wef_restriction_value = true
                         --savage_restriction_value = true
                     end
                     scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"

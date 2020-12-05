@@ -122,6 +122,11 @@ cst_restriction:set_default_value(false)
 cst_restriction:set_text(loc_prefix.."b_cst_restriction_txt", true)
 cst_restriction:set_tooltip_text(loc_prefix.."b_cst_restriction_tt", true)
 
+local wef_restriction = recruit_defeated:add_new_option("d_wef_restriction", "checkbox")
+wef_restriction:set_default_value(false)
+wef_restriction:set_text(loc_prefix.."d_wef_restriction_txt", true)
+wef_restriction:set_tooltip_text(loc_prefix.."d_wef_restriction_tt", true)
+
 --local savage_restriction = recruit_defeated:add_new_option("c_savage_restriction", "checkbox")
 --savage_restriction:set_default_value(true)
 --savage_restriction:set_text(loc_prefix.."c_savage_restriction_txt", true)
