@@ -249,12 +249,12 @@ local function init_abandon_region_listeners(enable_value)
                 region_key = context:garrison_residence():region():name()
                 local current_faction_key = context:garrison_residence():faction():name()
 
-                real_timer.register_singleshot("next_tick", 0)
+                real_timer.register_singleshot("abandon_region_next_tick", 0)
                 core:add_listener(
                     "abandon_region_next_tick",
                     "RealTimeTrigger",
                     function(context)
-                        return context.string == "next_tick"
+                        return context.string == "abandon_region_next_tick"
                     end,
                     function(context)
                         if abandon_frame then

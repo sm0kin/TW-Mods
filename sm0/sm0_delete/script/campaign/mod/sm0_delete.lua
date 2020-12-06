@@ -302,7 +302,7 @@ local function get_selected_char_CQI()
         local unitsUIC = find_uicomponent(core:get_ui_root(), "units_panel", "main_units_panel", "units")
         for i = 0, unitsUIC:ChildCount() - 1 do
             local uic_child = UIComponent(unitsUIC:Find(i))
-            if uic_child:CurrentState() == "Selected" and string.find(uic_child:Id(), "Agent") then
+            if uic_child:CurrentState() == "selected" and string.find(uic_child:Id(), "Agent") then
                 local charList = char:military_force():character_list()
                 local agentIndex = string.match(uic_child:Id(), "%d")
                 local selectedChar = charList:item_at(tonumber(agentIndex))
@@ -680,12 +680,12 @@ local function init_delete_listeners(enable)
 			end,
 			function(context)
 				--sm0_log("sm0/PanelOpenedCampaign: "..context.string)
-				real_timer.register_singleshot("next_tick", 0)
+				real_timer.register_singleshot("sm0_PanelOpenedCampaign_next_tick", 0)
                 core:add_listener(
                     "sm0_delete_next_tick",
                     "RealTimeTrigger",
                     function(context)
-                        return context.string == "next_tick"
+                        return context.string == "sm0_PanelOpenedCampaign_next_tick"
                     end,
                     function(context)
 						local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
@@ -711,12 +711,12 @@ local function init_delete_listeners(enable)
 			end,
 			function(context)
 				--sm0_log("sm0/PanelClosedCampaign: "..context.string)
-				real_timer.register_singleshot("next_tick", 0)
+				real_timer.register_singleshot("sm0_PanelClosedCampaign_next_tick", 0)
                 core:add_listener(
                     "sm0_delete_next_tick",
                     "RealTimeTrigger",
                     function(context)
-                        return context.string == "next_tick"
+                        return context.string == "sm0_PanelClosedCampaign_next_tick"
                     end,
                     function(context)
 						local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")
@@ -742,12 +742,12 @@ local function init_delete_listeners(enable)
 			end,
 			function(context)
 				--sm0_log("sm0/ComponentLClickUp: "..context.string)
-				real_timer.register_singleshot("next_tick", 0)
+				real_timer.register_singleshot("sm0_ComponentLClickUp_next_tick", 0)
                 core:add_listener(
                     "sm0_delete_next_tick",
                     "RealTimeTrigger",
                     function(context)
-                        return context.string == "next_tick"
+                        return context.string == "sm0_ComponentLClickUp_next_tick"
                     end,
                     function(context)
 						local tab_units = find_uicomponent(core:get_ui_root(),"layout", "bar_small_top", "TabGroup", "tab_units")

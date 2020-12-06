@@ -1524,12 +1524,12 @@ if buttonLocation_charPanel then
 			return context.string == "button_cycle_right" and is_uicomponent(panel)
 		end,
 		function(context)
-			real_timer.register_singleshot("next_tick", 0)
+			real_timer.register_singleshot("ml_ComponentLClickUp_next_tick", 0)
 			core:add_listener(
 				"ml_next_tick",
 				"RealTimeTrigger",
 				function(context)
-					return context.string == "next_tick"
+					return context.string == "ml_ComponentLClickUp_next_tick"
 				end,
 				function(context)
 						updateButtonVisibility_charPanel()
@@ -1549,12 +1549,12 @@ if buttonLocation_charPanel then
 			return context.string == "button_cycle_left" and is_uicomponent(panel)
 		end,
 		function(context)
-			real_timer.register_singleshot("next_tick", 0)
+			real_timer.register_singleshot("ml_ComponentLClickUp_next_tick", 0)
 			core:add_listener(
 				"ml_next_tick",
 				"RealTimeTrigger",
 				function(context)
-					return context.string == "next_tick"
+					return context.string == "ml_ComponentLClickUp_next_tick"
 				end,
 				function(context)
 						updateButtonVisibility_charPanel()
@@ -1574,12 +1574,12 @@ if buttonLocation_charPanel then
 			return context.string == "select_next" and is_uicomponent(panel)
 		end,
 		function(context)
-			real_timer.register_singleshot("next_tick", 0)
+			real_timer.register_singleshot("ml_ShortcutPressed_next_tick", 0)
 			core:add_listener(
 				"ml_next_tick",
 				"RealTimeTrigger",
 				function(context)
-					return context.string == "next_tick"
+					return context.string == "ml_ShortcutPressed_next_tick"
 				end,
 				function(context)
 						updateButtonVisibility_charPanel()
@@ -1599,12 +1599,12 @@ if buttonLocation_charPanel then
 			return context.string == "select_prev" and is_uicomponent(panel)
 		end,
 		function(context)
-			real_timer.register_singleshot("next_tick", 0)
+			real_timer.register_singleshot("ml_ShortcutPressed_next_tick", 0)
 			core:add_listener(
 				"ml_next_tick",
 				"RealTimeTrigger",
 				function(context)
-					return context.string == "next_tick"
+					return context.string == "ml_ShortcutPressed_next_tick"
 				end,
 				function(context)
 						updateButtonVisibility_charPanel()

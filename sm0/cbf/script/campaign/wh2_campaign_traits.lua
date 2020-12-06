@@ -1,4 +1,4 @@
-events = get_events();
+
 local TRAIT_LORDS_RECORDS = {};
 
 local TRAIT_EXCLUSIONS = {
@@ -102,8 +102,13 @@ local LEGENDARY_LORD_DEFEATED_TRAITS = {
 	["wh2_dlc14_brt_repanse"] = 				"wh2_dlc14_trait_defeated_repanse",						-- Repanse de Lyonese
 	["wh2_dlc14_def_malus_darkblade"] =			"wh2_dlc14_trait_defeated_malus",						-- Malus Darkblade
 	["wh2_dlc14_skv_deathmaster_snikch"] =		"wh2_dlc14_trait_defeated_snikch",						-- Deathmaster Snikch
-	["wh2_pro08_neu_gotrek"] =					"wh2_dlc14_trait_defeated_gotrek"						-- Gotrek
-	
+	["wh2_pro08_neu_gotrek"] =					"wh2_dlc14_trait_defeated_gotrek",						-- Gotrek
+	["wh2_dlc15_hef_imrik"] = 					"wh2_dlc15_trait_defeated_imrik",						-- Imrik
+	["wh2_dlc15_hef_eltharion"] = 				"wh2_dlc15_trait_defeated_eltharion",					-- Eltharion the Grim
+	["wh2_dlc15_grn_grom_the_paunch"] = 		"wh2_dlc15_trait_defeated_grom",					    -- Grom the Paunch
+	["wh2_dlc16_wef_drycha"] = 		            "wh2_main_trait_defeated_drycha",						-- Drycha
+	["wh2_dlc16_wef_sisters_of_twilight"] =     "wh2_main_trait_defeated_sisters_of_twilight",			-- Sisters of Twilight
+	["wh2_dlc16_skv_throt_the_unclean"] = 		"wh2_main_trait_defeated_throt"							-- Throt the Unclean
 };
 
 local SUBCULTURES_TRAIT_KEYS = {
@@ -272,7 +277,7 @@ function Check_Exclusion(trait, character)
 			end
 		end
 	end
-	if character:character_type("colonel") or character:character_subtype("wh2_main_def_black_ark") or char_faction:is_quest_battle_faction() then
+	if character:character_type("colonel") or char_faction:is_quest_battle_faction() then
 		return true;
 	end
 	return false;
@@ -334,26 +339,26 @@ function Get_Enemy_Legendary_Lords_In_Last_Battle(character)
 	local num_attackers = cm:pending_battle_cache_num_attackers();
 	local num_defenders = cm:pending_battle_cache_num_defenders();
 
-	if pb:night_battle() == true or pb:ambush_battle() == true then
+	if pb:night_battle() == true then --or pb:ambush_battle() == true
 		num_attackers = 1;
 		num_defenders = 1;
 	end
 	
 	for i = 1, num_attackers do
 		local this_char_cqi, this_mf_cqi, current_faction_name = cm:pending_battle_cache_get_attacker(i);
-		local char_obj = cm:model():character_for_command_queue_index(this_char_cqi);
+		local char_subtype = cm:pending_battle_cache_get_attacker_subtype(i);
 		
 		if this_char_cqi == character:cqi() then
 			was_attacker = true;
 			break;
 		end
 		
-		if char_obj:is_null_interface() == false then
-			local char_subtype = char_obj:character_subtype_key();
-			
-			if LEGENDARY_LORD_DEFEATED_TRAITS[char_subtype] ~= nil then
-				table.insert(LL_attackers, char_subtype);
-			elseif is_surtha_ek(char_obj) == true then
+		if LEGENDARY_LORD_DEFEATED_TRAITS[char_subtype] ~= nil then
+			table.insert(LL_attackers, char_subtype);
+		else
+			local char_obj = cm:model():character_for_command_queue_index(this_char_cqi);
+
+			if char_obj:is_null_interface() == false and is_surtha_ek(char_obj) == true then
 				table.insert(LL_attackers, "surtha_ek");
 			end
 		end
@@ -365,14 +370,14 @@ function Get_Enemy_Legendary_Lords_In_Last_Battle(character)
 	
 	for i = 1, num_defenders do
 		local this_char_cqi, this_mf_cqi, current_faction_name = cm:pending_battle_cache_get_defender(i);
-		local char_obj = cm:model():character_for_command_queue_index(this_char_cqi);
+		local char_subtype = cm:pending_battle_cache_get_defender_subtype(i);
 		
-		if char_obj:is_null_interface() == false then
-			local char_subtype = char_obj:character_subtype_key();
-			
-			if LEGENDARY_LORD_DEFEATED_TRAITS[char_subtype] ~= nil then
-				table.insert(LL_defenders, char_subtype);
-			elseif is_surtha_ek(char_obj) == true then
+		if LEGENDARY_LORD_DEFEATED_TRAITS[char_subtype] ~= nil then
+			table.insert(LL_defenders, char_subtype);
+		else
+			local char_obj = cm:model():character_for_command_queue_index(this_char_cqi);
+
+			if char_obj:is_null_interface() == false and is_surtha_ek(char_obj) == true then
 				table.insert(LL_defenders, "surtha_ek");
 			end
 		end
@@ -639,7 +644,7 @@ events.CharacterTurnStart[#events.CharacterTurnStart+1] =
 function (context)
 	local character = context:character();
 
-	if character:is_at_sea() == true and cm:char_is_general_with_army(character) then
+	if character:is_at_sea() and cm:char_is_general_with_army(character) then
 		Give_Trait(character, "wh2_main_trait_sea_legs");
 	end
 end

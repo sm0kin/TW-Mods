@@ -104,12 +104,12 @@ local function saveSettingsToTable()
     --        lastCategory:SimulateLClick()
     --    end, 0, "waitForUI"
     --)
-    real_timer.register_singleshot("next_tick", 0)
+    real_timer.register_singleshot("saveSettingsToTable_next_tick", 0)
     core:add_listener(
         "saveSettingsToTable_next_tick",
         "RealTimeTrigger",
         function(context)
-            return context.string == "next_tick"
+            return context.string == "saveSettingsToTable_next_tick"
         end,
         function(context)
             lastCategory:SimulateLClick()
@@ -295,12 +295,12 @@ function sm0_save_cam()
                 return context.string == "button_settings" or context.string == "button_pause"
             end,
             function(context)
-                real_timer.register_singleshot("next_tick", 0)
+                real_timer.register_singleshot("sm0_save_cam_SettingsLClickUp_next_tick", 0)
                 core:add_listener(
                     "sm0_save_cam_next_tick",
                     "RealTimeTrigger",
                     function(context)
-                        return context.string == "next_tick"
+                        return context.string == "sm0_save_cam_SettingsLClickUp_next_tick"
                     end,
                     function(context)
                         local apply_current_faction = find_uicomponent(core:get_ui_root(), "layout", "settings_panel", "camera_settings", "buttons_list", "apply_current_faction")
