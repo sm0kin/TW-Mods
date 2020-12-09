@@ -559,7 +559,7 @@ function sm0_test()
 	--end
 	
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
-	--cm:transfer_region_to_faction("wh2_main_eagle_gate", cm:get_local_faction(true))
+	cm:transfer_region_to_faction("wh2_main_avelorn_gaean_vale", cm:get_local_faction_name(true))
 	--cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction(true))
 	--cm:spawn_agent_at_settlement(cm:get_local_faction(true), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
 	--local characterList = cm:get_local_faction(true):character_list()

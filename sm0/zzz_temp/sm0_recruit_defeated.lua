@@ -1787,13 +1787,13 @@ local function confed_revived(confederator, confederated)
                 equip_quest_anc(confederated)
                 local faction_leader_cqi = confederated:faction_leader():command_queue_index()
                 local char_list = confederated:character_list()
-                --for n = 0, char_list:num_items() - 1 do 
-                --    local char = char_list:item_at(n)
-                --    local command_queue_index = char:command_queue_index()
-                --    if command_queue_index ~= cqi and not char:is_faction_leader() then 
-                --        cm:kill_character(command_queue_index, true, false) 
-                --    end
-                --end
+                for n = 0, char_list:num_items() - 1 do 
+                    local char = char_list:item_at(n)
+                    local command_queue_index = char:command_queue_index()
+                    if command_queue_index ~= cqi and not char:is_faction_leader() then 
+                        cm:kill_character(command_queue_index, true, false) 
+                    end
+                end
                 for i = 0, char_list:num_items() - 1 do 
                     local char = char_list:item_at(i)
                     local command_queue_index = char:command_queue_index()
@@ -1838,9 +1838,9 @@ local function confed_revived(confederator, confederated)
                     if is_surtha_ek(char) then
                         cm:force_add_ancillary(char, "wh_dlc10_anc_mount_nor_surtha_ek_marauder_chariot", true, true)
                     end
-                    if command_queue_index ~= cqi and not char:is_faction_leader() then 
-                        cm:kill_character(command_queue_index, true, false) 
-                    end
+                    --if command_queue_index ~= cqi and not char:is_faction_leader() then 
+                        --cm:kill_character(command_queue_index, true, false) 
+                    --end
                 end
                 if confederated:name() == "wh2_main_hef_eataine" and not cm:get_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked") then
                     local char_found = false
@@ -1918,7 +1918,7 @@ local function confed_revived(confederator, confederated)
                 if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", true) end
                 --cm:callback(function() 
                     cm:force_confederation(confederator:name(), confederated:name()) 
-                --end, 0.5)   
+                --end, 0.1)   
             end,
             true
         )
@@ -2543,14 +2543,18 @@ local function init_recruit_defeated_listeners(enable_value)
             end,
             function(context)
                 local faction_cqi = context:faction_cqi()
+                sm0_log("faction_cqi .. "..tostring(faction_cqi))
                 local str = context:trigger() --:string
                 local info = string.gsub(str, "RD|", "")
                 local char_cqi_end = string.find(info, ":")
                 local char_cqi = string.sub(info, 1, char_cqi_end - 1) 
                 local subtype = string.sub(info, char_cqi_end + 1)
+                sm0_log("char_cqi .. "..tostring(char_cqi))
                 --# assume char_cqi: CA_CQI
                 local character = cm:get_character_by_cqi(char_cqi)
+                sm0_log("get_character_by_cqi .. "..tostring(character))
                 if character then     
+                    sm0_log("if character then .. "..tostring(character:character_subtype_key()))
                     local confederator
                     local human_factions = cm:get_human_factions()
                     for i = 1, #human_factions do
@@ -2565,12 +2569,14 @@ local function init_recruit_defeated_listeners(enable_value)
                     end
                     local char_type = "legendary_lord"
                     if cm:char_is_agent(character) then char_type = "legendary_hero" end
+                    sm0_log("if cm:char_is_agent(character).. "..tostring(char_type))
                     --sm0_log("Faction event picture | Number: "..tostring(picture))
                     --sm0_log("Faction event Title 1: "..effect.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
                     --sm0_log("Faction event Title 2: "..effect.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
                     --sm0_log("Faction event Description: "..effect.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))
                     if picture and effect.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
                     and effect.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
+                        sm0_log("if picture and effect.get_localised_string... "..effect.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked"))
                         cm:show_message_event(
                             confederator,
                             "event_feed_strings_text_title_event_" .. char_type .. "_available",

@@ -1,4 +1,14 @@
 function fix_supply_lines()
+		-- apply effect bundles at campaign start/load
+		local human_factions = cm:get_human_factions()
+		for i = 1, #human_factions do
+			local faction = cm:get_faction(human_factions[i])
+			if faction then
+				cm:callback(function() 
+					apply_upkeep_penalty(faction)
+				end, 0.1) 
+			end
+		end
     -- apply the effect bundles every time a player's general "dies"
     core:add_listener(
         "fix_supply_lines_character_convalesced_or_killed",
