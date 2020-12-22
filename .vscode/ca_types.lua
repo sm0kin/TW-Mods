@@ -725,6 +725,7 @@
 --# assume CA_CHAR.is_embedded_in_military_force: method() --> boolean
 --# assume CA_CHAR.action_points_remaining_percent: method() --> (number | integer)
 --# assume CA_CHAR.has_ancillary: method(ancillary: string) --> boolean
+--# assume CA_CHAR.has_effect_bundle: method(bundle: string) --> boolean
 
 -- CHARACTER LIST
 --# assume CA_CHAR_LIST.num_items: method() --> number

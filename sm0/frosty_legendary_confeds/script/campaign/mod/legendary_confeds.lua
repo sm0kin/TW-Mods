@@ -19,21 +19,21 @@ local zzz04_deadlyAlliances_value --:WHATEVER
 local zzz05_restriction_value --:WHATEVER
 local enabled_factions = {} --:map<string, string> -- {["target_faction]", "human_faction"}
 
--- factions with legendary lords
+-- factions with confederable legendary lords
 ------------------------------------------------------------------
 
 local subcultures_factions = {
     ["wh2_main_sc_hef_high_elves"] = {"wh2_main_hef_eataine", "wh2_main_hef_order_of_loremasters", "wh2_main_hef_avelorn", "wh2_main_hef_nagarythe", "wh2_main_hef_yvresse", "wh2_dlc15_hef_imrik"},
     ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_tlaqua", "wh2_main_lzd_itza", "wh2_dlc13_lzd_spirits_of_the_jungle"},
     ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_naggarond", "wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread", "wh2_main_def_hag_graef"},
-    ["wh2_main_sc_skv_skaven"] = {"wh2_main_skv_clan_skyre", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus", "wh2_main_skv_clan_eshin"},
+    ["wh2_main_sc_skv_skaven"] = {"wh2_main_skv_clan_skyre", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus", "wh2_main_skv_clan_eshin","wh2_main_skv_clan_moulder"},
     ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_khemri", "wh2_dlc09_tmb_lybaras", "wh2_dlc09_tmb_exiles_of_nehek", "wh2_dlc09_tmb_followers_of_nagash"},
     ["wh2_dlc11_sc_cst_vampire_coast"] = {"wh2_dlc11_cst_vampire_coast", "wh2_dlc11_cst_noctilus", "wh2_dlc11_cst_pirates_of_sartosa", "wh2_dlc11_cst_the_drowned"},
     ["wh_main_sc_nor_norsca"] = {"wh_dlc08_nor_norsca", "wh_dlc08_nor_wintertooth"},
     ["wh_main_sc_emp_empire"] = {"wh_main_emp_empire", "wh_main_emp_middenland", "wh2_dlc13_emp_golden_order", "wh2_dlc13_emp_the_huntmarshals_expedition"},
     ["wh_main_sc_dwf_dwarfs"] = {"wh_main_dwf_dwarfs", "wh_main_dwf_karak_kadrin", "wh_main_dwf_karak_izor"},
     ["wh_main_sc_brt_bretonnia"] = {"wh_main_brt_bretonnia", "wh_main_brt_bordeleaux", "wh_main_brt_carcassonne", "wh2_dlc14_brt_chevaliers_de_lyonesse"},
-    ["wh_dlc05_sc_wef_wood_elves"] = {"wh_dlc05_wef_wood_elves", "wh_dlc05_wef_argwylon"},
+    ["wh_dlc05_sc_wef_wood_elves"] = {"wh_dlc05_wef_wood_elves", "wh_dlc05_wef_argwylon", "wh2_dlc16_wef_drycha", "wh2_dlc16_wef_sisters_of_twilight"},
     ["wh_main_sc_grn_greenskins"] = {"wh_main_grn_greenskins", "wh_main_grn_crooked_moon", "wh_main_grn_orcs_of_the_bloody_hand", "wh2_dlc15_grn_bonerattlaz", "wh2_dlc15_grn_broken_axe"},
     ["wh_main_sc_vmp_vampire_counts"] = {"wh_main_vmp_schwartzhafen", "wh_main_vmp_vampire_counts", "wh2_dlc11_vmp_the_barrow_legion", "wh_main_vmp_mousillon"}
     -- ["wh_dlc03_sc_bst_beastmen"] = {"",}
@@ -868,6 +868,7 @@ function legendary_confeds()
         local settings_table = frosty_confeds_mod:get_settings() 
 
        -- if cm:is_new_game() then
+       if not cm:get_saved_value("frosty_confeds_MctFinalized_done") then
             local confederation_options_mod = mct:get_mod_by_key("confederation_options")
             if confederation_options_mod and cm:is_new_game() then
                 local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")
@@ -1014,6 +1015,7 @@ function legendary_confeds()
                         end
                         start_confeds()
                         core:remove_listener("frosty_confeds_MctFinalized")
+                        cm:set_saved_value("frosty_confeds_MctFinalized_done", true)
                     end
                 end,
                 true
@@ -1026,6 +1028,7 @@ function legendary_confeds()
         --        end
         --    end
         --end
+        end
     else
 		local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
 		if not tk_value or tk_value == "yield" then

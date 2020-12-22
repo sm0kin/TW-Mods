@@ -2029,6 +2029,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         faction_list = faction:factions_of_same_subculture()
     end
     if is_factionlist(faction_list) then
+        local argwylon = cm:get_faction("wh_dlc05_wef_argwylon")
         --# assume faction_list: CA_FACTION_LIST
         for i = 0, faction_list:num_items() - 1 do
             local faction_current = faction_list:item_at(i)
@@ -2038,13 +2039,15 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             --tmb
             and (faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" or (not tmb_restriction_value and faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
             or (tmb_restriction_value and faction_current:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" 
-            and faction:name() ~= "wh2_dlc09_tmb_the_sentinels" and faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash")
+            and faction:name() ~= "wh2_dlc09_tmb_the_sentinels" and faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash"
+            and faction_current:name() ~= "wh2_dlc09_tmb_the_sentinels" and faction_current:name() ~= "wh2_dlc09_tmb_followers_of_nagash")
             or (tmb_restriction_value and faction_current:name() == "wh2_dlc09_tmb_the_sentinels" and faction:name() == "wh2_dlc09_tmb_followers_of_nagash") 
             or (tmb_restriction_value and faction_current:name() == "wh2_dlc09_tmb_followers_of_nagash" and faction:name() == "wh2_dlc09_tmb_the_sentinels"))
             --wef
             and (faction:subculture() ~= "wh_dlc05_sc_wef_wood_elves" or (not wef_restriction_value and faction:subculture() == "wh_dlc05_sc_wef_wood_elves") 
             or (wef_restriction_value and faction:subculture() == "wh_dlc05_sc_wef_wood_elves" and (faction_current:name() == "wh_dlc05_wef_argwylon"
             or (faction_current:name() == "wh2_dlc16_wef_drycha" and faction:name() == "wh_dlc05_wef_argwylon") 
+            or (faction_current:name() == "wh2_dlc16_wef_drycha" and (not argwylon or argwylon:is_dead()))
             or (faction_current:name() ~= "wh2_dlc16_wef_drycha" and faction:name() ~= "wh2_dlc16_wef_drycha")))) then 
                 table.insert(factions_of_same_subculture, faction_current:name())
             end

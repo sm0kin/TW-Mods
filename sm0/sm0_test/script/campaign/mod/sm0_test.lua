@@ -761,7 +761,7 @@ function sm0_test()
 			--for i = 0, region_list:num_items() - 1 do
 			--	local region = region_list:item_at(i)
 			--	--cm:set_region_abandoned(region:name())
-			--	cm:transfer_region_to_faction(region:name(), cm:get_local_faction(true))	
+			--	cm:transfer_region_to_faction(region:name(), cm:get_local_faction_name(true))	
 			--	cm:heal_garrison(region:cqi())		
 			----	local settlement = region:settlement()
 			----	cm:instantly_set_settlement_primary_slot_level(settlement, 3)			
