@@ -360,7 +360,7 @@ local function deletePlayerSubcultureFactions()
 			or ((--faction:name() == "wh2_main_hef_caledor" or 
 			faction:name() == "wh2_dlc11_cst_vampire_coast" or faction:name() == "wh_main_emp_middenland" 
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
-				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
+				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction_name(true), faction:name()) end
 			else
 				if cm:random_number(1, 1) == 1 then
 				--local regionList = faction:region_list()
@@ -392,7 +392,7 @@ local function deletePlayerSubcultureFactions()
 			or faction:subculture() == playerFaction:subculture()--or faction:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" 
 			or ((faction:name() == "wh2_main_hef_caledor" or faction:name() == "wh2_dlc11_cst_vampire_coast"
 			or faction:name() == "wh_main_emp_marienburg" or faction:name() == "wh2_main_hef_avelorn" or faction:name() == "wh_main_brt_lyonesse") and cm:model():turn_number() <= 3) then
-				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction(true), faction:name()) end
+				--if playerFaction:subculture() == faction:subculture() and cm:model():turn_number() == 2 then cm:force_confederation(cm:get_local_faction_name(true), faction:name()) end
 			else		
 				if cm:random_number(5, 1) == 1 then --playerFaction:subculture() == faction:subculture() 
 					--sm0_log("deleted Faction: "..faction:name())
@@ -533,8 +533,8 @@ function sm0_test()
 	--cm:add_building_to_force(lokhir:military_force():command_queue_index(), "wh2_main_horde_def_settlement_5")	
 	--cm:add_unit_model_overrides("character_cqi:"..lokhir:command_queue_index(), "wh2_sm0_art_set_def_black_ark_lokhir_3")
 	--cm:set_saved_value("black_ark_lokhir_ship_art_sets", "wh2_sm0_art_set_def_black_ark_lokhir_3")
-	--cm:force_confederation(cm:get_local_faction(true),"wh2_dlc11_def_the_blessed_dread")	
-	--cm:force_alliance(cm:get_local_faction(true), "wh2_dlc11_def_the_blessed_dread", true)
+	--cm:force_confederation(cm:get_local_faction_name(true),"wh2_dlc11_def_the_blessed_dread")	
+	--cm:force_alliance(cm:get_local_faction_name(true), "wh2_dlc11_def_the_blessed_dread", true)
 	--local top_knots = cm:get_faction("wh_main_grn_top_knotz")
 	--local mf_list = top_knots:military_force_list()
 	--for i = 0, mf_list:num_items() - 1 do
@@ -560,16 +560,16 @@ function sm0_test()
 	
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
 	cm:transfer_region_to_faction("wh2_main_avelorn_gaean_vale", cm:get_local_faction_name(true))
-	--cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction(true))
-	--cm:spawn_agent_at_settlement(cm:get_local_faction(true), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
+	--cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction_name(true))
+	--cm:spawn_agent_at_settlement(cm:get_local_faction_name(true), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
 	--local characterList = cm:get_local_faction(true):character_list()
     --for i = 0, characterList:num_items() - 1 do
     --    local currentChar = characterList:item_at(i)	
     --    local cqi = currentChar:command_queue_index()
 	--	cm:replenish_action_points(cm:char_lookup_str(cqi))
 	--end
-	--cm:force_make_peace(cm:get_local_faction(true), "wh_dlc03_bst_beastmen")
-	--cm:force_alliance(cm:get_local_faction(true), "wh_dlc03_bst_beastmen", true)
+	--cm:force_make_peace(cm:get_local_faction_name(true), "wh_dlc03_bst_beastmen")
+	--cm:force_alliance(cm:get_local_faction_name(true), "wh_dlc03_bst_beastmen", true)
 	--local x, y = cm:find_valid_spawn_location_for_character_from_settlement()
 
 	--core:add_listener(
@@ -592,11 +592,11 @@ function sm0_test()
     --    end,
     --    true
 	--)
-	--cm:faction_set_food_factor_value(cm:get_local_faction(true), "wh_dlc07_chivalry_events", 1600)
-	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "cst_infamy", "wh2_dlc11_resource_factor_other", 5000)
-	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "grn_salvage", "wh2_dlc11_resource_factor_other", 5000)
-	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "dwf_oathgold", "wh2_main_resource_factor_missions", 5000)
-	--cm:faction_add_pooled_resource(cm:get_local_faction(true), "emp_prestige", "wh2_dlc13_resource_factor_regions", 20000)
+	--cm:faction_set_food_factor_value(cm:get_local_faction_name(true), "wh_dlc07_chivalry_events", 1600)
+	--cm:faction_add_pooled_resource(cm:get_local_faction_name(true), "cst_infamy", "wh2_dlc11_resource_factor_other", 5000)
+	--cm:faction_add_pooled_resource(cm:get_local_faction_name(true), "grn_salvage", "wh2_dlc11_resource_factor_other", 5000)
+	--cm:faction_add_pooled_resource(cm:get_local_faction_name(true), "dwf_oathgold", "wh2_main_resource_factor_missions", 5000)
+	--cm:faction_add_pooled_resource(cm:get_local_faction_name(true), "emp_prestige", "wh2_dlc13_resource_factor_regions", 20000)
 	--cm:faction_add_pooled_resource("wh2_main_hef_yvresse", "yvresse_defence", "wh2_dlc15_resource_factor_yvresse_defence_settlement", 50)
 	cm:faction_add_pooled_resource("wh2_main_hef_yvresse", "wardens_supply", "wh2_dlc15_resource_factor_wardens_supply_executed_prisoners", 100)
 
@@ -796,7 +796,7 @@ function sm0_test()
 		end,
 		true
 	)
-	--cm:win_next_autoresolve_battle(cm:get_local_faction())
+	--cm:win_next_autoresolve_battle(cm:get_local_faction_name())
 	core:add_listener(
         "test_ComponentLClickUp",
         "ComponentLClickUp",
