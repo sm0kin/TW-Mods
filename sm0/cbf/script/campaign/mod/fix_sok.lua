@@ -1,7 +1,7 @@
 function fix_sok()
 	core:remove_listener("SwordRegionOccupied")
 	core:add_listener(
-		"cbf_SwordRegionOccupied",
+		"SwordRegionOccupied",
 		"CharacterPerformsSettlementOccupationDecision",
 		function(context)
 			local region = context:garrison_residence():region():name()

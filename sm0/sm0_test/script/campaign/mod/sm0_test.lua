@@ -36,6 +36,13 @@ local function expCheat()
 		--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
 		--if currentChar:character_subtype("wh2_main_skv_lord_skrolk") then cm:force_add_ancillary(currentChar, "wh2_main_anc_arcane_item_the_liber_bubonicus", true, false) end
 		if currentChar:character_subtype("dwf_thorgrim_grudgebearer") then cm:force_add_ancillary(currentChar, "wh2_dlc10_dwf_anc_enchanted_item_horn_of_the_ancestors", true, false) end
+		--if currentChar:character_subtype("wh2_dlc11_cst_harkon") then 
+		--	local mf = currentChar:military_force()
+		--	local faction = currentChar:faction()
+		--	cm:spawn_agent_at_military_force(faction, mf, "dignitary", "wh2_dlc11_cst_fleet_captain_deep")
+		--	cm:spawn_agent_at_military_force(faction, mf, "dignitary", "wh2_dlc11_cst_fleet_captain_death")
+		--	cm:spawn_agent_at_military_force(faction, mf, "dignitary", "wh2_dlc11_cst_fleet_captain")
+		--end
 	end
 	--if cm:is_new_game() then
 	--	local factionList = cm:model():world():faction_list()

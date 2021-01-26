@@ -36,7 +36,7 @@ end
 function fix_revitalizing_rite()
     core:remove_listener("snikch_RitualCompletedEvent")
     core:add_listener(
-        "fix_snikch_RitualCompletedEvent",
+        "snikch_RitualCompletedEvent",
         "RitualCompletedEvent",
         function(context)
             return context:performing_faction():name() == "wh2_main_skv_clan_eshin"

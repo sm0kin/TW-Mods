@@ -8,7 +8,7 @@ local lokhir_obj_key = "wh2_dlc11_objective_override_lokhir_sen_encounter";
 
 core:remove_listener("mission_succeeded_trigger_lokhir_mission")
 core:add_listener(
-	"fix_mission_succeeded_trigger_lokhir_mission",
+	"mission_succeeded_trigger_lokhir_mission",
 	"MissionSucceeded",
 	true,
 	function(context)

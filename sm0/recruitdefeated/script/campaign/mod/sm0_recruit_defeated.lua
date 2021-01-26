@@ -2912,7 +2912,7 @@ function sm0_recruit_defeated()
             --savage_restriction_value = true
         end
         scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
-        ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 0
+        ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
         preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
         preferance2_value = "alternate"
         preferance3_value = "met"
