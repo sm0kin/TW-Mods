@@ -1598,9 +1598,9 @@ local function apply_diplomacy(faction_name)
         "wh2_main_rogue_worldroot_rangers",
         "wh2_main_rogue_wrath_of_nature",
         -- 
-        "wh2_dlc11_sc_cst_vampire_coast",
+        "wh2_dlc11_sc_cst_vampire_coast"
         --ovn
-        "wh_main_sc_emp_araby"
+        --"wh_main_sc_emp_araby"
         --"wh_main_sc_nor_fimir"
     } --:vector<string>
     local faction = cm:get_faction(faction_name)
@@ -2873,13 +2873,13 @@ function sm0_recruit_defeated()
                     cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
                 end
             end
-            local araby_option = confederation_options_mod:get_option_by_key("wh_main_sc_emp_araby")
-            if araby_option then
-                local araby_value = araby_option:get_finalized_setting() 
-                if araby_value == "no_tweak" then
-                    cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
-                end
-            end
+            --local araby_option = confederation_options_mod:get_option_by_key("wh_main_sc_emp_araby")
+            --if araby_option then
+            --    local araby_value = araby_option:get_finalized_setting() 
+            --    if araby_value == "no_tweak" then
+            --        cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
+            --    end
+            --end
 		end
     else
 		local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
@@ -2894,10 +2894,10 @@ function sm0_recruit_defeated()
 		if (not teb_value or teb_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
 			cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
         end
-        local araby_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_sc_emp_araby") 
-		if (not araby_value or emp_value == "yield") then
-			cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
-        end
+        --local araby_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_sc_emp_araby") 
+		--if (not araby_value or emp_value == "yield") then
+		--	cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
+        --end
         
         enable_value = true
         if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
