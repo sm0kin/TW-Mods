@@ -344,6 +344,7 @@ local wh_agents = {
     {["faction"] = "wh2_dlc14_brt_chevaliers_de_lyonesse", ["subtype"] = "wh2_dlc14_brt_repanse"},
     {["faction"] = "wh2_dlc14_brt_chevaliers_de_lyonesse", ["subtype"] = "wh2_dlc14_brt_henri_le_massif"},
     {["faction"] = "wh2_main_skv_clan_eshin", ["subtype"] = "wh2_dlc14_skv_deathmaster_snikch", ["dlc"] = "TW_WH2_DLC14_SHADOW"},
+    {["faction"] = "wh2_main_def_hag_graef", ["subtype"] = "wh2_dlc14_def_malus_darkblade", ["dlc"] = "TW_WH2_DLC14_SHADOW"},
     {["faction"] = "wh2_dlc15_grn_broken_axe", ["subtype"] = "wh2_dlc15_grn_grom_the_paunch", ["dlc"] = "TW_WH2_DLC15_WARDEN"},
     {["faction"] = "wh2_main_hef_yvresse", ["subtype"] = "wh2_dlc15_hef_eltharion", ["dlc"] = "TW_WH2_DLC15_WARDEN"},
     {["faction"] = "wh2_dlc15_hef_imrik", ["subtype"] = "wh2_dlc15_hef_imrik", ["dlc"] = "TW_WH2_DLC15_IMRIK_FREE"},
@@ -352,7 +353,8 @@ local wh_agents = {
     {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_drycha", ["dlc"] = {"TW_WH_WOOD_ELVES", "TW_WH2_DLC16_TWILIGHT"}},
     {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_coeddil", ["dlc"] = {"TW_WH_WOOD_ELVES", "TW_WH2_DLC16_TWILIGHT"}},
     {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_ariel", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
-    {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_sisters_of_twilight", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"}
+    {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_sisters_of_twilight", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
+    {["faction"] = "wh2_twa03_def_rakarth", ["subtype"] = "wh2_twa03_def_rakarth", ["dlc"] = "TW_WH_TWA_03_RAKARTH"}
 } --:vector<map<string, string>> 
     --MIXU Part 1--
 local mixu1_agents = {
@@ -433,7 +435,7 @@ local kraka_agents = {
 } --:vector<map<string, string>> 
     --Project Resurrection - Parte Legendary Lords--
 local parte_agents = {
-    {["faction"] = "wh2_main_def_karond_kar", ["subtype"] = "def_rakarth"},
+    --{["faction"] = "wh2_main_def_karond_kar", ["subtype"] = "def_rakarth"},
     {["faction"] = "wh2_main_skv_clan_moulder", ["subtype"] = "skv_skweel_gnawtooth"},
     {["faction"] = "wh2_main_def_blood_hall_coven", ["subtype"] = "def_hag_queen_malida"},
     {["faction"] = "wh2_main_hef_cothique", ["subtype"] = "hef_aislinn"},
@@ -573,7 +575,8 @@ local playable_factions = {
     "wh2_dlc15_grn_broken_axe",
     "wh2_main_skv_clan_moulder",
     "wh2_dlc16_wef_drycha",
-    "wh2_dlc16_wef_sisters_of_twilight"
+    "wh2_dlc16_wef_sisters_of_twilight",
+    "wh2_twa03_def_rakarth"
 } --:vector<string>
 
 local vor_subtype_anc = {
@@ -622,6 +625,9 @@ local vor_subtype_anc = {
     ["wh2_dlc14_def_malus_darkblade"] = {
 		{"mission", "wh2_dlc14_anc_weapon_warpsword_of_khaine", "wh2_dlc14_vortex_def_malus_warpsword_of_khaine_stage_1", 5, "wh2_dlc14_vortex_def_malus_warpsword_of_khaine_stage_4_mpc"}
     },
+    ["wh2_twa03_def_rakarth"] = {
+		{"mission", "wh2_twa03_anc_weapon_whip_of_agony", "wh2_twa03_great_vortex_def_rakarth_whip_of_agony_stage_1", 2, "wh2_twa03_great_vortex_def_rakarth_whip_of_agony_stage_2_mpc"}
+	},
     ["wh2_main_lzd_lord_mazdamundi"] = {
 		{"mission", "wh2_main_anc_magic_standard_sunburst_standard_of_hexoatl", "wh2_main_great_vortex_lzd_mazdamundi_sunburst_standard_of_hexoatl_stage_1", 6, "wh2_main_great_vortex_lzd_mazdamundi_sunburst_standard_of_hexoatl_stage_4_mpc", "war.camp.advice.quest.mazdamundi.sunburst_standard_of_hexoatl.001"},
 		{"mission", "wh2_main_anc_weapon_cobra_mace_of_mazdamundi", "wh2_main_great_vortex_lzd_mazdamundi_cobra_mace_of_mazdamundi_stage_1", 10, "wh2_main_great_vortex_lzd_mazdamundi_cobra_mace_of_mazdamundi_stage_3_mpc", "war.camp.advice.quest.mazdamundi.cobra_mace_of_mazdamundi.001"}
@@ -802,10 +808,13 @@ local vor_missing_anc = {
         {"", "wh2_dlc12_anc_weapon_the_blade_of_ancient_skies", "", 1}
     },
     ["wh2_dlc11_cst_harkon"] = {
-        {"", "wh2_dlc11_anc_follower_captain_drekla", "", 1},
+        {"", "wh2_dlc11_anc_follower_captain_drekla", "", 1}
     },
     ["wh2_dlc15_hef_imrik"] = {
-        {"", "wh2_dlc15_anc_weapon_star_lance", "", 1},
+        {"", "wh2_dlc15_anc_weapon_star_lance", "", 1}
+    },
+    ["wh2_twa03_def_rakarth"] = {
+        {"", "wh2_twa03_anc_armour_beast_armour_of_karond_kar", "", 1}
     }
 } --:map<string, vector<vector<WHATEVER>>>
 
@@ -985,6 +994,9 @@ local me_subtype_anc = {
     ["wh2_dlc14_def_malus_darkblade"] = {
 		{"mission", "wh2_dlc14_anc_weapon_warpsword_of_khaine", "wh2_dlc14_main_def_malus_warpsword_of_khaine_stage_1", 5, "wh2_dlc14_main_def_malus_warpsword_of_khaine_stage_4_mpc"}
     },
+    ["wh2_twa03_def_rakarth"] = {
+		{"mission", "wh2_twa03_anc_weapon_whip_of_agony", "wh2_twa03_def_rakarth_whip_of_agony_stage_1", 2, "wh2_twa03_def_rakarth_whip_of_agony_stage_2_mpc"}
+	},
     ["wh2_main_lzd_lord_mazdamundi"] = {
 		{"mission", "wh2_main_anc_weapon_cobra_mace_of_mazdamundi", "wh2_main_lzd_mazdamundi_cobra_mace_of_mazdamundi_stage_1", 10, "wh2_main_lzd_mazdamundi_cobra_mace_of_mazdamundi_stage_3_mpc"},
 		{"mission", "wh2_main_anc_magic_standard_sunburst_standard_of_hexoatl", "wh2_main_lzd_mazdamundi_sunburst_standard_of_hexoatl_stage_1", 6, "wh2_main_lzd_mazdamundi_sunburst_standard_of_hexoatl_stage_4_mpc"}
@@ -1162,7 +1174,10 @@ local me_missing_anc = {
         {"", "wh2_dlc11_anc_follower_captain_drekla", "", 1}
     },
     ["wh2_dlc15_hef_imrik"] = {
-        {"", "wh2_dlc15_anc_weapon_star_lance", "", 1},
+        {"", "wh2_dlc15_anc_weapon_star_lance", "", 1}
+    },
+    ["wh2_twa03_def_rakarth"] = {
+        {"", "wh2_twa03_anc_armour_beast_armour_of_karond_kar", "", 1}
     }
 } --:map<string, vector<vector<WHATEVER>>>
 

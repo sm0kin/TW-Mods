@@ -129,6 +129,7 @@ local blacklisted_subtypes = {
 	--"wh2_dlc13_lzd_slann_mage_priest_life",
 	--"wh2_dlc13_lzd_slann_mage_priest_life_horde",
 	--"wh2_main_def_black_ark",
+	"wh2_main_def_black_ark_blessed_dread",
 	"wh2_main_def_malekith",
 	"wh2_main_def_morathi",
 	"wh2_main_hef_prince_alastar",
@@ -157,6 +158,7 @@ local blacklisted_subtypes = {
 	"wh2_dlc16_wef_coeddil",
 	"wh2_dlc16_wef_ariel",
 	"wh2_dlc16_wef_sisters_of_twilight",
+	"wh2_twa03_def_rakarth",
 	--mixu1
 	"brt_almaric_de_gaudaron",
 	"brt_chilfroy",
