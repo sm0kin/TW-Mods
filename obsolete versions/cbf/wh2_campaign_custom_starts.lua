@@ -50,8 +50,8 @@
 --			force_diplomacy_change([source faction key], [target faction key], ["war" / "peace"])
 --			force_diplomacy_change(   	 string   	   ,     	string   	 , 		string		)
 --		"block_diplomacy"  - This function is used to block diplomacy between a source and a target faction
---			force_diplomacy_change([source faction key], [target faction key], [diplomacy key	],[	can offer],	[	can accept	]	)
---			force_diplomacy_change(   	 string   	   ,     	string   	 , 		string		 , 	   bool	  ,			bool	    )
+--			force_diplomacy_change([source faction key], [target faction key], [	can offer	],[	can accept]	)
+--			force_diplomacy_change(   	 string   	   ,     	string   	 , 		bool,			bool	   )
 --		"abandon_region"  - This function is used for abandoning a target region
 --			abandon_region([region key])
 --			abandon_region(   string   )
@@ -215,20 +215,6 @@ local vor_custom_start_factions = {
 					{"add_units", "wh2_main_lzd_southern_sentinels", 274, 77, {"wh2_main_lzd_inf_skink_skirmishers_0","wh2_main_lzd_inf_skink_skirmishers_0","wh2_main_lzd_inf_saurus_warriors_0","wh2_main_lzd_inf_saurus_warriors_0"}},
 					{"teleport_character", "wh2_main_lzd_southern_sentinels", 274, 77, 244, 83, true},
 					{"region_change", "wh2_main_vor_the_lost_valleys_the_sentinel_of_time", "wh2_main_lzd_southern_sentinels"}
-				}
-			}
-		}
-	},
-	--------------------
-	---- HELLEBRON ----
-	--------------------
-	{faction = "wh2_main_def_har_ganeth", 
-		custom_start = {
-			{
-				exceptions = {"wh2_main_skv_clan_moulder"},
-				changes = {
-					{"force_diplomacy", "wh2_main_skv_clan_moulder", "wh2_main_def_ghrond", "peace"},
-					{"force_diplomacy", "wh2_main_skv_clan_moulder", "wh2_main_nor_mung", "war"}
 				}
 			}
 		}
@@ -496,205 +482,11 @@ local vor_custom_start_factions = {
 			}
 		}
 	},
-	--------------------
-	------- THROT ------
-	--------------------
-	{faction = "wh2_main_skv_clan_moulder", 
-		custom_start = {
-			{
-			--INITIAL EARLY GAME SETUP
-				exceptions = {"wh2_main_def_har_ganeth"},
-				changes = {
-					{"force_diplomacy", "wh2_main_def_har_ganeth", "wh2_main_def_ghrond", "peace"},
-					{"force_diplomacy", "wh2_main_def_har_ganeth", "wh2_main_def_deadwood_sentinels", "war"},
-					{"region_change", "wh2_main_vor_the_road_of_skulls_spite_reach", "wh2_main_def_har_ganeth"},
-					{"primary_slot_change", "wh2_main_vor_the_chill_road_ghrond", "wh2_main_def_settlement_major_1"},		
-					{"secondary_slot_change", "wh2_main_vor_the_chill_road_ghrond", 1, "wh2_main_def_farm_1"},				
-					{"teleport_character_faction_leader", "wh2_main_def_ghrond", 227, 667},
-					{"add_units", "wh2_main_def_ghrond", 223, 685, {"wh2_dlc10_def_mon_feral_manticore_0","wh2_main_def_inf_bleakswords_0","wh2_main_def_inf_darkshards_0"}},
-					{"char_effect_bundle", "wh2_main_def_ghrond", 223, 685, "wh2_dlc14_bundle_scripted_force_ambush", 2},
-					{"char_effect_bundle", "wh2_main_def_ghrond", 223, 685, "wh_main_reduced_movement_range_90", 2},
-					{"char_effect_bundle", "wh2_main_def_ghrond", 223, 685, "wh_main_reduced_movement_range_70", 2},
-					{"block_diplomacy","faction:wh2_main_def_ghrond","faction:wh2_main_skv_clan_moulder","peace", false, false},
-					{"block_diplomacy","faction:wh2_main_skv_clan_moulder","faction:wh2_main_def_ghrond","peace", false, false},
-
-				}
-			},
-			{
-			-- VORTEX NARRATIVE SETUP (only for Single player - listing all faction keys is messy but no time to implement an all factions check)
-				exceptions = {"wh2_main_hef_eataine", "wh2_main_hef_order_of_loremasters", "wh2_main_hef_avelorn", "wh2_main_hef_nagarythe", "wh2_main_hef_yvresse", "wh2_dlc15_hef_imrik", "wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc13_lzd_spirits_of_the_jungle", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_itza", "wh2_main_lzd_tlaqua", "wh2_main_def_naggarond", 
-								"wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread", "wh2_main_def_hag_graef", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus", "wh2_main_skv_clan_skyre", "wh2_main_skv_clan_eshin", "wh2_dlc11_cst_vampire_coast", "wh2_dlc11_cst_noctilus", "wh2_dlc11_cst_pirates_of_sartosa", 
-									"wh2_dlc11_cst_the_drowned", "wh2_dlc09_tmb_khemri", "wh2_dlc09_tmb_lybaras", "wh2_dlc09_tmb_followers_of_nagash", "wh2_dlc09_tmb_exiles_of_nehek", "wh2_dlc13_emp_the_huntmarshals_expedition", "wh2_dlc14_brt_chevaliers_de_lyonesse", "wh2_dlc15_grn_broken_axe", "wh2_dlc16_wef_sisters_of_twilight"},
-				changes = {
-					--Waystone faction 1 (Forest spirit focus) setup
-					{"create_army", "wh2_dlc16_wef_waystone_faction_1", "wh_dlc05_wef_inf_waywatchers_0,wh_dlc05_wef_mon_treekin_0,wh_dlc05_wef_mon_treekin_0,wh_dlc05_wef_inf_waywatchers_0,wh_dlc05_wef_mon_treekin_0,wh_dlc05_wef_mon_treekin_0,wh_dlc05_wef_inf_dryads_0,wh_dlc05_wef_inf_dryads_0,wh_dlc05_wef_inf_dryads_0,wh_dlc05_wef_mon_treekin_0,wh_dlc05_wef_mon_treeman_0,wh_dlc05_wef_mon_treeman_0,wh2_dlc16_wef_mon_zoats,wh_dlc05_wef_cav_sisters_thorn_0", 
-						"wh2_main_vor_iron_peaks_the_moon_shard", 168, 492, "dlc05_wef_ancient_treeman", true, 1,  {"names_name_1343598453", "", "", ""}
-					},
-					{"char_effect_bundle", "wh2_dlc16_wef_waystone_faction_1", 168, 492, "wh_main_bundle_military_upkeep_free_force", -1},
-					{"create_army", "wh2_dlc16_wef_waystone_faction_1", "wh_dlc05_wef_cav_hawk_riders_0,wh_dlc05_wef_mon_treekin_0,wh_dlc05_wef_mon_treekin_0,wh_dlc05_wef_inf_glade_guard_2,wh_dlc05_wef_inf_glade_guard_2,wh_dlc05_wef_inf_deepwood_scouts_1,wh_dlc05_wef_inf_deepwood_scouts_1,wh_dlc05_wef_inf_dryads_0,wh_dlc05_wef_inf_dryads_0,wh_dlc05_wef_inf_dryads_0,wh_dlc05_wef_mon_treekin_0,wh_dlc05_wef_mon_treeman_0,wh_dlc05_wef_mon_treeman_0,wh2_dlc16_wef_mon_zoats", 
-						"wh2_main_vor_the_black_coast_vauls_anvil", 239, 541, "dlc05_wef_ancient_treeman", false, 1
-					},
-					{"char_effect_bundle", "wh2_dlc16_wef_waystone_faction_1", 239, 541, "wh_main_bundle_military_upkeep_free_force", -1},
-					{"region_change", "wh2_main_vor_iron_peaks_the_moon_shard", "wh2_dlc16_wef_waystone_faction_1"},
-					{"region_change", "wh2_main_vor_the_black_coast_vauls_anvil", "wh2_dlc16_wef_waystone_faction_1"},
-					{"primary_slot_change", "wh2_main_vor_iron_peaks_the_moon_shard", "wh_dlc05_wef_outpost_minor_human_1"},
-					{"primary_slot_change", "wh2_main_vor_the_black_coast_vauls_anvil", "wh_dlc05_wef_outpost_minor_human_1"},
-					{"secondary_slot_change", "wh2_main_vor_iron_peaks_the_moon_shard", 0, "wh_dlc05_wef_outpost_replenishment_1"},	
-					{"secondary_slot_change", "wh2_main_vor_the_black_coast_vauls_anvil", 0, "wh_dlc05_wef_outpost_replenishment_1"},
-					{"teleport_character_faction_leader", "wh2_main_def_clar_karond", 225, 601},
-					{"region_change", "wh2_main_vor_shadow_wood_daldrachs_lair", "wh2_main_def_clar_karond"},
-					{"primary_slot_change", "wh2_main_vor_shadow_wood_daldrachs_lair", "wh2_main_def_settlement_minor_1"},
-					{"secondary_slot_change", "wh2_main_vor_shadow_wood_daldrachs_lair", 0, "wh2_main_def_industry_1"},	
-					{"teleport_character", "wh2_main_def_clar_karond", 247, 540, 217, 536, false},
-					{"block_diplomacy","faction:wh2_dlc16_wef_waystone_faction_1","all","all", false, false},
-					{"block_diplomacy","all","faction:wh2_dlc16_wef_waystone_faction_1","all", false, false},
-					{"block_diplomacy","faction:wh2_dlc16_wef_waystone_faction_1","faction:wh2_main_skv_clan_moulder","war", true, true},
-					{"block_diplomacy","faction:wh2_main_skv_clan_moulder","faction:wh2_dlc16_wef_waystone_faction_1","war", true, true},
-					
-					--Waystone faction 2 (Generic WEF) setup
-					{"create_army", "wh2_dlc16_wef_waystone_faction_2", "wh_dlc05_wef_inf_eternal_guard_1,wh_dlc05_wef_inf_eternal_guard_1,wh_dlc05_wef_inf_wardancers_0,wh_dlc05_wef_inf_deepwood_scouts_0,wh_dlc05_wef_inf_deepwood_scouts_0,wh_dlc05_wef_cav_wild_riders_0,wh2_dlc16_wef_mon_zoats", 
-						"wh2_main_vor_shadow_wood_clar_karond", 222, 591, "wh2_dlc16_wef_spellweaver_beasts", false, 1
-					},
-					{"char_effect_bundle", "wh2_dlc16_wef_waystone_faction_2", 222, 591, "wh_main_bundle_military_upkeep_free_force", -1},
-					{"create_army", "wh2_dlc16_wef_waystone_faction_2", "wh_dlc05_wef_inf_eternal_guard_0,wh_dlc05_wef_inf_glade_guard_0,wh_dlc05_wef_inf_glade_guard_0,wh_dlc05_wef_inf_glade_guard_0", 
-						"wh2_main_vor_the_chill_road_the_great_arena", 237, 641, "dlc05_wef_glade_lord", false, 1
-					},
-					{"char_effect_bundle", "wh2_dlc16_wef_waystone_faction_2", 237, 641, "wh_main_bundle_military_upkeep_free_force", -1},
-					{"region_change", "wh2_main_vor_shadow_wood_clar_karond", "wh2_dlc16_wef_waystone_faction_2"},
-					{"region_change", "wh2_main_vor_the_chill_road_the_great_arena", "wh2_dlc16_wef_waystone_faction_2"},
-					{"primary_slot_change", "wh2_main_vor_shadow_wood_clar_karond", "wh_dlc05_wef_outpost_minor_human_1"},
-					{"primary_slot_change", "wh2_main_vor_the_chill_road_the_great_arena", "wh_dlc05_wef_outpost_minor_human_1"},
-					{"secondary_slot_change", "wh2_main_vor_shadow_wood_clar_karond", 0, "wh_dlc05_wef_outpost_replenishment_1"},	
-					{"secondary_slot_change", "wh2_main_vor_the_chill_road_the_great_arena", 0, "wh_dlc05_wef_outpost_replenishment_1"},	
-					{"block_diplomacy","faction:wh2_dlc16_wef_waystone_faction_2","all","all", false, false},
-					{"block_diplomacy","all","faction:wh2_dlc16_wef_waystone_faction_2","all", false, false},
-					{"block_diplomacy","faction:wh2_dlc16_wef_waystone_faction_2","faction:wh2_main_skv_clan_moulder","war", true, true},
-					{"block_diplomacy","faction:wh2_main_skv_clan_moulder","faction:wh2_dlc16_wef_waystone_faction_2","war", true, true},
-
-					--Waystone faction 3 (Wardancers focus) setup
-					{"create_army", "wh2_dlc16_wef_waystone_faction_3", "wh_dlc05_wef_inf_wardancers_0,wh_dlc05_wef_inf_wardancers_0,wh_dlc05_wef_inf_wardancers_0,wh_dlc05_wef_inf_wardancers_0,wh2_dlc16_wef_inf_bladesingers_0,wh_dlc05_wef_inf_wardancers_1,wh_dlc05_wef_inf_wardancers_1,wh2_dlc16_wef_inf_bladesingers_0,wh_dlc05_wef_inf_waywatchers_0,wh_dlc05_wef_inf_waywatchers_0,wh_dlc05_wef_inf_deepwood_scouts_0,wh_dlc05_wef_mon_great_eagle_0", 
-						"wh2_main_vor_the_black_flood_temple_of_khaine", 162, 617, "dlc05_wef_glade_lord_fem", false, 1
-					},
-					{"char_effect_bundle", "wh2_dlc16_wef_waystone_faction_3", 162, 617, "wh_main_bundle_military_upkeep_free_force", -1},
-					{"create_army", "wh2_dlc16_wef_waystone_faction_3", "wh_dlc05_wef_inf_wardancers_0,wh_dlc05_wef_inf_wardancers_0,wh_dlc05_wef_inf_wardancers_0,wh_dlc05_wef_inf_wardancers_1,wh_dlc05_wef_inf_deepwood_scouts_1,wh_dlc05_wef_inf_deepwood_scouts_1,wh_dlc05_wef_inf_waywatchers_0,wh_dlc05_wef_inf_waywatchers_0,wh_dlc05_wef_inf_wardancers_0,wh_dlc05_wef_inf_wardancers_0,wh2_dlc16_wef_inf_bladesingers_0, wh2_dlc16_wef_inf_bladesingers_0", 
-						"wh2_main_vor_plain_of_spiders_clarak_spire", 56, 582, "wh2_dlc16_wef_spellweaver_shadows", false, 1
-					},
-					{"char_effect_bundle", "wh2_dlc16_wef_waystone_faction_3", 56, 582, "wh_main_bundle_military_upkeep_free_force", -1},
-					{"region_change", "wh2_main_vor_the_black_flood_temple_of_khaine", "wh2_dlc16_wef_waystone_faction_3"},
-					{"region_change", "wh2_main_vor_plain_of_spiders_clarak_spire", "wh2_dlc16_wef_waystone_faction_3"},
-					{"primary_slot_change", "wh2_main_vor_the_black_flood_temple_of_khaine", "wh_dlc05_wef_outpost_minor_human_1"},
-					{"primary_slot_change", "wh2_main_vor_plain_of_spiders_clarak_spire", "wh_dlc05_wef_outpost_minor_human_1"},
-					{"secondary_slot_change", "wh2_main_vor_the_black_flood_temple_of_khaine", 0, "wh_dlc05_wef_outpost_replenishment_1"},			
-					{"block_diplomacy","faction:wh2_dlc16_wef_waystone_faction_3","all","all", false, false},
-					{"block_diplomacy","all","faction:wh2_dlc16_wef_waystone_faction_3","all", false, false},
-					{"block_diplomacy","faction:wh2_dlc16_wef_waystone_faction_3","faction:wh2_main_skv_clan_moulder","war", true, true},
-					{"block_diplomacy","faction:wh2_main_skv_clan_moulder","faction:wh2_dlc16_wef_waystone_faction_3","war", true, true},
-
-
-					--fill in some of the ruins surrounding the Sisters to keep them more contained
-					{"region_change", "wh2_main_vor_obsidian_peaks_keshta_vault", "wh2_dlc16_grn_naggaroth_orcs"},
-					{"primary_slot_change", "wh2_main_vor_obsidian_peaks_keshta_vault", "wh_main_grn_settlement_major_1"},
-					{"region_change", "wh2_main_vor_obsidian_peaks_ice_rock_gorge", "wh2_main_def_clar_karond"},
-					{"primary_slot_change", "wh2_main_vor_obsidian_peaks_ice_rock_gorge", "wh2_main_def_settlement_minor_1"},
-					{"region_change", "wh2_main_vor_ashen_coast_tyrant_peak", "wh2_dlc09_tmb_exiles_of_nehek"},
-					{"primary_slot_change", "wh2_main_vor_ashen_coast_tyrant_peak", "wh2_dlc09_tmb_settlement_minor_1"},
-					{"region_change", "wh2_main_vor_plain_of_spiders_pits_of_zardok", "wh2_main_def_drackla_coven"},
-					{"primary_slot_change", "wh2_main_vor_plain_of_spiders_pits_of_zardok", "wh2_main_def_settlement_minor_1"},
-					{"teleport_character_faction_leader", "wh2_main_bst_stone_horn", 121, 667},
-					{"teleport_character_faction_leader", "wh2_main_bst_shadowgor", 130, 547},
-				}
-			}
-		}
-	},
-	-------------------------
-	-- SISTERS OF TWILIGHT --
-	-------------------------
-	{faction = "wh2_dlc16_wef_sisters_of_twilight", 
-		custom_start = {
-			{
-				exceptions = {"wh2_main_def_cult_of_pleasure","wh2_dlc09_tmb_exiles_of_nehek"},
-				changes = {	
-					{"char_effect_bundle", "wh2_dlc16_grn_naggaroth_orcs", 122, 573, "wh_main_reduced_movement_range_90", 1},
-					{"char_effect_bundle", "wh2_dlc16_lzd_wardens_of_the_living_pools", 205, 288, "wh_main_bundle_military_upkeep_lower_force", 200},
-					{"teleport_character_faction_leader", "wh2_main_bst_skrinderkin", 34, 670},
-					{"teleport_character_faction_leader", "wh2_main_bst_stone_horn", 181, 589},
-					{"add_units", "wh2_main_bst_skrinderkin", 226, 685, {"wh_dlc03_bst_mon_giant_0","wh_dlc03_bst_inf_gor_herd_1","wh_dlc03_bst_inf_gor_herd_0","wh_dlc03_bst_inf_gor_herd_0"}},
-					{"region_change", "wh2_main_vor_ashen_coast_tyrant_peak", "wh2_dlc16_grn_naggaroth_orcs"},
-					{"primary_slot_change", "wh2_main_vor_ashen_coast_tyrant_peak", "wh_main_grn_settlement_minor_2"},
-					{"secondary_slot_change", "wh2_main_vor_ashen_coast_tyrant_peak", 0, "wh_main_grn_garrison_1"},	
-					{"block_diplomacy","faction:wh2_main_bst_stone_horn","faction:wh2_dlc16_wef_sisters_of_twilight","peace", false, false},
-					{"block_diplomacy","faction:wh2_dlc16_wef_sisters_of_twilight","faction:wh2_main_bst_stone_horn","peace", false, false},
-					{"block_diplomacy","faction:wh2_dlc16_grn_naggaroth_orcs","faction:wh2_dlc16_wef_sisters_of_twilight","peace", false, false},					
-					{"block_diplomacy","faction:wh2_dlc16_wef_sisters_of_twilight","faction:wh2_dlc16_grn_naggaroth_orcs","peace", false, false},					
-					{"block_diplomacy","faction:wh2_main_def_clar_karond","faction:wh2_dlc16_grn_naggaroth_orcs","war", false, false},					
-					{"block_diplomacy","faction:wh2_dlc16_grn_naggaroth_orcs","faction:wh2_main_def_clar_karond","war", false, false},					
-				}
-			}
-		}
-	},
-
-	--------------------
-	---- RAKARTH--------
-	--------------------
-
-	{faction = "wh2_twa03_def_rakarth",
-		custom_start = {
-			{
-				exceptions = nil,
-				changes = {
-					{"force_diplomacy", "wh2_main_hef_cothique", "wh_main_nor_skaeling", "peace"},
-					{"force_diplomacy", "wh2_main_hef_chrace", "wh_main_nor_skaeling", "peace"},
-				}
-			},
-			{
-				exceptions = {"wh2_main_hef_yvresse", "wh2_dlc15_grn_broken_axe"},
-				changes = {
-					{"abandon_region", "wh2_main_vor_northern_yvresse_sardenath"},
-					{"primary_slot_change", "wh2_main_vor_southern_yvresse_elessaeli", "wh_main_grn_settlement_major_3_coast"},
-				}
-			},
-			{
-				exceptions = {"wh2_dlc11_cst_pirates_of_sartosa", "wh2_main_hef_yvresse", "wh2_dlc15_grn_broken_axe"},
-				changes = {
-					{"abandon_region", "wh2_main_vor_northern_yvresse_sardenath"},
-					{"region_change", "wh2_main_vor_southern_yvresse_shrine_of_loec", "wh2_dlc15_grn_broken_axe"},
-				}
-			},
-			{
-				exceptions = {"wh2_main_hef_nagarythe"},
-				changes = {
-					{"region_change", "wh2_main_vor_the_broken_land_black_creek_spire", "wh2_main_def_karond_kar"},
-					{"region_change", "wh2_main_vor_the_clawed_coast_the_monoliths", "wh2_main_hef_nagarythe"},
-					{"force_diplomacy", "wh2_main_def_karond_kar", "wh2_main_hef_nagarythe", "peace"},
-					{"force_diplomacy", "wh2_main_hef_nagarythe", "wh2_main_def_the_forgebound", "war"},
-					{"teleport_character_faction_leader", "wh2_main_hef_nagarythe", 320, 610},
-				}
-			},
-		}
-	},
 
 };
 
 --Mortal Empires Changes
 local me_custom_start_factions = {
-
-	--------------------
-	---- RAKARTH--------
-	--------------------
-
-	{faction = "wh2_twa03_def_rakarth",
-		custom_start = {
-			{
-				exceptions = {"wh_main_brt_bretonnia"},
-				changes = {
-					{"force_diplomacy", "wh_main_brt_bretonnia", "wh_main_emp_marienburg", "peace"},
-					{"force_diplomacy", "wh2_main_hef_cothique", "wh2_main_def_scourge_of_khaine", "war"},
-					{"force_diplomacy", "wh2_main_hef_chrace", "wh2_main_def_scourge_of_khaine", "war"},
-				},
-				
-			},
-		}
-	},
 
 	--------------------
 	---- ARGWYLON ------
@@ -703,12 +495,6 @@ local me_custom_start_factions = {
 	{faction = "wh_dlc05_wef_argwylon",
 		custom_start = {
 			{
-				exceptions = nil,
-				changes = {
-				{"create_army", "wh_main_dwf_karak_norn", "wh_main_dwf_inf_dwarf_warrior_0,wh_main_dwf_inf_dwarf_warrior_0,wh_main_dwf_inf_dwarf_warrior_0,wh_main_dwf_inf_dwarf_warrior_0,wh_main_dwf_inf_miners_0,wh_main_dwf_inf_miners_0,wh_main_dwf_inf_quarrellers_0","wh_main_athel_loren_waterfall_palace", 475, 380, "dwf_lord", false, 1},
-				}
-			},
-			{
 				exceptions = {"wh_dlc05_wef_wood_elves"},
 				changes = {
 					{"region_change", "wh_main_yn_edri_eternos_the_oak_of_ages", "wh_dlc05_wef_argwylon"},
@@ -716,61 +502,6 @@ local me_custom_start_factions = {
 			}
 		}
 	},
-	--------------------
-	---- TALSYN ------
-	--------------------
-
-	{faction = "wh_dlc05_wef_wood_elves",
-		custom_start = {
-			{
-				exceptions = nil,
-				changes = {
-					{"create_army", "wh_dlc03_bst_redhorn", "wh_dlc03_bst_inf_gor_herd_0,wh_dlc03_bst_inf_gor_herd_0,wh_dlc03_bst_inf_ungor_raiders_0,wh_dlc03_bst_inf_ungor_raiders_0,wh_dlc03_bst_inf_ungor_herd_1,wh_dlc03_bst_inf_ungor_herd_1,wh_dlc03_bst_inf_chaos_warhounds_0", 
-						"wh_main_athel_loren_yn_edryl_korian", 479, 322, "dlc03_bst_beastlord", false, 1
-					},
-				}
-			}
-		}
-	},
-
-	--------------------
-	---- SISTERS ------
-	--------------------
-
-	{faction = "wh2_dlc16_wef_sisters_of_twilight",
-		custom_start = {
-			{
-				exceptions = {"wh_dlc05_wef_wood_elves", "wh_dlc05_wef_argwylon"},
-				changes = {
-					{"region_change", "wh_main_yn_edri_eternos_the_oak_of_ages", "wh2_dlc16_wef_sisters_of_twilight"},
-				}
-			}
-		}
-	},
-
-	--------------------
-	---- DRYCHA ------
-	--------------------
-
-	{faction = "wh2_dlc16_wef_drycha",
-		custom_start = {
-			{
-				exceptions = nil,
-				changes = {
-					{"char_effect_bundle", "wh2_dlc15_skv_clan_kreepus", 640, 478, "wh_main_reduced_movement_range_90", 1},			
-			}
-			},
-			{
-				exceptions = {"wh2_dlc15_grn_bonerattlaz"},
-				changes = {
-					{"region_change", "wh2_main_northern_worlds_edge_mountains_karak_raziak", "wh2_dlc15_grn_bonerattlaz"},
-					{"force_diplomacy", "wh2_dlc16_wef_drycha", "wh_main_emp_ostermark", "war"},
-					{"force_diplomacy", "wh_main_emp_ostermark", "wh2_dlc15_grn_bonerattlaz", "peace"}	
-				}
-			}
-		}
-	},
-
 
 	--------------------
 	----    IKIT    ----
@@ -1036,7 +767,7 @@ local me_custom_start_factions = {
 				}
 			},
 			{
-				exceptions = {"wh2_main_skv_clan_eshin", "wh2_main_def_hag_graef"},
+				exceptions = {"wh2_main_skv_clan_eshin", "wh2_main_def_hag_graef"}, 
 				changes = {
 					{"force_diplomacy", "wh2_main_skv_clan_eshin", "wh2_main_def_hag_graef", "war"},
 					{"region_change", "wh2_main_dragon_isles_shattered_stone_isle", "wh2_main_def_hag_graef"},
@@ -1046,37 +777,10 @@ local me_custom_start_factions = {
 				}
 			}
 		}
-	},
-	--------------------
-	------- THROT ------
-	--------------------
-	{faction = "wh2_main_skv_clan_moulder",
-		custom_start = {
-			{
-				exceptions = nil,
-				changes = {
-					{"primary_slot_change", "wh_main_gianthome_mountains_kraka_drak", "wh_main_dwf_settlement_major_1"}
-				}
-			}
-		}
-	},
-
-
-	--------------------
-	------- BEASTMEN----
-	--------------------
-
-
-	{faction = "wh_dlc03_bst_beastmen",
-		custom_start = {
-			{
-				exceptions = nil,
-				changes = {
-					{"region_change", "wh2_main_marshes_of_madness_floating_village", "wh_main_grn_top_knotz"},
-				}
-			}
-		}
 	}
+
+
+
 };
 
 
@@ -1273,7 +977,6 @@ function secondary_slot_change(region, slot_index, building)
 	
 	return not result_building:is_null_interface() and result_building:name() == building;
 end
-
 
 --pass this function a faction(string), units (string/number), region(string), x(number), y(number), subtype(string), faction_leader(bool), turn(number), names(list of strings)
 function create_army(faction_name, unit_list, region_name, x_pos, y_pos, agent_subtype, is_leader, spawn_on_turn, name_table)
@@ -2186,7 +1889,7 @@ function generate_random_army(subculture, num_units)
 		return false;
 	end
 	
-	return ram:generate_force("custom_start_random_army", num_units, false);
+	return ram:generate_force("custom_start_random_army", num_units, true);
 end
 
 --generates a random name for the relevant faction subculture

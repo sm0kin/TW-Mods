@@ -86,72 +86,76 @@ local generic_army_effect = {
 	"wh2_dlc15_bundle_beserk",
 	"wh2_dlc15_bundle_rage",
 	"wh2_dlc15_bundle_regeneration",
-	"wh2_dlc10_bundle_blood_voyage_old",
+	"wh2_dlc10_bundle_blood_voyage",
 	"wh2_dlc15_bundle_rebirth",
 	"wh2_dlc15_bundle_blood_frenzy",
 	"wh2_dlc15_bundle_primal_rage"
 };	
 
 function add_dragon_encounters_listeners()
-	local imrik_interface = cm:get_faction(imrik_faction);
-	if imrik_interface == false or imrik_interface:is_human() == false  then
-		return
-	end
-
 	out("#### Adding Dragon Encounters Listeners ####");
 	-- Check to see if conditions(timer) is correct to spawn marker
 	SetupPostBattleListenerRetreatButton();
-	
-	cm:add_faction_turn_start_listener_by_name(
-		"Imrik_FactionTurnStart",
-		imrik_faction,
-		function(context)
-			local region_key = ""
-			if imrik_interface:has_home_region() then
-				region_key = imrik_interface:home_region():name();
-			end
-			local imrik = imrik_interface:faction_leader();
-			local imrik_cqi = imrik:command_queue_index();
-			local imrik_loc = {0, 0};
-			if not imrik:is_null_interface() then
-				imrik_loc = {imrik:logical_position_x(), imrik:logical_position_y()};
-			end	
-			local turn_number = cm:model():turn_number();
-	
-			-- If marker is on cooldown then countdown until 0, then at 0 spawn the dragon marker
-			if imrik_interface:is_null_interface() == false and imrik_interface:is_human() == true and dragon_state == dragon_marker_state.cooldown then
-				dragon_turns_spawn_timer = dragon_turns_spawn_timer - 1;
-				effect.set_context_value("dragon_taming_turns_until_next", dragon_turns_spawn_timer);
-				if dragon_turns_spawn_timer < 1 then
-					local pos_x, pos_y = cm:find_valid_spawn_location_for_character_from_position(imrik_faction, imrik_loc[1], imrik_loc[2], false, 25);
-					-- If Imrik is dead or a valid location cannot be found then just spawn marker from capital
-					if pos_x == -1 then
-					pos_x, pos_y = cm:find_valid_spawn_location_for_character_from_settlement(imrik_faction, region_key, false, false, 20);	
-					end
-					spawn_dragon_marker(pos_x, pos_y);
-					dragon_turns_spawn_timer = dragon_marker_cooldown;
-					dragon_state = dragon_marker_state.spawned;
+	core:add_listener(
+			"Imrik_FactionTurnStart",
+			"FactionTurnStart",
+			function(context)
+				return context:faction():name() == imrik_faction;
+			end,
+			function(context)
+				local imrik_interface = cm:model():world():faction_by_key(imrik_faction);
+				local region_key = nil
+				if imrik_interface:has_home_region() then
+					region_key = imrik_interface:home_region():name();
 				end
-				out("ENDING TURN REDUCTION");
-				out(dragon_turns_spawn_timer);
-			-- If marker is active then countdown until 0 then remove the marker	
-			elseif imrik_interface:is_null_interface() == false and imrik_interface:is_human() == true and dragon_state == dragon_marker_state.spawned then
-				dragon_marker_turns_available = dragon_marker_turns_available - 1;
-				effect.set_context_value("dragon_taming_turns_current", dragon_marker_turns_available);
-				if dragon_marker_turns_available == 0 then
-					cm:remove_interactable_campaign_marker("dragon_marker_"..tostring(dragon_marker_key_counter));
+				local imrik = imrik_interface:faction_leader();
+				local imrik_cqi = imrik:command_queue_index();
+				local imrik_loc = {0, 0};
+				if not imrik:is_null_interface() then
+					imrik_loc = {imrik:logical_position_x(), imrik:logical_position_y()};
+				end	
+				local turn_number = cm:model():turn_number();
+		
+				-- If marker is on cooldown then countdown until 0, then at 0 spawn the dragon marker
+				if imrik_interface:is_null_interface() == false and imrik_interface:is_human() == true and dragon_state == dragon_marker_state.cooldown then
+					dragon_turns_spawn_timer = dragon_turns_spawn_timer - 1;
 					effect.set_context_value("dragon_taming_turns_until_next", dragon_turns_spawn_timer);
-					dragon_marker_key_counter = dragon_marker_key_counter + 1;
-					dragon_state = dragon_marker_state.cooldown;
-					dragon_marker_turns_available = dragon_marker_turns;
-				end
-				out("ABOVE CHECKER");
-				out(dragon_marker_turns_available);
-			end	
-		end,
-		true
-	);
-	
+					if dragon_turns_spawn_timer < 1 then
+						local pos_x, pos_y = cm:find_valid_spawn_location_for_character_from_position(imrik_faction, imrik_loc[1], imrik_loc[2], false, 25);
+						-- If Imrik is dead or a valid location cannot be found then just spawn marker from capital
+						if pos_x == -1 then
+							if region_key then
+								pos_x, pos_y = cm:find_valid_spawn_location_for_character_from_settlement(imrik_faction, region_key, false, false, 20);	
+							else
+								local mf_list = context:faction():military_force_list()
+								local first_mf = mf_list:item_at(0)
+								local first_general = first_mf:general_character()
+								pos_x, pos_y = cm:find_valid_spawn_location_for_character_from_character(imrik_faction, "character_cqi:"..first_general:command_queue_index(), false, 25);
+							end
+						end
+						spawn_dragon_marker(pos_x, pos_y);
+						dragon_turns_spawn_timer = dragon_marker_cooldown;
+						dragon_state = dragon_marker_state.spawned;
+					end
+					out("ENDING TURN REDUCTION");
+					out(dragon_turns_spawn_timer);
+				-- If marker is active then countdown until 0 then remove the marker	
+				elseif imrik_interface:is_null_interface() == false and imrik_interface:is_human() == true and dragon_state == dragon_marker_state.spawned then
+					dragon_marker_turns_available = dragon_marker_turns_available - 1;
+					effect.set_context_value("dragon_taming_turns_current", dragon_marker_turns_available);
+					if dragon_marker_turns_available == 0 then
+						cm:remove_interactable_campaign_marker("dragon_marker_"..tostring(dragon_marker_key_counter));
+						effect.set_context_value("dragon_taming_turns_until_next", dragon_turns_spawn_timer);
+						dragon_marker_key_counter = dragon_marker_key_counter + 1;
+						dragon_state = dragon_marker_state.cooldown;
+						dragon_marker_turns_available = dragon_marker_turns;
+					end
+					out("ABOVE CHECKER");
+					out(dragon_marker_turns_available);
+				end	
+			end,
+			true
+		);
 	-- Dilemma Choice listener readded after saving/loading
 	core:add_listener(
 		"dragon_DilemmaChoiceMadeEvent",
@@ -163,9 +167,9 @@ function add_dragon_encounters_listeners()
 		true
 	);
 	local imrik_interface = cm:model():world():faction_by_key(imrik_faction);
-	
+	if imrik_interface:is_null_interface() == false and imrik_interface:is_human() == true and imrik_interface:is_human() ~= nil then
 	imrik_setup_dragon_armies();
-
+	end
 	--Reconstructing listener, if there's marker activated
 	if dragon_state == 2 then
 		core:add_listener(

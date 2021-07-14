@@ -354,7 +354,10 @@ local wh_agents = {
     {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_coeddil", ["dlc"] = {"TW_WH_WOOD_ELVES", "TW_WH2_DLC16_TWILIGHT"}},
     {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_ariel", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
     {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_sisters_of_twilight", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
-    {["faction"] = "wh2_twa03_def_rakarth", ["subtype"] = "wh2_twa03_def_rakarth", ["dlc"] = "TW_WH_TWA_03_RAKARTH"}
+    {["faction"] = "wh2_twa03_def_rakarth", ["subtype"] = "wh2_twa03_def_rakarth", ["dlc"] = "TW_WH_TWA_03_RAKARTH"},
+    {["faction"] = "wh2_dlc17_bst_taurox", ["subtype"] = "wh2_dlc17_bst_taurox", ["dlc"] = "TW_WH2_DLC17_SILENCE"},
+    {["faction"] = "wh2_dlc17_lzd_oxyotl", ["subtype"] = "wh2_dlc17_lzd_oxyotl", ["dlc"] = "TW_WH2_DLC17_SILENCE"},
+    {["faction"] = "wh2_dlc17_dwf_thorek_ironbrow", ["subtype"] = "wh2_dlc17_dwf_thorek", ["dlc"] = "TW_WH2_DLC17_THOREK_FREE"}
 } --:vector<map<string, string>> 
     --MIXU Part 1--
 local mixu1_agents = {
@@ -381,7 +384,7 @@ local mixu1_agents = {
     {["faction"] = "wh_main_emp_empire", ["subtype"] = "emp_luthor_huss"},
     {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "emp_theodore_bruckner"},
     {["faction"] = "wh_main_emp_middenland", ["subtype"] = "emp_vorn_thugenheim"},
-    {["faction"] = "wh2_main_bst_manblight", ["subtype"] = "bst_taurox"},
+    --{["faction"] = "wh2_main_bst_manblight", ["subtype"] = "bst_taurox"}, --dlc
     {["faction"] = "wh_dlc05_wef_wydrioth", ["subtype"] = "wef_drycha"}
 } --:vector<map<string, string>> 
     --MIXU Part 2--
@@ -576,7 +579,10 @@ local playable_factions = {
     "wh2_main_skv_clan_moulder",
     "wh2_dlc16_wef_drycha",
     "wh2_dlc16_wef_sisters_of_twilight",
-    "wh2_twa03_def_rakarth"
+    "wh2_twa03_def_rakarth",
+    "wh2_dlc17_lzd_oxyotl",
+    "wh2_dlc17_dwf_thorek_ironbrow",
+    "wh2_dlc17_bst_taurox"
 } --:vector<string>
 
 local vor_subtype_anc = {
@@ -714,6 +720,16 @@ local vor_subtype_anc = {
     ["wh2_dlc16_wef_sisters_of_twilight"] = {
 		{"mission", "wh2_dlc16_anc_mount_wef_cha_sisters_of_twilight_forest_dragon", "wh2_dlc16_great_vortex_wef_sisters_dragon_stage_1", 12,"wh2_dlc16_great_vortex_wef_sisters_dragon_stage_4_mpc"}
 	},
+    ["wh2_dlc17_lzd_oxyotl"] = {
+        {"mission", "wh2_dlc17_anc_weapon_the_golden_blowpipe_of_ptoohee", "wh2_dlc17_great_vortex_lzd_oxyotl_the_golden_blowpipe_of_ptoohee_stage_1", 5, "wh2_dlc17_great_vortex_lzd_oxyotl_the_golden_blowpipe_of_ptoohee_stage_4b_mpc"}
+    },
+    ["wh2_dlc17_bst_taurox"] = {
+        {"mission", "wh2_dlc17_anc_weapon_rune_tortured_axes", "wh2_dlc17_great_vortex_bst_taurox_rune_tortured_axes_stage_1", 5,"wh2_dlc17_great_vortex_bst_taurox_rune_tortured_axes_stage_3_mpc"}
+    },
+    ["wh2_dlc17_dwf_thorek"] = {
+        {"mission", "wh2_dlc17_anc_weapon_klad_brakak", "wh2_dlc17_great_vortex_dwf_thorek_klad_brakak_stage_1", 5,"wh2_dlc17_great_vortex_dwf_thorek_klad_brakak_stage_4_mp"},
+        {"mission", "wh2_dlc17_anc_armour_thoreks_rune_armour", "wh2_dlc17_great_vortex_dwf_thorek_rune_armour_quest", 3, "wh2_dlc17_great_vortex_dwf_thorek_rune_armour_quest"}
+    },
     --mixu
     ["brt_adalhard"] = {
         {"", "mixu_anc_armour_brt_adalhard_lions_cloak", "", 12}
@@ -767,9 +783,9 @@ local vor_subtype_anc = {
         {"", "mixu_anc_talisman_emp_vorn_thugenheim_heart_of_middenheim", "", 15},
         {"", "mixu_anc_enchanted_item_emp_vorn_thugenheim_pelt_of_horrors", "", 10}
     },
-    ["bst_taurox"] = {
-        {"", "mixu_anc_weapon_bst_taurox_the_brass_bull_rune_tortured_axes", "", 13}
-    },
+    --["bst_taurox"] = {
+    --    {"", "mixu_anc_weapon_bst_taurox_the_brass_bull_rune_tortured_axes", "", 13}
+    --},
     ["emp_wolfram_hertwig"] = {
         {"", "mixu_anc_talisman_emp_wolfram_hertwig_kislevite_icon", "", 14}
     }
@@ -1077,6 +1093,16 @@ local me_subtype_anc = {
         {"mission", "wh2_main_anc_armour_helm_of_the_kraken", "wh2_dlc11_lokhir_helm_of_the_kraken_stage_1", 11, "wh2_dlc11_lokhir_fellheart_helm_of_the_kraken_mp"},
         {"mission", "wh2_dlc11_anc_weapon_red_blades", "wh2_dlc11_def_lokhir_red_blades_stage_1", 2}
     },
+    ["wh2_dlc17_lzd_oxyotl"] = {
+        {"mission", "wh2_dlc17_anc_weapon_the_golden_blowpipe_of_ptoohee", "wh2_dlc17_lzd_oxyotl_the_golden_blowpipe_of_ptoohee_stage_1", 5, "wh2_dlc17_lzd_oxyotl_the_golden_blowpipe_of_ptoohee_stage_4b_mpc"}
+    },
+    ["wh2_dlc17_bst_taurox"] = {
+        {"mission", "wh2_dlc17_anc_weapon_rune_tortured_axes", "wh2_dlc17_bst_taurox_rune_tortured_axes_stage_1", 5,"wh2_dlc17_bst_taurox_rune_tortured_axes_stage_3_mpc"}
+    },
+    ["wh2_dlc17_dwf_thorek"] = {
+        {"mission", "wh2_dlc17_anc_weapon_klad_brakak", "wh2_dlc17_dwf_thorek_klad_brakak_stage_1", 5,"wh2_dlc17_dwf_thorek_klad_brakak_stage_4_mp"},
+        {"mission", "wh2_dlc17_anc_armour_thoreks_rune_armour", "wh2_dlc17_dwf_thorek_rune_armour_quest", 3, "wh2_dlc17_dwf_thorek_rune_armour_quest"}
+    },
     --mixu
     ["brt_adalhard"] = {
         {"", "mixu_anc_armour_brt_adalhard_lions_cloak", "", 12}
@@ -1130,9 +1156,9 @@ local me_subtype_anc = {
         {"", "mixu_anc_talisman_emp_vorn_thugenheim_heart_of_middenheim", "", 15},
         {"", "mixu_anc_enchanted_item_emp_vorn_thugenheim_pelt_of_horrors", "", 10}
     },
-    ["bst_taurox"] = {
-        {"", "mixu_anc_weapon_bst_taurox_the_brass_bull_rune_tortured_axes", "", 13}
-    },
+    --["bst_taurox"] = {
+    --    {"", "mixu_anc_weapon_bst_taurox_the_brass_bull_rune_tortured_axes", "", 13}
+    --},
     ["emp_wolfram_hertwig"] = {
         {"", "mixu_anc_talisman_emp_wolfram_hertwig_kislevite_icon", "", 14}
     }
@@ -2003,7 +2029,8 @@ end
 --v function(faction: CA_FACTION) --> boolean
 local function is_faction_exempted(faction)
     local is_exempted = false
-    if faction:subculture() == "wh_main_sc_chs_chaos" or faction:name() == "wh2_dlc13_lzd_defenders_of_the_great_plan" or faction:name() == "wh2_dlc13_lzd_avengers" 
+    if faction:subculture() == "wh_main_sc_chs_chaos" or faction:subculture() == "wh_dlc03_sc_bst_beastmen"
+    or faction:name() == "wh2_dlc13_lzd_defenders_of_the_great_plan" or faction:name() == "wh2_dlc13_lzd_avengers" 
     or faction:name():find("_waaagh") or faction:name():find("_brayherd") or faction:name():find("_unknown") or faction:name():find("_incursion")
     or faction:name():find("_qb") or faction:name():find("_separatists") or faction:name():find("_dil") or faction:name():find("_blood_voyage") 
     or faction:name():find("_encounters") or faction:name():find("rebel") or faction:name():find("_intervention") or faction:name():find("_invasion") 

@@ -140,22 +140,20 @@ function llr.create_button(cqi)
     local character_details_panel = find_uicomponent(core:get_ui_root(), "character_details_panel")
     if character_details_panel then
         llr.button = find_uicomponent(core:get_ui_root(), "obr_button")
-        if llr.button then deleteUIC(llr.button) end
-        llr.button = core:get_or_create_component("obr_button", "ui/templates/round_medium_button") -- square_medium_button
+        if llr.button then return end
+        llr.button = core:get_or_create_component("obr_button", "ui/templates/square_medium_button") -- round_medium_button
         local char = cm:get_character_by_cqi(cqi)
 
         character_details_panel:Adopt(llr.button:Address())
         local icon_path = effect.get_skinned_image_path("icon_home.png")
         llr.button:SetImagePath(icon_path) 
-        local button_ok = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_ok")
-        local bW, bH = button_ok:Bounds()
-        local bX, bY = button_ok:Position()
+        local button_replace_general = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_replace_general")
+        local bW, bH = button_replace_general:Bounds()
+        local bX, bY = button_replace_general:Position()
         llr.button:Resize(bW, bH)
 
-        local effects_window = find_uicomponent(core:get_ui_root(),"character_details_panel", "effects_parent", "campaign_effects_window")
-        local effects_window_XPos = effects_window:Position()
-        llr.button:MoveTo(effects_window_XPos + effects_window:Width() / 2 - llr.button:Width() / 2, bY)       
-        llr.button:PropagatePriority(button_ok:Priority())
+        llr.button:MoveTo(bX - bW - 1, bY)       
+        llr.button:PropagatePriority(button_replace_general:Priority())
 
         if llr.limit then
             if cm:get_saved_value("llr_respec_" .. tostring(cqi)) then
@@ -190,6 +188,12 @@ function llr.create_button(cqi)
             end,
             true
         )
+        if not core.svr:LoadPersistentBool("obr highlight") then 
+            llr.button:StartPulseHighlight(2) 
+            core.svr:SavePersistentBool("obr highlight", true)
+        else
+            llr.button:StopPulseHighlight()
+        end
     end
 end
 

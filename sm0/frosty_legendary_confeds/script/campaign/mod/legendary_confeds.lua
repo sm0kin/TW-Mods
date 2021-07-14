@@ -25,7 +25,7 @@ local enabled_factions = {} --:map<string, string> -- {["target_faction]", "huma
 local subcultures_factions = {
     ["wh2_main_sc_hef_high_elves"] = {"wh2_main_hef_eataine", "wh2_main_hef_order_of_loremasters", "wh2_main_hef_avelorn", "wh2_main_hef_nagarythe", "wh2_main_hef_yvresse", "wh2_dlc15_hef_imrik"},
     ["wh2_main_sc_lzd_lizardmen"] = {"wh2_main_lzd_hexoatl", "wh2_main_lzd_last_defenders", "wh2_dlc12_lzd_cult_of_sotek", "wh2_main_lzd_tlaqua", "wh2_main_lzd_itza", "wh2_dlc13_lzd_spirits_of_the_jungle"},
-    ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_naggarond", "wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread", "wh2_main_def_hag_graef"},
+    ["wh2_main_sc_def_dark_elves"] = {"wh2_main_def_naggarond", "wh2_main_def_cult_of_pleasure", "wh2_main_def_har_ganeth", "wh2_dlc11_def_the_blessed_dread", "wh2_main_def_hag_graef", "wh2_twa03_def_rakarth"},
     ["wh2_main_sc_skv_skaven"] = {"wh2_main_skv_clan_skyre", "wh2_main_skv_clan_mors", "wh2_main_skv_clan_pestilens", "wh2_dlc09_skv_clan_rictus", "wh2_main_skv_clan_eshin","wh2_main_skv_clan_moulder"},
     ["wh2_dlc09_sc_tmb_tomb_kings"] = {"wh2_dlc09_tmb_khemri", "wh2_dlc09_tmb_lybaras", "wh2_dlc09_tmb_exiles_of_nehek", "wh2_dlc09_tmb_followers_of_nagash"},
     ["wh2_dlc11_sc_cst_vampire_coast"] = {"wh2_dlc11_cst_vampire_coast", "wh2_dlc11_cst_noctilus", "wh2_dlc11_cst_pirates_of_sartosa", "wh2_dlc11_cst_the_drowned"},
@@ -55,6 +55,22 @@ local leaderFactions = {
     "wh_main_grn_greenskins",
     "wh_main_vmp_schwartzhaf"
 } --:vector<string>
+
+-- elector count factions
+
+local empire_politics_factions = {
+	{elector = "reikland", faction = "wh_main_emp_empire"},
+	{elector = "golden", faction = "wh2_dlc13_emp_golden_order"},
+	{elector = "averland", faction = "wh_main_emp_averland"},
+	{elector = "hochland", faction = "wh_main_emp_hochland"},
+	{elector = "middenland", faction = "wh_main_emp_middenland"},
+	{elector = "nordland", faction = "wh_main_emp_nordland"},
+	{elector = "ostermark", faction = "wh_main_emp_ostermark"},
+	{elector = "ostland", faction = "wh_main_emp_ostland"},
+	{elector = "stirland", faction = "wh_main_emp_stirland"},
+	{elector = "talabecland", faction = "wh_main_emp_talabecland"},
+	{elector = "wissenland", faction = "wh_main_emp_wissenland"}
+}
 
 -- alastar items
 ------------------------------------------------------------------
@@ -113,7 +129,7 @@ local function ancillaryOnRankUp(quests, subtype)
         local rank = currentQuest[2]			
         core:add_listener(
             ancillary,
-            "CharacterTurnStart",
+            "CharacterCreated", --"CharacterTurnStart",
             function(context)
                 return context:character():character_subtype(subtype) and context:character():rank() >= rank 
             end,
@@ -440,6 +456,26 @@ local function confed_factions(subcultures_factions_table)
                         or (zzz04_deadlyAlliances_value == "d2_deadly_Enable_worldwar" and (not cm:is_multiplayer() 
                         or cm:get_faction(humanFactions[1]):subculture() ~= cm:get_faction(humanFactions[2]):subculture()))) then
                             if humanFaction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" then delete_armies(faction_of_same_subculture:name()) end
+                            if humanFaction:subculture() == "wh_main_sc_emp_empire" then
+                                for i = 1, #empire_politics_factions do
+                                    local currentElector = empire_politics_factions[i] 
+                                    local currentFactionkey  = currentElector.faction
+                                    local currentFaction = cm:model():world():faction_by_key(currentFactionkey)
+                                    if currentFactionkey ==  faction_of_same_subculture:name() then  
+                                        core:add_listener(
+                                            "faction_add_pooled_resource_"..currentFactionkey.."_dead",
+                                            "FactionTurnStart",
+                                            function(context)
+                                                return context:faction():name() == humanFaction:name()
+                                            end,
+                                            function(context)
+                                                cm:faction_add_pooled_resource(context:faction():name(), "emp_imperial_authority", "wh2_dlc13_resource_factor_events", 2)
+                                            end,
+                                            false
+                                        )
+                                    end
+                                end
+                            end
                             cm:force_confederation(humanFactions[i], faction_of_same_subculture:name())
                         end
                     end
@@ -948,10 +984,10 @@ function legendary_confeds()
             end
 
             if not cm:is_multiplayer() or (cm:is_multiplayer() and cm:get_faction(humanFactions[1]):subculture() == cm:get_faction(humanFactions[2]):subculture()) then
-                frosty_confeds_mod:add_new_section("z_faction_options_1", "Faction Options") 
+                frosty_confeds_mod:add_new_section("z_faction_options_1", "Faction Choices") 
             else
-                frosty_confeds_mod:add_new_section("z_faction_options_1", "Faction Options - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[1]):name()))
-                frosty_confeds_mod:add_new_section("z_faction_options_2", "Faction Options - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[2]):name()))
+                frosty_confeds_mod:add_new_section("z_faction_options_1", "Faction Choices - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[1]):name()))
+                frosty_confeds_mod:add_new_section("z_faction_options_2", "Faction Choices - "..effect.get_localised_string("factions_screen_name_"..cm:get_faction(humanFactions[2]):name()))
             end
 
             for i = 1, #humanFactions do
