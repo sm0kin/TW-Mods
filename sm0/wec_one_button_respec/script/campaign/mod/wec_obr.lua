@@ -143,8 +143,8 @@ function llr.create_button(cqi)
         if llr.button then return end
         llr.button = core:get_or_create_component("obr_button", "ui/templates/square_medium_button") -- round_medium_button
         local char = cm:get_character_by_cqi(cqi)
-
-        character_details_panel:Adopt(llr.button:Address())
+        local bottom_buttons = find_uicomponent(core:get_ui_root(), "character_details_panel", "background", "bottom_buttons")
+        bottom_buttons:Adopt(llr.button:Address())
         local icon_path = effect.get_skinned_image_path("icon_home.png")
         llr.button:SetImagePath(icon_path) 
         local button_replace_general = find_uicomponent(core:get_ui_root(), "character_details_panel", "button_replace_general")

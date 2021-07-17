@@ -1113,6 +1113,9 @@ local function createloreButton_charPanel()
 						--spellBrowserButton:SetTooltipText("Locked by c++", "", false)			
 					end
 				)
+				if vfs.exists("script/campaign/mod/wec_obr.lua") then
+					loreButton_charPanel:PositionRelativeTo(referenceButton, -2*loreButton_charPanel:Width() - 1, 0)
+				end
 			end
 			updateButtonVisibility_charPanel()			
 	--	end, 0, "createloreButton_charPanel"
@@ -1162,13 +1165,15 @@ local function createloreButton_unitsPanel()
 	--	function(context)
 			local unitsPanel = find_uicomponent(core:get_ui_root(), "button_group_army")
 			local renownButton = find_uicomponent(unitsPanel, "button_renown") 
-			local recruitButton = find_uicomponent(unitsPanel, "button_recruitment")
+			local mercButton = find_uicomponent(unitsPanel, "button_ogre_mercenaries_pool")
 			loreButton_unitsPanel:Resize(renownButton:Width(), renownButton:Height())
 			local blessedButton = find_uicomponent(unitsPanel, "button_blessed_spawn_pool") 
 			local recruitButton = find_uicomponent(unitsPanel, "button_recruitment")
-			if blessedButton and blessedButton:Visible() then
+			if mercButton and mercButton:Visible() then
+				loreButton_unitsPanel:PositionRelativeTo(mercButton, loreButton_unitsPanel:Width() + 4, 0)
+			elseif mercButton and not mercButton:Visible() and blessedButton and blessedButton:Visible() then
 				loreButton_unitsPanel:PositionRelativeTo(blessedButton, loreButton_unitsPanel:Width() + 4, 0)
-			elseif blessedButton and not blessedButton:Visible() and renownButton and renownButton:Visible() then
+			elseif mercButton and not mercButton:Visible() and blessedButton and not blessedButton:Visible() and renownButton and renownButton:Visible() then
 				loreButton_unitsPanel:PositionRelativeTo(renownButton, loreButton_unitsPanel:Width() + 4, 0)
 			else
 				loreButton_unitsPanel:PositionRelativeTo(recruitButton, loreButton_unitsPanel:Width() + 4, 0)

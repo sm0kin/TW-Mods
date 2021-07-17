@@ -383,33 +383,38 @@ local function confed_factions(subcultures_factions_table)
                                         local cqi = char:command_queue_index()
                                         if char:is_wounded() then cm:stop_character_convalescing(cqi) end
                                         if not char:is_wounded() and cm:char_is_agent(char) and humanFaction:name() ~= "wh_main_dwf_karak_izor" then
-                                            local x, y
-                                            if humanFaction:faction_leader():has_military_force() then 
-                                                x, y = humanFaction:faction_leader():logical_position_x(), humanFaction:faction_leader():logical_position_y()
+                                            if humanFaction:name() == "wh2_dlc17_dwf_thorek_ironbrow" then
+                                                local faction_leader_army = humanFaction:faction_leader():military_force()
+                                                cm:embed_agent_in_force(char, faction_leader_army)
                                             else
-                                                local mfList =  humanFaction:military_force_list()
-                                                for p = 0, mfList:num_items() - 1 do
-                                                    local mf = mfList:item_at(p)
-                                                    if not mf:is_armed_citizenry() and mf:has_general() and mf:general_character():region():name() == humanFaction:home_region():name() then
-                                                        x, y = mf:general_character():logical_position_x(), mf:general_character():logical_position_y()
-                                                        break
+                                                local x, y
+                                                if humanFaction:faction_leader():has_military_force() then 
+                                                    x, y = humanFaction:faction_leader():logical_position_x(), humanFaction:faction_leader():logical_position_y()
+                                                else
+                                                    local mfList =  humanFaction:military_force_list()
+                                                    for p = 0, mfList:num_items() - 1 do
+                                                        local mf = mfList:item_at(p)
+                                                        if not mf:is_armed_citizenry() and mf:has_general() and mf:general_character():region():name() == humanFaction:home_region():name() then
+                                                            x, y = mf:general_character():logical_position_x(), mf:general_character():logical_position_y()
+                                                            break
+                                                        end
                                                     end
                                                 end
+                                                local spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], x, y, true, spawn_offset)
+                                                spawn_offset = spawn_offset + 1
+                                                --local valid = false
+                                                --while not valid do
+                                                --    if spawnX ~= -1 then
+                                                --        valid = true
+                                                --        break
+                                                --    end
+                                                --    local square = {x - 5, x + 5, y - 5, y + 5}
+                                                --    spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], cm:random_number(square[2], square[1]), cm:random_number(square[4], square[3]), true)
+                                                --end
+                                                --if valid then
+                                                    cm:teleport_to(cm:char_lookup_str(cqi), spawnX, spawnY, true)
+                                                --end
                                             end
-                                            local spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], x, y, true, spawn_offset)
-                                            spawn_offset = spawn_offset + 1
-                                            --local valid = false
-                                            --while not valid do
-                                            --    if spawnX ~= -1 then
-                                            --        valid = true
-                                            --        break
-                                            --    end
-                                            --    local square = {x - 5, x + 5, y - 5, y + 5}
-                                            --    spawnX, spawnY = cm:find_valid_spawn_location_for_character_from_position(humanFactions[i], cm:random_number(square[2], square[1]), cm:random_number(square[4], square[3]), true)
-                                            --end
-                                            --if valid then
-                                                cm:teleport_to(cm:char_lookup_str(cqi), spawnX, spawnY, true)
-                                            --end
                                         end
                                     end
                                 end
