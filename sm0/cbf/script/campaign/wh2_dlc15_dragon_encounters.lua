@@ -26,6 +26,8 @@ local dragon_marker_state = {
 	spawned = 2,
 };
 
+local dragon_marker_pending = false
+
 local dragon_state = 1;
 
 local incidents_list = {
@@ -180,9 +182,14 @@ function add_dragon_encounters_listeners()
 				local character_cqi = character:command_queue_index();
 				local character_force_cqi = character:military_force():command_queue_index();
 				local faction_key = character:faction():name();
-				cm:trigger_dilemma(faction_key, current_dilemma);
-				dragon_target_force_cqi = character_force_cqi;
-				dragon_target_cqi = character_cqi;
+				dragon_marker_pending = dragon_marker_pending or false;
+
+				if dragon_marker_pending == false then
+					dragon_marker_pending = true;
+					cm:trigger_dilemma(faction_key, current_dilemma);
+					dragon_target_force_cqi = character_force_cqi;
+					dragon_target_cqi = character_cqi;				
+				end
 			end,
 			true
 		);		
@@ -247,9 +254,14 @@ function spawn_dragon_marker(pos_x, pos_y)
 				local character_cqi = character:command_queue_index();
 				local character_force_cqi = character:military_force():command_queue_index();
 				local faction_key = character:faction():name();
-				cm:trigger_dilemma(faction_key, current_dilemma);
-				dragon_target_force_cqi = character_force_cqi;
-				dragon_target_cqi = character_cqi;
+				dragon_marker_pending = dragon_marker_pending or false;
+
+				if dragon_marker_pending == false then
+					dragon_marker_pending = true;
+					cm:trigger_dilemma(faction_key, current_dilemma);
+					dragon_target_force_cqi = character_force_cqi;
+					dragon_target_cqi = character_cqi;				
+				end
 				core:trigger_event("ScriptEventImrikDragonMarkerEnter");
 			end,
 			true
@@ -287,6 +299,7 @@ end
 function dragon_DilemmaChoiceMadeEvent(context)
 	local choice = context:choice();
 	local dilemma = context:dilemma();
+	dragon_marker_pending = false;
 	local x, y = cm:find_valid_spawn_location_for_character_from_position(imrik_faction, position[1], position[2], false);
 	for i=1, #dragon_dilemma_list do
 		-- If its a normal dilemma then spawn a special dragon army (similar to encounter at sea) for the player to fight against
@@ -593,6 +606,7 @@ cm:add_saving_game_callback(
 		cm:save_named_value("position", position, context);
 		cm:save_named_value("dragon_dilemma_special_ready", dragon_dilemma_special_ready, context);
 		cm:save_named_value("dragon_mission_completed", dragon_mission_completed, context);
+		cm:save_named_value("dragon_marker_pending", dragon_marker_pending, context);
 	end
 );
 cm:add_loading_game_callback(
@@ -609,6 +623,7 @@ cm:add_loading_game_callback(
 			position = cm:load_named_value("position", position, context);
 			dragon_dilemma_special_ready = cm:load_named_value("dragon_dilemma_special_ready", dragon_dilemma_special_ready, context);
 			dragon_mission_completed = cm:load_named_value("dragon_mission_completed", dragon_mission_completed, context);
+			dragon_marker_pending = cm:load_named_value("dragon_marker_pending", dragon_marker_pending, context);
 		end
 	end
 );

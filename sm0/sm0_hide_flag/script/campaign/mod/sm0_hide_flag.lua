@@ -49,7 +49,7 @@ end
 
 local function create_checkbox_toggle()
 	local info_holder = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel_header", "info_holder")	
-	local reference_uic = find_uicomponent(info_holder, "button_info")
+	local reference_uic = find_uicomponent(core:get_ui_root(), "settlement_panel", "main_settlement_panel_header", "info_holder", "button_info")
 	if cm:get_local_faction_name(true) == "wh2_main_skv_clan_eshin" then reference_uic = find_uicomponent(core:get_ui_root(), "settlement_panel", "target_shadowy_dealings_button") end
 	if reference_uic then 
 		local reference_uic_W, reference_uic_H = reference_uic:Bounds()

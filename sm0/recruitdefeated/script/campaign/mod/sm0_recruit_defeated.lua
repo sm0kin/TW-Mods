@@ -832,6 +832,15 @@ local vor_missing_anc = {
     },
     ["wh2_twa03_def_rakarth"] = {
         {"", "wh2_twa03_anc_armour_beast_armour_of_karond_kar", "", 1}
+    },
+    ["wh2_dlc17_dwf_thorek_ironbrow"] = {
+        {"", "wh_main_anc_rune_master_rune_of_stoicism", "", 1},
+        {"", "wh2_dlc17_anc_follower_dwf_kraggi", "", 1},
+        {"", "wh2_dlc17_anc_rune_engineering_rune_of_burning", "", 1}
+    },
+    ["wh2_dlc17_lzd_oxyotl"] = {
+        {"", "wh2_dlc17_anc_banner_lzd_poison_fireblood_toxin", "", 1},
+        {"", "wh2_dlc17_anc_banner_lzd_poison_toadskin_essence", "", 1}
     }
 } --:map<string, vector<vector<WHATEVER>>>
 
@@ -1205,6 +1214,15 @@ local me_missing_anc = {
     },
     ["wh2_twa03_def_rakarth"] = {
         {"", "wh2_twa03_anc_armour_beast_armour_of_karond_kar", "", 1}
+    },
+    ["wh2_dlc17_dwf_thorek_ironbrow"] = {
+        {"", "wh_main_anc_rune_master_rune_of_stoicism", "", 1},
+        {"", "wh2_dlc17_anc_follower_dwf_kraggi", "", 1},
+        {"", "wh2_dlc17_anc_rune_engineering_rune_of_burning", "", 1}
+    },
+    ["wh2_dlc17_lzd_oxyotl"] = {
+        {"", "wh2_dlc17_anc_banner_lzd_poison_fireblood_toxin", "", 1},
+        {"", "wh2_dlc17_anc_banner_lzd_poison_toadskin_essence", "", 1}
     }
 } --:map<string, vector<vector<WHATEVER>>>
 
@@ -2067,7 +2085,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
     local factions_of_same_subculture = {}
     local human_factions = cm:get_human_factions()
 
-    if not is_table(faction_list) and not is_factionlist(faction_list) then
+    if not is_table(faction_list) and not is_factionlist(faction_list) then --and next(faction_list) == nil
         --# assume faction_list: CA_FACTION_LIST
         faction_list = faction:factions_of_same_subculture()
     end
@@ -2094,6 +2112,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             or (faction_current:name() ~= "wh2_dlc16_wef_drycha" and faction:name() ~= "wh2_dlc16_wef_drycha")))) then 
                 table.insert(factions_of_same_subculture, faction_current:name())
             end
+            cm:shuffle_table(factions_of_same_subculture)
         end
     elseif is_table(faction_list) then
         --# assume factions_of_same_subculture: any
@@ -2114,32 +2133,32 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                     end
                 end
             end
+            for i = 1, #factions_of_same_subculture do
+                local faction_current = cm:get_faction(factions_of_same_subculture[i])
+                if not table_contains(prefered_factions, faction_current:name()) then
+                    table.insert(prefered_factions, faction_current:name())
+                end
+            end
         else
             sm0_log("preferance: met | something went wrong")
         end
     elseif preferance_type == "relation" then
         -- preferance: relation
-        local saved_standing = nil --:number
+        local faction_standings = {}
         if is_table(factions_of_same_subculture) then
             --# assume factions_of_same_subculture: vector<string>
             for i = 1, #factions_of_same_subculture do
                 local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
                 local standing = faction:diplomatic_standing_with(subculture_faction:name())
                 --sm0_log("relation | factions_of_same_subculture: "..tostring(factions_of_same_subculture[i]).." | faction: "..tostring(faction:name()).." | standing: "..tostring(standing))
-                if not is_number(saved_standing) or standing > saved_standing then
-                    saved_standing = standing
-                end
+                table.insert(faction_standings, {standing = standing - 0.001 * i, name = subculture_faction:name()})
             end
-            --sm0_log("relation | preferance_type: "..tostring(preferance_type).." | saved_standing: "..tostring(saved_standing))
-            if saved_standing then
-                for i = 1, #factions_of_same_subculture do
-                    local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
-                    local standing = faction:diplomatic_standing_with(subculture_faction:name())
-                    if standing >= saved_standing then                       
-                        table.insert(prefered_factions, subculture_faction:name())
-                        --sm0_log("factions_met_list/factions_of_same_subculture | Faction: "..prefered_faction_relation:name().." | Diplomatic Standing: "..tostring(saved_standing))
-                    end
-                end
+            -- messes up the previous table order if more than one key has an equal relation number
+            table.sort(faction_standings, function(a,b) return tonumber(a.standing) > tonumber(b.standing) end)
+
+            for _, faction in ipairs(faction_standings) do
+                table.insert(prefered_factions, faction.name)
+                --sm0_log("relation | faction: "..tostring(faction.name).." | saved_standing: "..tostring(faction.standing))
             end
         else
             sm0_log("preferance: relation | something went wrong")
@@ -2149,12 +2168,13 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         if is_table(factions_of_same_subculture) then
             --# assume factions_of_same_subculture: vector<string>
             for i = 1, #factions_of_same_subculture do
-                local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
-                for j = 1, #playable_factions do
-                    local playable_faction = cm:get_faction(playable_factions[j])
-                    if playable_faction and subculture_faction:name() == playable_faction:name() then 
-                        table.insert(prefered_factions, playable_faction:name())
-                    end
+                if table_contains(playable_factions, factions_of_same_subculture[i]) then
+                    table.insert(prefered_factions, factions_of_same_subculture[i])
+                end
+            end
+            for i = 1, #factions_of_same_subculture do
+                if not table_contains(prefered_factions, factions_of_same_subculture[i]) then
+                    table.insert(prefered_factions, factions_of_same_subculture[i])
                 end
             end
         else
@@ -2165,13 +2185,13 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         if is_table(factions_of_same_subculture) then
             --# assume factions_of_same_subculture: vector<string>
             for i = 1, #factions_of_same_subculture do
-                local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
-                for j = 1, #playable_factions do
-                    local playable_faction = cm:get_faction(playable_factions[j])
-                    if playable_faction:subculture() == faction:subculture() and not playable_faction:is_dead() and not is_faction_exempted(playable_faction) 
-                    and not is_human_and_rejected_faction(playable_faction, faction) and playable_faction and subculture_faction:name() ~= playable_faction:name() then 
-                        table.insert(prefered_factions, playable_faction:name())
-                    end
+                if not table_contains(playable_factions, factions_of_same_subculture[i]) then
+                    table.insert(prefered_factions, factions_of_same_subculture[i])
+                end
+            end
+            for i = 1, #factions_of_same_subculture do
+                if not table_contains(prefered_factions, factions_of_same_subculture[i]) then
+                    table.insert(prefered_factions, factions_of_same_subculture[i])
                 end
             end
         else
@@ -2188,6 +2208,12 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                     table.insert(prefered_factions, subculture_faction:name())
                 end
             end
+            for i = 1, #factions_of_same_subculture do
+                local faction_current = cm:get_faction(factions_of_same_subculture[i])
+                if not table_contains(prefered_factions, faction_current:name()) then
+                    table.insert(prefered_factions, faction_current:name())
+                end
+            end
         else
             sm0_log("preferance: player | something went wrong")
         end
@@ -2201,6 +2227,11 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                     table.insert(prefered_factions, subculture_faction:name())
                 end
             end
+            for i = 1, #factions_of_same_subculture do
+                if not table_contains(prefered_factions, factions_of_same_subculture[i]) then
+                    table.insert(prefered_factions, factions_of_same_subculture[i])
+                end
+            end
         else
             sm0_log("preferance: ai | something went wrong")
         end
@@ -2208,12 +2239,28 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         -- preferance: player alternate (only applies to mp same subculture)
         if is_table(factions_of_same_subculture) then
             --# assume factions_of_same_subculture: vector<string>
-            for i = 1, #factions_of_same_subculture do
-                local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
-                if not subculture_faction:is_human() or (subculture_faction:name() == human_factions[1] and not cm:get_saved_value("faction_P1")) 
-                or (subculture_faction:name() == human_factions[2] and not cm:get_saved_value("faction_P2")) then
-                    table.insert(prefered_factions, subculture_faction:name())
+            human_factions[1] = "wh2_main_hef_eataine"
+            human_factions[2] = "wh2_main_hef_order_of_loremasters"
+            if cm:get_saved_value("faction_P2") or cm:get_saved_value("faction_P1") then
+                local player1_current_pos
+                local player2_current_pos
+                for i = 1, #factions_of_same_subculture do
+                    local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
+                    if subculture_faction:name() == human_factions[1] then
+                        player1_current_pos = i
+                    elseif subculture_faction:name() == human_factions[2] then
+                        player2_current_pos = i
+                    end
                 end
+                prefered_factions = factions_of_same_subculture
+                if is_number(player1_current_pos) and is_number(player2_current_pos) then
+                    if ((player1_current_pos < player2_current_pos) and cm:get_saved_value("faction_P1")) 
+                    or ((player2_current_pos < player1_current_pos) and cm:get_saved_value("faction_P2")) then
+                        prefered_factions[player1_current_pos], prefered_factions[player2_current_pos] = prefered_factions[player2_current_pos], prefered_factions[player1_current_pos]
+                    end
+                end
+            else
+                prefered_factions = factions_of_same_subculture
             end
         else
             sm0_log("preferance: alternate | something went wrong")
@@ -2227,13 +2274,6 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     end
     
-    if next(prefered_factions) == nil then
-        -- prefered_factions is empty
-        prefered_factions = factions_of_same_subculture
-        --sm0_log("preferance_type: "..tostring(preferance_type).." | no faction fulfills the condition -> reset table to previous preference level")
-    end
-
-    --sm0_log("prefered_factions ("..faction:name()..") = "..tostring(prefered_factions))
     --for i, faction in ipairs(prefered_factions) do
     --    --# assume faction: string
     --    sm0_log("return | "..tostring(preferance_type).." | prefered_factions["..i.."]: "..tostring(faction))
@@ -2405,36 +2445,42 @@ local function init_recruit_defeated_listeners(enable_value)
                     and not cm:get_saved_value("rd_choice_2_"..current_faction:name()) then 
                         -- faction exceptions
                         if not is_faction_exempted(current_faction) then --and not current_faction:subculture() == "wh_main_sc_nor_norsca"
-                            local prefered_factions = {} --:vector<string>
-                            if preferance1_value and preferance1_value ~= "disabled" then
-                                prefered_factions = get_prefered_faction_list(nil, preferance1_value, current_faction)
-                            end
-                            if preferance2_value and preferance2_value ~= "disabled" then
-                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance2_value, current_faction)
-                            end
-                            if preferance3_value and preferance3_value ~= "disabled" then
-                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance3_value, current_faction)
-                            end
-                            if preferance4_value and preferance4_value ~= "disabled" then
-                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance4_value, current_faction)
+                            local prefered_factions = nil --:vector<string>
+                            if preferance6_value and preferance6_value ~= "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance6_value, current_faction)
                             end
                             if preferance5_value and preferance5_value ~= "disabled" then
                                 prefered_factions = get_prefered_faction_list(prefered_factions, preferance5_value, current_faction)
                             end
-                            if preferance6_value and preferance6_value ~= "disabled" then
-                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance6_value, current_faction)
+                            if preferance4_value and preferance4_value ~= "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance4_value, current_faction)
                             end
-                            if preferance1_value == "disabled" and preferance2_value == "disabled" and preferance3_value == "disabled" 
-                            and preferance4_value == "disabled" and preferance5_value == "disabled" and preferance6_value == "disabled" then
-                                prefered_factions = get_prefered_faction_list(nil, nil, current_faction) -- returns factions_of_same_subculture as vector<string>
+                            if preferance3_value and preferance3_value ~= "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance3_value, current_faction)
                             end
+                            if preferance2_value and preferance2_value ~= "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance2_value, current_faction)
+                            end
+                            if preferance1_value and preferance1_value ~= "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, preferance1_value, current_faction)
+                            end
+                            --old
+                            --if preferance1_value == "disabled" and preferance2_value == "disabled" and preferance3_value == "disabled" 
+                            --and preferance4_value == "disabled" and preferance5_value == "disabled" and preferance6_value == "disabled" then
+                            --    prefered_factions = get_prefered_faction_list(nil, nil, current_faction) -- returns factions_of_same_subculture as vector<string>
+                            --end
                             local prefered_faction = nil
-                            if prefered_factions and #prefered_factions >= 1 then
-                                local rng_index = cm:random_number(#prefered_factions)
-                                local prefered_faction_key = prefered_factions[rng_index]
+                            local prefered_faction_key = prefered_factions[1]
+                            --old
+                            --if prefered_factions and #prefered_factions >= 1 then
+                            --    local rng_index = cm:random_number(#prefered_factions)
+                            --    local prefered_faction_key = prefered_factions[rng_index]
+                            --    prefered_faction = cm:get_faction(prefered_faction_key)
+                            --end
+                            if prefered_faction_key then
                                 prefered_faction = cm:get_faction(prefered_faction_key)
                             end
-                            --sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
+                            sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
 
                             if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
@@ -2825,21 +2871,8 @@ core:add_listener(
 
         --local c_savage_restriction = recruit_defeated_mod:get_option_by_key("c_savage_restriction")
         --savage_restriction_value = c_savage_restriction:get_finalized_setting()
-        
-        mct:log("recruit_defeated_MctInitialized/enable_value = "..tostring(enable_value))
-        mct:log("recruit_defeated_MctInitialized/scope_value = "..tostring(scope_value))
-        mct:log("recruit_defeated_MctInitialized/ai_delay_value = "..tostring(ai_delay_value))
-        mct:log("recruit_defeated_MctInitialized/preferance1_value = "..tostring(preferance1_value))
-        mct:log("recruit_defeated_MctInitialized/preferance2_value = "..tostring(preferance2_value))
-        mct:log("recruit_defeated_MctInitialized/preferance3_value = "..tostring(preferance3_value))
-        mct:log("recruit_defeated_MctInitialized/preferance4_value = "..tostring(preferance4_value))
-        mct:log("recruit_defeated_MctInitialized/preferance5_value = "..tostring(preferance5_value))
-        mct:log("recruit_defeated_MctInitialized/preferance6_value = "..tostring(preferance6_value))
-        mct:log("recruit_defeated_MctInitialized/tmb_restriction_value = "..tostring(tmb_restriction_value))
-        mct:log("recruit_defeated_MctInitialized/cst_restriction_value = "..tostring(cst_restriction_value))
-        mct:log("recruit_defeated_MctInitialized/wef_restriction_value = "..tostring(wef_restriction_value))
 
-        --mct:log("recruit_defeated_MctInitialized/savage_restriction_value = "..tostring(savage_restriction_value))
+        --sm0_log("recruit_defeated_MctInitialized/savage_restriction_value = "..tostring(savage_restriction_value))
     end,
     true
 )
@@ -2858,14 +2891,27 @@ core:add_listener(
         preferance1_value = settings_table.a_preferance1
         preferance2_value = settings_table.b_preferance2
         preferance3_value = settings_table.c_preferance3
-        preferance4_value = settings_table.c_preferance4
-        preferance5_value = settings_table.c_preferance5
-        preferance6_value = settings_table.c_preferance6
+        preferance4_value = settings_table.d_preferance4
+        preferance5_value = settings_table.e_preferance5
+        preferance6_value = settings_table.f_preferance6
         tmb_restriction_value = settings_table.a_tmb_restriction
         cst_restriction_value = settings_table.b_cst_restriction
         wef_restriction_value = settings_table.d_wef_restriction
         --savage_restriction_value = settings_table.c_savage_restriction
         
+        sm0_log("recruit_defeated_MctInitialized/enable_value = "..tostring(enable_value))
+        sm0_log("recruit_defeated_MctInitialized/scope_value = "..tostring(scope_value))
+        sm0_log("recruit_defeated_MctInitialized/ai_delay_value = "..tostring(ai_delay_value))
+        sm0_log("recruit_defeated_MctInitialized/preferance1_value = "..tostring(preferance1_value))
+        sm0_log("recruit_defeated_MctInitialized/preferance2_value = "..tostring(preferance2_value))
+        sm0_log("recruit_defeated_MctInitialized/preferance3_value = "..tostring(preferance3_value))
+        sm0_log("recruit_defeated_MctInitialized/preferance4_value = "..tostring(preferance4_value))
+        sm0_log("recruit_defeated_MctInitialized/preferance5_value = "..tostring(preferance5_value))
+        sm0_log("recruit_defeated_MctInitialized/preferance6_value = "..tostring(preferance6_value))
+        sm0_log("recruit_defeated_MctInitialized/tmb_restriction_value = "..tostring(tmb_restriction_value))
+        sm0_log("recruit_defeated_MctInitialized/cst_restriction_value = "..tostring(cst_restriction_value))
+        sm0_log("recruit_defeated_MctInitialized/wef_restriction_value = "..tostring(wef_restriction_value))
+
         init_recruit_defeated_listeners(enable_value)
     end,
     true
@@ -2891,8 +2937,8 @@ function sm0_recruit_defeated()
 
     if mct then
         -- MCT new --
-        --mct:log("sm0_confed/mct/enable_value = "..tostring(enable_value))
-		--mct:log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
+        --sm0_log("sm0_confed/mct/enable_value = "..tostring(enable_value))
+		--sm0_log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
 		local confederation_options_mod = mct:get_mod_by_key("confederation_options")
 		if confederation_options_mod and cm:is_new_game() then
             local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")

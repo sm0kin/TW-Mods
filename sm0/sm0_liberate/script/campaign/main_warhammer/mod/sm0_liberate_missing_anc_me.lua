@@ -419,7 +419,7 @@ function sm0_liberate_missing_anc_me()
         "FactionTurnStart",
         true,
         function(context)
-            for _, anc in pairs(missing_anc) do
+            for _, anc in ipairs(missing_anc) do
                 if not cm:model():world():ancillary_exists(anc.key) then
                     local faction = cm:get_faction(anc.faction)
                     local not_found = true
