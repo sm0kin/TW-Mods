@@ -298,18 +298,18 @@ local function init_force_confed_listeners(enable_value)
 								if FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_khemri" then
 									button:SetState("inactive")
 									--button:SetDisabled(true)
-									button:SetOpacity(50)
+									--button:SetOpacity(50)
 									button:SetTooltipText(effect.get_localised_string("mct_force_confederation_tt_tk1"), "", false)
 								else
 									if player_faction:name() == "wh2_dlc09_tmb_followers_of_nagash" and FACTION_GARRISON_ATTACKED ~= "wh2_dlc09_tmb_the_sentinels" or player_faction:name() == "wh2_dlc09_tmb_the_sentinels" and FACTION_GARRISON_ATTACKED ~= "wh2_dlc09_tmb_followers_of_nagash" then
 										--button:SetDisabled(true)
 										button:SetState("inactive")
-										button:SetOpacity(50)
+										--button:SetOpacity(50)
 										button:SetTooltipText(effect.get_localised_string("mct_force_confederation_tt_tk2"), "", false)
 									elseif player_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_the_sentinels" or player_faction:name() ~= "wh2_dlc09_tmb_the_sentinels" and FACTION_GARRISON_ATTACKED == "wh2_dlc09_tmb_followers_of_nagash" then
 										--button:SetDisabled(true)
 										button:SetState("inactive")
-										button:SetOpacity(50)
+										--button:SetOpacity(50)
 										button:SetTooltipText(effect.get_localised_string("mct_force_confederation_tt_tk3"), "", false)
 									end
 								end

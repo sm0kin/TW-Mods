@@ -88,13 +88,13 @@ function add_empire_politics_listeners()
 		)
 		core:add_listener(
 			"invasion_CharacterAncillaryGained",
-			"CharacterAncillaryGained",
+			"CharacterAncillaryGained", --CharacterAncillaryGained --TriggerPostBattleAncillaries
 			true,
 			function(context)
-				out("cbf/empire/invasion_CharacterAncillaryGained/context:ancillary "..tostring(context:ancillary()))
+				--out("cbf/empire/invasion_CharacterAncillaryGained/context:ancillary "..tostring(context:ancillary()))
 				if empire_political_invasion.friendly > 0 and context:character():command_queue_index() == empire_political_invasion.friendly 
 				and not table_contains(empire_political_invasion.cqi_table, empire_political_invasion.friendly) then
-					out("cbf/empire/invasion_CharacterAncillaryGained/context:ancillary "..tostring(context:ancillary()))
+					out("cbf/empire/invasion_CharacterAncillaryGained/force_remove_ancillary "..tostring(context:ancillary()))
 					cm:force_remove_ancillary(context:character(), context:ancillary(), true, false) --cm:force_remove_ancillary(context:character(), context:ancillary(), true, true)
 				end
 			end,
@@ -1450,21 +1450,23 @@ function empire_spawn_human_defender_for_invasion()
 			true,
 			function(char_cqi, force_cqi)
 				------------------------------------- CBF -------------------------------------
-				local char = cm:get_character_by_cqi(force_cqi)
+				local char = cm:get_character_by_cqi(char_cqi)
 				if char and not char:character_type("colonel") then
 					empire_political_invasion.friendly = char_cqi
 				else
 					core:add_listener(
 						"duty_calls_CharacterCreated",
-						"CharacterCreated",
+						"CharacterSelected",
 						function(context)
-							return context:character():character_type("general") --and context:character():military_force():command_queue_index() == force_cqi
+							return context:character():character_type("general") and context:character():military_force():command_queue_index() == force_cqi
+							and context:character():faction():name() == faction_key
 						end,
 						function(context)
+							out("cbf/duty_calls_CharacterCreated/character_type_key "..tostring(context:character():character_type_key()))
 							empire_political_invasion.friendly = context:character():command_queue_index()
-							out("cbf/duty_calls_CharacterCreated/empire_political_invasion.friendly/cqi "..tostring(context:character():command_queue_index()))
+							out("cbf/duty_calls_CharacterCreated/empire_political_invasion.friendly "..tostring(empire_political_invasion.friendly))
 						end,
-						false					
+						true					
 					)
 				end
 				------------------------------------- END -------------------------------------
@@ -1897,12 +1899,13 @@ function empire_dilemma_choice(context)
 			cm:disable_event_feed_events(true, "wh_event_category_character", "", "");
 			if empire_political_invasion.friendly ~= nil and empire_political_invasion.friendly > 0 then
 				------------------------------------- CBF -------------------------------------
-				--out("cbf/empire/dilemma/create_force/empire_political_invasion.friendly = "..tostring(empire_political_invasion.friendly))
+				out("cbf/empire/dilemma/create_force/empire_political_invasion.friendly = "..tostring(empire_political_invasion.friendly))
 				if next(empire_political_invasion.cqi_table) then
 					for _, cqi in ipairs(empire_political_invasion.cqi_table) do
 						if cqi == empire_political_invasion.friendly then
 							local char = cm:get_character_by_cqi(empire_political_invasion.friendly)
 							if char and (char:character_subtype("dlc04_emp_arch_lector") or char:character_subtype("emp_lord") or char:character_subtype("wh2_dlc13_emp_cha_huntsmarshal_0")) then
+								-- make sure generals already used by the player don't die but are wounded instead (wounded_character command is bugged)
 								out("cbf/empire/set_character_immortality/cqi = "..tostring(empire_political_invasion.friendly))
 								cm:set_character_immortality(cm:char_lookup_str(empire_political_invasion.friendly), true)
 								core:add_listener(
@@ -1950,13 +1953,14 @@ function empire_kill_invasion_armies()
 
 		if empire_political_invasion.friendly ~= nil and empire_political_invasion.friendly > 0 then
 			------------------------------------- CBF -------------------------------------
-			--out("cbf/empire/after_battle/empire_political_invasion.friendly = "..tostring(empire_political_invasion.friendly))
+			out("cbf/empire/after_battle/empire_political_invasion.friendly = "..tostring(empire_political_invasion.friendly))
 			if next(empire_political_invasion.cqi_table) then
 				--out("cbf/empire/after_battle/empire_political_invasion")
 				for _, cqi in ipairs(empire_political_invasion.cqi_table) do
 					if cqi == empire_political_invasion.friendly then
 						local char = cm:get_character_by_cqi(empire_political_invasion.friendly)
 						if char and (char:character_subtype("dlc04_emp_arch_lector") or char:character_subtype("emp_lord") or char:character_subtype("wh2_dlc13_emp_cha_huntsmarshal_0")) then
+							-- make sure generals already used by the player don't die but are wounded instead (wounded_character command is bugged)
 							out("cbf/empire/set_character_immortality/cqi = "..tostring(empire_political_invasion.friendly))
 							cm:set_character_immortality(cm:char_lookup_str(empire_political_invasion.friendly), true)
 							core:add_listener(

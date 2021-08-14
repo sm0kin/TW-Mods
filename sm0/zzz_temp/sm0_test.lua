@@ -32,10 +32,11 @@ local function expCheat()
     for i = 0, characterList:num_items() - 1 do
         local currentChar = characterList:item_at(i)	
         local cqi = currentChar:command_queue_index()
-		cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
+		cm:add_agent_experience(cm:char_lookup_str(cqi), 70000) 
 		--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
 		--if currentChar:character_subtype("wh2_main_skv_lord_skrolk") then cm:force_add_ancillary(currentChar, "wh2_main_anc_arcane_item_the_liber_bubonicus", true, false) end
 		if currentChar:character_subtype("dwf_thorgrim_grudgebearer") then cm:force_add_ancillary(currentChar, "wh2_dlc10_dwf_anc_enchanted_item_horn_of_the_ancestors", true, false) end
+		if currentChar:character_subtype("wh2_dlc10_hef_alarielle") then cm:force_add_ancillary(currentChar, "wh_main_anc_enchanted_item_ruby_ring_of_ruin", true, false) end
 		--if currentChar:character_subtype("wh2_dlc11_cst_harkon") then 
 		--	local mf = currentChar:military_force()
 		--	local faction = currentChar:faction()
@@ -53,7 +54,7 @@ local function expCheat()
 				local currentChar = characterList:item_at(i)	
 				local cqi = currentChar:command_queue_index()
 				cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
-				--cm:add_agent_experience(cm:char_lookup_str(cqi), 9940)
+				--cm:add_agent_experience(cm:char_lookup_str(cqi), 70000)
 			end
 		end
 	end
@@ -138,25 +139,25 @@ local function unitCheat()
 						"wh_main_vmp_mon_terrorgheist",
 						"wh_main_vmp_mon_terrorgheist",
 						"wh_main_vmp_mon_terrorgheist"} --:vector<string>
-	local LZDunitstring = {"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1",
-						"wh2_dlc12_lzd_mon_ancient_stegadon_1"} --:vector<string>
+	local LZDunitstring = {"wh2_dlc13_lzd_mon_sacred_kroxigors_0_nakai",
+						"wh2_dlc13_lzd_mon_sacred_kroxigors_0_nakai",
+						"wh2_dlc13_lzd_mon_sacred_kroxigors_0_nakai",
+						"wh2_dlc13_lzd_mon_sacred_kroxigors_0_nakai",
+						"wh2_dlc13_lzd_mon_sacred_kroxigors_0_nakai",
+						"wh2_main_lzd_mon_kroxigors",
+						"wh2_main_lzd_mon_kroxigors",
+						"wh2_main_lzd_mon_kroxigors",
+						"wh2_main_lzd_mon_kroxigors",
+						"wh2_main_lzd_mon_kroxigors",
+						"wh2_main_lzd_mon_kroxigors_nakai",
+						"wh2_main_lzd_mon_kroxigors_nakai",
+						"wh2_main_lzd_mon_kroxigors_nakai",
+						"wh2_main_lzd_mon_kroxigors_nakai",
+						"wh2_main_lzd_mon_kroxigors_nakai",
+						"wh2_dlc13_lzd_mon_sacred_kroxigors_0",
+						"wh2_dlc13_lzd_mon_sacred_kroxigors_0",
+						"wh2_dlc13_lzd_mon_sacred_kroxigors_0",
+						"wh2_dlc13_lzd_mon_sacred_kroxigors_0"} --:vector<string>
 	local GRNunitstring = {"wh2_dlc15_grn_mon_rogue_idol_0",
 						"wh2_dlc15_grn_mon_rogue_idol_0",
 						"wh2_dlc15_grn_mon_rogue_idol_0",
@@ -453,22 +454,41 @@ local function deletePlayerSubcultureFactions()
 end
 
 --v function()
-local function spamLords()
-	local faction = "wh_main_dwf_dwarfs"--cm:get_local_faction(true)
-	local factionCA = cm:get_faction(faction)
+local function spamLords(faction_key, with_general)
+	local factionCA = cm:get_faction(faction_key)
     local x, y
-    if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction, factionCA:home_region():name(), false, false, 9) end
-	cm:create_force(
-        faction,
-        "wh_main_dwf_inf_hammerers",
-        factionCA:home_region():name(),
-        x,
-        y,
-        false,
-        function(cqi)
+    if factionCA:has_home_region() then x, y = cm:find_valid_spawn_location_for_character_from_settlement(faction_key, factionCA:home_region():name(), false, false, 9) end
+	if not with_general then
+		cm:create_force(
+			faction_key,
+			"wh_main_dwf_inf_hammerers",
+			factionCA:home_region():name(),
+			x,
+			y,
+			false,
+			function(cqi)
 
-        end
-	)
+			end
+		)
+	else
+		cm:create_force_with_general(
+			faction_key,
+			"wh_main_dwf_inf_hammerers",
+			factionCA:faction_leader():region():name(), --factionCA:home_region():name()
+			x,
+			y,
+			"general",
+			"dlc05_wef_ancient_treeman", --wh2_dlc16_wef_malicious_ancient_treeman_life --wh2_dlc16_wef_malicious_ancient_treeman_beasts --wh2_dlc16_wef_malicious_ancient_treeman_shadows --dlc05_wef_ancient_treeman
+			"",
+			"",
+			"",
+			"",
+			false,
+			function(cqi)
+
+			end
+		)	
+	end
 end
 
 --v function()
@@ -552,12 +572,12 @@ function sm0_test()
 		end,
 		true
 	)
-	local playerFaction = cm:get_local_faction(true)
-	local factionList2 = playerFaction:factions_of_same_subculture()
-	for i = 0, factionList2:num_items() - 1 do
-		local faction = factionList2:item_at(i)
-		cm:force_confederation(playerFaction:name(), faction:name())
-	end
+	--local playerFaction = cm:get_local_faction(true)
+	--local factionList2 = playerFaction:factions_of_same_subculture()
+	--for i = 0, factionList2:num_items() - 1 do
+	--	local faction = factionList2:item_at(i)
+	--	cm:force_confederation(playerFaction:name(), faction:name())
+	--end
 	--core:add_listener(
 	--	"testtest_CharacterConvalescedOrKilled",
 	--	"CharacterConvalescedOrKilled",
@@ -580,13 +600,14 @@ function sm0_test()
 	--	end,
 	--	true
 	--)
-	--local char_list =  local_faction:character_list()
-	--for i = 0, char_list:num_items() - 1 do
-	--	local current_char = char_list:item_at(i)
-	--	--if current_char:character_subtype("wh2_main_def_black_ark") or current_char:character_subtype("wh2_dlc11_def_lokhir") then
-	--		cm:kill_character(current_char:command_queue_index(), true, false)
-	--	--end
-	--end
+	local char_list =  local_faction:character_list()
+	for i = 0, char_list:num_items() - 1 do
+		local current_char = char_list:item_at(i)
+		if current_char:character_subtype("wh2_pro08_neu_gotrek") or current_char:character_subtype("wh2_pro08_neu_felix") then
+			--cm:kill_character(current_char:command_queue_index(), false, false)
+			cm:stop_character_convalescing(current_char:command_queue_index()) 
+		end
+	end
 --
 	--local char_list =  local_faction:character_list()
 	--for i = 0, char_list:num_items() - 1 do
@@ -624,15 +645,15 @@ function sm0_test()
 
 	--local karak = cm:get_region("wh_main_the_silver_road_the_pillars_of_grungni")
 	--local x, y = cm:find_valid_spawn_location_for_character_from_settlement(cm:get_local_faction_name(true), "wh_main_the_silver_road_the_pillars_of_grungni", false, true, 8)
-	local char_list = local_faction:character_list()
-	for i = 0, char_list:num_items() - 1 do
-		local current_char = char_list:item_at(i)
-		local x, y = cm:find_valid_spawn_location_for_character_from_settlement(cm:get_local_faction_name(true), "wh2_main_northern_great_jungle_chaqua", false, true, 8 + i)
-		if current_char:character_type("general") then
-			cm:teleport_to(cm:char_lookup_str(current_char), x + i, y + i, false)
-			cm:replenish_action_points(cm:char_lookup_str(current_char))
-		end
-	end
+	--local char_list = local_faction:character_list()
+	--for i = 0, char_list:num_items() - 1 do
+	--	local current_char = char_list:item_at(i)
+	--	local x, y = cm:find_valid_spawn_location_for_character_from_settlement(cm:get_local_faction_name(true), "wh2_main_skavenblight_skavenblight", false, true, 8 + i)
+	--	if current_char:character_type("general") then
+	--		cm:teleport_to(cm:char_lookup_str(current_char), x + i, y + i, false)
+	--		cm:replenish_action_points(cm:char_lookup_str(current_char))
+	--	end
+	--end
 	
 	--local factionList = cm:model():world():faction_list()
 	--for i = 0, factionList:num_items() - 1 do
@@ -647,6 +668,7 @@ function sm0_test()
 	--cm:add_unit_model_overrides("character_cqi:"..lokhir:command_queue_index(), "wh2_sm0_art_set_def_black_ark_lokhir_3")
 	--cm:set_saved_value("black_ark_lokhir_ship_art_sets", "wh2_sm0_art_set_def_black_ark_lokhir_3")
 	--cm:force_confederation(cm:get_local_faction_name(true),"wh2_dlc11_def_the_blessed_dread")	
+	--cm:force_confederation(cm:get_local_faction_name(true),"wh_dlc05_wef_argwylon")	--wh2_dlc15_grn_broken_axe --wh2_dlc15_grn_bonerattlaz
 	--cm:force_alliance(cm:get_local_faction_name(true), "wh2_dlc11_def_the_blessed_dread", true)
 	--local top_knots = cm:get_faction("wh_main_grn_top_knotz")
 	--local mf_list = top_knots:military_force_list()
@@ -673,7 +695,12 @@ function sm0_test()
 	
 	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
 	cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", cm:get_local_faction_name(true))
+	cm:transfer_region_to_faction("wh2_main_vor_northern_yvresse_tor_yvresse", "wh2_main_hef_yvresse")
+	--local yvresse = cm:get_region("wh2_main_vor_northern_yvresse_tor_yvresse")
+	--local yvresse_settlement = yvresse:settlement()
+	--cm:instantly_set_settlement_primary_slot_level(yvresse_settlement, 3)	
 	cm:transfer_region_to_faction("wh_main_averland_grenzstadt", "wh_main_vmp_vampire_counts")
+	--cm:heal_garrison(yvresse:cqi())
 
 	--cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction_name(true))
 	--cm:spawn_agent_at_settlement(cm:get_local_faction_name(true), cm:get_region("wh2_main_skavenblight_skavenblight"):settlement(), "wizard", "wh2_main_skv_plague_priest")
@@ -718,7 +745,30 @@ function sm0_test()
 	cm:faction_add_pooled_resource("wh2_main_hef_yvresse", "yvresse_defence", "wh2_dlc15_resource_factor_yvresse_defence_settlement", 50)
 	cm:faction_add_pooled_resource("wh2_main_hef_yvresse", "wardens_supply", "wh2_dlc15_resource_factor_wardens_supply_executed_prisoners", 100)
 	cm:faction_add_pooled_resource(cm:get_local_faction_name(true), "lzd_sacrificial_offerings", "wh2_dlc12_resource_factor_sacrifices_battle", 1200);
+	cm:faction_add_pooled_resource(cm:get_local_faction_name(true), "wef_worldroots_athel_loren", "wh2_dlc16_resource_factor_hidden", 1200);
+
+	--cm:trigger_dilemma(cm:get_local_faction_name(true), "wh_dlc05_wef_children_of_eternity")
 	
+
+	-- DEBUGGING
+	--function empire_event(event_type, event_data_1, event_data_2, event_data_3)
+	--	local faction = cm:model():world():whose_turn_is_it();
+	--
+	--	if event_type == "politics" then
+	--		local result = empire_trigger_political_dilemma(faction, event_data_1);
+	--		return result;
+	--	elseif event_type == "invasion" then
+	--		local result = empire_trigger_invasion_dilemma(faction, event_data_1, event_data_2, event_data_3);
+	--		return result;
+	--	elseif event_type == "civil_war" then
+	--		local result = empire_trigger_civil_war_dilemma(faction, event_data_1);
+	--		return result;
+	--	elseif event_type == "succession" then
+	--		local result = empire_trigger_succession_dilemma(faction, event_data_1);
+	--		return result;
+	--	end
+	--	return false;
+	--end
 
 	--cm:create_force(
 	--	"wh_main_chs_chaos",
@@ -742,12 +792,16 @@ function sm0_test()
 	----	cm:instantly_set_settlement_primary_slot_level(settlement, 3)			
 	--end
 
+	--if cm:model():turn_number() >= 2 then empire_trigger_invasion_dilemma(local_faction) end
+	cm:set_army_trespass_disabled(true)
+	--cm:set_character_excluded_from_trespassing(local_faction:faction_leader(), true)
+
 	core:add_listener(
 		"refugee_FactionTurnStart",
 		"FactionTurnStart",
 		true,
 		function(context)	
-			cm:transfer_region_to_faction("wh_main_averland_grenzstadt", "wh_main_vmp_vampire_counts")			
+			--cm:transfer_region_to_faction("wh_main_averland_grenzstadt", "wh_main_vmp_vampire_counts")			
 			--if cm:model():turn_number() == 2 and context:faction():name() == "wh2_dlc11_def_the_blessed_dread" then 
 			--	local blessed_dread = cm:get_faction("wh2_dlc11_def_the_blessed_dread")
 			--	local lokhir = blessed_dread:faction_leader()
@@ -783,6 +837,25 @@ function sm0_test()
 					local elector_faction_2 = cm:model():world():faction_by_key("wh_main_emp_ostland")
 					local elector_cqi_2 = elector_faction_2:command_queue_index()
 					local char_cqi = elector_faction_1:faction_leader():command_queue_index()
+					local enemy_faction = cm:model():world():faction_by_key("wh2_dlc13_grn_greenskins_invasion")
+					local enemy_cqi = enemy_faction:command_queue_index()
+					local region = empire_find_random_elector_region("wh_main_emp_nordland", true);
+					local region_cqi = region:cqi()
+					
+					cm:trigger_dilemma_with_targets(
+						context:faction():command_queue_index(),
+						"wh2_dlc13_emp_elector_invasion_".."greenskins",
+						elector_cqi_1,
+						enemy_cqi,
+						0,
+						0,
+						region_cqi,
+						0,
+						function()
+
+						end
+					)
+					
 					cm:trigger_dilemma_with_targets(
 						context:faction():command_queue_index(),
 						"wh2_dlc13_emp_elector_civil_war",
@@ -851,7 +924,8 @@ function sm0_test()
 	expCheat()
 	unitCheat()
 	--unlockLords()
-	--spamLords()
+	--spamLords("wh_dlc05_wef_argwylon", true)
+	--cm:show_shroud(true)
 	cm:treasury_mod(cm:get_local_faction_name(true), 100000)
 	core:add_listener(
 		"human_FactionTurnEnd",
@@ -867,7 +941,7 @@ function sm0_test()
 			--if cm:model():turn_number() == 2 then cm:unlock_starting_general_recruitment("2140784146", "wh_main_vmp_vampire_counts") end
 			--if cm:model():turn_number() == 2 then cm:force_confederation("wh_main_grn_teef_snatchaz","wh_main_grn_orcs_of_the_bloody_hand") end
 			--if cm:model():turn_number() == 4 then kill_faction("wh_main_grn_teef_snatchaz") end
-			deletePlayerSubcultureFactions()
+			--deletePlayerSubcultureFactions()
 
 			--item test
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then

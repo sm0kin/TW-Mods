@@ -1607,13 +1607,14 @@ local function confed_penalty(faction)
 end
 
 --v function(confederator: string, character: CA_CHAR, agents: vector<map<string, string>>)
-local function lord_event(confederator, character, agents)
+local function lord_event(confederator, confederated, character, agents)
     for _, agent in ipairs(agents) do
         local subtype = agent.subtype
-        local faction = cm:get_faction(confederator)
+        local confederator_faction = cm:get_faction(confederator)
+
         if subtype == character:character_subtype_key() and ((not is_string(agent.dlc) and not is_table(agent.dlc)) or (is_string(agent.dlc) and cm:is_dlc_flag_enabled(agent.dlc))
         or (is_table(agent.dlc) and cm:is_dlc_flag_enabled(agent.dlc[1]) and cm:is_dlc_flag_enabled(agent.dlc[2]))) then
-            CampaignUI.TriggerCampaignScriptEvent(faction:command_queue_index(), "RD|"..tostring(character:command_queue_index())..":"..subtype)
+            CampaignUI.TriggerCampaignScriptEvent(confederator_faction:command_queue_index(), "RD|"..tostring(character:command_queue_index())..":"..subtype..";"..tostring(confederated))
         end
     end    
 end
@@ -1868,22 +1869,22 @@ local function confed_revived(confederator, confederated)
                     end
                     --if not char:has_military_force() and (cm:char_is_general(char) or cm:char_is_agent(char)) then cm:kill_character(command_queue_index, true, false) end --kill colonels
                     if confederator:is_human() then 
-                        lord_event(confederator:name(), char, wh_agents)
-                        if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then lord_event(confederator:name(), char, mixu1_agents) end
-                        if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then lord_event(confederator:name(), char, mixu2_agents) end
-                        --if vfs.exists("script/campaign/mod/eltharion_yvresse_add.lua") then lord_event(confederator:name(), char, xoudad_agents) end
-                        if vfs.exists("script/campaign/main_warhammer/mod/cataph_kraka_drak.lua") then lord_event(confederator:name(), char, kraka_agents) end
-                        if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then lord_event(confederator:name(), char, teb_agents) end
-                        if vfs.exists("script/export_helpers_enforest.lua") then lord_event(confederator:name(), char, parte_agents) end
-                        if vfs.exists("script/campaign/main_warhammer/mod/spcha_live_launch.lua") then lord_event(confederator:name(), char, speshul_agents) end
-                        if vfs.exists("script/export_helpers_why_grudge.lua") then lord_event(confederator:name(), char, wsf_agents) end
-                        if vfs.exists("script/export_helpers_ordo_draconis_why.lua") then lord_event(confederator:name(), char, ordo_agents) end
-                        if vfs.exists("script/export_helpers_why_strigoi_camp.lua") then lord_event(confederator:name(), char, strigoi_agents) end
-                        if vfs.exists("script/campaign/mod/@zf_master_engineer_setup_vandy") then lord_event(confederator:name(), char, zf_agents) end 
-                        if vfs.exists("script/campaign/mod/cataph_aislinn") then lord_event(confederator:name(), char, seahelm_agents) end
-                        if vfs.exists("script/campaign/mod/mixu_shadewraith") then lord_event(confederator:name(), char, mixu_vangheist) end
-                        --if vfs.exists("script/campaign/mod/ovn_rogue.lua") then lord_event(confederator:name(), char, second_start_agents) end
-                        --if vfs.exists("script/campaign/mod/sr_chaos.lua") then lord_event(confederator:name(), char, lost_factions_agents) end
+                        lord_event(confederator:name(), confederated:name(), char, wh_agents)
+                        --if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then lord_event(confederator:name(), confederated:name(), char, mixu1_agents) end
+                        if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then lord_event(confederator:name(), confederated:name(), char, mixu2_agents) end
+                        --if vfs.exists("script/campaign/mod/eltharion_yvresse_add.lua") then lord_event(confederator:name(), confederated:name(), char, xoudad_agents) end
+                        if vfs.exists("script/campaign/main_warhammer/mod/cataph_kraka_drak.lua") then lord_event(confederator:name(), confederated:name(), char, kraka_agents) end
+                        if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then lord_event(confederator:name(), confederated:name(), char, teb_agents) end
+                        if vfs.exists("script/export_helpers_enforest.lua") then lord_event(confederator:name(), confederated:name(), char, parte_agents) end
+                        if vfs.exists("script/campaign/main_warhammer/mod/spcha_live_launch.lua") then lord_event(confederator:name(), confederated:name(), char, speshul_agents) end
+                        if vfs.exists("script/export_helpers_why_grudge.lua") then lord_event(confederator:name(), confederated:name(), char, wsf_agents) end
+                        if vfs.exists("script/export_helpers_ordo_draconis_why.lua") then lord_event(confederator:name(), confederated:name(), char, ordo_agents) end
+                        if vfs.exists("script/export_helpers_why_strigoi_camp.lua") then lord_event(confederator:name(), confederated:name(), char, strigoi_agents) end
+                        if vfs.exists("script/campaign/mod/@zf_master_engineer_setup_vandy") then lord_event(confederator:name(), confederated:name(), char, zf_agents) end 
+                        if vfs.exists("script/campaign/mod/cataph_aislinn") then lord_event(confederator:name(), confederated:name(), char, seahelm_agents) end
+                        if vfs.exists("script/campaign/mod/mixu_shadewraith") then lord_event(confederator:name(), confederated:name(), char, mixu_vangheist) end
+                        --if vfs.exists("script/campaign/mod/ovn_rogue.lua") then lord_event(confederator:name(), confederated:name(), char, second_start_agents) end
+                        --if vfs.exists("script/campaign/mod/sr_chaos.lua") then lord_event(confederator:name(), confederated:name(), char, lost_factions_agents) end
                         --sm0_log("Faction: "..confederated:name().." | ".."Character | Forename: "..effect.get_localised_string(char:get_forename()).." | Surname: "..effect.get_localised_string(char:get_surname()))
                     end
                     --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
@@ -2053,7 +2054,7 @@ local function is_faction_exempted(faction)
     or faction:name():find("_waaagh") or faction:name():find("_brayherd") or faction:name():find("_unknown") or faction:name():find("_incursion")
     or faction:name():find("_qb") or faction:name():find("_separatists") or faction:name():find("_dil") or faction:name():find("_blood_voyage") 
     or faction:name():find("_encounters") or faction:name():find("rebel") or faction:name():find("_intervention") or faction:name():find("_invasion") 
-    or faction:name():find("_rogue_")
+    or faction:name():find("_rogue_") or faction:name():find("_shanty_")
     -- ovn
     or faction:subculture() == "wh_main_sc_nor_warp" or faction:subculture() == "wh_main_sc_nor_troll" or faction:subculture() == "wh_main_sc_nor_albion"
     or faction:subculture() == "wh_main_sc_lzd_amazon" or faction:subculture() == "wh_main_sc_nor_fimir"
@@ -2239,9 +2240,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         -- preferance: player alternate (only applies to mp same subculture)
         if is_table(factions_of_same_subculture) then
             --# assume factions_of_same_subculture: vector<string>
-            human_factions[1] = "wh2_main_hef_eataine"
-            human_factions[2] = "wh2_main_hef_order_of_loremasters"
-            if cm:get_saved_value("faction_P2") or cm:get_saved_value("faction_P1") then
+            if cm:is_multiplayer() and (cm:get_saved_value("faction_P2") or cm:get_saved_value("faction_P1")) then
                 local player1_current_pos
                 local player2_current_pos
                 for i = 1, #factions_of_same_subculture do
@@ -2639,28 +2638,40 @@ local function init_recruit_defeated_listeners(enable_value)
                 local info = string.gsub(str, "RD|", "")
                 local char_cqi_end = string.find(info, ":")
                 local char_cqi = string.sub(info, 1, char_cqi_end - 1) 
-                local subtype = string.sub(info, char_cqi_end + 1)
+                local subtype_end = string.find(info, ";")
+                local subtype = string.sub(info, char_cqi_end + 1, subtype_end - 1) 
+                local confederated = string.sub(info, subtype_end + 1)
                 --# assume char_cqi: CA_CQI
                 local character = cm:get_character_by_cqi(char_cqi)
-                if character then     
-                    local confederator
-                    local human_factions = cm:get_human_factions()
-                    for i = 1, #human_factions do
-                        local human_faction = cm:get_faction(human_factions[i])
-                        if human_faction:command_queue_index() == faction_cqi then
-                            confederator = human_factions[i]
+                local confederator
+                local confederated_faction = cm:get_faction(confederated)
+                local human_factions = cm:get_human_factions()
+                for i = 1, #human_factions do
+                    local human_faction = cm:get_faction(human_factions[i])
+                    if human_faction:command_queue_index() == faction_cqi then
+                        confederator = human_factions[i]
+                    end
+                end
+                if not character and confederated_faction then
+                    local character_list = confederated_faction:character_list()
+                    for i = 0, character_list:num_items() - 1 do
+                        local current_char = character_list:item_at(i)
+                        if current_char:character_subtype_key() == subtype then
+                            character = current_char
                         end
                     end
+                end
+                if character then 
                     local picture = faction_event_picture[confederator]
                     if not is_number(picture) then 
-                        picture = subculture_event_picture[cm:get_faction(confederator):subculture()] 
+                        picture = subculture_event_picture[confederator_faction:subculture()] 
                     end
                     local char_type = "legendary_lord"
                     if cm:char_is_agent(character) then char_type = "legendary_hero" end
                     --sm0_log("Faction event picture | Number: "..tostring(picture))
                     --sm0_log("Faction event Title 1: "..effect.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
                     --sm0_log("Faction event Title 2: "..effect.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
-                    --sm0_log("Faction event Description: "..effect.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))
+                    --sm0_log("Faction event Description: "..effect.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))                   
                     if picture and effect.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
                     and effect.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
                         cm:show_message_event(

@@ -18,7 +18,7 @@ Ruination = {
 	cost_mod_effect_suffix = "_cost_mod",
 	-- Rituals
 	army_cap_ritual = "wh2_dlc17_bst_ritual_army_cap_upgrade",
-	army_cap_ritual_unlock_tier = 7,
+	army_cap_ritual_unlock_tier = 6,
 	unit_cap_ritual_category = "BEASTMEN_RITUAL_UNITS",
 	unit_ritual_cost_mod_increment = 15, ----multiplier to a unit cap cost each time it is performed
 	hero_cap_ritual_category = "BEASTMEN_RITUAL_LORDS",

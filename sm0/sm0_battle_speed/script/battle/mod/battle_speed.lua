@@ -171,7 +171,7 @@ local function createSpeedUI()
                     if tonumber(number) < 0.1 and number ~= "0" then number = "0.1" end
                     core:svr_save_string("svr_battleSpeed", tostring(number))
                     --loadButton:SetDisabled(false)
-                    loadButton:SetOpacity(255)
+                    --loadButton:SetOpacity(255)
                     loadButton:SetState("hover")
                     loadButton:SetTooltipText("load prefered speed: "..tostring(number), "", false)
                     loadButton:SetState("active")
@@ -208,7 +208,7 @@ local function createSpeedUI()
             --loadButton:SetDisabled(true)
             loadButton:SetState("inactive")
             loadButton:SetTooltipText("no prefered speed found",  "", false)
-            loadButton:SetOpacity(50)
+            --loadButton:SetOpacity(50)
         end
         core:add_listener(
             "sm0_loadButton",

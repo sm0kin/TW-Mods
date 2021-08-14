@@ -163,6 +163,7 @@ local blacklisted_subtypes = {
 	"wh2_dlc17_dwf_thorek",
 	"wh2_dlc17_lzd_oxyotl",
 	"wh2_dlc17_vmp_kevon_lloydstein",
+	"wh2_dlc17_dwf_thane_ghost_artifact",
 	--mixu1
 	"brt_almaric_de_gaudaron",
 	"brt_chilfroy",
@@ -399,7 +400,7 @@ local function create_trash_ui()
 	trash_bin_button:SetImagePath(icon_delete) 
 	local trash_bin_button_X, trash_bin_button_Y = trash_bin_button:Position()
 	trash_bin_button:SetState("inactive")
-	trash_bin_button:SetOpacity(50)
+	--trash_bin_button:SetOpacity(50)
 	trash_bin_button:SetTooltipText(trash_bin_button_disabled, "", false) 
 
 	--v function()
@@ -448,26 +449,26 @@ local function create_trash_ui()
 						if units_dropdown:Find("check_trash_button") then 
 							local check_trash_button = UIComponent(units_dropdown:Find("check_trash_button"))
 							if chars_selected >= 1 then
-								check_trash_button:SetOpacity(255)
+								--check_trash_button:SetOpacity(255)
 								check_trash_button:SetState("hover")
 								check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2, "", false) 
 								check_trash_button:SetState("active")
 							else
 								check_trash_button:SetState("inactive")
-								check_trash_button:SetOpacity(50)
+								--check_trash_button:SetOpacity(50)
 								check_trash_button:SetTooltipText(check_trash_button_disabled, "", false) 
 							end
 						end
 						if units_dropdown:Find("trash_bin_button") then 
 							local trash_bin_button = UIComponent(units_dropdown:Find("trash_bin_button"))
 							if chars_selected >= 1 then
-								trash_bin_button:SetOpacity(255)
+								--trash_bin_button:SetOpacity(255)
 								trash_bin_button:SetState("hover")
 								trash_bin_button:SetTooltipText(trash_bin_button_hover_1..chars_selected..trash_bin_button_hover_2, "", false) 
 								trash_bin_button:SetState("active")
 							else
 								trash_bin_button:SetState("inactive")
-								trash_bin_button:SetOpacity(50)
+								--trash_bin_button:SetOpacity(50)
 								trash_bin_button:SetTooltipText(trash_bin_button_disabled, "", false) 
 							end
 						end
@@ -487,12 +488,12 @@ local function create_trash_ui()
 					checkbox_toggle:SetTooltipText(checkbox_toggle_hero_selected_hover, "", false) 
 				end
 				checkbox_toggle:SetState("active")
-				checkbox_toggle:SetOpacity(255)
+				--checkbox_toggle:SetOpacity(255)
 				if not blacklisted_value then
 					for _, subtype in ipairs(blacklisted_subtypes) do
 						if char:character_subtype(subtype) then
 							checkbox_toggle:SetState("inactive")
-							checkbox_toggle:SetOpacity(150)
+							--checkbox_toggle:SetOpacity(150)
 							if cm:char_is_general(char) then 
 								checkbox_toggle:SetTooltipText(checkbox_toggle_lord_disabled, "", false) 
 							else
@@ -567,13 +568,13 @@ local function create_trash_ui()
 					end
 				end
 				if chars_selected >= 1 then
-					check_trash_button:SetOpacity(255)
+					--check_trash_button:SetOpacity(255)
 					check_trash_button:SetState("hover")
 					check_trash_button:SetTooltipText(check_trash_button_hover_1..chars_selected..check_trash_button_hover_2, "", false) 
 					check_trash_button:SetState("active")
 				else
 					check_trash_button:SetState("inactive")
-					check_trash_button:SetOpacity(50)
+					--check_trash_button:SetOpacity(50)
 					check_trash_button:SetTooltipText(check_trash_button_disabled, "", false) 
 				end
 
