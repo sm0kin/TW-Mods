@@ -114,10 +114,10 @@ local function unitCheat()
 						"wh2_main_def_inf_black_guard_0",
 						"wh2_main_def_inf_black_guard_0",
 						"wh2_main_def_inf_black_guard_0",
-						"wh2_main_def_mon_black_dragon",
-						"wh2_main_def_mon_black_dragon",
-						"wh2_main_def_mon_black_dragon",
-						"wh2_main_def_mon_black_dragon",
+						"wh2_dlc10_def_mon_feral_manticore_0",
+						"wh2_dlc10_def_mon_feral_manticore_0",
+						"wh2_dlc10_def_mon_feral_manticore_0",
+						"wh2_dlc10_def_mon_feral_manticore_0",
 						"wh2_main_def_mon_black_dragon",
 						"wh2_main_def_mon_black_dragon",
 						"wh2_main_def_mon_black_dragon",
@@ -383,6 +383,7 @@ end
 --v function()
 local function deletePlayerSubcultureFactions()
 	if cm:model():turn_number() == 1 and cm:get_local_faction_name(true) ~= "wh2_main_hef_avelorn" then cm:force_confederation("wh2_main_hef_caledor", "wh2_main_hef_avelorn") end
+	--if cm:model():turn_number() == 2 then kill_faction("wh_main_vmp_vampire_counts") end
 	local playerFaction = cm:get_local_faction(true)
 	local factionList2 = playerFaction:factions_of_same_subculture()
 	for i = 0, factionList2:num_items() - 1 do
@@ -524,36 +525,6 @@ local function unlockLords()
     end
 end
 
-function cbf_char_army_has_unit(character, unit)
-
-	-- allow a table of units to be passed in as a parameter
-	if type(unit) == "table" then
-		if not character:has_military_force() and not character:is_embedded_in_military_force() then
-			out("sm0/not character:has_military_force() or not character:is_embedded_in_military_force() = false")
-			return false
-		end
-	
-		for i = 1, #unit do
-			out("sm0/unit[i] = "..tostring(unit[i]))
-			if char_army_has_unit(character, unit[i]) then
-				out("sm0/if char_army_has_unit(character, unit[i]) then = true")
-				return true
-			end
-		end
-		out("sm0/if type(unit) == \"table\" then = false")
-		return false
-	end
-	
-	if character:has_military_force() then
-		out("sm0/character:military_force():unit_list():has_unit(unit) = "..tostring(character:military_force():unit_list():has_unit(unit)))
-		return character:military_force():unit_list():has_unit(unit)
-	elseif character:is_embedded_in_military_force() then
-		out("sm0/character:is_embedded_in_military_force() = "..tostring(character:is_embedded_in_military_force()))
-		return character:embedded_in_military_force():unit_list():has_unit(unit)
-	end
-end
-
-
 -- init
 --v function()
 function sm0_test()
@@ -643,14 +614,16 @@ function sm0_test()
 
 	--local x
 	--local y
-	--local mf_list = blessed_dread:military_force_list()
-	--local admiral
+	--local mf_list = local_faction:military_force_list()
+	----local admiral
 	--for i = 0, mf_list:num_items() - 1 do
 	--	local mf = mf_list:item_at(i)
-	--	if mf:general_character():character_subtype("wh2_main_def_black_ark") then
+	--	if mf:general_character():character_subtype("wh2_dlc15_hef_imrik") then
 	--		cqi = mf:general_character():command_queue_index()
 	--		x = mf:general_character():logical_position_x()
 	--		y = mf:general_character():logical_position_y()
+	--		out("sm0/x = "..tostring(x))
+	--		out("sm0/y = "..tostring(y))
 	--	end
 	--end
 	--cm:kill_character(cqi, true, false)
@@ -707,16 +680,19 @@ function sm0_test()
 	--	end
 	--end
 	
-	--cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", "wh2_dlc09_tmb_khemri")
+	cm:transfer_region_to_faction("wh2_main_land_of_the_dead_zandri", cm:get_local_faction_name(true))
 	cm:transfer_region_to_faction("wh_main_rib_peaks_mount_gunbad", cm:get_local_faction_name(true))
-	cm:transfer_region_to_faction("wh2_main_vor_northern_yvresse_tor_yvresse", "wh2_main_hef_yvresse")
-	--cm:transfer_region_to_faction("wh2_main_saphery_tower_of_hoeth", cm:get_local_faction_name(true))
-	--cm:transfer_region_to_faction("wh2_main_vor_saphery_tower_of_hoeth", cm:get_local_faction_name(true))
-
-	--local yvresse = cm:get_region("wh2_main_vor_northern_yvresse_tor_yvresse")
-	--local yvresse_settlement = yvresse:settlement()
-	--cm:instantly_set_settlement_primary_slot_level(yvresse_settlement, 3)	
-	cm:transfer_region_to_faction("wh_main_averland_grenzstadt", "wh_main_vmp_vampire_counts")
+	cm:transfer_region_to_faction("wh2_main_vor_northern_yvresse_tor_yvresse", cm:get_local_faction_name(true))
+	cm:transfer_region_to_faction("wh2_main_saphery_tower_of_hoeth", cm:get_local_faction_name(true))
+	cm:transfer_region_to_faction("wh2_main_vor_saphery_tower_of_hoeth", cm:get_local_faction_name(true))
+	cm:transfer_region_to_faction("wh2_main_fort_soll", cm:get_local_faction_name(true))
+	cm:transfer_region_to_faction("wh2_main_griffon_gate", cm:get_local_faction_name(true))
+	cm:transfer_region_to_faction("wh2_main_the_plain_of_bones_the_fortress_of_vorag", cm:get_local_faction_name(true))
+	
+	local yvresse = cm:get_region("wh2_main_land_of_the_dead_zandri") --wh2_main_vor_northern_yvresse_tor_yvresse
+	local yvresse_settlement = yvresse:settlement()
+	cm:instantly_set_settlement_primary_slot_level(yvresse_settlement, 3)	
+	cm:transfer_region_to_faction("wh_main_averland_grenzstadt", cm:get_local_faction_name(true))
 	--cm:heal_garrison(yvresse:cqi())
 
 	--cm:transfer_region_to_faction("wh2_main_great_mortis_delta_black_pyramid_of_nagash", cm:get_local_faction_name(true))
@@ -765,7 +741,11 @@ function sm0_test()
 	cm:faction_add_pooled_resource(cm:get_local_faction_name(true), "wef_worldroots_athel_loren", "wh2_dlc16_resource_factor_hidden", 1200)
 
 	--cm:trigger_dilemma(cm:get_local_faction_name(true), "wh_dlc05_wef_children_of_eternity")
-	
+	--cm:faction_imprison_character(cm:get_faction("wh2_main_hef_yvresse"), cm:get_faction("wh2_main_def_cult_of_pleasure"):faction_leader())
+	--cm:force_confederation(cm:get_local_faction_name(), "wh2_main_def_cult_of_pleasure")
+	cm:force_add_trait("character_cqi:"..local_faction:faction_leader():command_queue_index(),"wh2_main_trait_def_name_of_power_ar_05_beastbinder",true)
+	--cm:complete_scripted_mission_objective("wh_main_short_victory", "attain_chaos_god_favour", true);
+	--cm:complete_scripted_mission_objective("wh_main_long_victory", "attain_chaos_god_favour", true);
 
 	-- DEBUGGING
 	--function empire_event(event_type, event_data_1, event_data_2, event_data_3)
@@ -975,6 +955,8 @@ function sm0_test()
 			--if cm:model():turn_number() == 2 then cm:unlock_starting_general_recruitment("2140784146", "wh_main_vmp_vampire_counts") end
 			--if cm:model():turn_number() == 2 then cm:force_confederation("wh_main_grn_teef_snatchaz","wh_main_grn_orcs_of_the_bloody_hand") end
 			--if cm:model():turn_number() == 4 then kill_faction("wh_main_grn_teef_snatchaz") end
+
+			--unlock_ai_starting_generals()
 			deletePlayerSubcultureFactions()
 
 			--item test

@@ -3,5 +3,6 @@
         "lowercase-global",
         "undefined-global",
         "unused-function"
-    ]
+    ],
+    "Lua.workspace.maxPreload": 64000
 }
