@@ -2490,7 +2490,7 @@ local function init_recruit_defeated_listeners(enable_value)
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
                                 if confed_penalty(faction_P1) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai" or scope_value == "player") 
                                 and context:faction():name() == faction_P1:name() then
-                                    if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
+                                    --if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                     if are_lords_missing(current_faction) then
                                         sm0_log("["..player_confederation_count.."] Player 1 intends to spawn missing lords for: "..current_faction:name())
                                         spawn_missing_lords(faction_P1, current_faction)
@@ -2511,7 +2511,7 @@ local function init_recruit_defeated_listeners(enable_value)
                             and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P2:name() and prefered_faction:name() == faction_P2:name() then
                                 if confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai"  or scope_value == "player") 
                                 and context:faction():name() == faction_P2:name() then
-                                    if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
+                                    --if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
                                     if are_lords_missing(current_faction) then
                                         sm0_log("["..player_confederation_count.."] Player 2 intends to spawn missing lords for: "..current_faction:name())
                                         spawn_missing_lords(faction_P2, current_faction)
@@ -2616,7 +2616,7 @@ local function init_recruit_defeated_listeners(enable_value)
                 --        end
                 --    end
                 --end
-                if cm:get_saved_value("karl_check_illegit") then cm:set_saved_value("karl_check_illegit", false) end
+                --if cm:get_saved_value("karl_check_illegit") then cm:set_saved_value("karl_check_illegit", false) end
             end,
             true
         )
@@ -2715,7 +2715,7 @@ local function init_recruit_defeated_listeners(enable_value)
             return true
         end
         --re-enable karl franz lock (data.pack script/campaign/main_campaign/wh_legendary_lords.lua)
-        if faction_P1:name() == "wh_main_emp_empire" or (cm:is_multiplayer() and faction_P2:name() == "wh_main_emp_empire") 
+        if (faction_P1:name() == "wh_main_emp_empire" or (cm:is_multiplayer() and faction_P2:name() == "wh_main_emp_empire")) 
         and not cm:get_saved_value("2140783388" .. "_unlocked") then    
             core:remove_listener("2140783388" .. "_listener")
             core:add_listener(
@@ -2725,13 +2725,13 @@ local function init_recruit_defeated_listeners(enable_value)
                     return context:confederation():name() == "wh_main_emp_empire"
                 end,
                 function()
-                    if unique_char_subtype_has_no_military_force("emp_karl_franz") and not cm:get_saved_value("karl_check_illegit") then                            
+                    if unique_char_subtype_has_no_military_force("emp_karl_franz") and not cm:get_saved_value("rd_confed") then    --and not cm:get_saved_value("karl_check_illegit") then                       
                         cm:unlock_starting_general_recruitment("2140783388", "wh_main_emp_empire")
                         cm:set_saved_value("2140783388" .. "_unlocked", true)
                         core:remove_listener("2140783388" .. "_listener")
                     end
                 end,
-                false
+                true
             )
         end
         -- nakai confed override (data.pack script/campaign/wh_campaign_setup.lua)

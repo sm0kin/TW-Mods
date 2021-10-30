@@ -182,8 +182,8 @@ function black_ark_lokhir()
 			for i = 0, char_list:num_items() - 1 do
 				local current_char = char_list:item_at(i)
 				if current_char:character_subtype_key() == "wh2_dlc11_def_lokhir" then
-					local art_set = cm:get_saved_value("black_ark_lokhir_replenish_action_points") or "wh2_sm0_art_set_def_black_ark_lokhir_1"
-					if cm:get_saved_value("rd_confed") then art_set = "wh2_sm0_art_set_def_black_ark_lokhir_1" end
+					local art_set = cm:get_saved_value("black_ark_lokhir_ship_art_sets") or "wh2_sm0_art_set_def_black_ark_lokhir_1"
+					--if cm:get_saved_value("rd_confed") then art_set = "wh2_sm0_art_set_def_black_ark_lokhir_1" end
 					cm:add_unit_model_overrides("character_cqi:"..current_char:command_queue_index(), art_set)
 				end
 			end

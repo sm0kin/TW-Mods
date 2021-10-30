@@ -383,6 +383,7 @@ end
 --v function()
 local function deletePlayerSubcultureFactions()
 	if cm:model():turn_number() == 1 and cm:get_local_faction_name(true) ~= "wh2_main_hef_avelorn" then cm:force_confederation("wh2_main_hef_caledor", "wh2_main_hef_avelorn") end
+	--if cm:model():turn_number() == 1 and cm:get_local_faction_name(true) == "wh_main_emp_empire" then cm:force_confederation("wh_main_emp_empire", "wh_main_emp_middenland") end
 	--if cm:model():turn_number() == 2 then kill_faction("wh_main_vmp_vampire_counts") end
 	local playerFaction = cm:get_local_faction(true)
 	local factionList2 = playerFaction:factions_of_same_subculture()
@@ -688,6 +689,8 @@ function sm0_test()
 	cm:transfer_region_to_faction("wh2_main_fort_soll", cm:get_local_faction_name(true))
 	cm:transfer_region_to_faction("wh2_main_griffon_gate", cm:get_local_faction_name(true))
 	cm:transfer_region_to_faction("wh2_main_the_plain_of_bones_the_fortress_of_vorag", cm:get_local_faction_name(true))
+
+	cm:force_confederation("wh_main_emp_empire", "wh_main_emp_middenland") 
 	
 	local yvresse = cm:get_region("wh2_main_land_of_the_dead_zandri") --wh2_main_vor_northern_yvresse_tor_yvresse
 	local yvresse_settlement = yvresse:settlement()
@@ -955,6 +958,8 @@ function sm0_test()
 			--if cm:model():turn_number() == 2 then cm:unlock_starting_general_recruitment("2140784146", "wh_main_vmp_vampire_counts") end
 			--if cm:model():turn_number() == 2 then cm:force_confederation("wh_main_grn_teef_snatchaz","wh_main_grn_orcs_of_the_bloody_hand") end
 			--if cm:model():turn_number() == 4 then kill_faction("wh_main_grn_teef_snatchaz") end
+			--if cm:model():turn_number() == 6 then cm:force_confederation("wh_main_emp_empire", "wh_main_emp_middenland") end
+
 
 			--unlock_ai_starting_generals()
 			deletePlayerSubcultureFactions()
