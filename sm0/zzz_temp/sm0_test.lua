@@ -692,9 +692,9 @@ function sm0_test()
 
 	cm:force_confederation("wh_main_emp_empire", "wh_main_emp_middenland") 
 	
-	local yvresse = cm:get_region("wh2_main_land_of_the_dead_zandri") --wh2_main_vor_northern_yvresse_tor_yvresse
-	local yvresse_settlement = yvresse:settlement()
-	cm:instantly_set_settlement_primary_slot_level(yvresse_settlement, 3)	
+	--local yvresse = cm:get_region("wh2_main_land_of_the_dead_zandri") --wh2_main_vor_northern_yvresse_tor_yvresse
+	--local yvresse_settlement = yvresse:settlement()
+	--cm:instantly_set_settlement_primary_slot_level(yvresse_settlement, 3)	
 	cm:transfer_region_to_faction("wh_main_averland_grenzstadt", cm:get_local_faction_name(true))
 	--cm:heal_garrison(yvresse:cqi())
 
@@ -730,6 +730,8 @@ function sm0_test()
     --    end,
     --    true
 	--)
+
+	--Infamy_AddInfamy(cm:get_local_faction_name(true), "wh2_dlc11_resource_factor_other", 5000)
 	cm:modify_faction_slaves_in_a_faction(cm:get_local_faction_name(true), 10000)
 	cm:faction_set_food_factor_value(cm:get_local_faction_name(true), "wh_dlc07_chivalry_events", 2000)
 	cm:faction_add_pooled_resource(cm:get_local_faction_name(true), "bst_dread", "wh2_dlc17_bst_dread_gain_missions_events", 5000)
@@ -962,7 +964,7 @@ function sm0_test()
 
 
 			--unlock_ai_starting_generals()
-			deletePlayerSubcultureFactions()
+			--deletePlayerSubcultureFactions()
 
 			--item test
 			--if cm:get_region("wh2_main_vor_kingdom_of_beasts_temple_of_skulls"):is_abandoned() then
