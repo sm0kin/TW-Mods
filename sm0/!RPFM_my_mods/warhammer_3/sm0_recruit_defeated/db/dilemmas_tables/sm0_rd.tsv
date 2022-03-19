@@ -1,0 +1,20 @@
+key	localised_title	localised_description	ui_image	generate	prioritized	event_category	sound_popup_override	sound_click_override	override_icon
+#dilemmas_tables;2;db/dilemmas_tables/sm0_rd									
+wh2_sm0_rd_sc_bst			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_wef			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_brt			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_chs			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_dwf			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_emp			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_grn			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_ksl			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_nor			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_teb			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_vmp			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_cst			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_def			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_hef			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_lzd			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_skv			land_defeat	false	true	Event			
+wh2_sm0_rd_rogue			land_defeat	false	true	Event			
+wh2_sm0_rd_sc_tmb			land_defeat	false	true	Event			

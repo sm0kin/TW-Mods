@@ -1,0 +1,8 @@
+key	text	tooltip
+#Loc PackedFile;1;text/db/sm0_execute_mct.loc		
+mct_execute_mod_title	Execute (useless) Lords & Heroes	true
+mct_execute_mod_desc	This mod adds ui elements that allow the player to "execute" (useless) lords and heroes - even if they are immortal!	true
+mct_execute_a_enable_txt	Mod Enable	true
+mct_execute_a_enable_tt	Enables or disables the mod.	true
+mct_execute_b_blacklisted_txt	Allow Execution of special Characters	true
+mct_execute_b_blacklisted_tt	Enables or disables the "Execution" feature for special Characters (legendary or unique lords and heroes).	true

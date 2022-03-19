@@ -1,0 +1,4 @@
+key	text	tooltip
+#Loc PackedFile;1;text/db/sm0_recruit_defeated_ll_second_start.loc		
+event_feed_strings_text_title_event_sr_grim_LL_unlocked	Eltharion	true
+event_feed_strings_text_description_event_sr_grim_LL_unlocked		true

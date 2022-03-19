@@ -1,0 +1,38 @@
+id	dilemma_key	option_key	value	target
+#cdir_events_dilemma_option_junctions_tables;1;db/cdir_events_dilemma_option_junctions_tables/sm0_rd				
+191706	wh2_sm0_rd_sc_bst	VAR_CHANCE	100	default
+191707	wh2_sm0_rd_sc_wef	VAR_CHANCE	100	default
+191708	wh2_sm0_rd_sc_brt	VAR_CHANCE	100	default
+191709	wh2_sm0_rd_sc_chs	VAR_CHANCE	100	default
+191710	wh2_sm0_rd_sc_dwf	VAR_CHANCE	100	default
+191711	wh2_sm0_rd_sc_emp	VAR_CHANCE	100	default
+191712	wh2_sm0_rd_sc_grn	VAR_CHANCE	100	default
+191714	wh2_sm0_rd_sc_ksl	VAR_CHANCE	100	default
+191715	wh2_sm0_rd_sc_nor	VAR_CHANCE	100	default
+191716	wh2_sm0_rd_sc_teb	VAR_CHANCE	100	default
+191717	wh2_sm0_rd_sc_vmp	VAR_CHANCE	100	default
+191718	wh2_sm0_rd_sc_cst	VAR_CHANCE	100	default
+191719	wh2_sm0_rd_sc_def	VAR_CHANCE	100	default
+191720	wh2_sm0_rd_sc_hef	VAR_CHANCE	100	default
+191721	wh2_sm0_rd_sc_lzd	VAR_CHANCE	100	default
+191722	wh2_sm0_rd_sc_skv	VAR_CHANCE	100	default
+191723	wh2_sm0_rd_sc_bst	GEN_TARGET_NONE		default
+191724	wh2_sm0_rd_sc_wef	GEN_TARGET_NONE		default
+191725	wh2_sm0_rd_sc_brt	GEN_TARGET_NONE		default
+191726	wh2_sm0_rd_sc_chs	GEN_TARGET_NONE		default
+191727	wh2_sm0_rd_sc_dwf	GEN_TARGET_NONE		default
+191728	wh2_sm0_rd_sc_emp	GEN_TARGET_NONE		default
+191729	wh2_sm0_rd_sc_grn	GEN_TARGET_NONE		default
+191731	wh2_sm0_rd_sc_ksl	GEN_TARGET_NONE		default
+191732	wh2_sm0_rd_sc_nor	GEN_TARGET_NONE		default
+191733	wh2_sm0_rd_sc_teb	GEN_TARGET_NONE		default
+191734	wh2_sm0_rd_sc_vmp	GEN_TARGET_NONE		default
+191735	wh2_sm0_rd_sc_cst	GEN_TARGET_NONE		default
+191736	wh2_sm0_rd_sc_def	GEN_TARGET_NONE		default
+191737	wh2_sm0_rd_sc_hef	GEN_TARGET_NONE		default
+191738	wh2_sm0_rd_sc_lzd	GEN_TARGET_NONE		default
+191739	wh2_sm0_rd_sc_skv	GEN_TARGET_NONE		default
+191740	wh2_sm0_rd_rogue	VAR_CHANCE	100	default
+191741	wh2_sm0_rd_rogue	GEN_TARGET_NONE		default
+191832	wh2_sm0_rd_sc_tmb	VAR_CHANCE	100	default
+191833	wh2_sm0_rd_sc_tmb	GEN_TARGET_NONE		default

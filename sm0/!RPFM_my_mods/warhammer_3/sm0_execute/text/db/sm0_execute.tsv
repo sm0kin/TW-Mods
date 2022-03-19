@@ -1,0 +1,184 @@
+key	text	tooltip
+#Loc PackedFile;1;text/db/sm0_execute.loc		
+trash_bin_button_disabled_wh_dlc03_bst_beastmen	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh_dlc03_bst_beastmen	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh_dlc03_bst_beastmen	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh_dlc03_bst_beastmen	Execute all (	true
+check_trash_button_hover_2_wh_dlc03_bst_beastmen	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh_dlc03_bst_beastmen	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh_dlc03_bst_beastmen	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh_dlc03_bst_beastmen	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh_dlc03_bst_beastmen	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh_dlc03_bst_beastmen	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh_dlc03_bst_beastmen	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh_dlc03_bst_beastmen	This Hero can't be executed.	true
+cross_trash_button_hover_wh_dlc03_bst_beastmen	Cancel.	true
+trash_bin_button_disabled_wh_dlc05_wef_wood_elves	No Lords or Heroes selected for retirement.	true
+trash_bin_button_hover_1_wh_dlc05_wef_wood_elves	Are you sure you want to retire all (	true
+trash_bin_button_hover_2_wh_dlc05_wef_wood_elves	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh_dlc05_wef_wood_elves	Retire all (	true
+check_trash_button_hover_2_wh_dlc05_wef_wood_elves	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh_dlc05_wef_wood_elves	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh_dlc05_wef_wood_elves	Select Lord for retirement.	true
+checkbox_toggle_lord_selected_hover_wh_dlc05_wef_wood_elves	Lord selected for retirement.	true
+checkbox_toggle_hero_hover_wh_dlc05_wef_wood_elves	Select Hero for retirement.	true
+checkbox_toggle_hero_selected_hover_wh_dlc05_wef_wood_elves	Hero selected for retirement.	true
+checkbox_toggle_lord_disabled_wh_dlc05_wef_wood_elves	This Lord can't be retired.	true
+checkbox_toggle_hero_disabled_wh_dlc05_wef_wood_elves	This Hero can't be retired.	true
+cross_trash_button_hover_wh_dlc05_wef_wood_elves	Cancel.	true
+trash_bin_button_disabled_wh_main_brt_bretonnia	No Lords or Heroes selected for military discharge.	true
+trash_bin_button_hover_1_wh_main_brt_bretonnia	Are you sure you want to discharge all (	true
+trash_bin_button_hover_2_wh_main_brt_bretonnia	) selected Lords/Heroes from your military forces?	true
+check_trash_button_hover_1_wh_main_brt_bretonnia	Discharge all (	true
+check_trash_button_hover_2_wh_main_brt_bretonnia	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh_main_brt_bretonnia	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh_main_brt_bretonnia	Select Lord for military discharge.	true
+checkbox_toggle_lord_selected_hover_wh_main_brt_bretonnia	Lord selected for military discharge.	true
+checkbox_toggle_hero_hover_wh_main_brt_bretonnia	Select Hero for military discharge.	true
+checkbox_toggle_hero_selected_hover_wh_main_brt_bretonnia	Hero selected for military discharge.	true
+checkbox_toggle_lord_disabled_wh_main_brt_bretonnia	This Lord can't be discharged.	true
+checkbox_toggle_hero_disabled_wh_main_brt_bretonnia	This Hero can't be discharged.	true
+cross_trash_button_hover_wh_main_brt_bretonnia	Cancel.	true
+trash_bin_button_disabled_wh_main_chs_chaos	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh_main_chs_chaos	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh_main_chs_chaos	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh_main_chs_chaos	Execute all (	true
+check_trash_button_hover_2_wh_main_chs_chaos	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh_main_chs_chaos	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh_main_chs_chaos	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh_main_chs_chaos	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh_main_chs_chaos	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh_main_chs_chaos	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh_main_chs_chaos	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh_main_chs_chaos	This Hero can't be executed.	true
+cross_trash_button_hover_wh_main_chs_chaos	Cancel.	true
+trash_bin_button_disabled_wh_main_dwf_dwarfs	No Lords or Heroes selected for retirement.	true
+trash_bin_button_hover_1_wh_main_dwf_dwarfs	Are you sure you want to retire all (	true
+trash_bin_button_hover_2_wh_main_dwf_dwarfs	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh_main_dwf_dwarfs	Retire all (	true
+check_trash_button_hover_2_wh_main_dwf_dwarfs	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh_main_dwf_dwarfs	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh_main_dwf_dwarfs	Select Lord for retirement.	true
+checkbox_toggle_lord_selected_hover_wh_main_dwf_dwarfs	Lord selected for retirement.	true
+checkbox_toggle_hero_hover_wh_main_dwf_dwarfs	Select Hero for retirement.	true
+checkbox_toggle_hero_selected_hover_wh_main_dwf_dwarfs	Hero selected for retirement.	true
+checkbox_toggle_lord_disabled_wh_main_dwf_dwarfs	This Lord can't be retired.	true
+checkbox_toggle_hero_disabled_wh_main_dwf_dwarfs	This Hero can't be retired.	true
+cross_trash_button_hover_wh_main_dwf_dwarfs	Cancel.	true
+trash_bin_button_disabled_wh_main_emp_empire	No Lords or Heroes selected for military discharge.	true
+trash_bin_button_hover_1_wh_main_emp_empire	Are you sure you want to discharge all (	true
+trash_bin_button_hover_2_wh_main_emp_empire	) selected Lords/Heroes from your military forces?	true
+check_trash_button_hover_1_wh_main_emp_empire	Discharge all (	true
+check_trash_button_hover_2_wh_main_emp_empire	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh_main_emp_empire	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh_main_emp_empire	Select Lord for military discharge.	true
+checkbox_toggle_lord_selected_hover_wh_main_emp_empire	Lord selected for military discharge.	true
+checkbox_toggle_hero_hover_wh_main_emp_empire	Select Hero for military discharge.	true
+checkbox_toggle_hero_selected_hover_wh_main_emp_empire	Hero selected for military discharge.	true
+checkbox_toggle_lord_disabled_wh_main_emp_empire	This Lord can't be discharged.	true
+checkbox_toggle_hero_disabled_wh_main_emp_empire	This Hero can't be discharged.	true
+cross_trash_button_hover_wh_main_emp_empire	Cancel.	true
+trash_bin_button_disabled_wh_main_grn_greenskins	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh_main_grn_greenskins	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh_main_grn_greenskins	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh_main_grn_greenskins	Execute all (	true
+check_trash_button_hover_2_wh_main_grn_greenskins	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh_main_grn_greenskins	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh_main_grn_greenskins	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh_main_grn_greenskins	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh_main_grn_greenskins	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh_main_grn_greenskins	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh_main_grn_greenskins	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh_main_grn_greenskins	This Hero can't be executed.	true
+cross_trash_button_hover_wh_main_grn_greenskins	Cancel.	true
+trash_bin_button_disabled_wh_main_vmp_vampire_counts	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh_main_vmp_vampire_counts	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh_main_vmp_vampire_counts	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh_main_vmp_vampire_counts	Execute all (	true
+check_trash_button_hover_2_wh_main_vmp_vampire_counts	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh_main_vmp_vampire_counts	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh_main_vmp_vampire_counts	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh_main_vmp_vampire_counts	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh_main_vmp_vampire_counts	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh_main_vmp_vampire_counts	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh_main_vmp_vampire_counts	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh_main_vmp_vampire_counts	This Hero can't be executed.	true
+cross_trash_button_hover_wh_main_vmp_vampire_counts	Cancel.	true
+trash_bin_button_disabled_wh2_dlc09_tmb_tomb_kings	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh2_dlc09_tmb_tomb_kings	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh2_dlc09_tmb_tomb_kings	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh2_dlc09_tmb_tomb_kings	Execute all (	true
+check_trash_button_hover_2_wh2_dlc09_tmb_tomb_kings	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh2_dlc09_tmb_tomb_kings	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh2_dlc09_tmb_tomb_kings	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh2_dlc09_tmb_tomb_kings	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh2_dlc09_tmb_tomb_kings	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh2_dlc09_tmb_tomb_kings	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh2_dlc09_tmb_tomb_kings	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh2_dlc09_tmb_tomb_kings	This Hero can't be executed.	true
+cross_trash_button_hover_wh2_dlc09_tmb_tomb_kings	Cancel.	true
+trash_bin_button_disabled_wh2_dlc11_cst_vampire_coast	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh2_dlc11_cst_vampire_coast	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh2_dlc11_cst_vampire_coast	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh2_dlc11_cst_vampire_coast	Execute all (	true
+check_trash_button_hover_2_wh2_dlc11_cst_vampire_coast	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh2_dlc11_cst_vampire_coast	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh2_dlc11_cst_vampire_coast	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh2_dlc11_cst_vampire_coast	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh2_dlc11_cst_vampire_coast	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh2_dlc11_cst_vampire_coast	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh2_dlc11_cst_vampire_coast	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh2_dlc11_cst_vampire_coast	This Hero can't be executed.	true
+cross_trash_button_hover_wh2_dlc11_cst_vampire_coast	Cancel.	true
+trash_bin_button_disabled_wh2_main_def_dark_elves	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh2_main_def_dark_elves	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh2_main_def_dark_elves	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh2_main_def_dark_elves	Execute all (	true
+check_trash_button_hover_2_wh2_main_def_dark_elves	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh2_main_def_dark_elves	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh2_main_def_dark_elves	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh2_main_def_dark_elves	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh2_main_def_dark_elves	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh2_main_def_dark_elves	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh2_main_def_dark_elves	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh2_main_def_dark_elves	This Hero can't be executed.	true
+cross_trash_button_hover_wh2_main_def_dark_elves	Cancel.	true
+trash_bin_button_disabled_wh2_main_hef_high_elves	No Lords or Heroes selected for retirement.	true
+trash_bin_button_hover_1_wh2_main_hef_high_elves	Are you sure you want to retire all (	true
+trash_bin_button_hover_2_wh2_main_hef_high_elves	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh2_main_hef_high_elves	Retire all (	true
+check_trash_button_hover_2_wh2_main_hef_high_elves	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh2_main_hef_high_elves	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh2_main_hef_high_elves	Select Lord for retirement.	true
+checkbox_toggle_lord_selected_hover_wh2_main_hef_high_elves	Lord selected for retirement.	true
+checkbox_toggle_hero_hover_wh2_main_hef_high_elves	Select Hero for retirement.	true
+checkbox_toggle_hero_selected_hover_wh2_main_hef_high_elves	Hero selected for retirement.	true
+checkbox_toggle_lord_disabled_wh2_main_hef_high_elves	This Lord can't be retired.	true
+checkbox_toggle_hero_disabled_wh2_main_hef_high_elves	This Hero can't be retired.	true
+cross_trash_button_hover_wh2_main_hef_high_elves	Cancel.	true
+trash_bin_button_disabled_wh2_main_lzd_lizardmen	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh2_main_lzd_lizardmen	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh2_main_lzd_lizardmen	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh2_main_lzd_lizardmen	Execute all (	true
+check_trash_button_hover_2_wh2_main_lzd_lizardmen	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh2_main_lzd_lizardmen	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh2_main_lzd_lizardmen	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh2_main_lzd_lizardmen	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh2_main_lzd_lizardmen	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh2_main_lzd_lizardmen	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh2_main_lzd_lizardmen	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh2_main_lzd_lizardmen	This Hero can't be executed.	true
+cross_trash_button_hover_wh2_main_lzd_lizardmen	Cancel.	true
+trash_bin_button_disabled_wh2_main_skv_skaven	No Lords or Heroes selected for execution.	true
+trash_bin_button_hover_1_wh2_main_skv_skaven	Are you sure you want to execute all (	true
+trash_bin_button_hover_2_wh2_main_skv_skaven	) selected Lords/Heroes?	true
+check_trash_button_hover_1_wh2_main_skv_skaven	Execute all (	true
+check_trash_button_hover_2_wh2_main_skv_skaven	) selected Lords/Heroes!	true
+check_trash_button_disabled_wh2_main_skv_skaven	No Lords or Heroes selected.	true
+checkbox_toggle_lord_hover_wh2_main_skv_skaven	Select Lord for Execution.	true
+checkbox_toggle_lord_selected_hover_wh2_main_skv_skaven	Lord selected for Execution.	true
+checkbox_toggle_hero_hover_wh2_main_skv_skaven	Select Hero for Execution.	true
+checkbox_toggle_hero_selected_hover_wh2_main_skv_skaven	Hero selected for Execution.	true
+checkbox_toggle_lord_disabled_wh2_main_skv_skaven	This Lord can't be executed.	true
+checkbox_toggle_hero_disabled_wh2_main_skv_skaven	This Hero can't be executed.	true
+cross_trash_button_hover_wh2_main_skv_skaven	Cancel.	true

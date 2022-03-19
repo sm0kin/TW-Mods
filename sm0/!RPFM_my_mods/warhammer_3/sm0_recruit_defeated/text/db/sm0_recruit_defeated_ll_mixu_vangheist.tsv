@@ -1,0 +1,12 @@
+key	text	tooltip
+#Loc PackedFile;1;text/db/sm0_recruit_defeated_ll_mixu_vangheist.loc		
+event_feed_strings_text_title_event_cst_vangheist_LL_unlocked	Vangheist	true
+event_feed_strings_text_description_event_cst_vangheist_LL_unlocked	After the defeat of his original faction, Vangheist and his turncoat crew have become available to you, great lord. He, his crew and his ghost ship, the Shadewraith are ready to serve your cause!\\n	true
+event_feed_strings_text_title_event_cst_bloodline_the_white_death_LL_unlocked	Simuna the White Death	true
+event_feed_strings_text_description_event_cst_bloodline_the_white_death_LL_unlocked	Simuna the White Death, the master gunner of the Shadewraith has joined you, just as his captain has. He will serve you just as the rest of the crew the Shadewraith will!\\n	true
+event_feed_strings_text_title_event_cst_bloodline_tia_drowna_LL_unlocked	Tia Drowna	true
+event_feed_strings_text_description_event_cst_bloodline_tia_drowna_LL_unlocked	Tia Drowna, the pirate sorceress of the Shadewraith has pledged her sorcery to you, my lord. She will serve you with the rest of the Shadewraith.\\n	true
+event_feed_strings_text_title_event_cst_bloodline_dreng_gunddadrak_LL_unlocked	Dreng Grundadrakk	true
+event_feed_strings_text_description_event_cst_bloodline_dreng_gunddadrak_LL_unlocked	The cursed slayer Dreng Grundadrakk has come into your service, just as the rest of the Shadewraith crew. He has promised to slay your enemies for you as he did for his previous lord.\\n	true
+event_feed_strings_text_title_event_cst_bloodline_khoskog_LL_unlocked	Khoskog, the Count of Beasts	true
+event_feed_strings_text_description_event_cst_bloodline_khoskog_LL_unlocked	The strigoi pirate, Khoskog the Count of Beasts has come to your service with the rest of the Shadewraith after their previous faction’s defeat. He will serve you and fight for you with his fellow crew members!\\n	true

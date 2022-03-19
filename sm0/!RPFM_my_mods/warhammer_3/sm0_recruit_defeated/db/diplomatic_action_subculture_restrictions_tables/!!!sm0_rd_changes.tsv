@@ -1,0 +1,5 @@
+subculture	can_make_vassals	can_make_client_states	can_make_confederations
+#diplomatic_action_subculture_restrictions_tables;0;db/diplomatic_action_subculture_restrictions_tables/!!!sm0_rd_changes			
+wh2_dlc09_sc_tmb_tomb_kings	true	false	true
+wh2_dlc11_sc_cst_vampire_coast	true	false	true
+wh_main_sc_teb_teb	true	false	true

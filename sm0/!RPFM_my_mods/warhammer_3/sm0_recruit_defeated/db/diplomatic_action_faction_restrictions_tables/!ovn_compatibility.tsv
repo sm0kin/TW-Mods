@@ -1,0 +1,5 @@
+faction	can_make_vassals	can_make_client_states	can_make_confederations
+#diplomatic_action_faction_restrictions_tables;0;db/diplomatic_action_faction_restrictions_tables/!ovn_compatibility			
+wh2_dlc09_tmb_the_sentinels	true	false	true
+wh2_main_emp_the_moot	true	false	true
+wh2_main_emp_grudgebringers	false	false	true

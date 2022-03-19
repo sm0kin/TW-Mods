@@ -1,0 +1,29 @@
+Updated for "Total War: WARHAMMER II – The Rakarth Update".
+
+[img]https://i.imgur.com/fVVaDCS.gif[/img]
+
+This mod adds a check box that allows the player to show or hide the settlement/garrison faction flag.
+
+[h1]Why?[/h1]
+Because the faction flag covers part of the settlement/garrison panel, it gets in the way when hovering over buildings and makes it impossible to tell what garrison units hide behind the flag.
+You can of course still tell which garrison composition the settlement houses by reading the settlement building descriptions but that kind of defeats the purpose of the garrison overview in my opinion.
+
+[h1]Is this mod save-game compatible?[/h1]
+Save to remove: Yes
+Save to add mid-campaign: Yes
+
+[h1]Is it compatible with ... ?[/h1]
+Should be compatible with pretty much every mod out there.
+
+[h1]Is this mod multiplayer compatible?[/h1]
+Yes.
+
+[h1]Interested in other mods I made?[/h1]
+[url=https://steamcommunity.com/profiles/76561197971867345/myworkshopfiles/?appid=594570]My steam workshop[/url]
+[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1862021026][img]https://i.imgur.com/1eT0f76.png[/img][/url] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1861724956][img]https://i.imgur.com/HqCXskl.png[/img][/url] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1720705128][img]https://i.imgur.com/O5gliHv.png[/img][/url] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1683336438][img]https://i.imgur.com/CQQ7v6C.png[/img][/url]
+
+[h1]Support[/h1]
+If you would like to support my work or just want to see what I'm up to, consider checking out my patreon.
+[url]https://www.patreon.com/sm0kin[/url]
+
+[b]Please let me know if you run into problems or think there is an aspect of the mod I should improve on![/b]
