@@ -10,32 +10,32 @@ event_feed_strings_text_title_event_wh2_dlc11_cst_harkon_LL_unlocked	Luthor Hark
 event_feed_strings_text_title_event_wh2_dlc11_cst_noctilus_LL_unlocked	Count Noctilus	true
 event_feed_strings_text_title_event_wh2_dlc11_cst_cylostra_LL_unlocked	Cylostra Direfin	true
 event_feed_strings_text_title_event_wh2_dlc11_cst_aranessa_LL_unlocked	Aranessa Saltspite	true
-event_feed_strings_text_title_event_dlc03_emp_boris_todbringer_LL_unlocked	Boris Todbringer	true
-event_feed_strings_text_description_event_dlc03_emp_boris_todbringer_LL_unlocked	With the province of Middenland being defeated, their Legendary Lord Boris Todbringer will be joining our ranks. For The Empire!	true
-event_feed_strings_text_title_event_dlc04_emp_volkmar_LL_unlocked	Volkmar the Grim	true
-event_feed_strings_text_title_event_emp_balthasar_gelt_LL_unlocked	Balthasar Gelt	true
-event_feed_strings_text_title_event_emp_karl_franz_LL_unlocked	Emperor Karl Franz	true
-event_feed_strings_text_title_event_dlc04_vmp_helman_ghorst_LL_unlocked	Helman Ghorst	true
-event_feed_strings_text_title_event_dlc04_vmp_vlad_con_carstein_LL_unlocked	Vlad von Carstein	true
-event_feed_strings_text_title_event_pro02_vmp_isabella_von_carstein_LL_unlocked	Isabella von Carstein	true
-event_feed_strings_text_title_event_vmp_heinrich_kemmler_LL_unlocked	Heinrich Kemmler	true
-event_feed_strings_text_title_event_vmp_mannfred_von_carstein_LL_unlocked	Mannfred von Carstein	true
+event_feed_strings_text_title_event_wh_dlc03_emp_boris_todbringer_LL_unlocked	Boris Todbringer	true
+event_feed_strings_text_description_event_wh_dlc03_emp_boris_todbringer_LL_unlocked	With the province of Middenland being defeated, their Legendary Lord Boris Todbringer will be joining our ranks. For The Empire!	true
+event_feed_strings_text_title_event_wh_dlc04_emp_volkmar_LL_unlocked	Volkmar the Grim	true
+event_feed_strings_text_title_event_wh_main_emp_balthasar_gelt_LL_unlocked	Balthasar Gelt	true
+event_feed_strings_text_title_event_wh_main_emp_karl_franz_LL_unlocked	Emperor Karl Franz	true
+event_feed_strings_text_title_event_wh_dlc04_vmp_helman_ghorst_LL_unlocked	Helman Ghorst	true
+event_feed_strings_text_title_event_wh_dlc04_vmp_vlad_con_carstein_LL_unlocked	Vlad von Carstein	true
+event_feed_strings_text_title_event_wh_pro02_vmp_isabella_von_carstein_LL_unlocked	Isabella von Carstein	true
+event_feed_strings_text_title_event_wh_main_vmp_heinrich_kemmler_LL_unlocked	Heinrich Kemmler	true
+event_feed_strings_text_title_event_wh_main_vmp_mannfred_von_carstein_LL_unlocked	Mannfred von Carstein	true
 event_feed_strings_text_title_event_wh_dlc05_vmp_red_duke_LL_unlocked	Red Duke	true
-event_feed_strings_text_title_event_dwf_thorgrim_grudgebearer_LL_unlocked	Thorgrim Grudgebearer	true
-event_feed_strings_text_title_event_dwf_ungrim_ironfist_LL_unlocked	Ungrim Ironfist	true
-event_feed_strings_text_title_event_dlc06_dwf_belegar_LL_unlocked	Belegar Ironhammer	true
-event_feed_strings_text_title_event_pro01_dwf_grombrindal_LL_unlocked	Grombrindal	true
-event_feed_strings_text_title_event_dlc06_grn_skarsnik_LL_unlocked	Skarsnik	true
-event_feed_strings_text_title_event_grn_azhag_the_slaughterer_LL_unlocked	Azhag the Slaughterer	true
-event_feed_strings_text_title_event_grn_grimgor_ironhide_LL_unlocked	Grimgor Ironhide	true
-event_feed_strings_text_title_event_dlc06_grn_wurrzag_da_great_prophet_LL_unlocked	Wurrzag	true
+event_feed_strings_text_title_event_wh_main_dwf_thorgrim_grudgebearer_LL_unlocked	Thorgrim Grudgebearer	true
+event_feed_strings_text_title_event_wh_main_dwf_ungrim_ironfist_LL_unlocked	Ungrim Ironfist	true
+event_feed_strings_text_title_event_wh_dlc06_dwf_belegar_LL_unlocked	Belegar Ironhammer	true
+event_feed_strings_text_title_event_wh_pro01_dwf_grombrindal_LL_unlocked	Grombrindal	true
+event_feed_strings_text_title_event_wh_dlc06_grn_skarsnik_LL_unlocked	Skarsnik	true
+event_feed_strings_text_title_event_wh_main_grn_azhag_the_slaughterer_LL_unlocked	Azhag the Slaughterer	true
+event_feed_strings_text_title_event_wh_main_grn_grimgor_ironhide_LL_unlocked	Grimgor Ironhide	true
+event_feed_strings_text_title_event_wh_dlc06_grn_wurrzag_da_great_prophet_LL_unlocked	Wurrzag	true
 event_feed_strings_text_title_event_wh2_dlc09_tmb_arkhan_LL_unlocked	Arkhan the Black	true
 event_feed_strings_text_title_event_wh2_dlc09_tmb_khalida_LL_unlocked	High Queen Khalida	true
 event_feed_strings_text_title_event_wh2_dlc09_tmb_khatep_LL_unlocked	Grand Hierophant Khatep	true
 event_feed_strings_text_title_event_wh2_dlc09_tmb_settra_LL_unlocked	Settra the Imperishable	true
-event_feed_strings_text_title_event_brt_louen_leoncouer_LL_unlocked	King Louen Leoncoeur	true
-event_feed_strings_text_title_event_dlc07_brt_alberic_LL_unlocked	Alberic de Bordeleaux	true
-event_feed_strings_text_title_event_dlc07_brt_fay_enchantress_LL_unlocked	The Fay Enchantress	true
+event_feed_strings_text_title_event_wh_main_brt_louen_leoncouer_LL_unlocked	King Louen Leoncoeur	true
+event_feed_strings_text_title_event_wh_dlc07_brt_alberic_LL_unlocked	Alberic de Bordeleaux	true
+event_feed_strings_text_title_event_wh_dlc07_brt_fay_enchantress_LL_unlocked	The Fay Enchantress	true
 event_feed_strings_text_title_event_wh2_main_hef_teclis_LL_unlocked	Teclis	true
 event_feed_strings_text_title_event_wh2_main_hef_tyrion_LL_unlocked	Tyrion	true
 event_feed_strings_text_title_event_wh2_dlc10_hef_alarielle_LL_unlocked	Alarielle the Radiant	true
@@ -43,29 +43,29 @@ event_feed_strings_text_title_event_wh2_dlc10_hef_alith_anar_LL_unlocked	Alith A
 event_feed_strings_text_title_event_wh2_dlc11_def_lokhir_LL_unlocked	Lokhir Fellheart	true
 event_feed_strings_text_title_event_wh2_main_def_malekith_LL_unlocked	Malekith	true
 event_feed_strings_text_title_event_wh2_main_def_morathi_LL_unlocked	Morathi	true
-event_feed_strings_text_description_event_dlc04_emp_volkmar_LL_unlocked	With The Empire being defeated, The Legendary head of the Cult of Sigmar, Volkmar the Grim will be joining our ranks. For The Empire!	true
-event_feed_strings_text_description_event_emp_balthasar_gelt_LL_unlocked	With The Empire being defeated, The Legendary Supreme Patriarch of the Colleges of Magic, Balthasar Gelt will aid our efforts and join you. For The Empire!	true
-event_feed_strings_text_description_event_emp_karl_franz_LL_unlocked	With The Empire being defeated, The Legendary Emperor Karl Franz has fled to the other provinces and has humbly offered his service for the greater good of The Empire!	true
-event_feed_strings_text_description_event_dlc04_vmp_helman_ghorst_LL_unlocked	With the Vampire Counts of East Sylvania being defeated, The Legendary Necromancer Helman Ghorst is offering his services to those who will help him get vengeance for his family.	true
-event_feed_strings_text_description_event_dlc04_vmp_vlad_con_carstein_LL_unlocked	With the Von Carsteins of West Sylvania being defeated, The Legendary Vlad von Carstein, first of the Von Carsteins, is willing to join his brethren at another chance to consolidate his power!	true
-event_feed_strings_text_description_event_pro02_vmp_isabella_von_carstein_LL_unlocked	With the Von Carsteins of West Sylvania being defeated, Legendary Vampire Isabella von Carstein will accompany her love, Vlad von Carstein in joining their other brethren.	true
-event_feed_strings_text_description_event_vmp_mannfred_von_carstein_LL_unlocked	With the Vampire Counts of East Sylvania being defeated, Legendary Vampire Count Mannfred von Carstein has offered his service to his brethren, even if it means bowing to Vlad and his love, Isabella.	true
+event_feed_strings_text_description_event_wh_dlc04_emp_volkmar_LL_unlocked	With The Empire being defeated, The Legendary head of the Cult of Sigmar, Volkmar the Grim will be joining our ranks. For The Empire!	true
+event_feed_strings_text_description_event_wh_main_emp_balthasar_gelt_LL_unlocked	With The Empire being defeated, The Legendary Supreme Patriarch of the Colleges of Magic, Balthasar Gelt will aid our efforts and join you. For The Empire!	true
+event_feed_strings_text_description_event_wh_main_emp_karl_franz_LL_unlocked	With The Empire being defeated, The Legendary Emperor Karl Franz has fled to the other provinces and has humbly offered his service for the greater good of The Empire!	true
+event_feed_strings_text_description_event_wh_dlc04_vmp_helman_ghorst_LL_unlocked	With the Vampire Counts of East Sylvania being defeated, The Legendary Necromancer Helman Ghorst is offering his services to those who will help him get vengeance for his family.	true
+event_feed_strings_text_description_event_wh_dlc04_vmp_vlad_con_carstein_LL_unlocked	With the Von Carsteins of West Sylvania being defeated, The Legendary Vlad von Carstein, first of the Von Carsteins, is willing to join his brethren at another chance to consolidate his power!	true
+event_feed_strings_text_description_event_wh_pro02_vmp_isabella_von_carstein_LL_unlocked	With the Von Carsteins of West Sylvania being defeated, Legendary Vampire Isabella von Carstein will accompany her love, Vlad von Carstein in joining their other brethren.	true
+event_feed_strings_text_description_event_wh_main_vmp_mannfred_von_carstein_LL_unlocked	With the Vampire Counts of East Sylvania being defeated, Legendary Vampire Count Mannfred von Carstein has offered his service to his brethren, even if it means bowing to Vlad and his love, Isabella.	true
 event_feed_strings_text_description_event_wh_dlc05_vmp_red_duke_LL_unlocked	With Moussilon being defeated, The Legendary Blood Knight of the West, The Red Duke, is offering his services to his brethren in a bid to retake his lands.	true
-event_feed_strings_text_description_event_dwf_thorgrim_grudgebearer_LL_unlocked	With the Dwarfs being defeated, Legendary High King Thorgrim Grudgebearer will join his brethren elsewhere to avenge every single entry contained in Dammaz Kron - the Great Book of Grudges!	true
-event_feed_strings_text_description_event_dwf_ungrim_ironfist_LL_unlocked	With Karak Kadrin being defeated, the Legendary Slayer King, Ungrim Ironfist will join his brethren elsewhere, no longer burdened with the conflicting obligations of King and Slayer, but only Slayer. Until he one day retakes his ancestral home.	true
-event_feed_strings_text_description_event_dlc06_dwf_belegar_LL_unlocked	With Clan Angrund being defeated, the Legendary True King of Karak Eight Peaks, Belegar Ironhammer has joined his brethren elsewhere in the hopes of retaking the lost hold of Karak Eight Peaks.	true
-event_feed_strings_text_description_event_pro01_dwf_grombrindal_LL_unlocked	With the Dwarfs being defeated, the Legendary White Dwarf, Grombrindal is looking to join his brethren elsewhere and offer his services. Khazukan-Kazakit-Ha!	true
-event_feed_strings_text_description_event_dlc06_grn_skarsnik_LL_unlocked	With the Crooked Moon being defeated, the Legendary King under the mountain, Lord Skarsnik is King no more! He has been asked by other greenskins to join them. You must be honoured, he chose you!	true
-event_feed_strings_text_description_event_grn_azhag_the_slaughterer_LL_unlocked	With the Greenskins being defeated, Legendary Lord Azhag the Slaughterer, the most infamous of all Orcish Warlords is looking to join other greenskin factions and continue his mighty waaaaagh!	true
-event_feed_strings_text_description_event_grn_grimgor_ironhide_LL_unlocked	With the Greenskins being defeated, the Legendary and greatest Black Orc Warlord to have ever lived, Grimgor Ironhide, also known as Once and Future Git will join your greenskin faction to continue fighting!	true
-event_feed_strings_text_description_event_dlc06_grn_wurrzag_da_great_prophet_LL_unlocked	With the Bloody Handz being defeated, Legendary Savage ORc Shaman Wurrzag Ud Ura Zahubu, also known as Da Great Green Prophet, is offering his mighty mystical power to you!	true
+event_feed_strings_text_description_event_wh_main_dwf_thorgrim_grudgebearer_LL_unlocked	With the Dwarfs being defeated, Legendary High King Thorgrim Grudgebearer will join his brethren elsewhere to avenge every single entry contained in Dammaz Kron - the Great Book of Grudges!	true
+event_feed_strings_text_description_event_wh_main_dwf_ungrim_ironfist_LL_unlocked	With Karak Kadrin being defeated, the Legendary Slayer King, Ungrim Ironfist will join his brethren elsewhere, no longer burdened with the conflicting obligations of King and Slayer, but only Slayer. Until he one day retakes his ancestral home.	true
+event_feed_strings_text_description_event_wh_dlc06_dwf_belegar_LL_unlocked	With Clan Angrund being defeated, the Legendary True King of Karak Eight Peaks, Belegar Ironhammer has joined his brethren elsewhere in the hopes of retaking the lost hold of Karak Eight Peaks.	true
+event_feed_strings_text_description_event_wh_pro01_dwf_grombrindal_LL_unlocked	With the Dwarfs being defeated, the Legendary White Dwarf, Grombrindal is looking to join his brethren elsewhere and offer his services. Khazukan-Kazakit-Ha!	true
+event_feed_strings_text_description_event_wh_dlc06_grn_skarsnik_LL_unlocked	With the Crooked Moon being defeated, the Legendary King under the mountain, Lord Skarsnik is King no more! He has been asked by other greenskins to join them. You must be honoured, he chose you!	true
+event_feed_strings_text_description_event_wh_main_grn_azhag_the_slaughterer_LL_unlocked	With the Greenskins being defeated, Legendary Lord Azhag the Slaughterer, the most infamous of all Orcish Warlords is looking to join other greenskin factions and continue his mighty waaaaagh!	true
+event_feed_strings_text_description_event_wh_main_grn_grimgor_ironhide_LL_unlocked	With the Greenskins being defeated, the Legendary and greatest Black Orc Warlord to have ever lived, Grimgor Ironhide, also known as Once and Future Git will join your greenskin faction to continue fighting!	true
+event_feed_strings_text_description_event_wh_dlc06_grn_wurrzag_da_great_prophet_LL_unlocked	With the Bloody Handz being defeated, Legendary Savage ORc Shaman Wurrzag Ud Ura Zahubu, also known as Da Great Green Prophet, is offering his mighty mystical power to you!	true
 event_feed_strings_text_description_event_wh2_dlc09_tmb_arkhan_LL_unlocked	With The Followers of Nagash being defeated, the Legendary Arkhan the Black, known as the Liche King has been forced to serve you. While he is not happy with this, it is this or his destruction, oh great Tomb Lord. Use him well!	true
 event_feed_strings_text_description_event_wh2_dlc09_tmb_khalida_LL_unlocked	With the Court of Lybaras being defeated, the Legendary Warrior-Queen, High Queen Khalida Neferher has sworn to serve the remaining Tomb Kings and hope to bring honour and justice to all of Nehekhara.	true
 event_feed_strings_text_description_event_wh2_dlc09_tmb_khatep_LL_unlocked	With the Exiles of Nehek being defeated, the Legendary Liche Lord, Grand Hierophant Khatep has joined your service and swears to serve as he served before by using the Mortuary Cult.	true
 event_feed_strings_text_description_event_wh2_dlc09_tmb_settra_LL_unlocked	With Khemri being defeated, the Legendary King of Kings and High King of Nehekhara, Settra the Imperishable has joined you. Be cautious, however.. Settra is a cruel being who only wishes to rule, not be ruled.	true
-event_feed_strings_text_description_event_brt_louen_leoncouer_LL_unlocked	With Bretonnia being defeated, the Legendary Lion of Bretonnia, King Louen Leoncoeur has joined his fellow Bretonnians to serve his homelands, even if not as a ruler.	true
-event_feed_strings_text_description_event_dlc07_brt_alberic_LL_unlocked	With Bordeleaux being defeated, Legendary Duke Alberic de Bordeleaux has joined his fellow Bretonnian countrymen to continue facing down the forces of evil wherever they may be found in the name of his patron-god Manann and the Lady of the Lake, hopefully shoulder by shoulder with King Louen!	true
-event_feed_strings_text_description_event_dlc07_brt_fay_enchantress_LL_unlocked	With Carcassonne being defeated, the Legendary Lady of the Lake, Morgiana Le Fay or The Fay Enchantress will support other Bretonnian factions to continue their fight against evil.	true
+event_feed_strings_text_description_event_wh_main_brt_louen_leoncouer_LL_unlocked	With Bretonnia being defeated, the Legendary Lion of Bretonnia, King Louen Leoncoeur has joined his fellow Bretonnians to serve his homelands, even if not as a ruler.	true
+event_feed_strings_text_description_event_wh_dlc07_brt_alberic_LL_unlocked	With Bordeleaux being defeated, Legendary Duke Alberic de Bordeleaux has joined his fellow Bretonnian countrymen to continue facing down the forces of evil wherever they may be found in the name of his patron-god Manann and the Lady of the Lake, hopefully shoulder by shoulder with King Louen!	true
+event_feed_strings_text_description_event_wh_dlc07_brt_fay_enchantress_LL_unlocked	With Carcassonne being defeated, the Legendary Lady of the Lake, Morgiana Le Fay or The Fay Enchantress will support other Bretonnian factions to continue their fight against evil.	true
 event_feed_strings_text_description_event_wh2_main_hef_teclis_LL_unlocked	With the Order of Loremasters being defeated, Legendary High Loremaster of Hoeth and Warden of the White Tower, Teclis has joined his brethren elsewhere to continue his work.	true
 event_feed_strings_text_description_event_wh2_main_hef_tyrion_LL_unlocked	With Lothern being defeated, the Legendary Prince Tyrion, Heir of Aenarion and the Defender of Ulthuan will join his brethren elsewhere to continue to fight for all of Ulthuan!	true
 event_feed_strings_text_description_event_wh2_dlc10_hef_alarielle_LL_unlocked	With Avelorn being defeated, Legendary Everqueen, Alarielle the Radiant has joined her brethren of Ulthuan to unite their lands for their race. She will surely guide us onwards.	true
@@ -73,7 +73,7 @@ event_feed_strings_text_description_event_wh2_dlc10_hef_alith_anar_LL_unlocked	W
 event_feed_strings_text_description_event_wh2_dlc11_def_lokhir_LL_unlocked	With The Blessed Dread being defeated, Legendary Krakenlord, Lokhir Fellheart has joined his Druchii brethren, ready to raid the coasts of their enemies!	true
 event_feed_strings_text_description_event_wh2_main_def_malekith_LL_unlocked	With Naggarond being defeated, Legendary Witch King of Naggaroth, Malekith has joined you, even if you would not let him lead the Druchii as he had before. All he cares for is the demise of the Asur.	true
 event_feed_strings_text_description_event_wh2_main_def_morathi_LL_unlocked	With the Cult of Pleasure being defeated, Legendary Morathi the Hag Sorceress of Ghrond and First of the Hag Queens, has offered her magical powers to the other Druchii factions.	true
-event_feed_strings_text_description_event_vmp_heinrich_kemmler_LL_unlocked	With The Barrow Legion being defeated,the Legendary self-styled Lichemaster Heinrich Kemmler is willing to work with other Vampires, despite his reluctance and strong words for Nagash.	true
+event_feed_strings_text_description_event_wh_main_vmp_heinrich_kemmler_LL_unlocked	With The Barrow Legion being defeated,the Legendary self-styled Lichemaster Heinrich Kemmler is willing to work with other Vampires, despite his reluctance and strong words for Nagash.	true
 event_feed_strings_text_title_event_wh2_dlc10_def_crone_hellebron_LL_unlocked	Crone Hellebron	true
 event_feed_strings_text_description_event_wh2_dlc10_def_crone_hellebron_LL_unlocked	With Har Ganeth being defeated, Legendary Crone Hellebron the Blood Queen of Har Ganeth has offered her services to her fellow Druchii factions. Use her wisely!	true
 event_feed_strings_text_title_event_wh2_main_lzd_lord_mazdamundi_LL_unlocked	Lord Mazdamundi	true
@@ -86,10 +86,10 @@ event_feed_strings_text_title_event_wh2_dlc09_skv_tretch_craventail_LL_unlocked	
 event_feed_strings_text_description_event_wh2_dlc09_skv_tretch_craventail_LL_unlocked	With Clan Rictus being defeated, Legendary Chieftain of Clan Rictus, Tretch Craventail is offering his luck and dirty fighting to other Clans-- anything to save his pathetic life!	true
 event_feed_strings_text_title_event_wh2_main_skv_queek_headtaker_LL_unlocked	Queek Headtaker	true
 event_feed_strings_text_description_event_wh2_main_skv_queek_headtaker_LL_unlocked	With Clan Mors being defeated, Legendary Lord of the City of Pillars, Great Warlord of Clan Mors, Queek Headtaker offering his services to other Clans. With the death of Warlock Gnawdwell he no longer has a reason to stay with Clan Mors!	true
-event_feed_strings_text_title_event_dlc05_wef_durthu_LL_unlocked	Durthu	true
-event_feed_strings_text_description_event_dlc05_wef_durthu_LL_unlocked	With Argwylon being defeated, Legendary Durthu or Oakheart is willing to forgive the Elves he had grown to dislike and has sworn to join them to stop any who would threaten Athel Loren and all who live there.	true
-event_feed_strings_text_title_event_dlc05_wef_orion_LL_unlocked	Orion	true
-event_feed_strings_text_description_event_dlc05_wef_orion_LL_unlocked	With the Wood Elves being defeated, Legendary King in the Woods or the Master of the Wild Hunt, Orion has joined the other inhabitants of Athel Loren and has sworn to serve them to keep it safe!	true
+event_feed_strings_text_title_event_wh_dlc05_wef_durthu_LL_unlocked	Durthu	true
+event_feed_strings_text_description_event_wh_dlc05_wef_durthu_LL_unlocked	With Argwylon being defeated, Legendary Durthu or Oakheart is willing to forgive the Elves he had grown to dislike and has sworn to join them to stop any who would threaten Athel Loren and all who live there.	true
+event_feed_strings_text_title_event_wh_dlc05_wef_orion_LL_unlocked	Orion	true
+event_feed_strings_text_description_event_wh_dlc05_wef_orion_LL_unlocked	With the Wood Elves being defeated, Legendary King in the Woods or the Master of the Wild Hunt, Orion has joined the other inhabitants of Athel Loren and has sworn to serve them to keep it safe!	true
 event_feed_strings_text_title_event_wh_dlc08_nor_throgg_LL_unlocked	Throgg	true
 event_feed_strings_text_description_event_wh_dlc08_nor_throgg_LL_unlocked	With Wintertooth being defeated, Legendary Throgg, King of the Trolls has decided to join other Norsca. While his dreams of a permanent ice age are gone, he will still bring the cold where he can!	true
 event_feed_strings_text_title_event_wh_dlc08_nor_wulfrik_LL_unlocked	Wulfrik the Wanderer	true
@@ -102,12 +102,12 @@ event_feed_strings_text_title_event_wh2_dlc12_skv_ikit_claw_LL_unlocked	Ikit Cla
 event_feed_strings_text_description_event_wh2_dlc12_skv_ikit_claw_LL_unlocked	With Clan Skyre being defeated, Legendary Ikit Claw- the Chief Warlock Engineer of Clan Skyre has offered his services to you. May his wicked machines bring glory to the rightful clan that is ours, yes-yes! For the Horned Rat!	true
 event_feed_strings_text_title_event_wh2_main_hef_prince_alastar_LL_unlocked	Alastar the Wild Lion	true
 event_feed_strings_text_description_event_wh2_main_hef_prince_alastar_LL_unlocked	With Lothern being defeated, Legendary Alastar the White Lion has offered his services for all of Ulthuan. A member of the white lions, Alastar will shine in his lion cloak and lead the assault on all forces threatening his kin!	true
-event_feed_strings_text_title_event_dlc03_bst_khazrak_LL_unlocked	Khazrak the One-Eye	true
-event_feed_strings_text_description_event_dlc03_bst_khazrak_LL_unlocked	Khazrak the One-Eye, the eternal enemy of Middenland and Middenheim and one of the most legendary Beastmen Beastlords in recent history has become available to you, oh mighty Lord! With his unique and adept ability to control and harness the unruly spirit of the herd and devise simple but effective battle plans he will surely win battles for you!	true
-event_feed_strings_text_title_event_dlc03_bst_malagor_LL_unlocked	Malagor the Dark Omen	true
-event_feed_strings_text_description_event_dlc03_bst_malagor_LL_unlocked	Malagor the Dark Omen, known by many titles as Malagor the Crowfather, the Despoiler of the Sacred or the Harbinger of Disaster is a darkly winged figure of nightmares and destruction, revered by the Beastmen but feared above all by the superstitious of Mankind. And now, my lord, he is available to serve under your banners!	true
-event_feed_strings_text_title_event_dlc05_bst_morghur_LL_unlocked	Morghur the Shadowgave	true
-event_feed_strings_text_description_event_dlc05_bst_morghur_LL_unlocked	Morghur the Shadowgave, Morghur, known in ancient times as the Shadowgave, the Master of Skulls and to the Elves as simply, The Corruptor, is an ancient and wholly unkillable Beastlord that has terrorized the forested woodlands of the Old World for centuries. It is this creature that now offers it’s services to you, oh great Lord! Use him wisely to destroy any who oppose you!	true
+event_feed_strings_text_title_event_wh_dlc03_bst_khazrak_LL_unlocked	Khazrak the One-Eye	true
+event_feed_strings_text_description_event_wh_dlc03_bst_khazrak_LL_unlocked	Khazrak the One-Eye, the eternal enemy of Middenland and Middenheim and one of the most legendary Beastmen Beastlords in recent history has become available to you, oh mighty Lord! With his unique and adept ability to control and harness the unruly spirit of the herd and devise simple but effective battle plans he will surely win battles for you!	true
+event_feed_strings_text_title_event_wh_dlc03_bst_malagor_LL_unlocked	Malagor the Dark Omen	true
+event_feed_strings_text_description_event_wh_dlc03_bst_malagor_LL_unlocked	Malagor the Dark Omen, known by many titles as Malagor the Crowfather, the Despoiler of the Sacred or the Harbinger of Disaster is a darkly winged figure of nightmares and destruction, revered by the Beastmen but feared above all by the superstitious of Mankind. And now, my lord, he is available to serve under your banners!	true
+event_feed_strings_text_title_event_wh_dlc05_bst_morghur_LL_unlocked	Morghur the Shadowgave	true
+event_feed_strings_text_description_event_wh_dlc05_bst_morghur_LL_unlocked	Morghur the Shadowgave, Morghur, known in ancient times as the Shadowgave, the Master of Skulls and to the Elves as simply, The Corruptor, is an ancient and wholly unkillable Beastlord that has terrorized the forested woodlands of the Old World for centuries. It is this creature that now offers it’s services to you, oh great Lord! Use him wisely to destroy any who oppose you!	true
 event_feed_strings_text_title_event_wh2_dlc13_lzd_nakai_LL_unlocked	Nakai the Wanderer	true
 event_feed_strings_text_description_event_wh2_dlc13_lzd_nakai_LL_unlocked	Nakai, the ancient Kroxigor, is a revered creature, regarded by Skink Priests as a powerful jungle-spirit made manifest. He is a mighty protector of the Lizardmen and can appear anywhere during times of need. He has chosen to appear to you, oh mighty Lord, to serve the Old Ones and you alike!	true
 event_feed_strings_text_title_event_wh2_dlc13_lzd_gor_rok_LL_unlocked	Gor-Rok	true
@@ -154,3 +154,25 @@ event_feed_strings_text_title_event_wh2_dlc17_lzd_oxyotl_LL_unlocked	Oxyotl	true
 event_feed_strings_text_description_event_wh2_dlc17_lzd_oxyotl_LL_unlocked	With the Ghosts of Pahuax being defeated, Oxyotl, known as "He That Hunts Unseen", The Legendary and much-feared Chameleon Skink who was at one time, the last and greatest Chameleon Hunter within the jungle-continent of Lustria, an ancient being who was alive when Chaos first came to this very world has offered to continue the fight, offering you his services.	true
 event_feed_strings_text_title_event_wh2_dlc17_dwf_thorek_LL_unlocked	Thorek Ironbrow	true
 event_feed_strings_text_description_event_wh2_dlc17_dwf_thorek_LL_unlocked	With Ironbrow's Expedition being defeated, Legendary Thorek Ironbrow, Master Runelord of Karak Azul has joined his fellow Dwarfs. Whether it's to seek ancient artifacts of the past or to help reform the Dwarf Empire is unknown.	true
+event_feed_strings_text_title_event_wh3_main_ksl_katarin_LL_unlocked	Tzarina Katarin	true
+event_feed_strings_text_description_event_wh3_main_ksl_katarin_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_ksl_boris_LL_unlocked	Boris Ursus	true
+event_feed_strings_text_description_event_wh3_main_ksl_boris_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_ksl_kostaltyn_LL_unlocked	Kostaltyn	true
+event_feed_strings_text_description_event_wh3_main_ksl_kostaltyn_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_cth_miao_ying_LL_unlocked	Miao Ying, the Storm Dragon	true
+event_feed_strings_text_description_event_wh3_main_cth_miao_ying_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_cth_zhao_ming_LL_unlocked	Zhao Ming, the Iron Dragon	true
+event_feed_strings_text_description_event_wh3_main_cth_zhao_ming_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_kho_skarbrand_LL_unlocked	Skarbrand the Exiled	true
+event_feed_strings_text_description_event_wh3_main_kho_skarbrand_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_nur_kugath_LL_unlocked	Ku'gath Plaguefather	true
+event_feed_strings_text_description_event_wh3_main_nur_kugath_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_sla_nkari_LL_unlocked	N'Kari	true
+event_feed_strings_text_description_event_wh3_main_sla_nkari_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_tze_kairos_LL_unlocked	Kairos Fateweaver	true
+event_feed_strings_text_description_event_wh3_main_tze_kairos_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_ogr_skrag_the_slaughterer_LL_unlocked	Skrag the Slaughterer	true
+event_feed_strings_text_description_event_wh3_main_ogr_skrag_the_slaughterer_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_main_ogr_greasus_goldtoothr_LL_unlocked	Greasus Goldtooth	true
+event_feed_strings_text_description_event_wh3_main_ogr_greasus_goldtooth_LL_unlocked		true

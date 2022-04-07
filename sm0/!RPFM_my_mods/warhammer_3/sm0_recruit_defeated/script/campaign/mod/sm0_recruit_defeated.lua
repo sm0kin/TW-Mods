@@ -269,7 +269,15 @@ local subculture_event_picture = {
     ["wh2_main_sc_def_dark_elves"] = 773,
     ["wh2_main_sc_hef_high_elves"] = 771,
     ["wh2_main_sc_lzd_lizardmen"] = 775,
-    ["wh2_main_sc_skv_skaven"] = 778
+    ["wh2_main_sc_skv_skaven"] = 778,
+    ["wh3_main_sc_cth_cathay"] = 17,
+    ["wh3_main_sc_dae_daemons"] = 10,
+    ["wh3_main_sc_kho_khorne"] = 11,
+    ["wh3_main_sc_ksl_kislev"] = 15,
+    ["wh3_main_sc_nur_nurgle"] = 12,
+    ["wh3_main_sc_ogr_ogre_kingdoms"] = 16,
+    ["wh3_main_sc_sla_slaanesh"] = 13,
+    ["wh3_main_sc_tze_tzeentch"] = 14
 } 
 
 local wh_agents = {
@@ -1956,7 +1964,7 @@ local function confed_revived(confederator, confederated)
                         if vfs.exists("script/campaign/mod/mixu_shadewraith") then lord_event(confederator:name(), confederated:name(), char, mixu_vangheist) end
                         --if vfs.exists("script/campaign/mod/ovn_rogue.lua") then lord_event(confederator:name(), confederated:name(), char, second_start_agents) end
                         --if vfs.exists("script/campaign/mod/sr_chaos.lua") then lord_event(confederator:name(), confederated:name(), char, lost_factions_agents) end
-                        --sm0_log("Faction: "..confederated:name().." | ".."Character | Forename: "..effect.get_localised_string(char:get_forename()).." | Surname: "..effect.get_localised_string(char:get_surname()))
+                        --sm0_log("Faction: "..confederated:name().." | ".."Character | Forename: "..common.get_localised_string(char:get_forename()).." | Surname: "..common.get_localised_string(char:get_surname()))
                     end
                     --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
                     --    --cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
@@ -2102,15 +2110,85 @@ local function rd_dilemma(confederator, confederated)
         end,
         false
     )
+    -- NEEDS WORK!!!
+    ---------------------------------------------------
+    --core:add_listener(
+    --    "rd_trigger_dilemma_PanelOpenedCampaign",
+    --    "PanelOpenedCampaign",
+    --    function(context)		
+    --        return true --events
+    --    end,
+    --    function(context)
+    --        --sm0_log("rd_trigger_dilemma_PanelOpenedCampaign/PanelOpenedCampaign: "..context.string)
+    --        real_timer.register_singleshot("rd_trigger_dilemma_PanelOpenedCampaign_next_tick", 0)
+    --        core:add_listener(
+    --            "rd_trigger_next_tick",
+    --            "RealTimeTrigger",
+    --            function(context)
+    --                return context.string == "rd_trigger_dilemma_PanelOpenedCampaign_next_tick"
+    --            end,
+    --            function(context)
+    --                --sm0_log("rd_trigger_next_tick WORKS!!!")
+    --                local sc_string = string.sub(subculture, sc_string_start, sc_string_start + 5)
+    --                local dilemma_loc = common.get_localised_string("dilemmas_localised_description_sm0_rd_"..sc_string)
+    --                local faction_loc = common.get_localised_string("factions_screen_name_"..confederated:name())
+    --                local dilemma_description = find_uicomponent(core:get_ui_root(),"events", "event_layouts", "dilemma_active", "dilemma", "background", "main_holder", "details_holder", "dy_details_text", "dy_description")
+    --                if dilemma_description and dilemma_description:GetStateText() == "With their own faction being defeated former military leaders of  seek refuge in exchange for their service under your banner." then 
+    --                    dilemma_description:SetStateText("With their own faction being defeated former military leaders of "..faction_loc.." seek refuge in exchange for their service under your banner.")
+    --                    --sm0_log("rd_trigger_dilemma_PanelOpenedCampaign: "..dilemma_description:GetStateText())
+    --                    core:remove_listener("rd_trigger_dilemma_PanelOpenedCampaign")  
+    --                else
+    --                    --sm0_log("")
+    --                end	
+    --            end,
+    --            false
+    --        )						
+    --    end,
+    --    true
+    --)
+
+    --provided by omlett
+    --note first param expects script interfaces, not command queue indices!
+    --note also doesn't support on_trigger_callback or force_dilemma_immediately, maybe add that later?
+    local function please_trigger_dilemma_with_targets (faction, dilemma_key, target_faction, secondary_faction, character, mf, region, settlement)
+        local dbldr = cm:create_dilemma_builder (dilemma_key)
+        if target_faction then
+            dbldr:add_target ("default", target_faction)
+        end
+
+        local choice_keys = {"FIRST", "SECOND", "THIRD", "FOURTH"}
+        local dilemma_choices = dbldr:possible_choices()
+        for i = 1, #dilemma_choices do
+            dbldr:remove_choice_payload (choice_keys[i])
+        end
+
+        local ui_detail_keys = {"rd_first", "rd_first2", "rd_second", "rd_third", "rd_fourth"}
+        for i = 1, #dilemma_choices do
+            local payload_builder = cm:create_payload()
+            payload_builder:clear()
+            for j = 1, #ui_detail_keys do
+                if string.find(ui_detail_keys[j], string.lower(choice_keys[i])) then
+                    payload_builder:text_display(ui_detail_keys[j])
+                end
+            end
+            payload_builder:text_display()
+            dbldr:add_choice_payload (choice_keys[i], payload_builder)
+        end
+
+        cm:launch_custom_dilemma_from_builder (dbldr, faction)
+    end
+    ---------------------------------------------------
     if is_number(sc_string_start) then
         local sc_string = string.sub(subculture, sc_string_start, sc_string_start + 5) -- e.g.: "sc_emp"
         sm0_log("trigger_dilemma_with_targets:".."sm0_rd_"..sc_string.." | confederator:cqi = "..confederator:command_queue_index().." | confederated:cqi = "..confederated:command_queue_index())
         --cm:trigger_dilemma_with_targets(confederator:command_queue_index(), "sm0_rd_"..sc_string, confederated:command_queue_index(), 0, 0, 0, 0, 0, nil, false)
-        confed_revived(confederator, confederated)
+        please_trigger_dilemma_with_targets(confederator, "sm0_rd_"..sc_string, confederated)
+        --confed_revived(confederator, confederated)
     elseif string.find(subculture, "_rogue_") then
-        --sm0_log("trigger_dilemma_with_targets:".."sm0_rd_rogue")
+        sm0_log("trigger_dilemma_with_targets:".."sm0_rd_rogue")
         --cm:trigger_dilemma_with_targets(confederator:command_queue_index(), "sm0_rd_rogue", confederated:command_queue_index(), 0, 0, 0, 0, 0, nil, false)
-        confed_revived(confederator, confederated)
+        please_trigger_dilemma_with_targets(confederator, "sm0_rd_rogue", confederated)
+        --confed_revived(confederator, confederated)
     else  
         sm0_log("ERROR: Subculture string resolving failed! ["..subculture.."]")
         confed_revived(confederator, confederated)   
@@ -2728,11 +2806,11 @@ local function init_recruit_defeated_listeners(enable_value)
                     local char_type = "legendary_lord"
                     if cm:char_is_agent(character) then char_type = "legendary_hero" end
                     --sm0_log("Faction event picture | Number: "..tostring(picture))
-                    --sm0_log("Faction event Title 1: "..effect.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
-                    --sm0_log("Faction event Title 2: "..effect.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
-                    --sm0_log("Faction event Description: "..effect.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))                   
-                    if picture and effect.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
-                    and effect.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
+                    --sm0_log("Faction event Title 1: "..common.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
+                    --sm0_log("Faction event Title 2: "..common.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
+                    --sm0_log("Faction event Description: "..common.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))                   
+                    if picture and common.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
+                    and common.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
                         cm:show_message_event(
                             confederator,
                             "event_feed_strings_text_title_event_" .. char_type .. "_available",
