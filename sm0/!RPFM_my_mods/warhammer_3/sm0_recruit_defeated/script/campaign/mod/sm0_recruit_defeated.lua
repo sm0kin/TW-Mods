@@ -2171,7 +2171,6 @@ local function rd_dilemma(confederator, confederated)
                     payload_builder:text_display(ui_detail_keys[j])
                 end
             end
-            payload_builder:text_display()
             dbldr:add_choice_payload (choice_keys[i], payload_builder)
         end
 

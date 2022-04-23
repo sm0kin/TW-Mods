@@ -4,5 +4,12 @@
         "undefined-global",
         "unused-function"
     ],
-    "Lua.workspace.maxPreload": 64000
+    "Lua.workspace.maxPreload": 64000,
+    "Lua.workspace.library": [
+        "D:/Modding/tw_autogen/output/wh3/all.lua",
+        "D:/Modding/tw_autogen/output/wh3/tw_events_and_interfaces.lua",
+        "D:/Modding/tw_autogen/output/wh3/campaign/",
+        "D:/Modding/tw_autogen/output/wh3/frontend/",
+        "D:/Modding/tw_autogen/output/wh3/battle/"
+    ]
 }
