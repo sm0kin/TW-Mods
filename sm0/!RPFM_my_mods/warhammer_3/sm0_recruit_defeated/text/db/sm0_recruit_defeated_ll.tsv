@@ -112,8 +112,8 @@ event_feed_strings_text_title_event_wh2_dlc13_lzd_nakai_LL_unlocked	Nakai the Wa
 event_feed_strings_text_description_event_wh2_dlc13_lzd_nakai_LL_unlocked	Nakai, the ancient Kroxigor, is a revered creature, regarded by Skink Priests as a powerful jungle-spirit made manifest. He is a mighty protector of the Lizardmen and can appear anywhere during times of need. He has chosen to appear to you, oh mighty Lord, to serve the Old Ones and you alike!	true
 event_feed_strings_text_title_event_wh2_dlc13_lzd_gor_rok_LL_unlocked	Gor-Rok	true
 event_feed_strings_text_description_event_wh2_dlc13_lzd_gor_rok_LL_unlocked	Gor-Rok, the Great White Lizard, is amongst the greatest and most renowned Saurus in living memory. This great Saurus is now available to serve you in your ventures, oh mighty lord!	true
-event_feed_strings_text_title_event_wh2_dlc13_emp_cha_markus_wulfhart_0_LL_unlocked	Markus Wulfhart	true
-event_feed_strings_text_description_event_wh2_dlc13_emp_cha_markus_wulfhart_0_LL_unlocked	Markus Wulfhart, known by his title as Huntsmarhal, is the Emperor's Captain of Scouts and one of the most successful hunters and monster slayers in the entire Old World. He has pledged his hunting skills to your cause and will bring back the prey that is our enemies. For The Emperor!	true
+event_feed_strings_text_title_event_wh2_dlc13_emp_cha_markus_wulfhart_LL_unlocked	Markus Wulfhart	true
+event_feed_strings_text_description_event_wh2_dlc13_emp_cha_markus_wulfhart_LL_unlocked	Markus Wulfhart, known by his title as Huntsmarhal, is the Emperor's Captain of Scouts and one of the most successful hunters and monster slayers in the entire Old World. He has pledged his hunting skills to your cause and will bring back the prey that is our enemies. For The Emperor!	true
 event_feed_strings_text_title_event_wh2_dlc13_emp_hunter_jorek_grimm_LL_unlocked	Jorek Grimm	true
 event_feed_strings_text_description_event_wh2_dlc13_emp_hunter_jorek_grimm_LL_unlocked	Jorek Grimm, also known as Grimm the Great, was responsible for many of the ironclad ship designs that now steam out of Barak Varr. He was expelled for his unorthodox, if ground-breaking, work and forced to endure the embarrassing Trouser Legs Ritual as a final indignation before being finally ousted.He now offers to serve you instead, my lord!	true
 event_feed_strings_text_title_event_wh2_dlc13_emp_hunter_rodrik_l_anguille_LL_unlocked	Rodrik L'Anguille	true
@@ -174,5 +174,13 @@ event_feed_strings_text_title_event_wh3_main_tze_kairos_LL_unlocked	Kairos Fatew
 event_feed_strings_text_description_event_wh3_main_tze_kairos_LL_unlocked		true
 event_feed_strings_text_title_event_wh3_main_ogr_skrag_the_slaughterer_LL_unlocked	Skrag the Slaughterer	true
 event_feed_strings_text_description_event_wh3_main_ogr_skrag_the_slaughterer_LL_unlocked		true
-event_feed_strings_text_title_event_wh3_main_ogr_greasus_goldtoothr_LL_unlocked	Greasus Goldtooth	true
+event_feed_strings_text_title_event_wh3_main_ogr_greasus_goldtooth_LL_unlocked	Greasus Goldtooth	true
 event_feed_strings_text_description_event_wh3_main_ogr_greasus_goldtooth_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_dlc20_sla_azazel_LL_unlocked	Azazel	true
+event_feed_strings_text_description_event_wh3_dlc20_sla_azazel_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_dlc20_nur_festus_LL_unlocked	Festus	true
+event_feed_strings_text_description_event_wh3_dlc20_nur_festus_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_dlc20_kho_valkia_LL_unlocked	Valkia	true
+event_feed_strings_text_description_event_wh3_dlc20_kho_valkia_LL_unlocked		true
+event_feed_strings_text_title_event_wh3_dlc20_tze_vilitch_LL_unlocked	Vilitch	true
+event_feed_strings_text_description_event_wh3_dlc20_tze_vilitch_LL_unlocked		true

@@ -1,3 +1,4 @@
+--[[
 --# assume mct: MCT
 local loc_prefix = "mct_recruit_defeated_"
 local recruit_defeated = mct:register_mod("recruit_defeated")
@@ -164,3 +165,4 @@ enable:add_option_set_callback(
         --end
     end
 )
+--]]

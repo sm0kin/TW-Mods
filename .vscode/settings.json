@@ -1,15 +1,120 @@
 {
-    "Lua.diagnostics.disable": [
-        "lowercase-global",
-        "undefined-global",
-        "unused-function"
-    ],
-    "Lua.workspace.maxPreload": 64000,
     "Lua.workspace.library": [
-        "D:/Modding/tw_autogen/output/wh3/all.lua",
-        "D:/Modding/tw_autogen/output/wh3/tw_events_and_interfaces.lua",
-        "D:/Modding/tw_autogen/output/wh3/campaign/",
-        "D:/Modding/tw_autogen/output/wh3/frontend/",
-        "D:/Modding/tw_autogen/output/wh3/battle/"
+        "C:/Users/Tom/AppData/Roaming/rpfm/config/tw_autogen/output/wh3/global/",
+        "C:/Users/Tom/AppData/Roaming/rpfm/config/tw_autogen/output/wh3/campaign/",
+        "C:/Users/Tom/AppData/Roaming/rpfm/config/tw_autogen/output/wh3/frontend/",
+        "C:/Users/Tom/AppData/Roaming/rpfm/config/tw_autogen/output/wh3/battle/"
     ]
 }
+
+//old
+
+//user
+//{
+//    "git.ignoreMissingGitWarning": true,
+//    "LuaCoderAssist.luacheck.execPath": "C:\\Users\\Tom\\.vscode\\extensions\\liwangqian.luacoderassist-1.3.8\\3rd\\luacheck",
+//    "editor.quickSuggestions": {
+//        "other": true,
+//        "comments": true,
+//        "strings": true
+//    },
+//    "git.enableSmartCommit": true,
+//    "git.confirmSync": false,
+//    "window.menuBarVisibility": "default",
+//    "editor.minimap.enabled": true,
+//    "workbench.statusBar.visible": true,
+//    "breadcrumbs.enabled": true,
+//    "Lua.runtime.version": "Lua 5.1",
+//    "Lua.workspace.ignoreDir": [
+//        ".vscode",
+//        "doc",
+//        "impl",
+//        "obsolete version",
+//        "script_example",
+//        "script_example_wh2"
+//    ],
+//    "Lua.workspace.preloadFileSize": 1500,
+//    "Lua.workspace.maxPreload": 20000,
+//    "code-runner.executorMap": {
+//
+//        "lua": "C:/lua5.1/bin/lua5.1.exe"
+//    },
+//    "code-runner.executorMapByGlob": {
+//
+//        "pom.xml": "cd $dir && mvn clean package"
+//    },
+//    "autoscroll.autoScrollAllOpenedFiles": true,
+//    "editor.semanticHighlighting.enabled": true,
+//    "Lua.telemetry.enable": false,
+//    "Lua.workspace.library": [
+//        "D:\\Modding\\script_example\\CA\\wh3_live"
+//    ],
+//    "diffEditor.ignoreTrimWhitespace": false,
+//    "Lua.diagnostics.workspaceDelay": 500,
+//    "Lua.diagnostics.workspaceRate": 40,
+//    "Lua.hint.setType": true,
+//    "Lua.hint.enable": true,
+//    "Lua.IntelliSense.traceBeSetted": true,
+//    "Lua.IntelliSense.traceFieldInject": true,
+//    "Lua.IntelliSense.traceLocalSet": true,
+//    "Lua.IntelliSense.traceReturn": true,
+//    "Lua.workspace.ignoreSubmodules": false,
+//    "Lua.completion.autoRequire": false
+//}
+
+
+//workspace
+//{
+//	"folders": [
+//		{
+//			"name": "TW-Mods",
+//			"path": "TW-Mods"
+//		},
+//		{
+//			"name": "Total War WARHAMMER III",
+//			"path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Total War WARHAMMER III"
+//		},
+//		{
+//			"name": "script_example",
+//			"path": "..\\script_example"
+//		}
+//	],
+//	"settings": {
+//
+//		"[json]": {
+//			"editor.quickSuggestions": {
+//				"strings": true
+//			},
+//			"editor.suggest.insertMode": "replace"
+//		},
+//		"Lua.diagnostics.globals": [
+//			"out",
+//			"core",
+//			"effect",
+//			"find_uicomponent",
+//			"CampaignUI",
+//			"UIComponent",
+//			"__write_output_to_logfile",
+//			"is_number",
+//			"is_function",
+//			"is_string",
+//			"vfs",
+//			"is_table",
+//			"is_factionlist",
+//			"script_error",
+//			"get_mct",
+//			"is_uicomponent",
+//			"uicomponent_to_str"
+//		],
+//		"Lua.diagnostics.disable": [
+//			"lowercase-global",
+//			"undefined-global"
+//		],
+//		"Lua.workspace.ignoreDir": [
+//			".vscode",
+//			"script_example",
+//			"script_example_wh2"
+//		]
+//		
+//	}
+//}

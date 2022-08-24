@@ -1,8 +1,23 @@
--- NEEDS WORK!!!
--- New multiplayer (up to 8 players)
+-- TO-DO
+-- enable db confederation for warriors of chaos faction
+-- allow/add option for different subculture/culture confederations
+-- MCT options
+-- New multiplayer (up to 8 players) support
 -- is_faction_exempted function (may need new entries)
 -- apply_diplomacy function (maybe)
 -- spawn_missing_lords function (needs new spawn coordinates)
+-- mod agent subtype and ancillary tables (mod support in general)
+-- db dilemma setup for new subcultures if there are any
+-- is_faction_exempted function/table update
+-- update event messages
+-- update faction/subculture icons for event messages
+
+
+-- NEEDS TESTING
+-- immortality status of cst and tmb characters
+-- are ancillary backups still needed?
+-- influence of legendary difficulty autosaves
+-- was trigger_dilemma_with_targets fixed?
 
 --mct variables
 local enable_value 
@@ -202,7 +217,7 @@ local faction_event_picture = {
     ["wh2_main_skv_clan_mors"] = 777,
     ["wh2_dlc09_skv_clan_rictus"] = 778,
 	["wh2_main_skv_clan_pestilens"] = 778,
-	["wh2_main_skv_clan_skyre"] = 787,
+	["wh2_main_skv_clan_skryre"] = 787,
     ["wh_dlc05_wef_argwylon"] = 605,
     ["wh_dlc05_wef_wood_elves"] = 605,
     ["wh_dlc08_nor_norsca"] = 800,
@@ -217,6 +232,7 @@ local faction_event_picture = {
     ["wh2_dlc14_brt_chevaliers_de_lyonesse"] = 751,
     ["wh2_main_skv_clan_eshin"] = 778,
     ["wh2_main_def_hag_graef"] = 773,
+    ["wh_main_chs_chaos"] = 0,
 	
 	--MIXU Part 1--
 	["wh_main_brt_artois"] = 751,
@@ -255,7 +271,7 @@ local subculture_event_picture = {
     ["wh_dlc03_sc_bst_beastmen"] = 596,
     ["wh_dlc05_sc_wef_wood_elves"] = 605,
     ["wh_main_sc_brt_bretonnia"] = 751,
-    --["wh_main_sc_chs_chaos"] = 0,
+    ["wh_main_sc_chs_chaos"] = 0,
     ["wh_main_sc_dwf_dwarfs"] = 592,
     ["wh_main_sc_emp_empire"] = 591,
     ["wh_main_sc_grn_greenskins"] = 593,
@@ -281,68 +297,68 @@ local subculture_event_picture = {
 } 
 
 local wh_agents = {
-    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "wh_dlc03_emp_boris_todbringer", ["dlc"] = "TW_WH_BEASTMEN"},
-    {["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_dlc04_emp_volkmar", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"},
-    {["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_main_emp_balthasar_gelt"},
-    {["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_main_emp_karl_franz"},
-    {["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh_dlc04_vmp_helman_ghorst", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"},
-    {["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_dlc04_vmp_vlad_con_carstein"},
-    {["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_pro02_vmp_isabella_von_carstein"},
-    {["faction"] = "wh2_dlc11_vmp_the_barrow_legion", ["subtype"] = "wh_main_vmp_heinrich_kemmler"},
-    {["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh_main_vmp_mannfred_von_carstein"},
-    {["faction"] = "wh_main_vmp_mousillon", ["subtype"] = "wh_dlc05_vmp_red_duke", ["dlc"] = "TW_WH_WOOD_ELVES"},
-    {["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "wh_main_dwf_thorgrim_grudgebearer"},
-    {["faction"] = "wh_main_dwf_karak_kadrin", ["subtype"] = "wh_main_dwf_ungrim_ironfist"},
-    {["faction"] = "wh_main_dwf_karak_izor", ["subtype"] = "wh_dlc06_dwf_belegar", ["dlc"] = "TW_WH_LORDS_AND_UNITS_2"},
-    {["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "wh_pro01_dwf_grombrindal"},
-    {["faction"] = "wh_main_grn_crooked_moon", ["subtype"] = "wh_dlc06_grn_skarsnik", ["dlc"] = "TW_WH_LORDS_AND_UNITS_2"},
-    {["faction"] = "wh_main_grn_greenskins", ["subtype"] = "wh_main_grn_azhag_the_slaughterer"},
-    {["faction"] = "wh_main_grn_greenskins", ["subtype"] = "wh_main_grn_grimgor_ironhide"},
-    {["faction"] = "wh_main_grn_orcs_of_the_bloody_hand", ["subtype"] = "wh_dlc06_grn_wurrzag_da_great_prophet"},
+    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "wh_dlc03_emp_boris_todbringer", ["dlc"] = "TW_WH1_BEASTMEN"}, 
+    {["faction"] = "wh3_main_emp_cult_of_sigmar", ["subtype"] = "wh_dlc04_emp_volkmar", ["dlc"] = "TW_WH1_LORDS_AND_UNITS_1"},
+    {["faction"] = "wh2_dlc13_emp_golden_order", ["subtype"] = "wh_main_emp_balthasar_gelt", ["dlc"] = "TW_WH1_BASE_GAME"},
+    {["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_main_emp_karl_franz", ["dlc"] = "TW_WH1_BASE_GAME"},
+    {["faction"] = "wh3_main_vmp_caravan_of_blue_roses", ["subtype"] = "wh_dlc04_vmp_helman_ghorst", ["dlc"] = "TW_WH1_LORDS_AND_UNITS_1"},
+    {["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_dlc04_vmp_vlad_con_carstein", ["dlc"] = "TW_WH1_BASE_GAME"},
+    {["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_pro02_vmp_isabella_von_carstein", ["dlc"] = "TW_WH1_ISABELLA_FREE"},
+    {["faction"] = "wh2_dlc11_vmp_the_barrow_legion", ["subtype"] = "wh_main_vmp_heinrich_kemmler", ["dlc"] = "TW_WH1_BASE_GAME"},
+    {["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh_main_vmp_mannfred_von_carstein", ["dlc"] = "TW_WH1_BASE_GAME"},
+    {["faction"] = "wh_main_vmp_mousillon", ["subtype"] = "wh_dlc05_vmp_red_duke", ["dlc"] = "TW_WH1_WOOD_ELVES"},
+    {["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "wh_main_dwf_thorgrim_grudgebearer", ["dlc"] = "TW_WH1_BASE_GAME"},
+    {["faction"] = "wh_main_dwf_karak_kadrin", ["subtype"] = "wh_main_dwf_ungrim_ironfist", ["dlc"] = "TW_WH1_BASE_GAME"},
+    {["faction"] = "wh_main_dwf_karak_izor", ["subtype"] = "wh_dlc06_dwf_belegar", ["dlc"] = "TW_WH1_LORDS_AND_UNITS_2"},
+    {["faction"] = "wh3_main_dwf_the_ancestral_throng", ["subtype"] = "wh_pro01_dwf_grombrindal", ["dlc"] = "TW_WH1_GROMBRINDAL"},
+    {["faction"] = "wh_main_grn_crooked_moon", ["subtype"] = "wh_dlc06_grn_skarsnik", ["dlc"] = "TW_WH1_LORDS_AND_UNITS_2"},
+    {["faction"] = "wh2_dlc15_grn_bonerattlaz", ["subtype"] = "wh_main_grn_azhag_the_slaughterer", ["dlc"] = "TW_WH1_BASE_GAME"},
+    {["faction"] = "wh_main_grn_greenskins", ["subtype"] = "wh_main_grn_grimgor_ironhide", ["dlc"] = "TW_WH1_GROMBRINDAL"},
+    {["faction"] = "wh_main_grn_orcs_of_the_bloody_hand", ["subtype"] = "wh_dlc06_grn_wurrzag_da_great_prophet", ["dlc"] = "TW_WH1_LORDS_AND_UNITS_2_FREE"},
     {["faction"] = "wh2_dlc09_tmb_followers_of_nagash", ["subtype"] = "wh2_dlc09_tmb_arkhan", ["dlc"] = "TW_WH2_TOMB_KINGS"},
     {["faction"] = "wh2_dlc09_tmb_lybaras", ["subtype"] = "wh2_dlc09_tmb_khalida", ["dlc"] = "TW_WH2_TOMB_KINGS"},
     {["faction"] = "wh2_dlc09_tmb_exiles_of_nehek", ["subtype"] = "wh2_dlc09_tmb_khatep", ["dlc"] = "TW_WH2_TOMB_KINGS"},
     {["faction"] = "wh2_dlc09_tmb_khemri", ["subtype"] = "wh2_dlc09_tmb_settra", ["dlc"] = "TW_WH2_TOMB_KINGS"},
-    {["faction"] = "wh_main_brt_bretonnia", ["subtype"] = "wh_main_brt_louen_leoncouer"},
-    {["faction"] = "wh_main_brt_bordeleaux", ["subtype"] = "wh_dlc07_brt_alberic"},
-    {["faction"] = "wh_main_brt_carcassonne", ["subtype"] = "wh_dlc07_brt_fay_enchantress"},
-    {["faction"] = "wh2_main_hef_order_of_loremasters", ["subtype"] = "wh2_main_hef_teclis"},
-    {["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_tyrion"},
-    {["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar"},
-    {["faction"] = "wh2_main_hef_avelorn", ["subtype"] = "wh2_dlc10_hef_alarielle", ["dlc"] = "TW_WH2_DLC12_PROPHET"},
-    {["faction"] = "wh2_main_hef_nagarythe", ["subtype"] = "wh2_dlc10_hef_alith_anar"},
-    {["faction"] = "wh2_dlc11_def_the_blessed_dread", ["subtype"] = "wh2_dlc11_def_lokhir"},
-    {["faction"] = "wh2_main_def_naggarond", ["subtype"] = "wh2_main_def_malekith"},
-    {["faction"] = "wh2_main_def_cult_of_pleasure", ["subtype"] = "wh2_main_def_morathi"},
-    {["faction"] = "wh2_main_lzd_hexoatl", ["subtype"] = "wh2_main_lzd_lord_mazdamundi"},
-    {["faction"] = "wh2_main_lzd_last_defenders", ["subtype"] = "wh2_main_lzd_kroq_gar"},
+    {["faction"] = "wh_main_brt_bretonnia", ["subtype"] = "wh_main_brt_louen_leoncouer", ["dlc"] = "TW_WH1_BRETONNIA_FREE"},
+    {["faction"] = "wh_main_brt_bordeleaux", ["subtype"] = "wh_dlc07_brt_alberic", ["dlc"] = "TW_WH1_BRETONNIA_FREE"},
+    {["faction"] = "wh_main_brt_carcassonne", ["subtype"] = "wh_dlc07_brt_fay_enchantress", ["dlc"] = "TW_WH1_BRETONNIA_FREE"},
+    {["faction"] = "wh2_main_hef_order_of_loremasters", ["subtype"] = "wh2_main_hef_teclis", ["dlc"] = "TW_WH2_BASE_GAME"},
+    {["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_tyrion", ["dlc"] = "TW_WH2_BASE_GAME"},
+    {["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar", ["dlc"] = "TW_WH2_BASE_GAME"},
+    {["faction"] = "wh2_main_hef_avelorn", ["subtype"] = "wh2_dlc10_hef_alarielle", ["dlc"] = "TW_WH2_DLC10_QUEEN_CRONE"},
+    {["faction"] = "wh2_main_hef_nagarythe", ["subtype"] = "wh2_dlc10_hef_alith_anar", ["dlc"] = "TW_WH2_DLC10_ALITH_ANAR_FREE"},
+    {["faction"] = "wh2_dlc11_def_the_blessed_dread", ["subtype"] = "wh2_dlc11_def_lokhir", ["dlc"] = "TW_WH2_DLC11_LOKHIR_FREE"},
+    {["faction"] = "wh2_main_def_naggarond", ["subtype"] = "wh2_main_def_malekith", ["dlc"] = "TW_WH2_BASE_GAME"},
+    {["faction"] = "wh2_main_def_cult_of_pleasure", ["subtype"] = "wh2_main_def_morathi", ["dlc"] = "TW_WH2_BASE_GAME"},
+    {["faction"] = "wh2_main_lzd_hexoatl", ["subtype"] = "wh2_main_lzd_lord_mazdamundi", ["dlc"] = "TW_WH2_BASE_GAME"},
+    {["faction"] = "wh2_main_lzd_last_defenders", ["subtype"] = "wh2_main_lzd_kroq_gar", ["dlc"] = "TW_WH2_BASE_GAME"},
     {["faction"] = "wh2_dlc12_lzd_cult_of_sotek", ["subtype"] = "wh2_dlc12_lzd_tehenhauin", ["dlc"] = "TW_WH2_DLC12_PROPHET"},
-    {["faction"] = "wh2_main_lzd_tlaqua", ["subtype"] = "wh2_dlc12_lzd_tiktaqto"},
-    {["faction"] = "wh2_main_skv_clan_pestilens", ["subtype"] = "wh2_main_skv_lord_skrolk"},
-    {["faction"] = "wh2_dlc09_skv_clan_rictus", ["subtype"] = "wh2_dlc09_skv_tretch_craventail"},
-    {["faction"] = "wh2_main_skv_clan_mors", ["subtype"] = "wh2_main_skv_queek_headtaker"},
-    {["faction"] = "wh2_main_skv_clan_skyre", ["subtype"] = "wh2_dlc12_skv_ikit_claw", ["dlc"] = "TW_WH2_DLC10_QUEEN_CRONE"},
-    {["faction"] = "wh_dlc05_wef_argwylon", ["subtype"] = "wh_dlc05_wef_durthu", ["dlc"] = "TW_WH_WOOD_ELVES"},
-    {["faction"] = "wh_dlc05_wef_wood_elves", ["subtype"] = "wh_dlc05_wef_orion", ["dlc"] = "TW_WH_WOOD_ELVES"},
-    {["faction"] = "wh_dlc08_nor_wintertooth", ["subtype"] = "wh_dlc08_nor_throgg", ["dlc"] = "TW_WH_NORSCA"},
-    {["faction"] = "wh_dlc08_nor_norsca", ["subtype"] = "wh_dlc08_nor_wulfrik", ["dlc"] = "TW_WH_NORSCA"},
+    {["faction"] = "wh2_main_lzd_tlaqua", ["subtype"] = "wh2_dlc12_lzd_tiktaqto", ["dlc"] = "TW_WH2_DLC12_TIKTAQTO_FREE"},
+    {["faction"] = "wh2_main_skv_clan_pestilens", ["subtype"] = "wh2_main_skv_lord_skrolk", ["dlc"] = "TW_WH2_BASE_GAME"},
+    {["faction"] = "wh2_dlc09_skv_clan_rictus", ["subtype"] = "wh2_dlc09_skv_tretch_craventail", ["dlc"] = "TW_WH2_TRETCH_FREE"},
+    {["faction"] = "wh2_main_skv_clan_mors", ["subtype"] = "wh2_main_skv_queek_headtaker", ["dlc"] = "TW_WH2_BASE_GAME"},
+    {["faction"] = "wh2_main_skv_clan_skryre", ["subtype"] = "wh2_dlc12_skv_ikit_claw", ["dlc"] = "TW_WH2_DLC12_PROPHET"},
+    {["faction"] = "wh_dlc05_wef_argwylon", ["subtype"] = "wh_dlc05_wef_durthu", ["dlc"] = "TW_WH1_WOOD_ELVES"},
+    {["faction"] = "wh_dlc05_wef_wood_elves", ["subtype"] = "wh_dlc05_wef_orion", ["dlc"] = "TW_WH1_WOOD_ELVES"},
+    {["faction"] = "wh_dlc08_nor_wintertooth", ["subtype"] = "wh_dlc08_nor_throgg", ["dlc"] = "TW_WH1_NORSCA"},
+    {["faction"] = "wh_dlc08_nor_norsca", ["subtype"] = "wh_dlc08_nor_wulfrik", ["dlc"] = "TW_WH1_NORSCA"},
     {["faction"] = "wh2_main_def_har_ganeth", ["subtype"] = "wh2_dlc10_def_crone_hellebron", ["dlc"] = "TW_WH2_DLC10_QUEEN_CRONE"},
     {["faction"] = "wh2_dlc11_cst_pirates_of_sartosa", ["subtype"] = "wh2_dlc11_cst_aranessa", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"},
     {["faction"] = "wh2_dlc11_cst_the_drowned", ["subtype"] = "wh2_dlc11_cst_cylostra", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"},
     {["faction"] = "wh2_dlc11_cst_vampire_coast", ["subtype"] = "wh2_dlc11_cst_harkon", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"},
     {["faction"] = "wh2_dlc11_cst_noctilus", ["subtype"] = "wh2_dlc11_cst_noctilus", ["dlc"] = "TW_WH2_DLC11_VAMPIRE_COAST"},
-    {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_cha_markus_wulfhart_0", ["dlc"] = "TW_WH2_DLC13_HUNTER"},
+    {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_cha_markus_wulfhart", ["dlc"] = "TW_WH2_DLC13_HUNTER"},
     {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_hunter_jorek_grimm", ["dlc"] = "TW_WH2_DLC13_HUNTER"},
     {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_hunter_rodrik_l_anguille", ["dlc"] = "TW_WH2_DLC13_HUNTER"},
     {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_hunter_doctor_hertwig_van_hal", ["dlc"] = "TW_WH2_DLC13_HUNTER"},
     {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_hunter_kalara_of_wydrioth", ["dlc"] = "TW_WH2_DLC13_HUNTER"},
     {["faction"] = "wh2_dlc13_lzd_spirits_of_the_jungle", ["subtype"] = "wh2_dlc13_lzd_nakai", ["dlc"] = "TW_WH2_DLC13_HUNTER"},
-    {["faction"] = "wh2_main_lzd_itza", ["subtype"] = "wh2_dlc13_lzd_gor_rok"},
-    {["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc03_bst_khazrak", ["dlc"] = "TW_WH_BEASTMEN"},
-    {["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc03_bst_malagor", ["dlc"] = "TW_WH_BEASTMEN"},
-    {["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc05_bst_morghur", ["dlc"] = "TW_WH_BEASTMEN"},
-    {["faction"] = "wh2_dlc14_brt_chevaliers_de_lyonesse", ["subtype"] = "wh2_dlc14_brt_repanse"},
-    {["faction"] = "wh2_dlc14_brt_chevaliers_de_lyonesse", ["subtype"] = "wh2_dlc14_brt_henri_le_massif"},
+    {["faction"] = "wh2_main_lzd_itza", ["subtype"] = "wh2_dlc13_lzd_gor_rok", ["dlc"] = "TW_WH2_DLC13_GOR_ROK_FREE"},
+    {["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc03_bst_khazrak", ["dlc"] = "TW_WH1_BEASTMEN"},
+    {["faction"] = "wh2_dlc17_bst_malagor", ["subtype"] = "wh_dlc03_bst_malagor", ["dlc"] = "TW_WH1_BEASTMEN"},
+    {["faction"] = "wh_dlc05_bst_morghur_herd", ["subtype"] = "wh_dlc05_bst_morghur", ["dlc"] = "TW_WH1_BEASTMEN"},
+    {["faction"] = "wh2_dlc14_brt_chevaliers_de_lyonesse", ["subtype"] = "wh2_dlc14_brt_repanse", ["dlc"] = "TW_WH2_DLC14_REPANSE_FREE"},
+    {["faction"] = "wh2_dlc14_brt_chevaliers_de_lyonesse", ["subtype"] = "wh2_dlc14_brt_henri_le_massif", ["dlc"] = "TW_WH2_DLC14_REPANSE_FREE"},
     {["faction"] = "wh2_main_skv_clan_eshin", ["subtype"] = "wh2_dlc14_skv_deathmaster_snikch", ["dlc"] = "TW_WH2_DLC14_SHADOW"},
     {["faction"] = "wh2_main_def_hag_graef", ["subtype"] = "wh2_dlc14_def_malus_darkblade", ["dlc"] = "TW_WH2_DLC14_SHADOW"},
     {["faction"] = "wh2_dlc15_grn_broken_axe", ["subtype"] = "wh2_dlc15_grn_grom_the_paunch", ["dlc"] = "TW_WH2_DLC15_WARDEN"},
@@ -350,26 +366,33 @@ local wh_agents = {
     {["faction"] = "wh2_dlc15_hef_imrik", ["subtype"] = "wh2_dlc15_hef_imrik", ["dlc"] = "TW_WH2_DLC15_IMRIK_FREE"},
     {["faction"] = "wh2_main_skv_clan_moulder", ["subtype"] = "wh2_dlc16_skv_throt_the_unclean", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
     {["faction"] = "wh2_main_skv_clan_moulder", ["subtype"] = "wh2_dlc16_skv_ghoritch", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
-    {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_drycha", ["dlc"] = {"TW_WH_WOOD_ELVES", "TW_WH2_DLC16_TWILIGHT"}},
-    {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_coeddil", ["dlc"] = {"TW_WH_WOOD_ELVES", "TW_WH2_DLC16_TWILIGHT"}},
+    {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_drycha", ["dlc"] = {"TW_WH1_WOOD_ELVES", "TW_WH2_DLC16_TWILIGHT"}},
+    {["faction"] = "wh2_dlc16_wef_drycha", ["subtype"] = "wh2_dlc16_wef_coeddil", ["dlc"] = {"TW_WH1_WOOD_ELVES", "TW_WH2_DLC16_TWILIGHT"}},
     {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_ariel", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
     {["faction"] = "wh2_dlc16_wef_sisters_of_twilight", ["subtype"] = "wh2_dlc16_wef_sisters_of_twilight", ["dlc"] = "TW_WH2_DLC16_TWILIGHT"},
-    {["faction"] = "wh2_twa03_def_rakarth", ["subtype"] = "wh2_twa03_def_rakarth", ["dlc"] = "TW_WH_TWA_03_RAKARTH"},
+    {["faction"] = "wh2_twa03_def_rakarth", ["subtype"] = "wh2_twa03_def_rakarth", ["dlc"] = "TW_WH2_TWA_03_RAKARTH"},
     {["faction"] = "wh2_dlc17_bst_taurox", ["subtype"] = "wh2_dlc17_bst_taurox", ["dlc"] = "TW_WH2_DLC17_SILENCE"},
     {["faction"] = "wh2_dlc17_lzd_oxyotl", ["subtype"] = "wh2_dlc17_lzd_oxyotl", ["dlc"] = "TW_WH2_DLC17_SILENCE"},
     {["faction"] = "wh2_dlc17_dwf_thorek_ironbrow", ["subtype"] = "wh2_dlc17_dwf_thorek", ["dlc"] = "TW_WH2_DLC17_THOREK_FREE"},
-    {["faction"] = "wh3_main_cth_the_northern_provinces", ["subtype"] = "wh3_main_cth_miao_ying"},
-    {["faction"] = "wh3_main_cth_the_western_provinces", ["subtype"] = "wh3_main_cth_zhao_ming"},
-    --{["faction"] = "wh3_main_dae_daemon_prince", ["subtype"] = "wh3_main_dae_daemon_prince"},
-    {["faction"] = "wh3_main_kho_exiles_of_khorne", ["subtype"] = "wh3_main_kho_skarbrand"},
-    {["faction"] = "wh3_main_ksl_the_great_orthodoxy", ["subtype"] = "wh3_main_ksl_kostaltyn"},
-    {["faction"] = "wh3_main_ksl_the_ice_court", ["subtype"] = "wh3_main_ksl_katarin"},
-    {["faction"] = "wh3_main_ksl_ursun_revivalists", ["subtype"] = "wh3_main_ksl_boris"},
-    {["faction"] = "wh3_main_nur_poxmakers_of_nurgle", ["subtype"] = "wh3_main_nur_kugath"},
-    {["faction"] = "wh3_main_ogr_disciples_of_the_maw", ["subtype"] = "wh3_main_ogr_skrag_the_slaughterer"},
-    {["faction"] = "wh3_main_ogr_goldtooth", ["subtype"] = "wh3_main_ogr_greasus_goldtooth"},
-    {["faction"] = "wh3_main_sla_seducers_of_slaanesh", ["subtype"] = "wh3_main_sla_nkari"},
-    {["faction"] = "wh3_main_tze_oracles_of_tzeentch", ["subtype"] = "wh3_main_tze_kairos"}
+    {["faction"] = "wh3_main_cth_the_northern_provinces", ["subtype"] = "wh3_main_cth_miao_ying", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_cth_the_western_provinces", ["subtype"] = "wh3_main_cth_zhao_ming", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_dae_daemon_prince", ["subtype"] = "wh3_main_dae_daemon_prince", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_kho_exiles_of_khorne", ["subtype"] = "wh3_main_kho_skarbrand", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_ksl_the_great_orthodoxy", ["subtype"] = "wh3_main_ksl_kostaltyn", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_ksl_the_ice_court", ["subtype"] = "wh3_main_ksl_katarin", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_ksl_ursun_revivalists", ["subtype"] = "wh3_main_ksl_boris", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_nur_poxmakers_of_nurgle", ["subtype"] = "wh3_main_nur_kugath", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_ogr_disciples_of_the_maw", ["subtype"] = "wh3_main_ogr_skrag_the_slaughterer", ["dlc"] = "TW_WH3_OGRE_KINGDOMS"},
+    {["faction"] = "wh3_main_ogr_goldtooth", ["subtype"] = "wh3_main_ogr_greasus_goldtooth", ["dlc"] = "TW_WH3_OGRE_KINGDOMS"},
+    {["faction"] = "wh3_main_sla_seducers_of_slaanesh", ["subtype"] = "wh3_main_sla_nkari", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_main_tze_oracles_of_tzeentch", ["subtype"] = "wh3_main_tze_kairos", ["dlc"] = "TW_WH3_BASE_GAME"},
+    {["faction"] = "wh3_dlc20_chs_azazel", ["subtype"] = "wh3_dlc20_sla_azazel", ["dlc"] = "TW_WH3_DLC20_CHAMPIONS"},
+    {["faction"] = "wh3_dlc20_chs_festus", ["subtype"] = "wh3_dlc20_nur_festus", ["dlc"] = "TW_WH3_DLC20_CHAMPIONS"},
+    {["faction"] = "wh3_dlc20_chs_valkia", ["subtype"] = "wh3_dlc20_kho_valkia", ["dlc"] = "TW_WH3_DLC20_CHAMPIONS"},
+    {["faction"] = "wh3_dlc20_chs_vilitch", ["subtype"] = "wh3_dlc20_tze_vilitch", ["dlc"] = "TW_WH3_DLC20_CHAMPIONS"},
+    {["faction"] = "wh_main_chs_chaos", ["subtype"] = "wh_main_chs_archaon", ["dlc"] = "TW_WH1_CHAOS"},
+    {["faction"] = "wh3_dlc20_chs_kholek", ["subtype"] = "wh_dlc01_chs_kholek_suneater", ["dlc"] = "TW_WH1_CHAOS"},
+    {["faction"] = "wh3_dlc20_chs_sigvald", ["subtype"] = "wh_dlc01_chs_prince_sigvald", ["dlc"] = "TW_WH1_CHAOS"}
 } 
     --MIXU Part 1--
 local mixu1_agents = {
@@ -378,9 +401,9 @@ local mixu1_agents = {
     {["faction"] = "wh_main_brt_lyonesse", ["subtype"] = "brt_adalhard"},
     {["faction"] = "wh_main_brt_parravon", ["subtype"] = "brt_cassyon"},
     {["faction"] = "wh_main_dwf_karak_azul", ["subtype"] = "dwf_kazador_dragonslayer"},
-    {["faction"] = "wh_main_dwf_karak_azul", ["subtype"] = "dwf_thorek_ironbrow"},
+    --{["faction"] = "wh_main_dwf_karak_azul", ["subtype"] = "dwf_thorek_ironbrow"}, --dlc
     {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "mixu_elspeth_von_draken"},
-    --{["faction"] = "wh_main_ksl_kislev", ["subtype"] = "ksl_katarin_the_ice_queen"},
+    --{["faction"] = "wh_main_ksl_kislev", ["subtype"] = "ksl_katarin_the_ice_queen"}, --dlc
     {["faction"] = "wh_dlc05_wef_torgovann", ["subtype"] = "wef_daith"},
     {["faction"] = "wh_main_emp_averland", ["subtype"] = "emp_marius_leitdorf"},
     {["faction"] = "wh_main_emp_hochland", ["subtype"] = "emp_aldebrand_ludenhof"},
@@ -395,9 +418,9 @@ local mixu1_agents = {
     --{["faction"] = "", ["subtype"] = "emp_alberich_von_korden_hero"}, 
     {["faction"] = "wh_main_emp_empire", ["subtype"] = "emp_luthor_huss"},
     {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "emp_theodore_bruckner"},
-    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "emp_vorn_thugenheim"},
+    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "emp_vorn_thugenheim"}
     --{["faction"] = "wh2_main_bst_manblight", ["subtype"] = "bst_taurox"}, --dlc
-    {["faction"] = "wh_dlc05_wef_wydrioth", ["subtype"] = "wef_drycha"}
+    --{["faction"] = "wh_dlc05_wef_wydrioth", ["subtype"] = "wef_drycha"} --dlc
 }
     --MIXU Part 2--
 local mixu2_agents = {
@@ -450,7 +473,7 @@ local kraka_agents = {
 } 
     --Project Resurrection - Parte Legendary Lords--
 local parte_agents = {
-    --{["faction"] = "wh2_main_def_karond_kar", ["subtype"] = "def_rakarth"},
+    --{["faction"] = "wh2_main_def_karond_kar", ["subtype"] = "def_rakarth"}, --dlc
     {["faction"] = "wh2_main_skv_clan_moulder", ["subtype"] = "skv_skweel_gnawtooth"},
     {["faction"] = "wh2_main_def_blood_hall_coven", ["subtype"] = "def_hag_queen_malida"},
     {["faction"] = "wh2_main_hef_cothique", ["subtype"] = "hef_aislinn"},
@@ -522,16 +545,16 @@ local alastar_quests = {
 } 
 
 local locked_ai_generals = {
-    {["id"] = "2140784160",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "wh_pro01_dwf_grombrindal"},                                                             -- Grombrindal
-    --{["id"] = "2140783606",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "wh_main_grn_azhag_the_slaughterer"},                                                   -- Azhag the Slaughterer
-    {["id"] = "2140784146",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh_dlc04_vmp_helman_ghorst", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"},              -- Helman Ghorst
-    {["id"] = "2140784202",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_pro02_vmp_isabella_von_carstein"},                                            -- Isabella von Carstein
+    --{["id"] = "2140784160",	["faction"] = "wh_main_dwf_dwarfs", ["subtype"] = "wh_pro01_dwf_grombrindal"},                                                                  -- Grombrindal
+    --{["id"] = "2140783606",	["faction"] = "wh_main_grn_greenskins", ["subtype"] = "wh_main_grn_azhag_the_slaughterer"},                                                     -- Azhag the Slaughterer
+    --{["id"] = "2140784146",	["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh_dlc04_vmp_helman_ghorst", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"},                   -- Helman Ghorst
+    --{["id"] = "2140784202",	["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_pro02_vmp_isabella_von_carstein"},                                                 -- Isabella von Carstein
 
-    --{["id"] = "",	["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar"},                                                               -- Alastar
-    --{["id"] = "2140784127",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc03_bst_malagor"},                                                            -- Malagor
-    --{["id"] = "2140784189",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc05_bst_morghur"},                                                            -- Morghur
-    --{["id"] = "2140783648",	["faction"] = "wh2_dlc13_emp_golden_order", ["subtype"] = "wh_main_emp_balthasar_gelt"},                                                      -- Balthasar Gelt
-    {["id"] = "2140784136",	["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_dlc04_emp_volkmar", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"}                             -- Volkmar the Grim
+    --{["id"] = "",	["faction"] = "wh2_main_hef_eataine", ["subtype"] = "wh2_main_hef_prince_alastar"},                                                                         -- Alastar
+    --{["id"] = "2140784127",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc03_bst_malagor"},                                                                   -- Malagor
+    --{["id"] = "2140784189",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc05_bst_morghur"},                                                                   -- Morghur
+    --{["id"] = "2140783648",	["faction"] = "wh2_dlc13_emp_golden_order", ["subtype"] = "wh_main_emp_balthasar_gelt"},                                                        -- Balthasar Gelt
+    --{["id"] = "2140784136",	["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_dlc04_emp_volkmar", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"}                                  -- Volkmar the Grim
 } 
 
 -- "major" factions
@@ -554,7 +577,7 @@ local playable_factions = {
     "wh2_main_skv_clan_mors",
     "wh2_main_skv_clan_pestilens",
     "wh2_dlc09_skv_clan_rictus",
-    "wh2_main_skv_clan_skyre",
+    "wh2_main_skv_clan_skryre",
     "wh2_main_skv_clan_eshin",
     "wh2_dlc11_cst_vampire_coast",
     "wh2_dlc11_cst_noctilus",
@@ -607,7 +630,20 @@ local playable_factions = {
     "wh3_main_ogr_disciples_of_the_maw",
     "wh3_main_ogr_goldtooth",
     "wh3_main_sla_seducers_of_slaanesh",
-    "wh3_main_tze_oracles_of_tzeentch"
+    "wh3_main_tze_oracles_of_tzeentch",
+    "wh_dlc05_bst_morghur_herd",
+    "wh3_main_vmp_caravan_of_blue_roses",
+    "wh3_main_emp_cult_of_sigmar",
+    "wh3_main_dwf_the_ancestral_throng",
+    "wh3_main_chs_shadow_legion",
+    "wh3_dlc20_chs_vilitch",
+    "wh3_dlc20_chs_valkia",
+    "wh3_dlc20_chs_sigvald",
+    "wh3_dlc20_chs_kholek",
+    "wh3_dlc20_chs_festus",
+    "wh3_dlc20_chs_azazel",
+    "wh2_dlc17_bst_malagor",
+    "wh2_dlc15_grn_bonerattlaz"
 } 
 
 local chs_subtype_anc = {
@@ -640,9 +676,488 @@ local chs_subtype_anc = {
     },
     ["wh3_main_tze_kairos"] = {
         {"mission", "wh3_main_anc_arcane_item_staff_of_tomorrow", "wh3_main_qb_tze_kairos_staff_of_tomorrow", 10, nil, "wh3_main_camp_quest_kairos_staff_of_tomorrow_001", 253, 400}
+    },
+    ----------------------
+    ------ CHAMPIONS -----
+    ----------------------
+    ["wh3_dlc20_sla_azazel"] = {
+        {"mission", "wh3_dlc20_anc_weapon_daemonblade", "wh3_dlc20_qb_chs_azazel_daemonblade", 15, nil, "wh3_dlc20_azazel_cam_quest_mission_001", 452, 505}
+    },
+    ["wh3_dlc20_nur_festus"] = {
+        {"mission", "wh3_dlc20_anc_enchanted_item_pestilent_potions", "wh3_dlc20_qb_chs_festus_pestilent_potions", 15, nil, "wh3_dlc20_festus_cam_quest_mission_001", 375, 396}
+    },
+    ["wh3_dlc20_kho_valkia"] = {
+        {"mission", "wh3_dlc20_anc_armour_the_scarlet_armour", "wh3_dlc20_qb_chs_valkia_the_scarlet_armour", 8},
+        {"mission", "wh3_dlc20_anc_enchanted_item_daemonshield", "wh3_dlc20_qb_chs_valkia_daemonshield", 12},
+        {"mission", "wh3_dlc20_anc_weapon_the_spear_slaupnir", "wh3_dlc20_qb_chs_valkia_the_spear_slaupnir", 15, nil, "wh3_dlc20_valkia_cam_quest_mission_001", 393, 515}
+    },
+    ["wh3_dlc20_tze_vilitch"] = {
+        {"mission", "wh3_dlc20_anc_arcane_item_vessel_of_chaos", "wh3_dlc20_qb_chs_vilitch_vessel_of_chaos", 15, nil, "wh3_dlc20_vilitch_cam_quest_mission_001", 237, 513}
     }
 }
 
+local im_subtype_anc = {
+    ----------------------
+    ------- EMPIRE -------
+    ----------------------	
+    ["wh_main_emp_karl_franz"] = {			
+        {"mission", "wh2_dlc13_anc_weapon_runefang_drakwald", "wh3_main_ie_qb_emp_karl_franz_reikland_runefang", 7, nil, "war.camp.advice.quests.001", 342, 585},
+        {"mission", "wh_main_anc_weapon_ghal_maraz", "wh3_main_ie_qb_emp_karl_franz_ghal_maraz", 12, nil, nil, 440, 439},
+        {"mission", "wh_main_anc_talisman_the_silver_seal", "wh3_main_ie_qb_emp_karl_franz_silver_seal", 17, nil, nil, 431, 496},
+    },
+    ["wh_main_emp_balthasar_gelt"] = {			
+        {"mission", "wh_main_anc_enchanted_item_cloak_of_molten_metal", "wh3_main_ie_qb_emp_balthasar_gelt_cloak_of_molten_metal", 7, nil, "war.camp.advice.quests.001", 347, 544},
+        {"mission", "wh_main_anc_talisman_amulet_of_sea_gold", "wh3_main_ie_qb_emp_balthasar_gelt_amulet_of_sea_gold", 12, nil, nil, 267, 339},
+        {"mission", "wh_main_anc_arcane_item_staff_of_volans", "wh3_main_ie_qb_emp_balthasar_gelt_staff_of_volans", 17, nil, nil, 367, 498},
+    },		
+    ["wh_dlc04_emp_volkmar"] = {			
+        {"mission", "wh_dlc04_anc_talisman_jade_griffon", "wh3_main_ie_qb_emp_volkmar_the_grim_jade_griffon", 7, nil, "war.camp.advice.quests.001", 465, 502},
+        {"mission", "wh_dlc04_anc_weapon_staff_of_command", "wh3_main_ie_qb_emp_volkmar_the_grim_staff_of_command", 12, nil, nil, 343, 496},
+    },
+    ["wh2_dlc13_emp_cha_markus_wulfhart"] = {			
+        {"mission", "wh2_dlc13_anc_weapon_amber_bow", "wh3_main_ie_qb_emp_wulfhart_amber_bow", 7, nil, "war.camp.advice.quests.001", 118, 258},
+    },
+    
+    ----------------------
+    ------- DWARFS -------
+    ----------------------	
+    ["wh_dlc06_dwf_belegar"] = {			
+        {"mission", "wh_dlc06_anc_weapon_the_hammer_of_angrund", "wh3_main_ie_qb_dwf_belegar_ironhammer_hammer_of_angrund", 12, nil, nil, 510, 348},
+        {"mission", "wh_dlc06_anc_armour_shield_of_defiance", "wh3_main_ie_qb_dwf_belegar_ironhammer_shield_of_defiance", 7, nil, "war.camp.advice.quests.001", 531, 373},
+    },
+    ["wh_pro01_dwf_grombrindal"] = {			
+        {"mission", "wh_pro01_anc_armour_armour_of_glimril_scales", "wh3_main_ie_qb_dwf_grombrindal_armour_of_glimril", 7, nil, "war.camp.advice.quests.001", 337, 525},
+        {"mission", "wh_pro01_anc_weapon_the_rune_axe_of_grombrindal", "wh3_main_ie_qb_dwf_grombrindal_rune_axe_of_grombrindal", 12, nil, nil, 422, 628},
+        {"mission", "wh_pro01_anc_talisman_cloak_of_valaya", "wh3_main_ie_qb_dwf_grombrindal_rune_cloak_of_valaya", 17, nil, nil, 545, 588},
+        {"mission", "wh_pro01_anc_enchanted_item_rune_helm_of_zhufbar", "wh3_main_ie_qb_dwf_grombrindal_rune_helm_of_zhufbar", 22, nil, nil, 531, 408},
+    },
+    ["wh_main_dwf_thorgrim_grudgebearer"] = {			
+        {"mission", "wh_main_anc_armour_the_armour_of_skaldour", "wh3_main_ie_qb_dwf_thorgrim_grudgebearer_armour_of_skaldour", 12, nil, nil, 434, 622},
+        {"mission", "wh_main_anc_weapon_the_axe_of_grimnir", "wh3_main_ie_qb_dwf_thorgrim_grudgebearer_axe_of_grimnir", 7, nil, "war.camp.advice.quests.001", 467, 277},
+        {"mission", "wh_main_anc_enchanted_item_the_great_book_of_grudges", "wh3_main_ie_qb_dwf_thorgrim_grudgebearer_book_of_grudges", 22, nil, nil, 470, 498},
+        {"mission", "wh_main_anc_talisman_the_dragon_crown_of_karaz", "wh3_main_ie_qb_dwf_thorgrim_grudgebearer_dragon_crown_of_karaz", 17, nil, nil, 440, 439},
+    },
+    ["wh_main_dwf_ungrim_ironfist"] = {			
+        {"mission", "wh_main_anc_weapon_axe_of_dargo", "wh3_main_ie_qb_dwf_ungrim_ironfist_axe_of_dargo", 17, nil, nil, 542, 593},
+        {"mission", "wh_main_anc_talisman_dragon_cloak_of_fyrskar", "wh3_main_ie_qb_dwf_ungrim_ironfist_dragon_cloak_of_fyrskar", 12, nil, nil, 506, 510},
+        {"mission", "wh_main_anc_armour_the_slayer_crown", "wh3_main_ie_qb_dwf_ungrim_ironfist_slayer_crown", 7, nil, "war.camp.advice.quests.001", 353, 542},
+    },
+    ["wh2_dlc17_dwf_thorek"] = {			
+        {"mission", "wh2_dlc17_anc_armour_thoreks_rune_armour", "wh3_main_ie_qb_dwf_thorek_rune_armour_quest", 7},
+        {"mission", "wh2_dlc17_anc_weapon_klad_brakak", "wh3_main_ie_qb_dwf_thorek_klad_brakak", 12, nil, "war.camp.advice.quests.001", 481, 156},
+    },
+    ----------------------
+    ----- GREENSKINS -----
+    ----------------------	
+    ["wh2_dlc15_grn_grom_the_paunch"] = {			
+        {"mission", "wh2_dlc15_anc_weapon_axe_of_grom", "wh3_main_ie_qb_grn_grom_axe_of_grom", 12, nil, "war.camp.advice.quests.001", 409, 214},
+        {"mission", "wh2_dlc15_anc_enchanted_item_lucky_banner", "wh3_main_ie_qb_grn_grom_lucky_banner", 7},
+    },
+    ["wh_dlc06_grn_skarsnik"] = {			
+        {"mission", "wh_dlc06_anc_weapon_skarsniks_prodder", "wh3_main_ie_qb_grn_skarsnik_skarsniks_prodder", 7, nil, "war.camp.advice.quests.001", 512, 346},
+    },
+    ["wh_dlc06_grn_wurrzag_da_great_prophet"] = {			
+        {"mission", "wh_dlc06_anc_enchanted_item_baleful_mask", "wh3_main_ie_qb_grn_wurrzag_da_great_green_prophet_baleful_mask", 7, nil, "war.camp.advice.quests.001", 416, 253},
+        {"mission", "wh_dlc06_anc_arcane_item_squiggly_beast", "wh3_main_ie_qb_grn_wurrzag_da_great_green_prophet_squiggly_beast", 12, nil, nil, 364, 433},
+        {"mission", "wh_dlc06_anc_weapon_bonewood_staff", "wh3_main_ie_qb_grn_wurrzag_da_great_green_prophet_bonewood_staff", 17, nil, nil, 475, 402},
+    },
+    ["wh_main_grn_azhag_the_slaughterer"] = {			
+        {"mission", "wh_main_anc_enchanted_item_the_crown_of_sorcery", "wh3_main_ie_qb_grn_azhag_the_slaughterer_crown_of_sorcery", 7, nil, "war.camp.advice.quests.001", 563, 601},
+        {"mission", "wh_main_anc_armour_azhags_ard_armour", "wh3_main_ie_qb_grn_azhag_the_slaughterer_azhags_ard_armour", 12, nil, nil, 338, 361},
+        {"mission", "wh_main_anc_weapon_slaggas_slashas", "wh3_main_ie_qb_grn_azhag_the_slaughterer_slaggas_slashas", 17, nil, nil, 416, 253},
+    },
+    ["wh_main_grn_grimgor_ironhide"] = {			
+        {"mission", "wh_main_anc_armour_blood", "wh3_main_ie_qb_grn_grimgor_ironhide_blood_forged_armour", 12, nil, nil, 542, 593},
+        {"mission", "wh_main_anc_weapon_gitsnik", "wh3_main_ie_qb_grn_grimgor_ironhide_gitsnik", 7, nil, "war.camp.advice.quests.001", 450, 420},
+    },
+
+    ----------------------
+    --- VAMPIRE COUNTS ---
+    ----------------------	
+    ["wh_main_vmp_mannfred_von_carstein"] = {			
+        {"mission", "wh_main_anc_armour_armour_of_templehof", "wh3_main_ie_qb_vmp_mannfred_von_carstein_armour_of_templehof", 12, nil, nil, 336, 367},
+        {"mission", "wh_main_anc_weapon_sword_of_unholy_power", "wh3_main_ie_qb_vmp_mannfred_von_carstein_sword_of_unholy_power", 7, nil, "war.camp.advice.quests.001", 467, 277},
+    },
+    ["wh_dlc04_vmp_helman_ghorst"] = {			
+        {"mission", "wh_dlc04_anc_arcane_item_the_liber_noctus", "wh3_main_ie_qb_vmp_helman_ghorst_liber_noctus", 7, nil, "war.camp.advice.quests.001", 356, 357},
+    },
+    ["wh_main_vmp_heinrich_kemmler"] = {			
+        {"mission", "wh_main_anc_arcane_item_skull_staff", "wh3_main_ie_qb_vmp_heinrich_kemmler_skull_staff", 17, nil, nil, 337, 438},
+        {"mission", "wh_main_anc_enchanted_item_cloak_of_mists_and_shadows", "wh3_main_ie_qb_vmp_heinrich_kemmler_cloak_of_mists", 12, nil, nil, 362, 499},
+        {"mission", "wh_main_anc_weapon_chaos_tomb_blade", "wh3_main_ie_qb_vmp_heinrich_kemmler_chaos_tomb_blade", 7, nil, "war.camp.advice.quests.001", 356, 357},
+    },
+    ["wh_dlc04_vmp_vlad_con_carstein"] = {			
+        {"mission", "wh_dlc04_anc_talisman_the_carstein_ring", "wh3_main_ie_qb_vmp_vlad_von_carstein_the_carstein_ring", 12, nil, nil, 533, 314},
+        {"mission", "wh_dlc04_anc_weapon_blood_drinker", "wh3_main_ie_qb_vmp_vlad_von_carstein_blood_drinker", 7, nil, "war.camp.advice.quests.001", 482, 505},
+    },
+    ["wh_pro02_vmp_isabella_von_carstein"] = {			
+        {"mission", "wh_pro02_anc_enchanted_item_blood_chalice_of_bathori", "wh3_main_ie_qb_vmp_isabella_von_carstein_blood_chalice_of_bathori", 8, nil, "war.camp.advice.quests.001", 478, 467},
+    },
+    
+    ----------------------
+    -------- CHAOS -------
+    ----------------------	
+    ["wh_main_chs_archaon"] = {			
+        {"mission", "wh_main_anc_armour_the_armour_of_morkar", "wh3_main_ie_qb_chs_archaon_armour_of_morkar", 12, nil, nil, 576, 617},
+        {"mission", "wh_main_anc_enchanted_item_the_crown_of_domination", "wh3_main_ie_qb_chs_archaon_crown_of_domination", 22, nil, nil, 470, 701},
+        {"mission", "wh_main_anc_talisman_the_eye_of_sheerian", "wh3_main_ie_qb_chs_archaon_eye_of_sheerian", 17, nil, nil, 596, 660},
+        {"mission", "wh_main_anc_weapon_the_slayer_of_kings", "wh3_main_ie_qb_chs_archaon_slayer_of_kings", 7, nil, "war.camp.advice.quests.001", 543, 593},
+    },
+    ["wh_dlc01_chs_prince_sigvald"] = {			
+        {"mission", "wh_main_anc_armour_auric_armour", "wh3_main_ie_qb_chs_prince_sigvald_auric_armour", 12, nil, nil, 434, 622},
+        {"mission", "wh_main_anc_weapon_sliverslash", "wh3_main_ie_qb_chs_prince_sigvald_sliverslash", 7, nil, "war.camp.advice.quests.001", 522, 649},
+    },
+    ["wh_dlc01_chs_kholek_suneater"] = {			
+        {"mission", "wh_main_anc_weapon_starcrusher", "wh3_main_ie_qb_chs_kholek_suneater_starcrusher", 7, nil, "war.camp.advice.quests.001", 565, 575},
+    },
+    ["wh3_dlc20_sla_azazel"] = {
+        {"mission", "wh3_dlc20_anc_weapon_daemonblade", "wh3_dlc20_ie_qb_chs_azazel_daemonblade", 15, nil, "wh3_dlc20_azazel_cam_quest_mission_001", 315, 729}
+    },
+    ["wh3_dlc20_nur_festus"] = {
+        {"mission", "wh3_dlc20_anc_enchanted_item_pestilent_potions", "wh3_dlc20_ie_qb_chs_festus_pestilent_potions", 15, nil, "wh3_dlc20_festus_cam_quest_mission_001", 435, 728}
+    },
+    ["wh3_dlc20_kho_valkia"] = {
+        {"mission", "wh3_dlc20_anc_armour_the_scarlet_armour", "wh3_dlc20_ie_qb_chs_valkia_the_scarlet_armour", 8},
+        {"mission", "wh3_dlc20_anc_enchanted_item_daemonshield", "wh3_dlc20_ie_qb_chs_valkia_daemonshield", 12},
+        {"mission", "wh3_dlc20_anc_weapon_the_spear_slaupnir", "wh3_dlc20_ie_qb_chs_valkia_the_spear_slaupnir", 15, nil, "wh3_dlc20_valkia_cam_quest_mission_001", 566, 700}
+    },
+    ["wh3_dlc20_tze_vilitch"] = {
+        {"mission", "wh3_dlc20_anc_arcane_item_vessel_of_chaos", "wh3_dlc20_ie_qb_chs_vilitch_vessel_of_chaos", 15, nil, "wh3_dlc20_vilitch_cam_quest_mission_001", 490, 709}
+    },
+    ["wh3_main_dae_belakor"] = {
+        {"reward", "wh3_main_anc_weapon_blade_of_shadow", nil, 7}
+    },
+    ----------------------
+    ------ BEASTMEN ------
+    ----------------------	
+    ["wh_dlc03_bst_khazrak"] = {			
+        {"mission", "wh_dlc03_anc_armour_the_dark_mail", "wh3_main_ie_qb_bst_khazrak_one_eye_the_dark_mail", 12, nil, nil, 418, 553},
+        {"mission", "wh_dlc03_anc_weapon_scourge", "wh3_main_ie_qb_bst_khazrak_one_eye_scourge", 7, nil, "war.camp.advice.quests.001", 360, 544},
+    },
+    ["wh_dlc03_bst_malagor"] = {			
+        {"mission", "wh_dlc03_anc_enchanted_item_icons_of_vilification", "wh3_main_ie_qb_bst_malagor_the_dark_omen_the_icons_of_vilification", 7, nil, "war.camp.advice.quests.001", 389, 490},
+    },
+    ["wh_dlc05_bst_morghur"] = {			
+        {"mission", "wh_main_anc_weapon_stave_of_ruinous_corruption", "wh3_main_ie_qb_bst_morghur_stave_of_ruinous_corruption", 7, nil, "war.camp.advice.quests.001", 276, 483},
+    },
+    ["wh2_dlc17_bst_taurox"] = {			
+        {"mission", "wh2_dlc17_anc_weapon_rune_tortured_axes", "wh3_main_ie_qb_bst_taurox_rune_tortured_axes", 7, nil, "war.camp.advice.quests.001", 108, 637},
+    },
+    
+    ---------------------
+    ----- WOOD ELVES -----
+    ----------------------	
+    ["wh_dlc05_wef_orion"] = {
+        {"mission", "wh_dlc05_anc_enchanted_item_horn_of_the_wild_hunt", "wh3_main_ie_qb_wef_orion_the_horn_of_the_wild", 7, nil, "war.camp.advice.quests.001", 334, 427},
+        {"mission", "wh_dlc05_anc_talisman_cloak_of_isha", "wh3_main_ie_qb_wef_orion_the_cloak_of_isha", 12, nil, nil, 335, 414},
+        {"mission", "wh_dlc05_anc_weapon_spear_of_kurnous", "wh3_main_ie_qb_wef_orion_the_spear_of_kurnous", 17, nil, nil, 335, 397},
+    },
+    ["wh_dlc05_wef_durthu"] = {
+        {"mission", "wh_dlc05_anc_weapon_daiths_sword", "wh3_main_ie_qb_wef_durthu_daiths_sword", 7, nil, "war.camp.advice.quests.001", 335, 397},
+    },
+    ["wh2_dlc16_wef_sisters_of_twilight"] = {
+        {"mission", "wh2_dlc16_anc_mount_wef_cha_sisters_of_twilight_forest_dragon", "wh3_main_ie_qb_wef_sisters_dragon", 12, nil, "war.camp.advice.quests.001", 58, 489},
+    },
+    ["wh2_dlc16_wef_drycha"] = {
+        {"mission", "wh2_dlc16_anc_enchanted_item_fang_of_taalroth", "wh3_main_ie_qb_wef_drycha_coeddil_unchained", 7, nil, "war.camp.advice.quests.001", 348, 404},
+    },
+
+    ----------------------
+    ------ BRETONNIA -----
+    ----------------------	
+    ["wh_main_brt_louen_leoncouer"] = {			
+        {"mission", "wh_main_anc_weapon_the_sword_of_couronne", "wh3_main_ie_qb_brt_louen_sword_of_couronne", 12, nil, "war.camp.advice.quests.001", 276, 483},
+        {"mission", "wh2_dlc12_anc_armour_brt_armour_of_brilliance", "wh3_main_ie_qb_brt_louen_armour_of_brilliance", 3},
+    },
+    ["wh_dlc07_brt_fay_enchantress"] = {			
+        {"mission", "wh_dlc07_anc_arcane_item_the_chalice_of_potions", "wh3_main_ie_qb_brt_fay_enchantress_chalice_of_potions", 12, nil, "war.camp.advice.quests.001", 258, 535},
+        {"mission", "wh2_dlc12_anc_enchanted_item_brt_morgianas_mirror", "wh3_main_ie_qb_brt_fay_morgianas_mirror", 3},
+    },
+    ["wh_dlc07_brt_alberic"] = {			
+        {"mission", "wh_dlc07_anc_weapon_trident_of_manann", "wh3_main_ie_qb_brt_alberic_trident_of_bordeleaux", 7, nil, "war.camp.advice.quests.001", 264, 347},
+        {"mission", "wh2_dlc12_anc_enchanted_item_brt_braid_of_bordeleaux", "wh3_main_ie_qb_brt_alberic_braid_of_bordeleaux", 12},
+    },
+    ["wh2_dlc14_brt_repanse"] = {			
+        {"mission", "wh2_dlc14_anc_weapon_sword_of_lyonesse", "wh3_main_ie_qb_brt_repanse_sword_of_lyonesse", 7, nil, "war.camp.advice.quests.001", 325, 237},
+    },
+    
+    ----------------------
+    ------- NORSCA -------
+    ----------------------
+    ["wh_dlc08_nor_wulfrik"] = {
+        {"mission", "wh_dlc08_anc_weapon_sword_of_torgald", "wh3_main_ie_qb_nor_wulfrik_the_wanderer_sword_of_torgald", 7, nil, "war.camp.advice.quests.001", 251, 500},
+    },
+    ["wh_dlc08_nor_throgg"] = {
+        {"mission", "wh_dlc08_anc_enchanted_item_wintertooth_crown", "wh3_main_ie_qb_nor_throgg_wintertooth_crown", 7, nil, "war.camp.advice.quests.001", 502, 509},
+    },
+    
+    ----------------------
+    ----- HIGH ELVES -----
+    ----------------------
+    ["wh2_main_hef_tyrion"] = {
+        {"mission", "wh2_main_anc_armour_dragon_armour_of_aenarion", "wh3_main_ie_qb_hef_tyrion_dragon_armour_of_aenarion", 7, nil, "war.camp.advice.quest.tyrion.dragon_armour_of_aenarion.001", 135, 398},
+        {"mission", "wh2_main_anc_weapon_sunfang", "wh3_main_ie_qb_hef_tyrion_sunfang", 12, nil, "war.camp.advice.quest.tyrion.sunfang.001", 196, 438},
+        {"mission", "wh2_main_anc_enchanted_item_heart_of_avelorn", "wh3_main_ie_qb_hef_tyrion_heart_of_avelorn", 17},
+    },
+    ["wh2_main_hef_teclis"] = {
+        {"mission", "wh2_main_anc_enchanted_item_scroll_of_hoeth", "wh2_main_vortex_narrative_hef_the_lies_of_the_druchii", 2},
+        {"mission", "wh2_main_anc_arcane_item_moon_staff_of_lileath", "wh2_main_vortex_narrative_hef_the_vermin_of_hruddithi", 4},
+        {"mission", "wh2_main_anc_armour_war_crown_of_saphery", "wh3_main_ie_qb_hef_teclis_war_crown_of_saphery", 7, nil, "war.camp.advice.quest.teclis.war_crown_of_saphery.001", 91, 173},
+        {"mission", "wh2_main_anc_weapon_sword_of_teclis", "wh3_main_ie_qb_hef_teclis_sword_of_teclis", 12, nil, "war.camp.advice.quest.teclis.sword_of_teclis.001", 135, 398},
+    },
+    ["wh2_dlc10_hef_alarielle"] = {
+        {"mission", "wh2_dlc10_anc_talisman_shieldstone_of_isha", "wh3_main_ie_qb_hef_alarielle_shieldstone_of_isha", 7},
+        {"mission", "wh2_dlc10_anc_enchanted_item_star_of_avelorn", "wh3_main_ie_qb_hef_alarielle_star_of_avelorn", 12, nil, "war.camp.advice.quests.001", 246, 593},
+    },
+    ["wh2_dlc10_hef_alith_anar"] = {
+        {"mission", "wh2_dlc10_anc_enchanted_item_the_shadow_crown", "wh3_main_ie_qb_hef_alith_anar_the_shadow_crown", 4},
+        {"mission", "wh2_dlc10_anc_weapon_moonbow", "wh3_main_ie_qb_hef_alith_anar_the_moonbow", 7, nil, "war.camp.advice.quests.001", 43, 421},
+    },
+    ["wh2_dlc15_hef_eltharion"] = {
+        {"mission", "wh2_dlc15_anc_talisman_talisman_of_hoeth", "wh3_main_ie_qb_hef_eltharion_talisman_of_hoeth", 7, nil, "war.camp.advice.quests.001", 213, 420},
+        {"mission", "wh2_dlc15_anc_armour_helm_of_yvresse", "wh3_main_ie_qb_hef_eltharion_helm_of_yvresse", 12},
+        {"mission", "wh2_dlc15_anc_weapon_fangsword_of_eltharion", "wh3_main_ie_qb_hef_eltharion_fangsword_of_eltharion", 17},
+    },
+    ["wh2_dlc15_hef_imrik"] = {
+        {"mission", "wh2_dlc15_anc_armour_armour_of_caledor", "wh3_main_ie_qb_hef_imrik_armour_of_caledor", 8, nil, "war.camp.advice.quests.001", 164, 509},
+    },
+    
+    ----------------------
+    ----- DARK ELVES -----
+    ----------------------	
+    ["wh2_main_def_malekith"] = {
+        {"mission", "wh2_main_anc_arcane_item_circlet_of_iron", "wh3_main_ie_qb_def_malekith_circlet_of_iron", 7, nil, "war.camp.advice.quest.malekith.circlet_of_iron.001", 37, 643},
+        {"mission", "wh2_main_anc_weapon_destroyer", "wh3_main_ie_qb_def_malekith_destroyer", 12, nil, "war.camp.advice.quest.malekith.destroyer.001", 135, 398},
+        {"mission", "wh2_main_anc_armour_supreme_spellshield", "wh3_main_ie_qb_def_malekith_supreme_spellshield", 17, nil, "war.camp.advice.quest.malekith.supreme_spellshield.001", 148, 222},
+        {"mission", "wh2_main_anc_armour_armour_of_midnight", "wh3_main_ie_qb_def_malekith_armour_of_midnight", 4},
+    },
+    ["wh2_main_def_morathi"] = {
+        {"mission", "wh2_main_anc_weapon_heartrender_and_the_darksword", "wh3_main_ie_qb_def_morathi_heartrender_and_the_darksword", 12, nil, "war.camp.advice.quest.morathi.heartrender_and_the_darksword.001", 83, 454},
+        {"mission", "wh2_main_anc_arcane_item_wand_of_the_kharaidon", "wh3_main_ie_qb_def_morathi_wand_of_kharaidon", 7},
+        {"mission", "wh2_main_anc_talisman_amber_amulet", "wh3_main_ie_qb_def_morathi_amber_amulet", 4},
+    },
+    ["wh2_dlc10_def_crone_hellebron"] = {
+        {"mission", "wh2_dlc10_anc_weapon_deathsword_and_the_cursed_blade", "wh3_main_ie_qb_def_hellebron_deathsword_and_the_cursed_blade", 12, nil, "war.camp.advice.quests.001", 37, 643},
+        {"mission", "wh2_dlc10_anc_talisman_amulet_of_dark_fire", "wh3_main_ie_qb_def_hellebron_amulet_of_dark_fire", 7},
+    },
+    ["wh2_dlc11_def_lokhir"] = {
+        {"mission", "wh2_main_anc_armour_helm_of_the_kraken", "wh3_main_ie_qb_lokhir_helm_of_the_kraken", 12, nil, "wh2_dlc11.camp.advice.quest.lokhir.001", 158, 128},
+        {"mission", "wh2_dlc11_anc_weapon_red_blades", "wh3_main_ie_qb_def_lokhir_red_blades", 3},
+    },
+    ["wh2_dlc14_def_malus_darkblade"] = {
+        {"mission", "wh2_dlc14_anc_weapon_warpsword_of_khaine", "wh3_main_ie_qb_def_malus_warpsword_of_khaine", 7, nil, "war.camp.advice.quests.001", 492, 128},
+    },
+    ["wh2_twa03_def_rakarth"] = {
+        {"mission", "wh2_twa03_anc_weapon_whip_of_agony", "wh3_main_ie_qb_def_rakarth_whip_of_agony", 7, nil, "war.camp.advice.quests.001", 238, 557},
+    },
+
+    ----------------------
+    ------ LIZARDMEN -----
+    ----------------------	
+    ["wh2_main_lzd_lord_mazdamundi"] = {
+        {"mission", "wh2_main_anc_weapon_cobra_mace_of_mazdamundi", "wh3_main_ie_qb_lzd_mazdamundi_cobra_mace_of_mazdamundi", 12, nil, "war.camp.advice.quest.mazdamundi.cobra_mace_of_mazdamundi.001", 54, 295},
+        {"mission", "wh2_main_anc_magic_standard_sunburst_standard_of_hexoatl", "wh3_main_ie_qb_lzd_mazdamundi_sunburst_standard_of_hexoatl", 7, nil, "war.camp.advice.quest.mazdamundi.sunburst_standard_of_hexoatl.001", 35, 392},
+    },
+    ["wh2_main_lzd_kroq_gar"] = {
+        {"mission", "wh2_main_anc_enchanted_item_hand_of_gods", "wh3_main_ie_qb_liz_kroq_gar_hand_of_gods", 12, nil, "war.camp.advice.quest.kroqgar.hand_of_gods.001", 35, 392},
+        {"mission", "wh2_main_anc_weapon_revered_spear_of_tlanxla", "wh3_main_ie_qb_liz_kroq_gar_revered_spear_of_tlanxla", 7, nil, "war.camp.advice.quest.kroqgar.revered_spear_of_tlanxla.001", 153, 229},
+    },
+    ["wh2_dlc12_lzd_tehenhauin"] = {
+        {"mission", "wh2_dlc12_anc_enchanted_item_plaque_of_sotek", "wh3_main_ie_qb_lzd_tehenhauin_plaque_of_sotek", 7, nil, "war.camp.advice.quests.001", 107, 201},
+    },
+    ["wh2_dlc12_lzd_tiktaqto"] = {
+        {"mission", "wh2_dlc12_anc_enchanted_item_mask_of_heavens", "wh3_main_ie_qb_lzd_tiktaqto_mask_of_heavens", 7, nil, "war.camp.advice.quests.001", 331, 191},
+    },
+    ["wh2_dlc13_lzd_nakai"] = {
+        {"mission", "wh2_dlc13_anc_enchanted_item_golden_tributes", "wh3_main_ie_qb_lzd_nakai_golden_tributes", 7, nil, "war.camp.advice.quests.001", 105, 195},
+        {"mission", "wh2_dlc13_talisman_the_ogham_shard", "wh3_main_ie_qb_lzd_nakai_the_ogham_shard", 10, nil, nil, 227, 566},
+    },
+    ["wh2_dlc13_lzd_gor_rok"] = {
+        {"mission", "wh2_dlc13_anc_armour_the_shield_of_aeons", "wh3_main_ie_qb_lzd_gorrok_the_shield_of_aeons", 7, nil, "war.camp.advice.quests.001", 107, 201},
+        {"mission", "wh2_dlc13_anc_weapon_mace_of_ulumak", "wh3_main_ie_qb_lzd_the_mace_of_ulumak", 3}
+    },
+    ["wh2_dlc17_lzd_oxyotl"] = {
+        {"mission", "wh2_dlc17_anc_weapon_the_golden_blowpipe_of_ptoohee", "wh3_main_ie_qb_lzd_oxyotl_the_golden_blowpipe_of_ptoohee", 7, nil, "war.camp.advice.quests.001", 248, 679},
+    },
+    
+    ----------------------
+    ------- SKAVEN -------
+    ----------------------	
+    ["wh2_main_skv_queek_headtaker"] = {
+        {"mission", "wh2_main_anc_armour_warp_shard_armour", "wh3_main_ie_qb_skv_queek_headtaker_warp_shard_armour", 7, nil, "war.camp.advice.quest.queek.warp_shard_armour.001", 398, 246},
+        {"mission", "wh2_main_anc_weapon_dwarf_gouger", "wh3_main_ie_qb_skv_queek_headtaker_dwarfgouger", 12, nil, "war.camp.advice.quest.queek.dwarfgouger.001", 486, 297},
+    },
+    ["wh2_main_skv_lord_skrolk"] = {
+        {"mission", "wh2_main_anc_arcane_item_the_liber_bubonicus", "wh3_main_ie_qb_skv_skrolk_liber_bubonicus", 7, nil, "war.camp.advice.quest.skrolk.liber_bubonicus.001", 114, 155},
+        {"mission", "wh2_main_anc_weapon_rod_of_corruption", "wh3_main_ie_qb_skv_skrolk_rod_of_corruption", 12, nil, "war.camp.advice.quest.skrolk.rod_of_corruption.001", 44, 287},
+    },
+    ["wh2_dlc09_skv_tretch_craventail"] = {
+        {"mission", "wh2_dlc09_anc_enchanted_item_lucky_skullhelm", "wh3_main_ie_qb_skv_tretch_lucky_skullhelm", 7, nil, "dlc09.camp.advice.quest.tretch.lucky_skullhelm.001", 75, 523},
+    },
+    ["wh2_dlc12_skv_ikit_claw"] = {
+        {"mission", "wh2_dlc12_anc_weapon_storm_daemon", "wh3_main_ie_qb_ikit_claw_storm_daemon", 7, nil, "war.camp.advice.quests.001", 97, 270},
+    },
+    ["wh2_dlc14_skv_deathmaster_snikch"] = {
+        {"mission", "wh2_dlc14_anc_armour_the_cloak_of_shadows", "wh3_main_ie_qb_skv_snikch_the_cloak_of_shadows", 7, nil, "war.camp.advice.quests.001", 546, 278},
+        {"mission", "wh2_dlc14_anc_weapon_whirl_of_weeping_blades", "wh3_main_ie_qb_skv_snikch_whirl_of_weeping_blades", 3},
+    },
+    ["wh2_dlc16_skv_throt_the_unclean"] = {
+        {"mission", "wh2_dlc16_anc_enchanted_item_whip_of_domination", "wh3_main_ie_qb_skv_throt_main_whip_of_domination", 7, nil, "war.camp.advice.quests.001", 462, 618},
+        {"mission", "wh2_dlc16_anc_weapon_creature_killer", "wh3_main_ie_qb_skv_throt_main_creature_killer", 3},
+    },
+
+    ----------------------
+    ----- TOMB KINGS -----
+    ----------------------	
+    ["wh2_dlc09_tmb_settra"] = {
+        {"mission", "wh2_dlc09_anc_enchanted_item_the_crown_of_nehekhara", "wh3_main_ie_qb_tmb_settra_the_crown_of_nehekhara", 7, nil, "dlc09.camp.advice.quest.settra.the_crown_of_nehekhara.001", 329, 601},
+        {"mission", "wh2_dlc09_anc_weapon_the_blessed_blade_of_ptra", "wh3_main_ie_qb_tmb_settra_the_blessed_blade_of_ptra", 12, nil, "dlc09.camp.advice.quest.settra.the_blessed_blade_of_ptra.001", 474, 239},
+    },
+    ["wh2_dlc09_tmb_arkhan"] = {
+        {"mission", "wh2_dlc09_anc_weapon_the_tomb_blade_of_arkhan", "wh3_main_ie_qb_tmb_arkhan_the_tomb_blade_of_arkhan", 7, nil, "dlc09.camp.advice.quest.arkhan.the_tomb_blade_of_arkhan.001", 362, 168},
+        {"mission", "wh2_dlc09_anc_arcane_item_staff_of_nagash", "wh3_main_ie_qb_tmb_arkhan_the_staff_of_nagash", 12, nil, "dlc09.camp.advice.quest.arkhan.the_staff_of_nagash.001", 370, 218},
+    },
+    ["wh2_dlc09_tmb_khatep"] = {
+        {"mission", "wh2_dlc09_anc_arcane_item_the_liche_staff", "wh3_main_ie_qb_tmb_khatep_the_liche_staff", 7, nil, "dlc09.camp.advice.quest.khatep.the_liche_staff.001", 16, 571},
+    },
+    ["wh2_dlc09_tmb_khalida"] = {
+        {"mission", "wh2_dlc09_anc_weapon_the_venom_staff", "wh3_main_ie_qb_tmb_khalida_venom_staff", 12, nil, "dlc09.camp.advice.quest.khalida.venom_staff.001", 434, 221},
+    },
+    
+    ----------------------
+    ---- VAMPIRE COAST ---
+    ----------------------	
+    ["wh2_dlc11_cst_harkon"] = {
+        {"mission", "wh2_dlc11_anc_enchanted_item_slann_gold", "wh3_main_ie_qb_cst_harkon_quest_for_slann_gold", 12, nil, "wh2_dlc11.camp.advice.quest.harkon.001", 89, 354},
+    },
+    ["wh2_dlc11_cst_noctilus"] = {
+        {"mission", "wh2_dlc11_anc_enchanted_item_captain_roths_moondial", "wh3_main_ie_qb_cst_noctilus_captain_roths_moondial", 12, nil, "wh2_dlc11.camp.advice.quest.noctilus.001", 220, 230},
+    },
+    ["wh2_dlc11_cst_aranessa"] = {
+        {"mission", "wh2_dlc11_anc_weapon_krakens_bane", "wh3_main_ie_qb_cst_aranessa_krakens_bane", 12, nil, "wh2_dlc11.camp.advice.quest.aranessa.001", 260, 590},
+    },
+    ["wh2_dlc11_cst_cylostra"] = {
+        {"mission", "wh2_dlc11_anc_arcane_item_the_bordeleaux_flabellum", "wh3_main_ie_qb_cst_cylostra_the_bordeleaux_flabellum", 7, nil, "wh2_dlc11.camp.advice.quest.cylostra.001", 218, 492},
+    },
+    
+    ----------------------
+    ------- KISLEV -------
+    ----------------------	
+    ["wh3_main_ksl_katarin"] = {
+        {"mission", "wh3_main_anc_weapon_frost_fang", "wh3_main_ie_qb_ksl_katarin_frost_fang", 7},
+        {"mission", "wh3_main_anc_armour_the_crystal_cloak", "wh3_main_ie_qb_ksl_katarin_crystal_cloak", 10, nil, "wh3_main_camp_quest_katarin_the_crystal_cloak_001", 497, 698}
+    },
+    ["wh3_main_ksl_kostaltyn"] = {
+        {"mission", "wh3_main_anc_weapon_the_burning_brazier", "wh3_main_ie_qb_ksl_kostaltyn_burning_brazier", 10, nil, "wh3_main_camp_quest_kostaltyn_burning_brazier_001", 417, 610}
+    },
+    ["wh3_main_ksl_boris"] = {
+        {"mission", "wh3_main_anc_weapon_shard_blade", "wh3_main_ie_qb_ksl_boris_shard_blade", 7},
+        {"mission", "wh3_main_anc_armour_armour_of_ursun", "wh3_main_ie_qb_ksl_boris_armour_of_ursun", 10}
+    },
+
+    ----------------------
+    ---- OGRE KINGDOMS ---
+    ----------------------	
+    ["wh3_main_ogr_greasus_goldtooth"] = {
+        {"mission", "wh3_main_anc_weapon_sceptre_of_titans", "wh3_main_ie_qb_ogr_greasus_sceptre_of_titans", 7},
+        {"mission", "wh3_main_anc_talisman_overtyrants_crown", "wh3_main_ie_qb_ogr_greasus_overtyrants_crown", 10, nil, "wh3_main_camp_quest_greasus_overtyrants_crown_001", 665, 432}
+    },
+    ["wh3_main_ogr_skrag_the_slaughterer"] = {
+        {"mission", "wh3_main_anc_enchanted_item_cauldron_of_the_great_maw", "wh3_main_ie_qb_ogr_skrag_cauldron_of_the_great_maw", 10, nil, "wh3_main_camp_quest_skrag_cauldron_of_the_great_maw_001", 647, 544}
+    },
+    
+    ----------------------
+    -------- KHORNE ------
+    ----------------------	
+    ["wh3_main_kho_skarbrand"] = {
+        {"mission", "wh3_main_anc_weapon_slaughter_and_carnage", "wh3_main_ie_qb_kho_skarbrand_slaughter_and_carnage", 10, nil, "wh3_main_camp_quest_skarbrand_slaughter_and_carnage_001", 528, 670}
+    },
+
+    ----------------------
+    -------- NURGLE ------
+    ----------------------
+    ["wh3_main_nur_kugath"] = {
+        {"mission", "wh3_main_anc_weapon_necrotic_missiles", "wh3_main_ie_qb_nur_kugath_necrotic_missiles", 10, nil, "wh3_main_camp_quest_kugath_necrotic_missiles_001", 585, 588}
+    },
+
+    ----------------------
+    ------- SLAANESH -----
+    ----------------------
+    ["wh3_main_sla_nkari"] = {
+        {"mission", "wh3_main_anc_weapon_witstealer_sword", "wh3_main_ie_qb_sla_nkari_witstealer_sword", 10, nil, "wh3_main_camp_quest_nkari_witstealer_sword_001", 264, 626}
+    },
+
+    ----------------------
+    ------- TZEENCH ------
+    ----------------------
+    ["wh3_main_tze_kairos"] = {
+        {"mission", "wh3_main_anc_arcane_item_staff_of_tomorrow", "wh3_main_ie_qb_tze_kairos_staff_of_tomorrow", 10, nil, "wh3_main_camp_quest_kairos_staff_of_tomorrow_001", 490, 711}
+    },
+
+}
+
+local im_missing_anc = {
+    ["wh2_dlc10_hef_alarielle"] = {
+        {"", "wh2_dlc10_anc_magic_standard_banner_of_avelorn", "", 1},
+        {"", "wh2_dlc10_anc_arcane_item_stave_of_avelorn", "", 1}
+    },
+    ["wh2_dlc12_skv_ikit_claw"] = {
+        {"", "wh2_dlc12_anc_armour_iron_frame", "", 1}
+    },
+    ["wh_dlc06_grn_skarsnik"] = {
+        {"", "wh_dlc06_anc_magic_standard_skarsniks_boyz", "", 1}
+    },
+    ["wh2_dlc12_lzd_tehenhauin"] = {
+        {"", "wh2_dlc12_anc_weapon_blade_of_the_serpents_tongue", "", 1}
+    },
+    ["wh_main_grn_grimgor_ironhide"] = {
+        {"", "wh_main_anc_magic_standard_da_immortulz", "", 1}
+    },
+    ["wh2_main_hef_prince_alastar"] = {
+        {"", "wh2_main_anc_armour_lions_pelt", "", 1}
+    },
+    ["wh_dlc03_emp_boris_todbringer"] = {
+        {"", "wh_main_anc_talisman_the_white_cloak_of_ulric", "", 1}
+    },
+    ["wh2_dlc10_hef_alith_anar"] = {
+        {"", "wh2_dlc10_anc_talisman_stone_of_midnight", "", 1}
+    },
+    ["wh_main_vmp_heinrich_kemmler"] = {
+        {"", "wh2_dlc11_anc_follower_vmp_the_ravenous_dead", "", 1}
+    },
+    ["wh2_dlc12_lzd_tiktaqto"] = {
+        {"", "wh2_dlc12_anc_weapon_the_blade_of_ancient_skies", "", 1}
+    },
+    ["wh2_dlc11_cst_harkon"] = {
+        {"", "wh2_dlc11_anc_follower_captain_drekla", "", 1}
+    },
+    ["wh2_dlc15_hef_imrik"] = {
+        {"", "wh2_dlc15_anc_weapon_star_lance", "", 1}
+    },
+    ["wh2_twa03_def_rakarth"] = {
+        {"", "wh2_twa03_anc_armour_beast_armour_of_karond_kar", "", 1}
+    },
+    ["wh2_dlc17_dwf_thorek_ironbrow"] = {
+        {"", "wh_main_anc_rune_master_rune_of_stoicism", "", 1},
+        {"", "wh2_dlc17_anc_follower_dwf_kraggi", "", 1},
+        {"", "wh2_dlc17_anc_rune_engineering_rune_of_burning", "", 1}
+    },
+    ["wh2_dlc17_lzd_oxyotl"] = {
+        {"", "wh2_dlc17_anc_banner_lzd_poison_fireblood_toxin", "", 1},
+        {"", "wh2_dlc17_anc_banner_lzd_poison_toadskin_essence", "", 1}
+    },
+    --new
+    ["wh_pro02_vmp_isabella_von_carstein_hero"] = {
+        {"", "wh_pro02_anc_enchanted_item_blood_chalice_of_bathori", "", 1}
+    },
+    ["wh_dlc04_vmp_vlad_von_carstein_hero"] = {
+        {"", "wh_dlc04_anc_talisman_the_carstein_ring", "", 1},
+        {"", "wh_dlc04_anc_weapon_blood_drinker", "", 1}
+    }
+} 
+
+-- Mortal Empires and Vortex campaign ancillary backup table
+--[[
 local vor_subtype_anc = {
     ["wh2_main_hef_tyrion"] = {
 		{"mission", "wh2_main_anc_armour_dragon_armour_of_aenarion", "wh2_main_great_vortex_hef_tyrion_dragon_armour_of_aenarion_stage_1", 6, "wh2_main_great_vortex_hef_tyrion_dragon_armour_of_aenarion_stage_4_mpc", "war.camp.advice.quest.tyrion.dragon_armour_of_aenarion.001"},
@@ -765,7 +1280,7 @@ local vor_subtype_anc = {
         {"mission", "wh2_main_anc_armour_helm_of_the_kraken", "wh2_dlc11_great_vortex_lokhir_helm_of_the_kraken_stage_1", 11, "wh2_dlc11_great_vortex_lokhir_fellheart_helm_of_the_kraken_mp", "wh2_dlc11.camp.advice.quest.lokhir.001"},
         {"mission", "wh2_dlc11_anc_weapon_red_blades", "wh2_dlc11_great_vortex_def_lokhir_red_blades_stage_1", 2}
     },
-    ["wh2_dlc13_emp_cha_markus_wulfhart_0"] = {
+    ["wh2_dlc13_emp_cha_markus_wulfhart"] = {
 		{"mission", "wh2_dlc13_anc_weapon_amber_bow", "wh2_dlc13_emp_wulfhart_vor_amber_bow_stage_1", 8,"wh2_dlc13_vortex_emp_wulfhart_amber_bow_stage_4"}
     },
     ["wh2_dlc14_brt_repanse"] = {
@@ -916,7 +1431,7 @@ local me_subtype_anc = {
         {"mission", "wh_dlc04_anc_talisman_jade_griffon", "wh_dlc04_emp_volkmar_the_grim_jade_griffon_stage_1", 5,"wh_dlc04_emp_volkmar_the_grim_jade_griffon_stage_4_mpc"},
         {"mission", "wh_dlc04_anc_weapon_staff_of_command", "wh_dlc04_emp_volkmar_the_grim_staff_of_command_stage_1", 10,"wh_dlc04_emp_volkmar_the_grim_staff_of_command_stage_5_mpc"}
     },
-    ["wh2_dlc13_emp_cha_markus_wulfhart_0"] = {
+    ["wh2_dlc13_emp_cha_markus_wulfhart"] = {
         {"mission", "wh2_dlc13_anc_weapon_amber_bow", "wh2_dlc13_emp_wulfhart_amber_bow_stage_1", 8,"wh2_dlc13_emp_wulfhart_amber_bow_stage_4"}
     },
     ["wh_main_dwf_thorgrim_grudgebearer"] = {
@@ -1282,6 +1797,7 @@ local me_missing_anc = {
         {"", "wh2_dlc17_anc_banner_lzd_poison_toadskin_essence", "", 1}
     }
 } 
+--]]
 
 local subtype_immortality = {
     --["wh_dlc03_emp_boris_todbringer"] = true,
@@ -1342,14 +1858,14 @@ local names_of_power_traits = {
 --- @p table subject table
 --- @p object object
 --- @return boolean table contains object
-local function table_contains(t, obj)
-	for i = 1, #t do
-		if t[i] == obj then
-			return true
-		end
-	end
-	return false
-end
+--local function table_contains(t, obj)
+--	for i = 1, #t do
+--		if t[i] == obj then
+--			return true
+--		end
+--	end
+--	return false
+--end
 
 local function immortality_backup(faction)
     local char_list = faction:character_list()
@@ -1362,17 +1878,23 @@ local function immortality_backup(faction)
     end       
 end
 
+-- NEEDS TESTING!!!
 local function equip_quest_anc(faction)
     local missing_anc = {} 
     local subtype_anc = {} 
-    if cm:get_campaign_name() == "main_warhammer" then 
-        missing_anc = me_missing_anc 
-        subtype_anc = me_subtype_anc
-    elseif cm:get_campaign_name() == "wh2_main_great_vortex" then 
-        missing_anc = vor_missing_anc 
-        subtype_anc = vor_subtype_anc
+    --if cm:get_campaign_name() == "main_warhammer" then 
+    --    missing_anc = me_missing_anc 
+    --    subtype_anc = me_subtype_anc
+    --elseif cm:get_campaign_name() == "wh2_main_great_vortex" then 
+    --    missing_anc = vor_missing_anc 
+    --    subtype_anc = vor_subtype_anc
+    if cm:get_campaign_name() == "wh3_main_combi" then 
+        subtype_anc = im_subtype_anc
+        missing_anc = im_missing_anc
     elseif cm:get_campaign_name() == "wh3_main_chaos" then 
         subtype_anc = chs_subtype_anc
+    elseif cm:get_campaign_name() == "wh3_main_prologue" then 
+        --prologue
     end
     local char_list = faction:character_list()
     for i = 0, char_list:num_items() - 1 do
@@ -1486,7 +2008,7 @@ end
 
 -- pre empire undivided spawn location search
 local function find_valid_spawn_coordinates(faction, x, y)
-    -- Witten by Vandy. Full credit goes to him.
+    -- Written by Vandy.
     local spawn_X, spawn_Y = cm:find_valid_spawn_location_for_character_from_position(faction, x, y, true)
     --sm0_log("find_valid_spawn_coordinates: x="..tostring(spawn_X)..", y="..tostring(spawn_Y))
     local valid = false
@@ -1608,15 +2130,15 @@ local function spawn_missing_lords(confederator, confederated)
                                                 --    end, 0.1)  
                                                 --    cm:set_saved_value("sm0_immortal_cqi"..cqi, true)
                                                 --end 
-                                                cm:kill_character(cqi, true, false)
-                                                --cm:kill_character_and_commanded_unit(cm:char_lookup_str(cqi), true, false)                                       
+                                                cm:kill_character(cqi, true)
+                                                --cm:kill_character_and_commanded_unit(cm:char_lookup_str(cqi), true)                                       
                                                 --if is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()] then cm:set_character_immortality(cm:char_lookup_str(cqi), false) end
                                                 --cm:callback(function()
                                                     --if char:is_wounded() then cm:stop_character_convalescing(cqi) end
                                                 --end, 0.5)
                                                 if n >= 10 or cm:get_saved_value(locked_ai_generals[i].subtype.."_spawned") then 
-                                                    if char_cqi and cm:get_character_by_cqi(char_cqi) then cm:kill_character(char_cqi, true, false) end
-                                                    --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char_cqi), true, false)   
+                                                    if char_cqi and cm:get_character_by_cqi(char_cqi) then cm:kill_character(char_cqi, true) end
+                                                    --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char_cqi), true)   
                                                 end
                                             end,
                                             false
@@ -1630,14 +2152,14 @@ local function spawn_missing_lords(confederator, confederated)
                 cm:callback(function() 
                     kill_faction(confederated:name()) --backup
                     --cm:kill_all_armies_for_faction(confederated) --backup
-                    cm:kill_character(char_cqi, true, false)
-                    --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char_cqi), true, false)
+                    cm:kill_character(char_cqi, true)
+                    --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char_cqi), true)
                     local char_list = confederated:character_list()
                     for i = 0, char_list:num_items() - 1 do
                         local char = char_list:item_at(i)
                         --if char then sm0_log("DEAD FACTION char: "..char:character_subtype_key()) end
-                        cm:kill_character(char:command_queue_index(), true, true)
-                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char:command_queue_index()), true, true)
+                        cm:kill_character(char:command_queue_index(), true)
+                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char:command_queue_index()), true)
                         --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
                         --    cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) 
                         --    cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), false)
@@ -1665,7 +2187,6 @@ local function confed_penalty(faction)
         "wh_main_bundle_confederation_brt",
         "wh_main_bundle_confederation_wef",
         "wh_dlc03_beastmen_confederation_help",
-        "wh2_main_bundle_confederation_tmb",
         "wh3_main_bundle_confederation_cth",
         "wh3_main_bundle_confederation_dae",
         "wh3_main_bundle_confederation_kho",
@@ -1674,6 +2195,7 @@ local function confed_penalty(faction)
         "wh3_main_bundle_confederation_sla",
         "wh3_main_bundle_confederation_tze"
     } 
+
     local has_confed_bundle = ""
     for i = 1, #bundles do
         if faction and faction:has_effect_bundle(bundles[i]) then 
@@ -1695,47 +2217,46 @@ local function lord_event(confederator, confederated, character, agents)
         end
     end    
 end
--- NEEDS WORK!!!
+
 local function apply_diplomacy(faction_name)
     local subculture_confed_disabled = {
         -- by default
+        "wh2_dlc09_sc_tmb_tomb_kings",
+        "wh2_main_rogue",
+        "wh2_main_rogue_chaos",
         "wh_main_sc_chs_chaos",
         "wh_main_sc_grn_savage_orcs",
-        "wh_main_sc_ksl_kislev",
-        "wh_main_sc_teb_teb",
-        "wh2_dlc09_sc_tmb_tomb_kings",
-        "wh2_main_rogue_abominations",
-        "wh2_main_rogue_beastcatchas",
-        "wh2_main_rogue_bernhoffs_brigands",
-        "wh2_main_rogue_black_spider_tribe",
-        "wh2_main_rogue_boneclubbers_tribe",
-        "wh2_main_rogue_celestial_storm",
-        "wh2_main_rogue_college_of_pyrotechnics",
-        "wh2_main_rogue_doomseekers",
-        "wh2_main_rogue_gerhardts_mercenaries",
-        "wh2_main_rogue_heirs_of_mourkain",
-        "wh2_main_rogue_hung_warband",
-        "wh2_main_rogue_hunters_of_kurnous",
-        "wh2_main_rogue_jerrods_errantry",
-        "wh2_main_rogue_mangy_houndz",
-        "wh2_main_rogue_mengils_manflayers",
-        "wh2_main_rogue_morrsliebs_howlers",
-        "wh2_main_rogue_pirates_of_the_far_sea",
-        "wh2_main_rogue_pirates_of_the_southern_ocean",
-        "wh2_main_rogue_pirates_of_trantio",
-        "wh2_main_rogue_scions_of_tesseninck",
-        "wh2_main_rogue_scourge_of_aquitaine",
-        "wh2_main_rogue_stuff_snatchers",
-        "wh2_main_rogue_teef_snatchaz",
-        "wh2_main_rogue_the_wandering_dead",
-        "wh2_main_rogue_tor_elithis",
-        "wh2_main_rogue_troll_skullz",
-        "wh2_main_rogue_vashnaar",
-        "wh2_main_rogue_vauls_expedition",
-        "wh2_main_rogue_worldroot_rangers",
-        "wh2_main_rogue_wrath_of_nature",
-        -- 
-        "wh2_dlc11_sc_cst_vampire_coast"
+        "wh_main_sc_teb_teb"
+        --"wh2_main_rogue_abominations",
+        --"wh2_main_rogue_beastcatchas",
+        --"wh2_main_rogue_bernhoffs_brigands",
+        --"wh2_main_rogue_black_spider_tribe",
+        --"wh2_main_rogue_boneclubbers_tribe",
+        --"wh2_main_rogue_celestial_storm",
+        --"wh2_main_rogue_college_of_pyrotechnics",
+        --"wh2_main_rogue_doomseekers",
+        --"wh2_main_rogue_gerhardts_mercenaries",
+        --"wh2_main_rogue_heirs_of_mourkain",
+        --"wh2_main_rogue_hung_warband",
+        --"wh2_main_rogue_hunters_of_kurnous",
+        --"wh2_main_rogue_jerrods_errantry",
+        --"wh2_main_rogue_mangy_houndz",
+        --"wh2_main_rogue_mengils_manflayers",
+        --"wh2_main_rogue_morrsliebs_howlers",
+        --"wh2_main_rogue_pirates_of_the_far_sea",
+        --"wh2_main_rogue_pirates_of_the_southern_ocean",
+        --"wh2_main_rogue_pirates_of_trantio",
+        --"wh2_main_rogue_scions_of_tesseninck",
+        --"wh2_main_rogue_scourge_of_aquitaine",
+        --"wh2_main_rogue_stuff_snatchers",
+        --"wh2_main_rogue_teef_snatchaz",
+        --"wh2_main_rogue_the_wandering_dead",
+        --"wh2_main_rogue_tor_elithis",
+        --"wh2_main_rogue_troll_skullz",
+        --"wh2_main_rogue_vashnaar",
+        --"wh2_main_rogue_vauls_expedition",
+        --"wh2_main_rogue_worldroot_rangers",
+        --"wh2_main_rogue_wrath_of_nature",
         --ovn
         --"wh_main_sc_emp_araby"
         --"wh_main_sc_nor_fimir"
@@ -1747,7 +2268,8 @@ local function apply_diplomacy(faction_name)
         local confed_option_value --= cm:get_saved_value("mcm_tweaker_confed_tweaks_" .. culture .."_value")
         local confederation_options_mod 
         local mct = core:get_static_object("mod_configuration_tool")
-        if mct then 
+        if mct then
+            -- NEEDS WORK!!!
             confederation_options_mod = mct:get_mod_by_key("confederation_options")
             if confederation_options_mod then 
                 local confed_option = confederation_options_mod:get_option_by_key(culture)
@@ -1818,56 +2340,58 @@ local function apply_diplomacy(faction_name)
         cm:callback(
             function(context)
                 if option.offer ~= nil and option.accept ~= nil and option.both_directions ~= nil then
-                    cm:force_diplomacy(option.source, option.target, "form confederation", option.offer, option.accept, option.both_directions)
+                    cm:force_diplomacy(option.source, option.target, "form confederation", option.offer, option.accept, option.both_directions, false)
                 end
                 if confed_option_value == "no_tweak" or confed_option_value == nil then
                     if faction:name() == "wh_main_vmp_rival_sylvanian_vamps" then
-                        cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true)
-                        cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true)
+                        cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_vampire_counts", "form confederation", false, false, true, false)
+                        cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true, false)
                     end
                     if subculture == "wh_main_sc_brt_bretonnia" and faction:is_human() and faction_name ~= "wh2_dlc14_brt_chevaliers_de_lyonesse" then
                         local bret_confederation_tech = {
-                            {tech = "tech_dlc07_brt_heraldry_artois", faction = "wh_main_brt_artois"},
-                            {tech = "tech_dlc07_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
-                            {tech = "tech_dlc07_brt_heraldry_bordeleaux", faction = "wh_main_brt_bordeleaux"},
-                            {tech = "tech_dlc07_brt_heraldry_bretonnia", faction = "wh_main_brt_bretonnia"},
-                            {tech = "tech_dlc07_brt_heraldry_carcassonne", faction = "wh_main_brt_carcassonne"},
-                            {tech = "tech_dlc07_brt_heraldry_lyonesse", faction = "wh_main_brt_lyonesse"},
-                            {tech = "tech_dlc07_brt_heraldry_parravon", faction = "wh_main_brt_parravon"}
+                            {tech = "wh_dlc07_tech_brt_heraldry_artois", faction = "wh_main_brt_artois"},
+                            {tech = "wh_dlc07_tech_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
+                            {tech = "wh_dlc07_tech_brt_heraldry_bordeleaux", faction = "wh_main_brt_bordeleaux"},
+                            {tech = "wh_dlc07_tech_brt_heraldry_bretonnia", faction = "wh_main_brt_bretonnia"},
+                            {tech = "wh_dlc07_tech_brt_heraldry_carcassonne", faction = "wh_main_brt_carcassonne"},
+                            {tech = "wh_dlc07_tech_brt_heraldry_lyonesse", faction = "wh_main_brt_lyonesse"},
+                            {tech = "wh_dlc07_tech_brt_heraldry_parravon", faction = "wh_main_brt_parravon"},
+                            {tech = "wh3_main_tech_brt_heraldry_aquitaine", faction = "wh3_main_brt_aquitaine"}
                         } 
+
                         for i = 1, #bret_confederation_tech do
                             local has_tech = faction:has_technology(bret_confederation_tech[i].tech)
-                            cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true)
+                            cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true, false)
                         end
                     end
                     if faction:is_human() and faction:pooled_resource_manager():resource("emp_loyalty") == true then
-                        cm:force_diplomacy("faction:"..faction_name, "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false)
-                        cm:force_diplomacy("faction:"..faction_name, "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false)
+                        cm:force_diplomacy("faction:"..faction_name, "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false, false)
+                        cm:force_diplomacy("faction:"..faction_name, "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false, false)
                     end
                     ---hack fix to stop this re-enabling confederation when it needs to stay disabled
                     ---please let's make this more robust!
                     if subculture == "wh2_main_sc_hef_high_elves" then
                         local grom_faction = cm:get_faction("wh2_dlc15_grn_broken_axe")
                         if grom_faction ~= false and grom_faction:is_human() then
-                            cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false)
+                            cm:force_diplomacy("subculture:wh2_main_sc_hef_high_elves","faction:wh2_main_hef_yvresse","form confederation", false, true, false, false)
                         end
                     end
                     if vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
-                        cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
-                        cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
+                        cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false, false)
+                        cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false, false)
                     end
                     if faction:name() == "wh2_dlc16_wef_drycha" then
-                        cm:force_diplomacy("faction:wh2_dlc16_wef_drycha", "culture:wh_dlc05_wef_wood_elves", "form confederation", false, false)
-                        cm:force_diplomacy("faction:wh2_dlc16_wef_drycha", "faction:wh_dlc05_wef_argwylon", "form confederation", true, true)
+                        cm:force_diplomacy("faction:wh2_dlc16_wef_drycha", "culture:wh_dlc05_wef_wood_elves", "form confederation", false, false, true, false)
+                        cm:force_diplomacy("faction:wh2_dlc16_wef_drycha", "faction:wh_dlc05_wef_argwylon", "form confederation", true, true, true, false)
                     end
                         --- only player(s) - excluding Drycha - can confederate
                     if subculture == "wh_dlc05_sc_wef_wood_elves" and faction:name() ~= "wh2_dlc16_wef_drycha" and faction:is_human() then
-                        cm:force_diplomacy("culture:wh_dlc05_wef_wood_elves", "culture:wh_dlc05_wef_wood_elves", "form confederation", false, false)
-                        cm:force_diplomacy("faction:"..faction:name(),"culture:wh_dlc05_wef_wood_elves","form confederation",true,true)
+                        cm:force_diplomacy("culture:wh_dlc05_wef_wood_elves", "culture:wh_dlc05_wef_wood_elves", "form confederation", false, false, true, false)
+                        cm:force_diplomacy("faction:"..faction:name(),"culture:wh_dlc05_wef_wood_elves","form confederation",true,true, true, false)
                     end
                     -- Kislev confederation restriction for follower feature
                     if faction:is_human() and faction_name == "wh3_main_ksl_the_ice_court" or faction:is_human() and faction_name == "wh3_main_ksl_the_great_orthodoxy" then
-                        cm:force_diplomacy("faction:wh3_main_ksl_the_ice_court", "faction:wh3_main_ksl_the_great_orthodoxy", "form confederation", false, false, true)
+                        cm:force_diplomacy("faction:wh3_main_ksl_the_ice_court", "faction:wh3_main_ksl_the_great_orthodoxy", "form confederation", false, false, true, false)
                     end
                 end
             end, 1, "changeDiplomacyOptions"
@@ -1924,14 +2448,15 @@ local function confed_revived(confederator, confederated)
             true,
             function(cqi)
                 --sm0_log("Faction revived: "..confederated:name().." | Region: "..start_region:name().." | CQI: "..cqi)
-                equip_quest_anc(confederated)
+                -- NEEDS WORK!!!
+                --equip_quest_anc(confederated)
                 local faction_leader_cqi = confederated:faction_leader():command_queue_index()
                 local char_list = confederated:character_list()
                 --for n = 0, char_list:num_items() - 1 do 
                 --    local char = char_list:item_at(n)
                 --    local command_queue_index = char:command_queue_index()
                 --    if command_queue_index ~= cqi and not char:is_faction_leader() then 
-                --        cm:kill_character(command_queue_index, true, false) 
+                --        cm:kill_character(command_queue_index, true) 
                 --    end
                 --end
                 for i = 0, char_list:num_items() - 1 do 
@@ -1946,7 +2471,7 @@ local function confed_revived(confederator, confederated)
                             end
                         end
                     end
-                    --if not char:has_military_force() and (cm:char_is_general(char) or cm:char_is_agent(char)) then cm:kill_character(command_queue_index, true, false) end --kill colonels
+                    --if not char:has_military_force() and (cm:char_is_general(char) or cm:char_is_agent(char)) then cm:kill_character(command_queue_index, true) end --kill colonels
                     if confederator:is_human() then 
                         lord_event(confederator:name(), confederated:name(), char, wh_agents)
                         --if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then lord_event(confederator:name(), confederated:name(), char, mixu1_agents) end
@@ -1972,14 +2497,15 @@ local function confed_revived(confederator, confederated)
                     --    --end, 0.5) 
                     --    cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), true)
                     --end 
-                    if char:character_subtype("wh_main_brt_louen_leoncouer") then
-                        cm:force_add_ancillary(char, "wh_main_anc_mount_brt_louen_barded_warhorse", true, true)
-                    end
-                    if is_surtha_ek(char) then
-                        cm:force_add_ancillary(char, "wh_dlc10_anc_mount_nor_surtha_ek_marauder_chariot", true, true)
-                    end
+                    -- NEEDS WORK!!!
+                    --if char:character_subtype("wh_main_brt_louen_leoncouer") then
+                    --    cm:force_add_ancillary(char, "wh_main_anc_mount_brt_louen_barded_warhorse", true, true)
+                    --end
+                    --if is_surtha_ek(char) then
+                    --    cm:force_add_ancillary(char, "wh_dlc10_anc_mount_nor_surtha_ek_marauder_chariot", true, true)
+                    --end
                     if command_queue_index ~= cqi and not char:is_faction_leader() then 
-                        cm:kill_character(command_queue_index, true, false) 
+                        cm:kill_character(command_queue_index, true) 
                     end
                 end
                 -- NEEDS WORK!!!
@@ -2036,14 +2562,14 @@ local function confed_revived(confederator, confederated)
                         if cm:get_saved_value("sm0_immortal_cqi"..cqi) then cm:set_character_immortality(cm:char_lookup_str(cqi), true) end
                         if cm:get_saved_value("sm0_immortal_cqi"..faction_leader_cqi) then cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), true) end
                         -- kill command doesn't work reliably...
-                        cm:kill_character(cqi, true, false) 
-                        if cqi and cm:get_character_by_cqi(cqi) then cm:kill_character(cqi, true, false) end
+                        cm:kill_character(cqi, true) 
+                        if cqi and cm:get_character_by_cqi(cqi) then cm:kill_character(cqi, true) end
                         cm:callback(function() 
-                            cm:kill_character(faction_leader_cqi, true, false)  
+                            cm:kill_character(faction_leader_cqi, true)  
                             cm:set_saved_value("rd_confed", false)
                         end, 0.5)  
-                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(cqi), true, false)    
-                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(faction_leader_cqi), true, false)  
+                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(cqi), true)    
+                        --cm:kill_character_and_commanded_unit(cm:char_lookup_str(faction_leader_cqi), true)  
                         apply_diplomacy(confederator:name())
                         --local char_list = context:confederation():character_list()
                         --for i = 0, char_list:num_items() - 1 do 
@@ -2194,36 +2720,117 @@ local function rd_dilemma(confederator, confederated)
         core:remove_listener("rd_trigger_dilemma"..confederated:name())                                 
     end
 end
--- NEEDS WORK!!!
+
+local subculture_exempted = {
+    "wh_main_sc_chs_chaos",
+    "wh_dlc03_sc_bst_beastmen",
+    --rogue
+    "wh2_main_rogue",
+    "wh2_main_rogue_chaos",
+    --prologue
+    "wh3_main_pro_sc_kho_khorne",
+    "wh3_main_pro_sc_ksl_kislev",
+    "wh3_main_pro_sc_tze_tzeentch",
+    --mods
+    "wh_main_sc_nor_warp",
+    "wh_main_sc_nor_troll",
+    "wh_main_sc_nor_albion",
+    "wh_main_sc_lzd_amazon",
+    "wh_main_sc_nor_fimir"
+}
+
+local faction_exempted = {
+    "wh2_dlc13_lzd_defenders_of_the_great_plan", --nakai vassal
+    "wh2_dlc13_lzd_avengers", --wulfhart hostility mechanic
+    "wh2_dlc10_def_blood_voyage", --queen & crone mechanic
+	"wh2_main_chs_chaos_incursion_def", --cai_diplomacy_excluded_factions table
+	"wh2_main_chs_chaos_incursion_hef", --cai_diplomacy_excluded_factions table
+	"wh2_main_chs_chaos_incursion_lzd", --cai_diplomacy_excluded_factions table
+    "wh2_main_chs_chaos_incursion_skv",
+	"wh2_main_nor_hung_incursion_def", --cai_diplomacy_excluded_factions table
+	"wh2_main_nor_hung_incursion_hef", --cai_diplomacy_excluded_factions table
+	"wh2_main_nor_hung_incursion_lzd", --cai_diplomacy_excluded_factions table
+	"wh2_main_nor_hung_incursion_skv", --cai_diplomacy_excluded_factions table
+	"wh2_main_skv_unknown_clan_def", --cai_diplomacy_excluded_factions table
+	"wh2_main_skv_unknown_clan_hef", --cai_diplomacy_excluded_factions table
+	"wh2_main_skv_unknown_clan_lzd", --cai_diplomacy_excluded_factions table
+	"wh2_main_skv_unknown_clan_skv", --cai_diplomacy_excluded_factions table
+    "wh3_main_kho_brazen_throne", --chaos realm
+    "wh3_main_nur_bubonic_swarm", --chaos realm
+    "wh3_main_rogue_shadow_legion", --chaos realm
+    "wh3_main_rogue_the_bloody_harvest", --chaos realm
+    "wh3_main_rogue_the_fluxion_host", --chaos realm
+    "wh3_main_rogue_the_pleasure_tide", --chaos realm
+    "wh3_main_rogue_the_putrid_swarm", --chaos realm
+    "wh3_main_sla_rapturous_excess", --chaos realm
+    "wh3_main_tze_all_seeing_eye", --chaos realm
+    "wh3_main_nur_bubonic_swarm", --chaos realm
+    "_prologue",
+    "_waaagh",
+    "_brayherd",
+    "wh_main_emp_empire_separatists", --Empire Secessionists
+    "wh_main_chs_chaos_separatists", --brt quest battle
+    "wh2_dlc09_skv_clan_rictus_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_noctilus_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_pirates_of_sartosa_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_the_drowned_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_vampire_coast_separatists", --loyalty mechanic
+    "wh2_dlc11_def_the_blessed_dread_separatists", --loyalty mechanic
+    "wh2_main_def_cult_of_pleasure_separatists", --loyalty mechanic
+    "wh2_main_def_hag_graef_separatists", --loyalty mechanic
+    "wh2_main_def_har_ganeth_separatists", --loyalty mechanic
+    "wh2_main_def_naggarond_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_eshin_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_mors_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_moulder_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_pestilens_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_skryre_separatists", --loyalty mechanic
+    "wh2_twa03_def_rakarth_separatists", --loyalty mechanic
+    "wh_main_nor_norsca_separatists", --not used, I believe
+    "wh_main_nor_norsca_separatists_sorcerer_lord", --not used, I believe
+    "wh2_dlc11_brt_bretonnia_dil", --cst mission
+    "wh2_dlc11_def_dark_elves_dil", --cst mission
+    "wh2_dlc11_emp_empire_dil", --cst mission
+    "wh2_dlc11_nor_norsca_dil", --cst mission
+    "wh2_dlc11_cst_vampire_coast_rebels", --wulfhart mission
+    "wh3_main_cth_rebel_lords_of_nan_yang", --miao ying starting opponent
+    "wh3_dlc21_vmp_jiangshi_rebels", --nakai victory objective
+    "wh3_dlc21_cst_dead_flag_fleet", --nakai victory objective
+    "_invasion", --empire and world root invasion armies
+    "_shanty",  --roving pirate and treasure map armies
+    "wh_dlc08_chs_chaos_challenger_tzeentch", --norscan gods mechanic
+    "wh_dlc08_chs_chaos_challenger_slaanesh", --norscan gods mechanic
+    "wh_dlc08_chs_chaos_challenger_nurgle", --norscan gods mechanic
+    "wh_dlc08_chs_chaos_challenger_khorne", --norscan gods mechanic
+    --"wh3_main_cth_cathay_mp", --?
+    --"wh2_dlc16_wef_waystone_faction_3", --?
+    --"wh2_dlc16_wef_waystone_faction_2", --?
+    --"wh2_dlc16_wef_waystone_faction_1", --?
+}
+
 local function is_faction_exempted(faction)
-    local is_exempted = false
-    if faction:subculture() == "wh_main_sc_chs_chaos" or faction:subculture() == "wh_dlc03_sc_bst_beastmen"
-    or faction:name() == "wh2_dlc13_lzd_defenders_of_the_great_plan" or faction:name() == "wh2_dlc13_lzd_avengers" 
-    or faction:name():find("_waaagh") or faction:name():find("_brayherd") or faction:name():find("_unknown") or faction:name():find("_incursion")
-    or faction:name():find("_qb") or faction:name():find("_separatists") or faction:name():find("_dil") or faction:name():find("_blood_voyage") 
-    or faction:name():find("_encounters") or faction:name():find("rebel") or faction:name():find("_intervention") or faction:name():find("_invasion") 
-    or faction:name():find("_rogue_") or faction:name():find("_shanty_")
-    -- ovn
-    or faction:subculture() == "wh_main_sc_nor_warp" or faction:subculture() == "wh_main_sc_nor_troll" or faction:subculture() == "wh_main_sc_nor_albion"
-    or faction:subculture() == "wh_main_sc_lzd_amazon" or faction:subculture() == "wh_main_sc_nor_fimir"
-    or (faction:name() == "wh2_dlc11_vmp_the_barrow_legion" and vfs.exists("script/campaign/main_warhammer/mod/liche_init.lua")) --hobo
-    or faction:is_quest_battle_faction() then
-        is_exempted = true
-    else
-        is_exempted = false
+    for i = 1, #subculture_exempted do
+        if faction:subculture() == subculture_exempted[i] then
+            return true
+        end
     end
-    return is_exempted
+    for i = 1, #faction_exempted do
+        if faction:name():find() == faction_exempted[i] then
+            return true
+        end
+    end
+    if faction:is_rebel() or faction:is_quest_battle_faction() then
+        return true
+    end
+    if faction:name() == "wh2_dlc11_vmp_the_barrow_legion" and vfs.exists("script/campaign/main_warhammer/mod/liche_init.lua") then --hobo
+        return true
+    end
+    return false
 end
--- NEEDS WORK!!! (MP)
+
 local function is_human_and_rejected_faction(faction, refugee)
-    local human_factions = cm:get_human_factions()
-    local faction_P1 = cm:get_faction(human_factions[1])
-    local faction_P2
-    if cm:is_multiplayer() then
-        faction_P2 = cm:get_faction(human_factions[2])
-    end
-    return cm:get_saved_value("rd_choice_1_"..refugee:name()) == faction_P1:name() and faction_P1:name() == faction:name()
-    or (cm:is_multiplayer() and cm:get_saved_value("rd_choice_1_"..refugee:name()) == faction_P2:name() and faction_P2:name() == faction:name())
+    local confederator_key = cm:get_saved_value("rd_choice_1_"..refugee:name())
+    return faction:is_human() and faction:name() == confederator_key
 end
 
 local function get_prefered_faction_list(faction_list, preferance_type, faction)
@@ -2278,7 +2885,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             end
             for i = 1, #factions_of_same_subculture do
                 local faction_current = cm:get_faction(factions_of_same_subculture[i])
-                if not table_contains(prefered_factions, faction_current:name()) then
+                if not table.contains(prefered_factions, faction_current:name()) then
                     table.insert(prefered_factions, faction_current:name())
                 end
             end
@@ -2309,12 +2916,12 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         -- preferance: major
         if is_table(factions_of_same_subculture) then
             for i = 1, #factions_of_same_subculture do
-                if table_contains(playable_factions, factions_of_same_subculture[i]) then
+                if table.contains(playable_factions, factions_of_same_subculture[i]) then
                     table.insert(prefered_factions, factions_of_same_subculture[i])
                 end
             end
             for i = 1, #factions_of_same_subculture do
-                if not table_contains(prefered_factions, factions_of_same_subculture[i]) then
+                if not table.contains(prefered_factions, factions_of_same_subculture[i]) then
                     table.insert(prefered_factions, factions_of_same_subculture[i])
                 end
             end
@@ -2325,12 +2932,12 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         -- preferance: minor
         if is_table(factions_of_same_subculture) then
             for i = 1, #factions_of_same_subculture do
-                if not table_contains(playable_factions, factions_of_same_subculture[i]) then
+                if not table.contains(playable_factions, factions_of_same_subculture[i]) then
                     table.insert(prefered_factions, factions_of_same_subculture[i])
                 end
             end
             for i = 1, #factions_of_same_subculture do
-                if not table_contains(prefered_factions, factions_of_same_subculture[i]) then
+                if not table.contains(prefered_factions, factions_of_same_subculture[i]) then
                     table.insert(prefered_factions, factions_of_same_subculture[i])
                 end
             end
@@ -2349,7 +2956,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             end
             for i = 1, #factions_of_same_subculture do
                 local faction_current = cm:get_faction(factions_of_same_subculture[i])
-                if not table_contains(prefered_factions, faction_current:name()) then
+                if not table.contains(prefered_factions, faction_current:name()) then
                     table.insert(prefered_factions, faction_current:name())
                 end
             end
@@ -2366,7 +2973,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                 end
             end
             for i = 1, #factions_of_same_subculture do
-                if not table_contains(prefered_factions, factions_of_same_subculture[i]) then
+                if not table.contains(prefered_factions, factions_of_same_subculture[i]) then
                     table.insert(prefered_factions, factions_of_same_subculture[i])
                 end
             end
@@ -2401,6 +3008,14 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         else
             sm0_log("preferance: alternate | something went wrong")
         end
+    elseif preferance_type == "random" then
+        -- preferance: random
+        if is_table(factions_of_same_subculture) then
+            cm:shuffle_table(factions_of_same_subculture)
+            prefered_factions = factions_of_same_subculture
+        else
+            sm0_log("preferance: random | something went wrong")
+        end 
     else
         -- preferance: nil
         if is_table(factions_of_same_subculture) then
@@ -2420,10 +3035,6 @@ local function init_recruit_defeated_listeners(enable_value)
     local human_factions = cm:get_human_factions()
     -- NEEDS WORK!!! (MP)
     local faction_P1 = cm:get_faction(human_factions[1])
-    local faction_P2
-    if cm:is_multiplayer() then
-        faction_P2 = cm:get_faction(human_factions[2])
-    end
     core:remove_listener("recruit_defeated_FactionTurnEnd")
     core:remove_listener("recruit_defeated_FactionTurnStart")
     core:remove_listener("delayed_spawn_listener")
@@ -2562,7 +3173,7 @@ local function init_recruit_defeated_listeners(enable_value)
                         local char_list = current_faction:character_list()
                         for i = 0, char_list:num_items() - 1 do
                             local current_char = char_list:item_at(i)
-                            cm:kill_character(current_char:command_queue_index(), true, false)
+                            cm:kill_character(current_char:command_queue_index(), true)
                         end
                     end
                     -- mcm/mct restrictions
@@ -2617,8 +3228,9 @@ local function init_recruit_defeated_listeners(enable_value)
                             end
                             --sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
                             -- NEEDS WORK!!! (MP)
-                            if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
-                            and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
+                            if prefered_faction and prefered_faction:is_human() then
+                            --if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
+                            --and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
                                 if confed_penalty(faction_P1) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai" or scope_value == "player") 
                                 and context:faction():name() == faction_P1:name() then
                                     --if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
@@ -2631,34 +3243,34 @@ local function init_recruit_defeated_listeners(enable_value)
                                     else
                                         sm0_log("["..player_confederation_count.."] Player 1 intends to confederate: "..current_faction:name())
                                         rd_dilemma(faction_P1, current_faction)
-                                        if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
-                                            cm:set_saved_value("faction_P1", true)
-                                            cm:set_saved_value("faction_P2", false)
-                                        end
+                                        --if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
+                                        --    cm:set_saved_value("faction_P1", true)
+                                        --    cm:set_saved_value("faction_P2", false)
+                                        --end
                                         player_confederation_count = player_confederation_count + 1
                                     end
                                 end
-                            elseif prefered_faction and cm:is_multiplayer() and not faction_P2:is_dead() and current_faction:subculture() == faction_P2:subculture() 
-                            and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P2:name() and prefered_faction:name() == faction_P2:name() then
-                                if confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai"  or scope_value == "player") 
-                                and context:faction():name() == faction_P2:name() then
-                                    --if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
-                                    if are_lords_missing(current_faction) then
-                                        sm0_log("["..player_confederation_count.."] Player 2 intends to spawn missing lords for: "..current_faction:name())
-                                        spawn_missing_lords(faction_P2, current_faction)
-                                        --making sure there are no further confederations happening during the spawn_missing_lords loop
-                                        player_confederation_count = player_confederation_count + player_confederation_limit
-                                        ai_confederation_count = ai_confederation_count + ai_confederation_limit
-                                    else
-                                        sm0_log("["..player_confederation_count.."] Player 2 intends to confederate: "..current_faction:name())
-                                        rd_dilemma(faction_P2, current_faction)
-                                        if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
-                                            cm:set_saved_value("faction_P2", true)
-                                            cm:set_saved_value("faction_P1", false)                                
-                                        end
-                                        player_confederation_count = player_confederation_count + 1
-                                    end
-                                end
+                            --elseif prefered_faction and cm:is_multiplayer() and not faction_P2:is_dead() and current_faction:subculture() == faction_P2:subculture() 
+                            --and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P2:name() and prefered_faction:name() == faction_P2:name() then
+                            --    if confed_penalty(faction_P2) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai"  or scope_value == "player") 
+                            --    and context:faction():name() == faction_P2:name() then
+                            --        --if current_faction:name() == "wh_main_emp_empire" then cm:set_saved_value("karl_check_illegit", true) end
+                            --        if are_lords_missing(current_faction) then
+                            --            sm0_log("["..player_confederation_count.."] Player 2 intends to spawn missing lords for: "..current_faction:name())
+                            --            spawn_missing_lords(faction_P2, current_faction)
+                            --            --making sure there are no further confederations happening during the spawn_missing_lords loop
+                            --            player_confederation_count = player_confederation_count + player_confederation_limit
+                            --            ai_confederation_count = ai_confederation_count + ai_confederation_limit
+                            --        else
+                            --            sm0_log("["..player_confederation_count.."] Player 2 intends to confederate: "..current_faction:name())
+                            --            rd_dilemma(faction_P2, current_faction)
+                            --            if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
+                            --                cm:set_saved_value("faction_P2", true)
+                            --                cm:set_saved_value("faction_P1", false)                                
+                            --            end
+                            --            player_confederation_count = player_confederation_count + 1
+                            --        end
+                            --    end
                             else --ai
                                 if scope_value == "player_ai" or scope_value == "ai" then 
                                     if prefered_faction and ai_confederation_count <= ai_confederation_limit 
@@ -2844,7 +3456,7 @@ local function init_recruit_defeated_listeners(enable_value)
             return true
         end
         --re-enable karl franz lock (data.pack script/campaign/main_campaign/wh_legendary_lords.lua)
-        -- NEEDS WORK!!!
+        -- NO LONGER NEEDED
         --if (faction_P1:name() == "wh_main_emp_empire" or (cm:is_multiplayer() and faction_P2:name() == "wh_main_emp_empire")) 
         --and not cm:get_saved_value("2140783388" .. "_unlocked") then    
         --    core:remove_listener("2140783388" .. "_listener")
@@ -2864,6 +3476,7 @@ local function init_recruit_defeated_listeners(enable_value)
         --        true
         --    )
         --end
+
         -- nakai confed override (data.pack script/campaign/wh_campaign_setup.lua)
         core:remove_listener("confederation_listener")
         core:add_listener(
@@ -2871,65 +3484,75 @@ local function init_recruit_defeated_listeners(enable_value)
             "FactionJoinsConfederation",
             true,
             function(context)
-                local faction = context:confederation()
-                local faction_name = faction:name()
-                local faction_culture = faction:culture()
-                local faction_subculture = faction:subculture()
-                local faction_human = faction:is_human()
-                local confederation_timeout = 5
+                local faction = context:confederation();
+                local faction_name = faction:name();
+                local faction_culture = faction:culture();
+                local faction_subculture = faction:subculture();
+                local faction_human = faction:is_human();
+                local confederation_timeout = 5;
                 
-                -- exclude Empire, Beastmen, Norsca and Bretonnia - they can confederate as often as they like but only if they aren't AI
-                if faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and faction_culture ~= "wh_main_brt_bretonnia" and faction_subculture ~= "wh_dlc08_sc_nor_norsca" and faction_subculture ~= "wh3_main_sc_ksl_kislev" then
-                --if faction_human == false or (faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and (faction_culture ~= "wh_main_brt_bretonnia" or faction_name == "wh2_dlc14_brt_chevaliers_de_lyonesse") and faction_subculture ~= "wh_dlc08_sc_nor_norsca") then
-                    --if faction_human == false then
-                    --    confederation_timeout = 10
-                    --end
+                -- exclude Empire, Wood Elves, Beastmen, Norsca, Greenskins, Bretonnia (excluding Chevs de Leonesse), Kislev - they can confederate as often as they like but only if they aren't AI
+			    if faction_human == false or (faction_subculture ~= "wh_main_sc_emp_empire" and faction_culture ~= "wh_dlc03_bst_beastmen" and faction_culture ~= "wh_dlc05_wef_wood_elves" and (faction_culture ~= "wh_main_brt_bretonnia" or faction_name == "wh2_dlc14_brt_chevaliers_de_lyonesse") and faction_subculture ~= "wh_dlc08_sc_nor_norsca" and faction_subculture ~= "wh_main_sc_grn_greenskins" and faction_subculture ~= "wh3_main_sc_ksl_kislev") then
+                    if faction_human == false then
+                        confederation_timeout = 10;
+                    end
 
-                    out("Restricting confederation between [faction:" .. faction_name .. "] and [subculture:" .. faction_subculture .. "]")
-                    cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. faction_subculture, "form confederation", false, true, false)
-                    cm:add_turn_countdown_event(faction_name, confederation_timeout, "ScriptEventConfederationExpired", faction_name)
+                    out("Restricting confederation between [faction:" .. faction_name .. "] and [subculture:" .. faction_subculture .. "]");
+                    cm:force_diplomacy("faction:" .. faction_name, "subculture:" .. faction_subculture, "form confederation", false, true, false, false);
+                    cm:add_turn_countdown_event(faction_name, confederation_timeout, "ScriptEventConfederationExpired", faction_name);
                 end
                 
-                local source_faction = context:faction()
-                local source_faction_name = source_faction:name()
+                local source_faction = context:faction();
+                local source_faction_name = source_faction:name();
                 
                 -- remove deathhag after confederating/being confedrated with cult of pleasure
                 if source_faction:culture() == "wh2_main_def_dark_elves" and faction_name == "wh2_main_def_cult_of_pleasure" then
-                    local char_list = faction:character_list()
+                    local char_list = faction:character_list();
                     
                     for i = 0, char_list:num_items() - 1 do
-                        local current_char = char_list:item_at(i)
+                        local current_char = char_list:item_at(i);
                         
                         if current_char:has_skill("wh2_main_skill_all_dummy_agent_actions_def_death_hag") then
-                            cm:kill_character(current_char:command_queue_index(), true)
+                            cm:kill_character(current_char:command_queue_index(), true);
                         end
                     end
                 elseif faction_culture == "wh2_main_def_dark_elves" and source_faction_name == "wh2_main_def_cult_of_pleasure" then
-                    local char_list = faction:character_list()
+                    local char_list = faction:character_list();
                     
                     for i = 0, char_list:num_items() - 1 do
-                        local current_char = char_list:item_at(i)
+                        local current_char = char_list:item_at(i);
                         
                         if current_char:has_skill("wh2_main_skill_all_dummy_agent_actions_def_death_hag_chs") then
-                            cm:kill_character(current_char:command_queue_index(), true)
+                            cm:kill_character(current_char:command_queue_index(), true);
                         end
                     end
                 elseif faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
-                    local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
+                    local defender_faction = cm:get_faction("wh2_dlc13_lzd_defenders_of_the_great_plan");
                     
-                    --cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
-                    --cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal")
+                    --cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
+                    --cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
 
-                    if defender_faction:is_null_interface() == false then
-                        if defender_faction:is_dead() == true and faction:has_home_region() == true then
-                            local home_region = faction:home_region():name()
+                    local function handover_nakai_region()
+                        local nakai_faction = cm:get_faction("wh2_dlc13_lzd_spirits_of_the_jungle");
+                        local faction_regions = nakai_faction:region_list();
+                        
+                        for i = 0, faction_regions:num_items() - 1 do
+                            local region = faction_regions:item_at(i);
+                            cm:transfer_region_to_faction(region:name(), "wh2_dlc13_lzd_defenders_of_the_great_plan");
+                            nakai_temples:create_region_temple(region);
+                        end
+                    end
+
+                    if defender_faction then
+                        if defender_faction:is_dead() and faction:has_home_region() then
+                            local home_region = faction:home_region():name();
 
                             local x, y = cm:find_valid_spawn_location_for_character_from_settlement(
                                 "wh2_dlc13_lzd_defenders_of_the_great_plan",
                                 home_region,
                                 false,
                                 true
-                            )
+                            );
 
                             cm:create_force(
                                 "wh2_dlc13_lzd_defenders_of_the_great_plan",
@@ -2938,45 +3561,47 @@ local function init_recruit_defeated_listeners(enable_value)
                                 x, y,
                                 true,
                                 function(char_cqi, force_cqi)
-                                    handover_nakai_region()
-                                    cm:kill_character(char_cqi, true)
+                                    handover_nakai_region();
+                                    cm:kill_character(char_cqi, true);
                                 end
-                            )
+                            );
                         else
-                            handover_nakai_region()
+                            handover_nakai_region();
                         end
                         
                         if defender_faction:is_vassal() == false then
-                            cm:force_make_vassal("wh2_dlc13_lzd_spirits_of_the_jungle", "wh2_dlc13_lzd_defenders_of_the_great_plan")
-                            cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "all", false, false, false)
-                            cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "war", false, false, true)
-                            cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "break vassal", false, false, true)
-                            cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "war", false, true, false)
-                            cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "peace", false, true, false)
+                            cm:force_make_vassal("wh2_dlc13_lzd_spirits_of_the_jungle", "wh2_dlc13_lzd_defenders_of_the_great_plan");
+                            cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "all", false, false, false, false);
+                            cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "war", false, false, true, false);
+                            cm:force_diplomacy("faction:wh2_dlc13_lzd_spirits_of_the_jungle", "faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "break vassal", false, false, true, false);
+                            cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "war", false, true, false, false);
+                            cm:force_diplomacy("faction:wh2_dlc13_lzd_defenders_of_the_great_plan", "all", "peace", false, true, false, false);
                         end
                     end
         
-                    --cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1)
-                    --cm:callback(function() cm:disable_event_feed_events(false, "", "","diplomacy_treaty_negotiated_vassal") end, 1)
+                    --cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1);
+                    --cm:callback(function() cm:disable_event_feed_events(false, "", "","diplomacy_treaty_negotiated_vassal") end, 1);
                 elseif source_faction_name == "wh2_dlc13_lzd_spirits_of_the_jungle" then
                     if not cm:get_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle") then
-                        --cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "")
-                        --cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal")
+                        --cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
+                        --cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
         
-                        cm:force_confederation(faction_name, "wh2_dlc13_lzd_defenders_of_the_great_plan")
+                        cm:force_confederation(faction_name, "wh2_dlc13_lzd_defenders_of_the_great_plan");
         
-                        --cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1)
-                        --cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_treaty_negotiated_vassal") end, 1)
+                        --cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1);
+                        --cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_treaty_negotiated_vassal") end, 1);
                     else
                         cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", false)
                     end
                 end
             end,
             true
-        )
+        );
     end
 end
 
+-- NEEDS WORK!!!
+--[[
 core:add_listener(
     "recruit_defeated_MctInitialized",
     "MctInitialized",
@@ -3064,13 +3689,15 @@ core:add_listener(
     end,
     true
 )
+--]]
 
 function sm0_recruit_defeated()
     RDDEBUG()
     --local mcm = _G.mcm
-    local mct = core:get_static_object("mod_configuration_tool")
+    -- NEEDS WORK!!!
+    --local mct = core:get_static_object("mod_configuration_tool")
 
-    local version_number = "2.0" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0"
+    local version_number = "3.0" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0"
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()
@@ -3078,155 +3705,160 @@ function sm0_recruit_defeated()
         end
     end
 
-    if vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
-        cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false)
-        cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false)
-    end
+    if cm:get_campaign_name() ~= "wh3_main_prologue" then 
+        -- NEEDS WORK!!!
+        if vfs.exists("script/campaign/mod/!ovn_me_lost_factions_start.lua") then
+            cm:force_diplomacy("faction:wh2_main_emp_grudgebringers", "all", "form confederation", false, false, false, false)
+            cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false, false)
+        end
 
-    if mct then
-        -- MCT new --
-        --sm0_log("sm0_confed/mct/enable_value = "..tostring(enable_value))
-		--sm0_log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
-		local confederation_options_mod = mct:get_mod_by_key("confederation_options")
-		if confederation_options_mod and cm:is_new_game() then
-            local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")
-            if tk_option then
-                local tk_value = tk_option:get_finalized_setting()
-                if tk_value == "no_tweak" then
-                    cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
+        if mct then
+            -- NEEDS WORK!!!
+            -- MCT new --
+            --sm0_log("sm0_confed/mct/enable_value = "..tostring(enable_value))
+            --sm0_log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
+            local confederation_options_mod = mct:get_mod_by_key("confederation_options")
+            if confederation_options_mod and cm:is_new_game() then
+                local tk_option = confederation_options_mod:get_option_by_key("wh2_dlc09_sc_tmb_tomb_kings")
+                if tk_option then
+                    local tk_value = tk_option:get_finalized_setting()
+                    if tk_value == "no_tweak" then
+                        cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false, false)
+                    end
                 end
-            end
-            local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_sc_cst_vampire_coast")
-            if cst_option then
-                local cst_value = cst_option:get_finalized_setting()
-                if cst_value == "no_tweak" then
-                    cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
+                local cst_option = confederation_options_mod:get_option_by_key("wh2_dlc11_sc_cst_vampire_coast")
+                if cst_option then
+                    local cst_value = cst_option:get_finalized_setting()
+                    if cst_value == "no_tweak" then
+                        cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false, false)
+                    end
                 end
-            end
-            local teb_option = confederation_options_mod:get_option_by_key("wh_main_sc_teb_teb")
-            if teb_option then
-                local teb_value = teb_option:get_finalized_setting()
-                if teb_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
-                    cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
+                local teb_option = confederation_options_mod:get_option_by_key("wh_main_sc_teb_teb")
+                if teb_option then
+                    local teb_value = teb_option:get_finalized_setting()
+                    if teb_value == "no_tweak" and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
+                        cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false, false)
+                    end
                 end
+                --local araby_option = confederation_options_mod:get_option_by_key("wh_main_sc_emp_araby")
+                --if araby_option then
+                --    local araby_value = araby_option:get_finalized_setting() 
+                --    if araby_value == "no_tweak" then
+                --        cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
+                --    end
+                --end
             end
-            --local araby_option = confederation_options_mod:get_option_by_key("wh_main_sc_emp_araby")
-            --if araby_option then
-            --    local araby_value = araby_option:get_finalized_setting() 
-            --    if araby_value == "no_tweak" then
-            --        cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
-            --    end
+        else
+            --local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
+            --if not tk_value or tk_value == "yield" then
+                cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false, false)
             --end
-		end
-    else
-		--local tk_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc09_tmb_tomb_kings_value")
-		--if not tk_value or tk_value == "yield" then
-			cm:force_diplomacy("subculture:wh2_dlc09_sc_tmb_tomb_kings", "subculture:wh2_dlc09_sc_tmb_tomb_kings", "form confederation", false, false, false)
-        --end
-        --local cst_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc11_cst_vampire_coast_value")
-        --if not cst_value or cst_value == "yield" then
-            cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false)
-        --end
-		--local teb_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") 
-		--if (not teb_value or teb_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
-			cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false)
-        --end
-        --local araby_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_sc_emp_araby") 
-		--if (not araby_value or emp_value == "yield") then
-		--	cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
-        --end
-        
-        enable_value = true
-        --if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
-            tmb_restriction_value = false
-            cst_restriction_value = false
-            wef_restriction_value = false
-            --savage_restriction_value = false
-        --else
-        --    tmb_restriction_value = true
-        --    cst_restriction_value = true
-        --    wef_restriction_value = true
-        --    --savage_restriction_value = true
-        --end
-        --scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
-        --ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
-        --preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
-        scope_value = "player_ai"
-        ai_delay_value = 1 --50
-        preferance1_value = "player"
-        preferance2_value = "alternate"
-        preferance3_value = "met"
-        --if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
-        --    preferance4_value = "major"
-        --else
-            preferance4_value = "relation"
-        --end
-        preferance5_value = "major"
-        preferance6_value = "disable"
-        --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
-        --" | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
-        --" | preferance1_value = "..tostring(preferance1_value).." | preferance2_value = "..tostring(preferance2_value).." | preferance3_value = "..tostring(preferance3_value))
+            --local cst_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh2_dlc11_cst_vampire_coast_value")
+            --if not cst_value or cst_value == "yield" then
+                cm:force_diplomacy("subculture:wh2_dlc11_sc_cst_vampire_coast", "subculture:wh2_dlc11_sc_cst_vampire_coast", "form confederation", false, false, false, false)
+            --end
+            --local teb_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_emp_empire") 
+            --if (not teb_value or teb_value == "yield") and not vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then
+                cm:force_diplomacy("subculture:wh_main_sc_teb_teb", "subculture:wh_main_sc_teb_teb", "form confederation", false, false, false, false)
+            --end
+            --local araby_value = cm:get_saved_value("mcm_tweaker_confed_tweaks_wh_main_sc_emp_araby") 
+            --if (not araby_value or emp_value == "yield") then
+            --	cm:force_diplomacy("subculture:wh_main_sc_emp_araby", "subculture:wh_main_sc_emp_araby", "form confederation", false, false, false)
+            --end
+            
+            enable_value = true
+            --if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
+                tmb_restriction_value = false
+                cst_restriction_value = false
+                wef_restriction_value = false
+                --savage_restriction_value = false
+            --else
+            --    tmb_restriction_value = true
+            --    cst_restriction_value = true
+            --    wef_restriction_value = true
+            --    --savage_restriction_value = true
+            --end
+            --scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
+            --ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
+            --preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
+            scope_value = "player_ai"
+            ai_delay_value = 1 --50
+            preferance1_value = "player"
+            -- NEEDS WORK!!! 
+            --preferance2_value = "alternate"
+            preferance3_value = "met"
+            --if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
+            --    preferance4_value = "major"
+            --else
+                preferance4_value = "relation"
+            --end
+            preferance5_value = "major"
+            preferance6_value = "random"
+            --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
+            --" | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
+            --" | preferance1_value = "..tostring(preferance1_value).." | preferance2_value = "..tostring(preferance2_value).." | preferance3_value = "..tostring(preferance3_value))
 
-		--if not not mcm then
-        --    local recruit_defeated = mcm:register_mod("recruit_defeated", "Recruit Defeated Legendary Lords", "")
-        --    --if legacy_option then
-        --    --    local version = recruit_defeated:add_tweaker("version", "Mod Version", "Choose your prefered mod version.")
-        --    --    version:add_option("default", "Default", "This script uses confederation methods to transfer legendary lords from dead factions to the player/ai. Written by sm0kin.")
-        --    --    version:add_option("legacy", "Legacy", "DISCONTINUED VERSION!!!\nThis script uses spawn methods to create doppelganger lords and deletes the original legendary lords in case the faction gets revived. Written by Scipion. Originally by scipion, reworked by sm0kin.")
-        --    --end
-        --    local lore_restriction = recruit_defeated:add_tweaker("lore_restriction", "Restriction", "Defines whether defeated Lords/Heroes can join any faction of the same subculture or if they are restricted from joining factions that make little to no sense considering their background.") --mcm_tweaker_recruit_defeated_lore_restriction_value
-        --    lore_restriction:add_option("all", "Gotta Catch 'Em All", "No restrictions.")
-        --    lore_restriction:add_option("lorefriendly", "Lorefriendly", "Restrictions are in place for the following factions:\n*Khemri: no Arkhan\n*Lybaras/Exiles of Nehek/Numas: no Settra, no Arkhan\n\nRecruit Defeated is disabled for the following cultures/factions:\n*Vampire Coast\n*Followers of Nagash")
-        --    local scope = recruit_defeated:add_tweaker("scope", "Available for", "Specifies if defeated Lords/Heroes are allowed to join the player, the ai or both.") --mcm_tweaker_recruit_defeated_scope_value
-        --    scope:add_option("player_ai", "Player & AI", "")
-        --    scope:add_option("player", "Player only", "")
-        --    scope:add_option("ai", "AI only", "")
-        --    local preferance = recruit_defeated:add_tweaker("preferance", "Preference (1. Level)", "Should factions prefer to join the ai or the player (supersedes \"Preference (2. Level)\")?") --mcm_tweaker_recruit_defeated_preferance_value
-        --    preferance:add_option("player", "Prefer Player", "Defeated Lords/Heroes will always join a player-led faction.")
-        --    preferance:add_option("ai", "Prefer AI", "As long as a AI factions is left defeated Lords/Heroes will prefer them over the player.")
-        --    preferance:add_option("disable", "Disable", "No AI/Player preferance.")
-        --    local preferance2 = recruit_defeated:add_tweaker("preferance2", "Preference (2. Level)", "Determines the criteria used to decide which faction is chosen to receive the refugee dilemma (superseded by \"Preference (1. Level)\"") --mcm_tweaker_recruit_defeated_preferance2_value
-        --    preferance2:add_option("relation", "Relation based", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.")
-        --    preferance2:add_option("power", "Prefer Major Factions", "Defeated Lords/Heroes will prefer Major Factions.")
-        --    --local diplo = recruit_defeated:add_tweaker("diplo", "Lords/Heroes join factions based on diplomatic standing", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.") --mcm_tweaker_recruit_defeated_diplo_value
-        --    --diplo:add_option("enable", "Enable", "")
-        --    --diplo:add_option("disable", "Disable", "")
-        --    local ai_delay = recruit_defeated:add_variable("ai_delay", 0, 200, 50, 5, "AI Turn Delay", "Determines at which turn the AI starts to get Lords/Heroes from defeated factions.")
-        --    mcm:add_post_process_callback(
-        --        function()
-        --            sm0_log("Mod Version: default/mcm".." ("..version_number..")")
-        --            if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
-        --                tmb_restriction_value = false
-        --                cst_restriction_value = false
-        --                wef_restriction_value = false
-        --                --savage_restriction_value = false
-        --            else
-        --                tmb_restriction_value = true
-        --                cst_restriction_value = true
-        --                wef_restriction_value = true
-        --                --savage_restriction_value = true
-        --            end
-        --            scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
-        --            ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
-        --            preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
-        --            preferance2_value = "alternate"
-        --            preferance3_value = "met"
-        --            if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
-        --                preferance4_value = "major"
-        --            else
-        --                preferance4_value = "relation"
-        --            end
-        --            preferance5_value = "major"
-        --            preferance6_value = "disable"
-        --
-        --            --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
-        --            --" | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
-        --            --" | preferance1_value = "..tostring(preferance1_value).." | preferance2_value = "..tostring(preferance2_value).." | preferance3_value = "..tostring(preferance3_value))
-        --        end
-        --    )
-        --else
-        --    sm0_log("Mod Version: default".." ("..version_number..")")
-        --end	
-	end
-    init_recruit_defeated_listeners(enable_value)
+            --if not not mcm then
+            --    local recruit_defeated = mcm:register_mod("recruit_defeated", "Recruit Defeated Legendary Lords", "")
+            --    --if legacy_option then
+            --    --    local version = recruit_defeated:add_tweaker("version", "Mod Version", "Choose your prefered mod version.")
+            --    --    version:add_option("default", "Default", "This script uses confederation methods to transfer legendary lords from dead factions to the player/ai. Written by sm0kin.")
+            --    --    version:add_option("legacy", "Legacy", "DISCONTINUED VERSION!!!\nThis script uses spawn methods to create doppelganger lords and deletes the original legendary lords in case the faction gets revived. Written by Scipion. Originally by scipion, reworked by sm0kin.")
+            --    --end
+            --    local lore_restriction = recruit_defeated:add_tweaker("lore_restriction", "Restriction", "Defines whether defeated Lords/Heroes can join any faction of the same subculture or if they are restricted from joining factions that make little to no sense considering their background.") --mcm_tweaker_recruit_defeated_lore_restriction_value
+            --    lore_restriction:add_option("all", "Gotta Catch 'Em All", "No restrictions.")
+            --    lore_restriction:add_option("lorefriendly", "Lorefriendly", "Restrictions are in place for the following factions:\n*Khemri: no Arkhan\n*Lybaras/Exiles of Nehek/Numas: no Settra, no Arkhan\n\nRecruit Defeated is disabled for the following cultures/factions:\n*Vampire Coast\n*Followers of Nagash")
+            --    local scope = recruit_defeated:add_tweaker("scope", "Available for", "Specifies if defeated Lords/Heroes are allowed to join the player, the ai or both.") --mcm_tweaker_recruit_defeated_scope_value
+            --    scope:add_option("player_ai", "Player & AI", "")
+            --    scope:add_option("player", "Player only", "")
+            --    scope:add_option("ai", "AI only", "")
+            --    local preferance = recruit_defeated:add_tweaker("preferance", "Preference (1. Level)", "Should factions prefer to join the ai or the player (supersedes \"Preference (2. Level)\")?") --mcm_tweaker_recruit_defeated_preferance_value
+            --    preferance:add_option("player", "Prefer Player", "Defeated Lords/Heroes will always join a player-led faction.")
+            --    preferance:add_option("ai", "Prefer AI", "As long as a AI factions is left defeated Lords/Heroes will prefer them over the player.")
+            --    preferance:add_option("disable", "Disable", "No AI/Player preferance.")
+            --    local preferance2 = recruit_defeated:add_tweaker("preferance2", "Preference (2. Level)", "Determines the criteria used to decide which faction is chosen to receive the refugee dilemma (superseded by \"Preference (1. Level)\"") --mcm_tweaker_recruit_defeated_preferance2_value
+            --    preferance2:add_option("relation", "Relation based", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.")
+            --    preferance2:add_option("power", "Prefer Major Factions", "Defeated Lords/Heroes will prefer Major Factions.")
+            --    --local diplo = recruit_defeated:add_tweaker("diplo", "Lords/Heroes join factions based on diplomatic standing", "Defeated Lords/Heroes join the faction they have the best diplomatic relations with.") --mcm_tweaker_recruit_defeated_diplo_value
+            --    --diplo:add_option("enable", "Enable", "")
+            --    --diplo:add_option("disable", "Disable", "")
+            --    local ai_delay = recruit_defeated:add_variable("ai_delay", 0, 200, 50, 5, "AI Turn Delay", "Determines at which turn the AI starts to get Lords/Heroes from defeated factions.")
+            --    mcm:add_post_process_callback(
+            --        function()
+            --            sm0_log("Mod Version: default/mcm".." ("..version_number..")")
+            --            if cm:get_saved_value("mcm_tweaker_recruit_defeated_lore_restriction_value") ~= "lorefriendly" then
+            --                tmb_restriction_value = false
+            --                cst_restriction_value = false
+            --                wef_restriction_value = false
+            --                --savage_restriction_value = false
+            --            else
+            --                tmb_restriction_value = true
+            --                cst_restriction_value = true
+            --                wef_restriction_value = true
+            --                --savage_restriction_value = true
+            --            end
+            --            scope_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_scope_value") or "player_ai"
+            --            ai_delay_value = cm:get_saved_value("mcm_variable_recruit_defeated_ai_delay_value") or 50
+            --            preferance1_value = cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance_value") or "player"
+            --            preferance2_value = "alternate"
+            --            preferance3_value = "met"
+            --            if cm:get_saved_value("mcm_tweaker_recruit_defeated_preferance2_value") == "power" then
+            --                preferance4_value = "major"
+            --            else
+            --                preferance4_value = "relation"
+            --            end
+            --            preferance5_value = "major"
+            --            preferance6_value = "disable"
+            --
+            --            --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
+            --            --" | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
+            --            --" | preferance1_value = "..tostring(preferance1_value).." | preferance2_value = "..tostring(preferance2_value).." | preferance3_value = "..tostring(preferance3_value))
+            --        end
+            --    )
+            --else
+            --    sm0_log("Mod Version: default".." ("..version_number..")")
+            --end	
+        end
+        init_recruit_defeated_listeners(enable_value)
+    end
 end
