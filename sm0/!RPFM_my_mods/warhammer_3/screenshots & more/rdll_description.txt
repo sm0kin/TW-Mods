@@ -1,0 +1,64 @@
+Updated for "The Total WAAAGH! Update" / "The Warden & The Paunch" DLC!
+
+[img]https://i.imgur.com/fVVaDCS.gif[/img]
+
+
+
+This mod transfers legendary lords and legendary heroes of defeated factions (of the same culture) to factions that are still in play. This works both for the player and the AI (though the player will be favoured)!
+
+[b]Scenario 1[/b]
+Has that foolish counterpart of a Vampire Count refused to confederate, be reasonable or flat out irked the grand, righteous ruler that you are? Are you left with no choice but to defeat him, yet fear for the consequences as you can’t have their legendary lord this way? Well no more!
+
+That’s right, they will serve their rightful masters! You can now pummel your "like-minded", bovine-staring-face neighbor into the ground, destroy his useless empire, sack all his cities, plunder him to your heart's content and then recruit his legendary lord as a fresh, empty-headed recruit!
+
+[b]Scenario 2[/b]
+You'd like to help the Last Defenders but as the Hexoatl you might as well be on another planet and confederating territories that far away might not be ideal.
+Well, if he's ever defeated, you can now hire him, build up spanking shining new armies and lead him to retake his lost territories!
+
+[h1]Mod features[/h1]
+[list]
+[*] After factions are defeated their Legendary Lords/Heroes will be made available to remaining factions (player as well as AI) of the same culture.
+[*] Legendary Lords obtained this way will start off wounded. 
+[*] Characters acquired this way get a skill reset.
+[*] Legendary Lords/Heroes recruited this way are the "original" ones (not copies like in previous versions of the mod). This means there won't be doppelganger, item quests will work and the lord/hero will retain their level, items, skills and traits.
+[*] This works with all legendary/immortal lords and heroes regardless whether they are modded or vanilla characters. No submods needed!
+[*] Event messages indicating newly available lords/heroes will appear for all base game & dlc lords as well as lords/heroes added by the following mods:
+[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1194588998]Mixu's Legendary Lords 1[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1158791019]Mixu's Legendary Lords 2[/url], [url=https://steamcommunity.com/workshop/filedetails/?id=1297906646]We'z Speshul[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1651163345]Project Resurrection - Parte Legendary Lords[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1181220751]Cataph's Kraka Drak: the Norse Dwarfs[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1158737832]Cataph's Southern Realms (TEB)[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1250988907]Whysofurious' Additional Lords & Heroes[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1658674950]WsF' Vampire Bloodlines: The Strigoi[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1360054229]Ordo Draconis - Templehof Expanded[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1634174122]High Elves Expanded[/url]
+[*] All factions benefits from this (even horde factions).
+[*] Defeated Lords favor factions they had the best diplomatic relations with when deciding whom to join.
+[*] Works for not-yet recruited lords too! (Like Ghorst for Vampire Counts when you play as Von Carsteins or The Barrow Legion)
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1576253740]The Mod Configuration Tool[/url] options: 
+Enable the recruitment of defeated lords to only AI, only the Player or both (default). 
+Decide whether the AI or the Player (default) should be favored or both be treated equally.
+Choose to enable the Recruit Defeated for all factions (default) or restrict it in a lore friendly way.
+[/list]
+
+[h1]Compatibility[/h1]
+"Savegame compatible: Save to add but NOT save to remove!
+
+Should be compatible with just about any other mod.
+
+Works with Mortal Empires and the Eye of the Vortex campaign on singleplayer.
+
+Not yet tested in Head-to-Head / Co-op.
+
+[h1]Known issues[/h1]
+[list]
+[*] The mod transfers lords/heroes whether or not they are real legendary lords or just immortal lords. On the one hand this means you won’t miss out on legendary lords even if they were just recently added, e.g. by a mod update (you’d get the lord even if no event message appears) on the other hand you’ll get lords from minor factions you may not necessarily want. This may lead to a slightly more crowded recruitment pool.
+[*] If you add the mod mid campaign and a lot of factions are already defeated by that point it may take a few turns for all characters to be assigned to their new factions. This was done intentionally to reduce the start turn delay/lag.
+[*] Missing quest items may appear a few turns delayed.
+[*] If the player confederated recently then defeated characters will be transfered after the confederation penalty is expired.
+[*] Since the new version of the script uses confederation methods to transfer defeated characters, AI or player factions that take on defeated lords will have their original faction name changed to their confederation name.
+[/list]
+
+[h1]Credit[/h1]
+[url=https://steamcommunity.com/profiles/76561198007366358]Scipion[/url] for his original concept and upload of this mod.
+[url=https://www.twitch.tv/militus]Lord Militus[/url] for writing the events of the mod and taking over the mod page.
+[url=https://steamcommunity.com/profiles/76561197971867345]sm0kin[/url] for picking up after Scipion lost track and time.
+[url=https://steamcommunity.com/profiles/76561198144868434/]Tabula rasa[/url] for attempting to update and fix this before sm0kin did so.
+
+Note from Militus: If anybody has any information about specific lords and aren’t happy with what I wrote, please leave a comment with @Militus or something in the comments! I’ll be checking the comments regularly. I used the Warhammer Wiki for each Lord that I knew nothing about, to try and make them appealing for each LL! I hope you enjoy the mod. [url=https://docs.google.com/document/d/1cd7fOQPc_4dSM29CPbTik1knyx7tRciX5QKUspyKXuY/edit?usp=sharing] You can see what there is currently and leave idea's in the comments! [/url]
+
+[b]Please let us know if you run into problems or think there is an aspect of the mod we should improve on![/b]
+
+[b] THE MOD WORKS. IT IS NOT OUTDATED EVEN IF IT SAYS IT IS. PLEASE STOP ASKING QUESTIONS THAT ARE ALREADY ANSWERED IN THE COMMENTS RIGHT BEFORE YOURS! [/b]
