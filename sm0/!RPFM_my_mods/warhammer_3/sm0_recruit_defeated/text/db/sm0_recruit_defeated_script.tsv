@@ -31,3 +31,22 @@ mct_recruit_defeated_c_savage_restriction_txt	Savage Orcs	true
 mct_recruit_defeated_c_savage_restriction_tt	Checking this box disables the Refugee dilemmas for factions of the following culture:|| - Savage Orcs	true
 mct_recruit_defeated_d_wef_restriction_txt	Wood Elves	true
 mct_recruit_defeated_d_wef_restriction_tt	Checking this box puts restrictions in place for the following factions:|| - Argwylon will be the first faction able to receive refugees from Wargrove of Woe (Drycha/Coeddil)|| - Wargrove of Woe (Drycha/Coeddil) will only accept refugee from Argwylon (Durthu & whoever is part of his faction)	true
+mct_recruit_defeated_section_beta_options	Beta options	true
+mct_recruit_defeated_playable_faction_only_txt	Playable Factions only	true
+mct_recruit_defeated_playable_faction_only_tt	Lords/Heroes of playable/major factions will only seek refuge with other playable/major factions.	true
+mct_recruit_defeated_include_seccessionists_txt	Include secessionist factions	true
+mct_recruit_defeated_include_seccessionists_tt	Let's you reintegrate immortal Lords/Heroes that rebelled due to low loyalty.	true
+mct_recruit_defeated_dilemmas_per_turn_txt	Dilemmas per turn (Player and AI)	true
+mct_recruit_defeated_dilemmas_per_turn_tt	Amount of Refugee Dilemmas per turn (Player and AI).	true
+mct_recruit_defeated_dilemmas_per_turn_player_txt	Dilemmas per turn (Player)	true
+mct_recruit_defeated_dilemmas_per_turn_player_tt	Amount of Refugee Dilemmas per turn (Player).	true
+mct_recruit_defeated_dilemmas_per_turn_per_sc_txt	Dilemmas per race per turn	true
+mct_recruit_defeated_dilemmas_per_turn_per_sc_tt	Allowed Refugee Dilemmas per race per turn.	true
+mct_recruit_defeated_chs_restriction_txt	Chaos Restrictions	true
+mct_recruit_defeated_chs_restriction_tt	Restrictions for Warriors of Chaos, Mono-god, Daemon and Norscan factions.	true
+mct_recruit_defeated_cross_race_txt	Cross-Race (Experimental)	true
+mct_recruit_defeated_cross_race_tt	Cross-Race Refugee Dilemmas. 	true
+mct_recruit_defeated_mortals_txt	Mortal Refugees	true
+mct_recruit_defeated_mortals_tt	Are Lords and Heroes, other than immortal/legendary ones, allowed to seek refuge after their faction's demise?	true
+mct_recruit_defeated_nakai_vassal_txt	Nakai vassal settlements	true
+mct_recruit_defeated_nakai_vassal_tt	What should be done about Nakai's vassal faction after Nakai joins another faction?	true
