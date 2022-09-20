@@ -28,7 +28,7 @@ scope:add_dropdown_values({
 local ai_delay = recruit_defeated:add_new_option("d_ai_delay", "slider")
 ai_delay:set_text(loc_prefix.."d_ai_delay_txt", true)
 ai_delay:set_tooltip_text(loc_prefix.."d_ai_delay_tt", true)
-ai_delay:slider_set_min_max(1, 200)
+ai_delay:slider_set_min_max(1, 550)
 ai_delay:set_default_value(50)
 ai_delay:slider_set_step_size(5)
 
