@@ -1,189 +1,37 @@
 -- TO-DO
--- MCT options
--- apply_diplomacy functionality
--- skill reset mct option
--- either new spawn mechanic or start pos id for alastar needed
 -- update mod agent subtype and ancillary tables (mod support in general) 
--- db dilemma setup for new subcultures
 -- update event messages
 -- update faction/subculture icons for event messages
--- enable db confederation for warriors of chaos faction
--- allow/add option for different subculture/culture confederations
 
 -- NEEDS TESTING
--- are ancillary backups still needed (quest and starting items!)?
 -- was trigger_dilemma_with_targets fixed?
--- multiplayer (up to 8 players) support
+-- multiplayer support (up to 8 players, different subcultures, head-to-head, coop, simultaneous turns)
+-- does quests/item-allocation work for cross race lords?
 
 --mct variables
-local enable_value 
-local scope_value 
-local ai_delay_value 
-local preferance1_value  
-local preferance2_value  
-local preferance3_value  
-local preferance4_value  
-local preferance5_value  
-local preferance6_value  
-local tmb_restriction_value  
-local cst_restriction_value  
-local wef_restriction_value  
-local savage_restriction_value  
-local chaos_restriction_value
-
-local function sm0_log_reset()
-	if not __write_output_to_logfile then
-		return
-	end
-	local logTimeStamp = os.date("%d, %m %Y %X")
-	local popLog = io.open("sm0_log.txt","w+")
-	popLog :write("NEW LOG ["..logTimeStamp.."] \n")
-	popLog :flush()
-	popLog :close()
-end
-
----@param text string
-local function sm0_log(text)
-	if not __write_output_to_logfile then
-		return
-	end
-	local logText = tostring(text)
-	local logTimeStamp = os.date("%d, %m %Y %X")
-	local popLog = io.open("sm0_log.txt","a")
-	popLog :write("RD:  [".. logTimeStamp .. "] [Turn: ".. tostring(cm:model():turn_number()) .. "(" .. tostring(cm:whose_turn_is_it_single():name()) .. ")]:  "..logText .. "  \n")
-	popLog :flush()
-	popLog :close()
-end
-
-local function RDDEBUG()
-    if not __write_output_to_logfile then
-		return
-	end
-	--Vanish's PCaller
-	--All credits to vanish
-	local function safeCall(func)
-		--out("safeCall start")
-		local status, result = pcall(func)
-		if not status then
-			sm0_log("ERROR")
-			sm0_log(tostring(result))
-			sm0_log(debug.traceback())
-		end
-		--out("safeCall end")
-		return result
-	end
-
-	--local oldTriggerEvent = core.trigger_event
-
-	local function pack2(...) return {n=select('#', ...), ...} end
-	local function unpack2(t) return unpack(t, 1, t.n) end
-
-	local function wrapFunction(f, argProcessor)
-		return function(...)
-			--out("start wrap ")
-			local someArguments = pack2(...)
-			if argProcessor then
-				safeCall(function() argProcessor(someArguments) end)
-			end
-			local result = pack2(safeCall(function() return f(unpack2( someArguments )) end))
-			--for k, v in pairs(result) do
-			--    out("Result: " .. tostring(k) .. " value: " .. tostring(v))
-			--end
-			--out("end wrap ")
-			return unpack2(result)
-			end
-	end
-
-	-- function myTriggerEvent(event, ...)
-	--     local someArguments = { ... }
-	--     safeCall(function() oldTriggerEvent(event, unpack( someArguments )) end)
-	-- end
-
-	local function tryRequire(fileName)
-		local loaded_file = loadfile(fileName)
-		if not loaded_file then
-			out("Failed to find mod file with name " .. fileName)
-		else
-			out("Found mod file with name " .. fileName)
-			out("Load start")
-			local local_env = getfenv(1)
-			setfenv(loaded_file, local_env)
-			loaded_file()
-			out("Load end")
-		end
-	end
-
-	local function logFunctionCall(f, name)
-		return function(...)
-			out("function called: " .. name)
-			return f(...)
-		end
-	end
-
-	local function logAllObjectCalls(object)
-		local metatable = getmetatable(object)
-		for name,f in pairs(getmetatable(object)) do
-			if is_function(f) then
-				out("Found " .. name)
-				if name == "Id" or name == "Parent" or name == "Find" or name == "Position" or name == "CurrentState"  or name == "Visible"  or name == "Priority" or "Bounds" then
-					--Skip
-				else
-					metatable[name] = logFunctionCall(f, name)
-				end
-			end
-			if name == "__index" and not is_function(f) then
-				for indexname,indexf in pairs(f) do
-					out("Found in index " .. indexname)
-					if is_function(indexf) then
-						f[indexname] = logFunctionCall(indexf, indexname)
-					end
-				end
-				out("Index end")
-			end
-		end
-	end
-
-	-- logAllObjectCalls(core)
-	-- logAllObjectCalls(cm)
-	-- logAllObjectCalls(game_interface)
-
-	core.trigger_event = wrapFunction(
-		core.trigger_event,
-		function(ab)
-			--out("trigger_event")
-			--for i, v in pairs(ab) do
-			--    out("i: " .. tostring(i) .. " v: " .. tostring(v))
-			--end
-			--out("Trigger event: " .. ab[1])
-		end
-	)
-
-	cm.check_callbacks = wrapFunction(
-		cm.check_callbacks,
-		function(ab)
-			--out("check_callbacks")
-			--for i, v in pairs(ab) do
-			--    out("i: " .. tostring(i) .. " v: " .. tostring(v))
-			--end
-		end
-	)
-
-	local currentAddListener = core.add_listener
-	local function myAddListener(core, listenerName, eventName, conditionFunc, listenerFunc, persistent)
-		local wrappedCondition = nil
-		if is_function(conditionFunc) then
-			--wrappedCondition =  wrapFunction(conditionFunc, function(arg) out("Callback condition called: " .. listenerName .. ", for event: " .. eventName) end)
-			wrappedCondition =  wrapFunction(conditionFunc)
-		else
-			wrappedCondition = conditionFunc
-		end
-		currentAddListener(
-			core, listenerName, eventName, wrappedCondition, wrapFunction(listenerFunc), persistent
-			--core, listenerName, eventName, wrappedCondition, wrapFunction(listenerFunc, function(arg) out("Callback called: " .. listenerName .. ", for event: " .. eventName) end), persistent
-		)
-	end
-	core.add_listener = myAddListener
-end
+local enable_value = true 
+local scope_value = "player_ai" 
+local ai_delay_value = 50 
+local preferance1_value = "race"  
+local preferance2_value = "player"  
+local preferance3_value = "met"  
+local preferance4_value = "relation"  
+local preferance5_value = "major"  
+local preferance6_value = "disabled"   
+local tmb_restriction_value = false  
+local cst_restriction_value = false  
+local wef_restriction_value = false  
+--beta
+local playable_faction_only_value = false
+local include_seccessionists_value = false
+local dilemmas_per_turn_value = 10
+local dilemmas_per_turn_per_sc_value = 1
+local dilemmas_per_turn_player_value = 1
+local cross_race_value = "disable"
+local mortals_value = "disable"
+local nakai_vassal_value = "do_nothing"
+local savage_restriction_value = false  
+local chs_restriction_value = "no_restrictions"
 
 local faction_event_picture = {
     ["wh_main_emp_empire"] = 591,
@@ -233,7 +81,7 @@ local faction_event_picture = {
     ["wh2_dlc14_brt_chevaliers_de_lyonesse"] = 751,
     ["wh2_main_skv_clan_eshin"] = 778,
     ["wh2_main_def_hag_graef"] = 773,
-    ["wh_main_chs_chaos"] = 0,
+    ["wh_main_chs_chaos"] = 595,
 	
 	--MIXU Part 1--
 	["wh_main_brt_artois"] = 751,
@@ -264,7 +112,7 @@ local faction_event_picture = {
     ["wh2_main_lzd_tlaxtlan"] = 775,
     ["wh_main_nor_skaeling"] = 800,
     ["wh2_dlc09_tmb_numas"] = 606,
-    ["wh_dlc05_wef_wydrioth"] = 605
+    ["wh_dlc05_wef_wydrioth"] = 605,
 } 
 
 --backup picture ids
@@ -272,12 +120,11 @@ local subculture_event_picture = {
     ["wh_dlc03_sc_bst_beastmen"] = 596,
     ["wh_dlc05_sc_wef_wood_elves"] = 605,
     ["wh_main_sc_brt_bretonnia"] = 751,
-    ["wh_main_sc_chs_chaos"] = 0,
+    ["wh_main_sc_chs_chaos"] = 595,
     ["wh_main_sc_dwf_dwarfs"] = 592,
     ["wh_main_sc_emp_empire"] = 591,
     ["wh_main_sc_grn_greenskins"] = 593,
     ["wh_main_sc_grn_savage_orcs"] = 593,
-    ["wh_main_sc_ksl_kislev"] = 591,
     ["wh_dlc08_sc_nor_norsca"] = 800,
     ["wh_main_sc_teb_teb"] = 591,
     ["wh_main_sc_vmp_vampire_counts"] = 594,
@@ -294,7 +141,7 @@ local subculture_event_picture = {
     ["wh3_main_sc_nur_nurgle"] = 12,
     ["wh3_main_sc_ogr_ogre_kingdoms"] = 16,
     ["wh3_main_sc_sla_slaanesh"] = 13,
-    ["wh3_main_sc_tze_tzeentch"] = 14
+    ["wh3_main_sc_tze_tzeentch"] = 14,
 } 
 
 local wh_agents = {
@@ -305,6 +152,7 @@ local wh_agents = {
     {["faction"] = "wh3_main_vmp_caravan_of_blue_roses", ["subtype"] = "wh_dlc04_vmp_helman_ghorst", ["dlc"] = {"TW_WH1_LORDS_AND_UNITS_1"}},
     {["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_dlc04_vmp_vlad_con_carstein", ["dlc"] = {"TW_WH1_BASE_GAME"}},
     {["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_pro02_vmp_isabella_von_carstein", ["dlc"] = {"TW_WH1_ISABELLA_FREE"}},
+    {["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "wh_pro02_vmp_isabella_von_carstein_hero", ["dlc"] = {"TW_WH1_ISABELLA_FREE"}},
     {["faction"] = "wh2_dlc11_vmp_the_barrow_legion", ["subtype"] = "wh_main_vmp_heinrich_kemmler", ["dlc"] = {"TW_WH1_BASE_GAME"}},
     {["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh_main_vmp_mannfred_von_carstein", ["dlc"] = {"TW_WH1_BASE_GAME"}},
     {["faction"] = "wh_main_vmp_mousillon", ["subtype"] = "wh_dlc05_vmp_red_duke", ["dlc"] = {"TW_WH1_WOOD_ELVES"}},
@@ -343,11 +191,16 @@ local wh_agents = {
     {["faction"] = "wh_dlc05_wef_wood_elves", ["subtype"] = "wh_dlc05_wef_orion", ["dlc"] = {"TW_WH1_WOOD_ELVES"}},
     {["faction"] = "wh_dlc08_nor_wintertooth", ["subtype"] = "wh_dlc08_nor_throgg", ["dlc"] = {"TW_WH1_NORSCA"}},
     {["faction"] = "wh_dlc08_nor_norsca", ["subtype"] = "wh_dlc08_nor_wulfrik", ["dlc"] = {"TW_WH1_NORSCA"}},
+    {["faction"] = "wh_dlc08_nor_norsca", ["subtype"] = "wh_dlc08_nor_arzik", ["dlc"] = {"TW_WH1_NORSCA"}},
+    {["faction"] = "wh_dlc08_nor_norsca", ["subtype"] = "wh_dlc08_nor_kihar", ["dlc"] = {"TW_WH1_NORSCA"}},
+    {["faction"] = "wh_dlc08_nor_norsca", ["subtype"] = "wh3_main_ie_nor_burplesmirk_spewpit", ["dlc"] = {"TW_WH1_NORSCA"}},
+    {["faction"] = "wh_dlc08_nor_norsca", ["subtype"] = "wh3_main_ie_nor_killgore_slaymaim", ["dlc"] = {"TW_WH1_NORSCA"}},
     {["faction"] = "wh2_main_def_har_ganeth", ["subtype"] = "wh2_dlc10_def_crone_hellebron", ["dlc"] = {"TW_WH2_DLC10_QUEEN_CRONE"}},
     {["faction"] = "wh2_dlc11_cst_pirates_of_sartosa", ["subtype"] = "wh2_dlc11_cst_aranessa", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
     {["faction"] = "wh2_dlc11_cst_the_drowned", ["subtype"] = "wh2_dlc11_cst_cylostra", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
     {["faction"] = "wh2_dlc11_cst_vampire_coast", ["subtype"] = "wh2_dlc11_cst_harkon", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
     {["faction"] = "wh2_dlc11_cst_noctilus", ["subtype"] = "wh2_dlc11_cst_noctilus", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
+    {["faction"] = "wh2_dlc11_cst_cylostra", ["subtype"] = "wh2_dlc11_cst_ghost_paladin", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
     {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_cha_markus_wulfhart", ["dlc"] = {"TW_WH2_DLC13_HUNTER"}},
     {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_hunter_jorek_grimm", ["dlc"] = {"TW_WH2_DLC13_HUNTER"}},
     {["faction"] = "wh2_dlc13_emp_the_huntmarshals_expedition", ["subtype"] = "wh2_dlc13_emp_hunter_rodrik_l_anguille", ["dlc"] = {"TW_WH2_DLC13_HUNTER"}},
@@ -393,63 +246,76 @@ local wh_agents = {
     {["faction"] = "wh3_dlc20_chs_vilitch", ["subtype"] = "wh3_dlc20_tze_vilitch", ["dlc"] = {"TW_WH3_DLC20_CHAMPIONS"}},
     {["faction"] = "wh_main_chs_chaos", ["subtype"] = "wh_main_chs_archaon", ["dlc"] = {"TW_WH1_CHAOS"}},
     {["faction"] = "wh3_dlc20_chs_kholek", ["subtype"] = "wh_dlc01_chs_kholek_suneater", ["dlc"] = {"TW_WH1_CHAOS"}},
-    {["faction"] = "wh3_dlc20_chs_sigvald", ["subtype"] = "wh_dlc01_chs_prince_sigvald", ["dlc"] = {"TW_WH1_CHAOS"}}
+    {["faction"] = "wh3_dlc20_chs_sigvald", ["subtype"] = "wh_dlc01_chs_prince_sigvald", ["dlc"] = {"TW_WH1_CHAOS"}},
+    {["faction"] = "wh3_main_chs_shadow_legion", ["subtype"] = "wh3_main_dae_belakor", ["dlc"] = {"TW_WH3_BASE_GAME"}},
+    {["faction"] = "wh2_main_lzd_itza", ["subtype"] = "wh2_dlc12_lzd_lord_kroak", ["dlc"] = {"TW_WH2_BASE_GAME"}},
+    {["faction"] = "wh_main_dwf_karak_izor", ["subtype"] = "wh_dlc06_dwf_thane_ghost_1", ["dlc"] = {"TW_WH1_LORDS_AND_UNITS_2"}},
+    {["faction"] = "wh_main_dwf_karak_izor", ["subtype"] = "wh_dlc06_dwf_thane_ghost_2", ["dlc"] = {"TW_WH1_LORDS_AND_UNITS_2"}},
+    {["faction"] = "wh_main_dwf_karak_izor", ["subtype"] = "wh_dlc06_dwf_runesmith_ghost", ["dlc"] = {"TW_WH1_LORDS_AND_UNITS_2"}},
+    {["faction"] = "wh_main_dwf_karak_izor", ["subtype"] = "wh_dlc06_dwf_master_engineer_ghost", ["dlc"] = {"TW_WH1_LORDS_AND_UNITS_2"}},
+    {["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh2_dlc17_vmp_kevon_lloydstein", ["dlc"] = {"TW_WH2_BASE_GAME"}},
+    --{["faction"] = "", ["subtype"] = "wh2_pro08_neu_gotrek", ["dlc"] = {"TW_WH2_BASE_GAME"}},
+    --{["faction"] = "", ["subtype"] = "wh2_pro08_neu_felix", ["dlc"] = {"TW_WH2_BASE_GAME"}},
 } 
-    --MIXU Part 1--
-local mixu1_agents = {
-    {["faction"] = "wh_main_brt_artois", ["subtype"] = "brt_chilfroy"},
-    {["faction"] = "wh_main_brt_bastonne", ["subtype"] = "brt_bohemond"},
+
+--MIXU--
+local mixu_agents = {
     {["faction"] = "wh_main_brt_lyonesse", ["subtype"] = "brt_adalhard"},
+    {["faction"] = "wh_main_brt_carcassonne", ["subtype"] = "brt_amalric_de_gaudaron"},
+    {["faction"] = "", ["subtype"] = "brt_bohemond"},
     {["faction"] = "wh_main_brt_parravon", ["subtype"] = "brt_cassyon"},
-    {["faction"] = "wh_main_dwf_karak_azul", ["subtype"] = "dwf_kazador_dragonslayer"},
-    {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "mixu_elspeth_von_draken"},
-    {["faction"] = "wh_dlc05_wef_torgovann", ["subtype"] = "wef_daith"},
-    {["faction"] = "wh_main_emp_averland", ["subtype"] = "emp_marius_leitdorf"},
-    {["faction"] = "wh_main_emp_hochland", ["subtype"] = "emp_aldebrand_ludenhof"},
-    {["faction"] = "wh_main_emp_marienburg", ["subtype"] = "emp_edward_van_der_kraal"},
-    {["faction"] = "wh_main_emp_nordland", ["subtype"] = "emp_theoderic_gausser"},
-    {["faction"] = "wh_main_emp_ostermark", ["subtype"] = "emp_wolfram_hertwig"},
-    {["faction"] = "wh_main_emp_ostland", ["subtype"] = "emp_valmir_von_raukov"},
-    {["faction"] = "wh_main_emp_stirland", ["subtype"] = "emp_alberich_haupt_anderssen"},
-    {["faction"] = "wh_main_emp_talabecland", ["subtype"] = "emp_helmut_feuerbach"},
-    --{["faction"] = "", ["subtype"] = "emp_alberich_von_korden"}, 
-    --{["faction"] = "", ["subtype"] = "emp_alberich_von_korden_hero"}, 
-    {["faction"] = "wh_main_emp_empire", ["subtype"] = "emp_luthor_huss"},
-    {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "emp_theodore_bruckner"},
-    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "emp_vorn_thugenheim"}
-}
-    --MIXU Part 2--
-local mixu2_agents = {
+    {["faction"] = "wh_main_brt_artois", ["subtype"] = "brt_chilfroy"},
+    {["faction"] = "wh2_main_brt_knights_of_origo", ["subtype"] = "brt_donna_don_domingio"},
     {["faction"] = "wh2_main_brt_knights_of_origo", ["subtype"] = "brt_john_tyreweld"},
-    --{["faction"] = "", ["subtype"] = chs_egrimm_van_horstmann"}, --player unlock
+    {["faction"] = "wh2_main_bst_ripper_horn", ["subtype"] = "bst_ghorros_warhoof"},
+    {["faction"] = "", ["subtype"] = "bst_slugtongue"},
+    {["faction"] = "", ["subtype"] = "chs_azubhor_clawhand"},  
+    {["faction"] = "", ["subtype"] = "chs_egrimm_van_horstmann"}, 
+    {["faction"] = "", ["subtype"] = "chs_malofex_the_storm_chaser"},  
+    {["faction"] = "", ["subtype"] = "cst_drekla"},  
+    {["faction"] = "wh2_main_def_naggarond", ["subtype"] = "def_kouran_darkhand"},
     {["faction"] = "wh2_main_def_scourge_of_khaine", ["subtype"] = "def_tullaris_dreadbringer"},
-    {["faction"] = "wh2_main_def_scourge_of_khaine", ["subtype"] = "def_tullaris_hero"},
-    --{["faction"] = "wh_main_dwf_zhufbar", ["subtype"] = "dwf_bloodline_grimm_burloksson"}, --player unlock
+    {["faction"] = "wh_main_dwf_zhufbar", ["subtype"] = "dwf_grimm_burloksson"}, 
+    {["faction"] = "wh_main_dwf_karak_azul", ["subtype"] = "dwf_kazador_dragonslayer"},
+    {["faction"] = "", ["subtype"] = "dwf_kragg_the_grim"},
+    {["faction"] = "wh_main_emp_stirland", ["subtype"] = "emp_alberich_haupt_anderssen"},
+    {["faction"] = "", ["subtype"] = "emp_alberich_von_korden"}, 
+    {["faction"] = "", ["subtype"] = "emp_alberich_von_korden_hero"}, 
+    {["faction"] = "wh_main_emp_hochland", ["subtype"] = "emp_aldebrand_ludenhof"},
+    {["faction"] = "mixer_emp_van_der_kraal", ["subtype"] = "emp_edvard_van_der_kraal"},
+    {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "emp_elspeth"},
+    {["faction"] = "wh_main_emp_talabecland", ["subtype"] = "emp_helmut_feuerbach"},
+    {["faction"] = "wh_main_emp_empire", ["subtype"] = "emp_luthor_huss"},
+    {["faction"] = "wh_main_emp_averland", ["subtype"] = "emp_marius_leitdorf"},
+    {["faction"] = "wh_main_emp_nordland", ["subtype"] = "emp_theoderic_gausser"},
+    {["faction"] = "wh_main_emp_wissenland", ["subtype"] = "emp_theodore_bruckner"},
+    {["faction"] = "wh_main_emp_ostland", ["subtype"] = "emp_valmir_von_raukov"},
+    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "emp_vorn_thugenheim"},
+    {["faction"] = "wh_main_emp_ostermark", ["subtype"] = "emp_wolfram_hertwig"},
     {["faction"] = "wh_main_grn_red_fangs", ["subtype"] = "grn_gorfang_rotgut"},
     {["faction"] = "wh2_main_hef_saphery", ["subtype"] = "hef_belannaer"},
-    --{["faction"] = "wh2_main_hef_eataine", ["subtype"] = "hef_bloodline_caradryan"}, --player unlock
-    --{["faction"] = "wh2_main_hef_eataine", ["subtype"] = "hef_caradryan_hero"}, --player unlock
+    {["faction"] = "", ["subtype"] = "hef_caradryan"}, 
     {["faction"] = "wh2_main_hef_chrace", ["subtype"] = "hef_korhil"},
+    {["faction"] = "", ["subtype"] = "lzd_chakax"},
     {["faction"] = "wh2_main_lzd_xlanhuapec", ["subtype"] = "lzd_lord_huinitenuchli"},
-    --{["faction"] = "wh2_main_lzd_tlaqua", ["subtype"] = "lzd_oxyotl"}, --player unlock
     {["faction"] = "wh2_main_lzd_tlaxtlan", ["subtype"] = "lzd_tetto_eko"},
     {["faction"] = "wh_main_nor_skaeling", ["subtype"] = "nor_egil_styrbjorn"},
-    {["faction"] = "wh2_dlc09_tmb_numas", ["subtype"] = "tmb_tutankhanut"},
-    {["faction"] = "wh_dlc05_wef_wydrioth", ["subtype"] = "wef_naieth_the_prophetess"},
-    {["faction"] = "wh2_main_def_naggarond", ["subtype"] = "def_kouran_darkhand"},
-    {["faction"] = "", ["subtype"] = "lzd_chakax"}, -- "wh2_main_lzd_xlanhuapec" "wh2_main_lzd_hexoatl"
-    {["faction"] = "wh2_main_brt_knights_of_origo", ["subtype"] = "brt_donna_don_domingio"},
+    {["faction"] = "wh2_main_skv_clan_mordkin", ["subtype"] = "skv_feskit"},
     {["faction"] = "wh2_dlc09_tmb_numas", ["subtype"] = "tmb_ramhotep"},
-    {["faction"] = "wh2_main_bst_ripper_horn", ["subtype"] = "bst_ghorros_warhoof"},
-    {["faction"] = "", ["subtype"] = "chs_aekold_helbrass"},
-    {["faction"] = "", ["subtype"] = "chs_azubhor_clawhand"},  
-    {["faction"] = "wh2_main_skv_clan_mordkin", ["subtype"] = "skv_feskit"}
-} 
-    --XOUDAD High Elves Expanded--
+    {["faction"] = "wh2_dlc09_tmb_numas", ["subtype"] = "tmb_tutankhanut"},
+    {["faction"] = "wh2_dlc09_tmb_numas", ["subtype"] = "tze_melekh_the_changer"},
+    {["faction"] = "", ["subtype"] = "vmp_dieter_helsnicht"},
+    {["faction"] = "wh_dlc05_wef_torgovann", ["subtype"] = "wef_daith"},
+    {["faction"] = "wh_dlc05_wef_wydrioth", ["subtype"] = "wef_naieth_the_prophetess"},
+    {["faction"] = "", ["subtype"] = "wef_wychwethyl"},
+}
+
+--XOUDAD High Elves Expanded--
 local xoudad_agents = {
-    {["faction"] = "", ["subtype"] = "wax_emp_valten"}
+    {["faction"] = "", ["subtype"] = "wax_emp_valten"},
 } 
-    --CATAPH TEB--
+
+--CATAPH TEB--
 local teb_agents = {
     {["faction"] = "wh_main_teb_tilea", ["subtype"] = "teb_borgio_the_besiege"},
     {["faction"] = "wh_main_teb_tilea", ["subtype"] = "teb_tilea"},
@@ -458,70 +324,80 @@ local teb_agents = {
     {["faction"] = "wh_main_teb_border_princes", ["subtype"] = "teb_border_princes"},
     {["faction"] = "wh_main_teb_estalia", ["subtype"] = "teb_estalia"},
     {["faction"] = "wh2_main_emp_new_world_colonies", ["subtype"] = "teb_new_world_colonies"},
-    {["faction"] = "wh2_main_emp_new_world_colonies", ["subtype"] = "teb_colombo"}
+    {["faction"] = "wh2_main_emp_new_world_colonies", ["subtype"] = "teb_colombo"},
 } 
-    --CATAPH Kraka Drak--
+
+--CATAPH Kraka Drak--
 local kraka_agents = {
-    {["faction"] = "wh_main_dwf_kraka_drak", ["subtype"] = "dwf_kraka_drak"}
+    {["faction"] = "wh_main_dwf_kraka_drak", ["subtype"] = "dwf_kraka_drak"},
 } 
-    --Project Resurrection - Parte Legendary Lords--
+
+--Project Resurrection - Parte Legendary Lords--
 local parte_agents = {
     {["faction"] = "wh2_main_skv_clan_moulder", ["subtype"] = "skv_skweel_gnawtooth"},
     {["faction"] = "wh2_main_def_blood_hall_coven", ["subtype"] = "def_hag_queen_malida"},
     {["faction"] = "wh2_main_hef_cothique", ["subtype"] = "hef_aislinn"},
     {["faction"] = "wh_main_dwf_barak_varr", ["subtype"] = "dwf_byrrnoth_grundadrakk"},
     {["faction"] = "wh_main_dwf_karak_ziflin", ["subtype"] = "dwf_rorek_granitehand"},
-    {["faction"] = "wh_main_dwf_karak_hirn", ["subtype"] = "dwf_alrik_ranulfsson"}
+    {["faction"] = "wh_main_dwf_karak_hirn", ["subtype"] = "dwf_alrik_ranulfsson"},
 } 
-    --We'z Speshul--
+
+--We'z Speshul--
 local speshul_agents = {
     {["faction"] = "wh_main_grn_greenskins", ["subtype"] = "spcha_grn_borgut_facebeater"},
     {["faction"] = "wh_main_grn_orcs_of_the_bloody_hand", ["subtype"] = "spcha_grn_grokka_goreaxe"},
     {["faction"] = "", ["subtype"] = "spcha_grn_tinitt_foureyes"}, -- wh_main_grn_black_venom -- wh2_main_grn_arachnos 
     {["faction"] = "wh2_main_grn_blue_vipers", ["subtype"] = "spcha_grn_grak_beastbasha"},
     {["faction"] = "wh_main_grn_crooked_moon", ["subtype"] = "spcha_grn_duffskul"},
-    {["faction"] = "", ["subtype"] = "spcha_grn_snagla_grobspit"} -- wh_main_grn_black_venom -- wh2_main_grn_arachnos 
+    {["faction"] = "", ["subtype"] = "spcha_grn_snagla_grobspit"}, -- wh_main_grn_black_venom -- wh2_main_grn_arachnos 
 } 
-    --Whysofurious' Additional Lords & Heroes--
+
+--Whysofurious' Additional Lords & Heroes--
 local wsf_agents = {
     {["faction"] = "wh_main_emp_empire", ["subtype"] = "genevieve"},
     {["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "helsnicht"},
     {["faction"] = "wh_main_vmp_schwartzhafen", ["subtype"] = "konrad"},
     {["faction"] = "wh_main_vmp_mousillon", ["subtype"] = "mallobaude"},
     --{["faction"] = "", ["subtype"] = "sycamo"},
-    {["faction"] = "wh2_main_vmp_necrarch_brotherhood", ["subtype"] = "zacharias"}
+    {["faction"] = "wh2_main_vmp_necrarch_brotherhood", ["subtype"] = "zacharias"},
 } 
-    --Ordo Draconis - Templehof Expanded--
+
+--Ordo Draconis - Templehof Expanded--
 local ordo_agents = {
     {["faction"] = "wh_main_vmp_rival_sylvanian_vamps", ["subtype"] = "abhorash"},
     {["faction"] = "wh_main_vmp_rival_sylvanian_vamps", ["subtype"] = "vmp_walach_harkon_hero"},
-    {["faction"] = "wh_main_vmp_rival_sylvanian_vamps", ["subtype"] = "tib_kael"}
+    {["faction"] = "wh_main_vmp_rival_sylvanian_vamps", ["subtype"] = "tib_kael"},
 } 
-    --WsF' Vampire Bloodlines: The Strigoi--
+
+--WsF' Vampire Bloodlines: The Strigoi--
 local strigoi_agents = {
     {["faction"] = "wh2_main_vmp_strygos_empire", ["subtype"] = "ushoran"},
     {["faction"] = "wh2_main_vmp_strygos_empire", ["subtype"] = "vorag"},
     {["faction"] = "wh2_main_vmp_strygos_empire", ["subtype"] = "str_high_priest"},
-    {["faction"] = "wh2_main_vmp_strygos_empire", ["subtype"] = "nanosh"}
+    {["faction"] = "wh2_main_vmp_strygos_empire", ["subtype"] = "nanosh"},
 } 
-    --OvN Second Start--
+
+--OvN Second Start--
 local second_start_agents = {
-    --{["faction"] = "wh2_main_hef_yvresse", ["subtype"] = "sr_grim"}
+    --{["faction"] = "wh2_main_hef_yvresse", ["subtype"] = "sr_grim"},
 } 
-    --OvN Lost Factions - Beta--
+
+--OvN Lost Factions - Beta--
 local lost_factions_agents = {
     --{["faction"] = "", ["subtype"] = "ovn_hlf_ll"},
     --{["faction"] = "", ["subtype"] = "ovn_araby_ll"},
     --{["faction"] = "", ["subtype"] = "Sultan_Jaffar"},
-    --{["faction"] = "", ["subtype"] = "morgan_bernhardt"}
+    --{["faction"] = "", ["subtype"] = "morgan_bernhardt"},
 } 
-    --Empire Master Engineer
+
+--Empire Master Engineer
 local zf_agents = {
-    {["faction"] = "", ["subtype"] = "wh_main_emp_jubal_falk"}
+    {["faction"] = "", ["subtype"] = "wh_main_emp_jubal_falk"},
 } 
-    --Cataph's High Elf Sea Patrol
+
+--Cataph's High Elf Sea Patrol
 local seahelm_agents = {
-    {["faction"] = "", ["subtype"] = "AK_aislinn"}
+    {["faction"] = "", ["subtype"] = "AK_aislinn"},
 } 
 --Mixu's: Vangheist's Revenge
 local mixu_vangheist = {
@@ -529,11 +405,7 @@ local mixu_vangheist = {
     {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_the_white_death", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
     {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_tia_drowna", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
     {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_dreng_gunddadrak", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
-    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_khoskog", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}}
-} 
-
-local alastar_quests = {
-    { "wh2_main_anc_armour_lions_pelt", 1}
+    {["faction"] = "wh2_main_cst_the_shadewraith", ["subtype"] = "cst_bloodline_khoskog", ["dlc"] = {"TW_WH2_DLC11_VAMPIRE_COAST"}},
 } 
 
 local locked_ai_generals = {
@@ -546,7 +418,7 @@ local locked_ai_generals = {
     --{["id"] = "2140784127",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc03_bst_malagor"},                                                                   -- Malagor
     --{["id"] = "2140784189",	["faction"] = "wh_dlc03_bst_beastmen", ["subtype"] = "wh_dlc05_bst_morghur"},                                                                   -- Morghur
     --{["id"] = "2140783648",	["faction"] = "wh2_dlc13_emp_golden_order", ["subtype"] = "wh_main_emp_balthasar_gelt"},                                                        -- Balthasar Gelt
-    --{["id"] = "2140784136",	["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_dlc04_emp_volkmar", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"}                                  -- Volkmar the Grim
+    --{["id"] = "2140784136",	["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_dlc04_emp_volkmar", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"},                                  -- Volkmar the Grim
 } 
 
 -- "major" factions
@@ -635,7 +507,11 @@ local playable_factions = {
     "wh3_dlc20_chs_festus",
     "wh3_dlc20_chs_azazel",
     "wh2_dlc17_bst_malagor",
-    "wh2_dlc15_grn_bonerattlaz"
+    "wh2_dlc15_grn_bonerattlaz",
+} 
+
+local alastar_quests = {
+    { "wh2_main_anc_armour_lions_pelt", 1},
 } 
 
 local chs_subtype_anc = {
@@ -1106,10 +982,6 @@ local im_subtype_anc = {
         {"", "mixu_anc_weapon_emp_elspeth_von_draken_the_pale_scythe", "", 17},
         {"", "mixu_anc_arcane_item_emp_elspeth_von_draken_deaths_timekeeper", "", 12}
     },
-    --["mixu_katarin_the_ice_queen"] = {
-    --    {"", "mixu_anc_enchanted_item_ksl_katarin_the_ice_queen_crystal_cloak", "", 9},
-    --    {"", "mixu_anc_weapon_ksl_katarin_the_ice_queen_fearfrost", "", 15}
-    --},
     ["emp_theoderic_gausser"] = {
         {"", "mixu_anc_enchanted_item_emp_theoderic_gausser_sea_dragon_cloak", "", 10}
     },
@@ -1119,10 +991,6 @@ local im_subtype_anc = {
     ["dwf_kazador_dragonslayer"] = {
         {"", "mixu_anc_armour_dwf_kazador_dragonslayer_armour_of_karak_azul", "", 9},
         {"", "mixu_anc_weapon_dwf_kazador_dragonslayer_hammer_karak_azul", "", 15}
-    },
-    ["dwf_thorek_ironbrow"] = {
-        {"", "mixu_anc_weapon_dwf_thorek_ironbrow_klad_brakak", "", 15},
-        {"", "mixu_anc_armour_dwf_thorek_ironbrow_thoreks_rune_armour", "", 9}
     },
     ["emp_edward_van_der_kraal"] = {
         {"", "mixu_anc_enchanted_item_emp_edward_van_der_kraal_the_cursed_skull", "", 15}
@@ -1141,9 +1009,6 @@ local im_subtype_anc = {
         {"", "mixu_anc_talisman_emp_vorn_thugenheim_heart_of_middenheim", "", 15},
         {"", "mixu_anc_enchanted_item_emp_vorn_thugenheim_pelt_of_horrors", "", 10}
     },
-    --["bst_taurox"] = {
-    --    {"", "mixu_anc_weapon_bst_taurox_the_brass_bull_rune_tortured_axes", "", 13}
-    --},
     ["emp_wolfram_hertwig"] = {
         {"", "mixu_anc_talisman_emp_wolfram_hertwig_kislevite_icon", "", 14}
     }
@@ -1191,7 +1056,7 @@ local im_missing_anc = {
     ["wh2_twa03_def_rakarth"] = {
         {"", "wh2_twa03_anc_armour_beast_armour_of_karond_kar", "", 1}
     },
-    ["wh2_dlc17_dwf_thorek_ironbrow"] = {
+    ["wh2_dlc17_dwf_thorek"] = {
         {"", "wh_main_anc_rune_master_rune_of_stoicism", "", 1},
         {"", "wh2_dlc17_anc_follower_dwf_kraggi", "", 1},
         {"", "wh2_dlc17_anc_rune_engineering_rune_of_burning", "", 1}
@@ -1221,7 +1086,7 @@ local subtype_immortality = {
     ["wh2_dlc11_cst_aranessa"] = true,
     ["wh2_dlc11_cst_cylostra"] = true,
     ["wh2_dlc11_cst_harkon"] = true,
-    ["wh2_dlc11_cst_noctilus"] = true
+    ["wh2_dlc11_cst_noctilus"] = true,
 } 
 
 local names_of_power_traits = {
@@ -1260,8 +1125,385 @@ local names_of_power_traits = {
     "wh2_main_trait_def_name_of_power_ca_09_the_dark_marshall",
     "wh2_main_trait_def_name_of_power_ca_10_the_dire_overseer",
     "wh2_main_trait_def_name_of_power_ca_11_gatesmiter",
-    "wh2_main_trait_def_name_of_power_ca_12_the_tormentor"
+    "wh2_main_trait_def_name_of_power_ca_12_the_tormentor",
 } 
+
+local subculture_chaos = {
+    "wh_main_sc_chs_chaos",
+    --"wh_dlc03_sc_bst_beastmen",
+    "wh_dlc08_sc_nor_norsca",
+    "wh3_main_sc_dae_daemons",
+    "wh3_main_sc_kho_khorne",
+    "wh3_main_sc_nur_nurgle",
+    "wh3_main_sc_sla_slaanesh",
+    "wh3_main_sc_tze_tzeentch",
+}
+
+local loreful_restrictions = {
+    ["wh_main_chs_chaos"] = {
+        subculture = {}, -- subcultures allowed to confederated "wh_main_chs_chaos"
+        faction = {} -- factions allowed to confederated "wh_main_chs_chaos"
+    },
+    ["wh3_main_chs_shadow_legion"] = {
+        subculture = {},
+        faction = {}
+    },
+    ["wh3_main_dae_daemon_prince"] = {
+        subculture = {},
+        faction = {}
+    },
+    ["wh3_dlc20_chs_vilitch"] = {
+        subculture = {"wh3_main_sc_tze_tzeentch"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion"},
+    },
+    ["wh3_dlc20_chs_valkia"] = {
+        subculture = {"wh3_main_sc_kho_khorne"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion"},
+    },
+    ["wh3_dlc20_chs_sigvald"] = {
+        subculture = {"wh3_main_sc_sla_slaanesh"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion", "wh3_dlc20_chs_azazel"},
+    },
+    ["wh3_dlc20_chs_kholek"] = {
+        subculture = {},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion"},
+    },
+    ["wh3_dlc20_chs_festus"] = {
+        subculture = {"wh3_main_sc_nur_nurgle"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion"},
+    },
+    ["wh3_dlc20_chs_azazel"] = {
+        subculture = {"wh3_main_sc_sla_slaanesh"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion", "wh3_dlc20_chs_sigvald"},
+    },
+    ["wh3_main_sc_kho_khorne"] = {
+        subculture = {"wh3_main_sc_kho_khorne"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion", "wh3_dlc20_chs_azazel"},
+    },
+    ["wh3_main_sc_nur_nurgle"] = {
+        subculture = {"wh3_main_sc_nur_nurgle"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion", "wh3_dlc20_chs_festus"},
+    },
+    ["wh3_main_sc_sla_slaanesh"] = {
+        subculture = {"wh3_main_sc_sla_slaanesh"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion", "wh3_dlc20_chs_sigvald", "wh3_dlc20_chs_azazel"},
+    },
+    ["wh3_main_sc_tze_tzeentch"] = {
+        subculture = {"wh3_main_sc_tze_tzeentch"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion", "wh3_dlc20_chs_vilitch"},
+    },
+    ["wh_dlc08_sc_nor_norsca"] = {
+        subculture = {"wh_dlc08_sc_nor_norsca"},
+        faction = {"wh_main_chs_chaos", "wh3_main_dae_daemon_prince", "wh3_main_chs_shadow_legion"},
+    },
+}
+
+local subculture_exempted = {
+    --"wh_main_sc_chs_chaos",
+    "wh_dlc03_sc_bst_beastmen",
+    --rogue
+    "wh2_main_rogue",
+    "wh2_main_rogue_chaos",
+    --prologue
+    "wh3_main_pro_sc_kho_khorne",
+    "wh3_main_pro_sc_ksl_kislev",
+    "wh3_main_pro_sc_tze_tzeentch",
+    --mods
+    "wh_main_sc_nor_warp",
+    "wh_main_sc_nor_troll",
+    "wh_main_sc_nor_albion",
+    "wh_main_sc_lzd_amazon",
+    "wh_main_sc_nor_fimir"
+}
+
+local confed_restricted_subcultures = {
+    -- by default
+    --"wh2_dlc09_sc_tmb_tomb_kings",
+    --"wh2_main_rogue",
+    --"wh2_main_rogue_chaos",
+    --"wh_main_sc_chs_chaos",
+    --"wh_main_sc_grn_savage_orcs",
+    --"wh_main_sc_teb_teb",
+    --"wh2_dlc11_sc_cst_vampire_coast",
+    --ovn
+    --"wh_main_sc_emp_araby",
+    --"wh_main_sc_nor_fimir",
+} 
+
+local faction_exempted = {
+    "wh2_dlc13_lzd_defenders_of_the_great_plan", --nakai vassal
+    "wh2_dlc13_lzd_avengers", --wulfhart hostility mechanic
+    "wh2_dlc10_def_blood_voyage", --queen & crone mechanic
+	"wh2_main_chs_chaos_incursion_def", --cai_diplomacy_excluded_factions table
+	"wh2_main_chs_chaos_incursion_hef", --cai_diplomacy_excluded_factions table
+	"wh2_main_chs_chaos_incursion_lzd", --cai_diplomacy_excluded_factions table
+    "wh2_main_chs_chaos_incursion_skv",
+	"wh2_main_nor_hung_incursion_def", --cai_diplomacy_excluded_factions table
+	"wh2_main_nor_hung_incursion_hef", --cai_diplomacy_excluded_factions table
+	"wh2_main_nor_hung_incursion_lzd", --cai_diplomacy_excluded_factions table
+	"wh2_main_nor_hung_incursion_skv", --cai_diplomacy_excluded_factions table
+	"wh2_main_skv_unknown_clan_def", --cai_diplomacy_excluded_factions table
+	"wh2_main_skv_unknown_clan_hef", --cai_diplomacy_excluded_factions table
+	"wh2_main_skv_unknown_clan_lzd", --cai_diplomacy_excluded_factions table
+	"wh2_main_skv_unknown_clan_skv", --cai_diplomacy_excluded_factions table
+    "wh3_main_kho_brazen_throne", --chaos realm
+    "wh3_main_nur_bubonic_swarm", --chaos realm
+    "wh3_main_sla_rapturous_excess", --chaos realm
+    "wh3_main_tze_all_seeing_eye", --chaos realm
+    "wh3_main_rogue_shadow_legion", --chaos realm
+    "wh3_main_rogue_the_bloody_harvest", --chaos realm
+    "wh3_main_rogue_the_fluxion_host", --chaos realm
+    "wh3_main_rogue_the_pleasure_tide", --chaos realm
+    "wh3_main_rogue_the_putrid_swarm", --chaos realm
+    "_prologue",
+    "_waaagh",
+    "_brayherd",
+    "wh_main_emp_empire_separatists", --Empire Secessionists
+    "wh3_main_cth_dissenter_lords_of_jinshen", --zhao ming "rebels"
+    "wh3_main_cth_rebel_lords_of_nan_yang", --miao ying "rebels"
+    "wh_main_chs_chaos_separatists", --brt quest battle
+    "wh2_dlc09_skv_clan_rictus_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_noctilus_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_pirates_of_sartosa_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_the_drowned_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_vampire_coast_separatists", --loyalty mechanic
+    "wh2_dlc11_def_the_blessed_dread_separatists", --loyalty mechanic
+    "wh2_main_def_cult_of_pleasure_separatists", --loyalty mechanic
+    "wh2_main_def_hag_graef_separatists", --loyalty mechanic
+    "wh2_main_def_har_ganeth_separatists", --loyalty mechanic
+    "wh2_main_def_naggarond_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_eshin_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_mors_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_moulder_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_pestilens_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_skryre_separatists", --loyalty mechanic
+    "wh2_twa03_def_rakarth_separatists", --loyalty mechanic
+    "wh_main_nor_norsca_separatists", --not used, I believe
+    "wh_main_nor_norsca_separatists_sorcerer_lord", --not used, I believe
+    "wh2_dlc11_brt_bretonnia_dil", --cst mission
+    "wh2_dlc11_def_dark_elves_dil", --cst mission
+    "wh2_dlc11_emp_empire_dil", --cst mission
+    "wh2_dlc11_nor_norsca_dil", --cst mission
+    "wh2_dlc11_cst_vampire_coast_rebels", --wulfhart mission
+    "wh3_main_cth_rebel_lords_of_nan_yang", --miao ying starting opponent
+    "wh3_dlc21_vmp_jiangshi_rebels", --nakai victory objective
+    "wh3_dlc21_cst_dead_flag_fleet", --nakai victory objective
+    "_invasion", --empire and world root invasion armies
+    "_shanty",  --roving pirate and treasure map armies
+    "wh_dlc08_chs_chaos_challenger_tzeentch", --norscan gods mechanic
+    "wh_dlc08_chs_chaos_challenger_slaanesh", --norscan gods mechanic
+    "wh_dlc08_chs_chaos_challenger_nurgle", --norscan gods mechanic
+    "wh_dlc08_chs_chaos_challenger_khorne", --norscan gods mechanic
+    --"wh3_main_cth_cathay_mp", --?
+    --"wh2_dlc16_wef_waystone_faction_3", --?
+    --"wh2_dlc16_wef_waystone_faction_2", --?
+    --"wh2_dlc16_wef_waystone_faction_1", --?
+}
+
+local faction_seccessionists = {
+    "wh2_dlc09_skv_clan_rictus_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_noctilus_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_pirates_of_sartosa_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_the_drowned_separatists", --loyalty mechanic
+    "wh2_dlc11_cst_vampire_coast_separatists", --loyalty mechanic
+    "wh2_dlc11_def_the_blessed_dread_separatists", --loyalty mechanic
+    "wh2_main_def_cult_of_pleasure_separatists", --loyalty mechanic
+    "wh2_main_def_hag_graef_separatists", --loyalty mechanic
+    "wh2_main_def_har_ganeth_separatists", --loyalty mechanic
+    "wh2_main_def_naggarond_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_eshin_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_mors_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_moulder_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_pestilens_separatists", --loyalty mechanic
+    "wh2_main_skv_clan_skryre_separatists", --loyalty mechanic
+    "wh2_twa03_def_rakarth_separatists", --loyalty mechanic
+}
+
+local bundle_confederation = {
+    "wh2_main_bundle_confederation_skv",
+    "wh2_main_bundle_confederation_lzd",
+    "wh2_main_bundle_confederation_hef",
+    "wh2_main_bundle_confederation_def",
+    "wh_main_bundle_confederation_grn",
+    "wh_main_bundle_confederation_vmp",
+    "wh_main_bundle_confederation_dwf",
+    "wh_main_bundle_confederation_emp",
+    "wh_main_bundle_confederation_brt",
+    "wh_main_bundle_confederation_wef",
+    "wh_dlc03_beastmen_confederation_help",
+    "wh3_main_bundle_confederation_cth",
+    "wh3_main_bundle_confederation_dae",
+    "wh3_main_bundle_confederation_kho",
+    "wh3_main_bundle_confederation_nur",
+    "wh3_main_bundle_confederation_ogr",
+    "wh3_main_bundle_confederation_sla",
+    "wh3_main_bundle_confederation_tze",
+} 
+
+local bret_confederation_tech = {
+    {tech = "wh_dlc07_tech_brt_heraldry_artois", faction = "wh_main_brt_artois"},
+    {tech = "wh_dlc07_tech_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
+    {tech = "wh_dlc07_tech_brt_heraldry_bordeleaux", faction = "wh_main_brt_bordeleaux"},
+    {tech = "wh_dlc07_tech_brt_heraldry_bretonnia", faction = "wh_main_brt_bretonnia"},
+    {tech = "wh_dlc07_tech_brt_heraldry_carcassonne", faction = "wh_main_brt_carcassonne"},
+    {tech = "wh_dlc07_tech_brt_heraldry_lyonesse", faction = "wh_main_brt_lyonesse"},
+    {tech = "wh_dlc07_tech_brt_heraldry_parravon", faction = "wh_main_brt_parravon"},
+    {tech = "wh3_main_tech_brt_heraldry_aquitaine", faction = "wh3_main_brt_aquitaine"}
+} 
+
+local function sm0_log_reset()
+	if not __write_output_to_logfile then
+		return
+	end
+	local logTimeStamp = os.date("%d, %m %Y %X")
+	local popLog = io.open("sm0_log.txt","w+")
+	popLog :write("NEW LOG ["..logTimeStamp.."] \n")
+	popLog :flush()
+	popLog :close()
+end
+
+---@param text string
+local function sm0_log(text)
+	if not __write_output_to_logfile then
+		return
+	end
+	local logText = tostring(text)
+	local logTimeStamp = os.date("%d, %m %Y %X")
+	local popLog = io.open("sm0_log.txt","a")
+	popLog :write("RD:  [".. logTimeStamp .. "] [Turn: ".. tostring(cm:model():turn_number()) .. "(" .. tostring(cm:whose_turn_is_it_single():name()) .. ")]:  "..logText .. "  \n")
+	popLog :flush()
+	popLog :close()
+end
+
+local function RDDEBUG()
+    if not __write_output_to_logfile then
+		return
+	end
+	--Vanish's PCaller
+	--All credits to vanish
+	local function safeCall(func)
+		--out("safeCall start")
+		local status, result = pcall(func)
+		if not status then
+			sm0_log("ERROR")
+			sm0_log(tostring(result))
+			sm0_log(debug.traceback())
+		end
+		--out("safeCall end")
+		return result
+	end
+
+	--local oldTriggerEvent = core.trigger_event
+
+	local function pack2(...) return {n=select('#', ...), ...} end
+	local function unpack2(t) return unpack(t, 1, t.n) end
+
+	local function wrapFunction(f, argProcessor)
+		return function(...)
+			--out("start wrap ")
+			local someArguments = pack2(...)
+			if argProcessor then
+				safeCall(function() argProcessor(someArguments) end)
+			end
+			local result = pack2(safeCall(function() return f(unpack2( someArguments )) end))
+			--for k, v in pairs(result) do
+			--    out("Result: " .. tostring(k) .. " value: " .. tostring(v))
+			--end
+			--out("end wrap ")
+			return unpack2(result)
+			end
+	end
+
+	-- function myTriggerEvent(event, ...)
+	--     local someArguments = { ... }
+	--     safeCall(function() oldTriggerEvent(event, unpack( someArguments )) end)
+	-- end
+
+	local function tryRequire(fileName)
+		local loaded_file = loadfile(fileName)
+		if not loaded_file then
+			out("Failed to find mod file with name " .. fileName)
+		else
+			out("Found mod file with name " .. fileName)
+			out("Load start")
+			local local_env = getfenv(1)
+			setfenv(loaded_file, local_env)
+			loaded_file()
+			out("Load end")
+		end
+	end
+
+	local function logFunctionCall(f, name)
+		return function(...)
+			out("function called: " .. name)
+			return f(...)
+		end
+	end
+
+	local function logAllObjectCalls(object)
+		local metatable = getmetatable(object)
+		for name,f in pairs(getmetatable(object)) do
+			if is_function(f) then
+				out("Found " .. name)
+				if name == "Id" or name == "Parent" or name == "Find" or name == "Position" or name == "CurrentState"  or name == "Visible"  or name == "Priority" or "Bounds" then
+					--Skip
+				else
+					metatable[name] = logFunctionCall(f, name)
+				end
+			end
+			if name == "__index" and not is_function(f) then
+				for indexname,indexf in pairs(f) do
+					out("Found in index " .. indexname)
+					if is_function(indexf) then
+						f[indexname] = logFunctionCall(indexf, indexname)
+					end
+				end
+				out("Index end")
+			end
+		end
+	end
+
+	-- logAllObjectCalls(core)
+	-- logAllObjectCalls(cm)
+	-- logAllObjectCalls(game_interface)
+
+	core.trigger_event = wrapFunction(
+		core.trigger_event,
+		function(ab)
+			--out("trigger_event")
+			--for i, v in pairs(ab) do
+			--    out("i: " .. tostring(i) .. " v: " .. tostring(v))
+			--end
+			--out("Trigger event: " .. ab[1])
+		end
+	)
+
+	cm.check_callbacks = wrapFunction(
+		cm.check_callbacks,
+		function(ab)
+			--out("check_callbacks")
+			--for i, v in pairs(ab) do
+			--    out("i: " .. tostring(i) .. " v: " .. tostring(v))
+			--end
+		end
+	)
+
+	local currentAddListener = core.add_listener
+	local function myAddListener(core, listenerName, eventName, conditionFunc, listenerFunc, persistent)
+		local wrappedCondition = nil
+		if is_function(conditionFunc) then
+			--wrappedCondition =  wrapFunction(conditionFunc, function(arg) out("Callback condition called: " .. listenerName .. ", for event: " .. eventName) end)
+			wrappedCondition =  wrapFunction(conditionFunc)
+		else
+			wrappedCondition = conditionFunc
+		end
+		currentAddListener(
+			core, listenerName, eventName, wrappedCondition, wrapFunction(listenerFunc), persistent
+			--core, listenerName, eventName, wrappedCondition, wrapFunction(listenerFunc, function(arg) out("Callback called: " .. listenerName .. ", for event: " .. eventName) end), persistent
+		)
+	end
+	core.add_listener = myAddListener
+end
 
 ---@param faction FACTION_SCRIPT_INTERFACE
 local function immortality_backup(faction)
@@ -1368,7 +1610,7 @@ local function are_lords_missing(faction)
                     end
                 end
             end
-            return not char_found and (not is_string(locked_ai_generals[i].dlc) or (is_string(locked_ai_generals[i].dlc) and cm:is_dlc_flag_enabled(locked_ai_generals[i].dlc))) 
+            return not char_found and (not is_string(locked_ai_generals[i].dlc) or (is_string(locked_ai_generals[i].dlc) and cm:is_dlc_flag_enabled(locked_ai_generals[i].dlc, faction:name()))) 
         end
     end
 end
@@ -1414,8 +1656,7 @@ end
 ---@param faction FACTION_SCRIPT_INTERFACE
 ---@param x number
 ---@param y number
----@return spawn_X number
----@return spawn_Y number
+---@return number, number
 local function find_valid_spawn_coordinates(faction, x, y)
     -- Written by Vandy.
     local spawn_X, spawn_Y = cm:find_valid_spawn_location_for_character_from_position(faction, x, y, true)
@@ -1582,33 +1823,13 @@ local function spawn_missing_lords(confederator, confederated)
         sm0_log("ERROR: Could not find valid spawn position!")
     end
 end
-
+---@param faction FACTION_SCRIPT_INTERFACE
+---@return string
 local function confed_penalty(faction)
-    local bundles = {
-        "wh2_main_bundle_confederation_skv",
-        "wh2_main_bundle_confederation_lzd",
-        "wh2_main_bundle_confederation_hef",
-        "wh2_main_bundle_confederation_def",
-        "wh_main_bundle_confederation_grn",
-        "wh_main_bundle_confederation_vmp",
-        "wh_main_bundle_confederation_dwf",
-        "wh_main_bundle_confederation_emp",
-        "wh_main_bundle_confederation_brt",
-        "wh_main_bundle_confederation_wef",
-        "wh_dlc03_beastmen_confederation_help",
-        "wh3_main_bundle_confederation_cth",
-        "wh3_main_bundle_confederation_dae",
-        "wh3_main_bundle_confederation_kho",
-        "wh3_main_bundle_confederation_nur",
-        "wh3_main_bundle_confederation_ogr",
-        "wh3_main_bundle_confederation_sla",
-        "wh3_main_bundle_confederation_tze"
-    } 
-
     local has_confed_bundle = ""
-    for i = 1, #bundles do
-        if faction and faction:has_effect_bundle(bundles[i]) then 
-            has_confed_bundle = bundles[i] 
+    for i = 1, #bundle_confederation do
+        if faction and faction:has_effect_bundle(bundle_confederation[i]) then 
+            has_confed_bundle = bundle_confederation[i] 
             break
         end
     end
@@ -1619,7 +1840,7 @@ end
 ---@param confederated FACTION_SCRIPT_INTERFACE
 ---@param character CHARACTER_SCRIPT_INTERFACE
 ---@param agents table
-local function lord_event(confederator, confederated, character, agents)
+local function lord_events_mp(confederator, confederated, character, agents)
     for _, agent in ipairs(agents) do
         local subtype = agent.subtype
 
@@ -1633,29 +1854,58 @@ local function lord_event(confederator, confederated, character, agents)
             --elseif is_string(agent.dlc) then
             --    sm0_log("agent.dlc: "..tostring(agent.dlc).." == "..tostring(cm:is_dlc_flag_enabled(agent.dlc, confederator)))
             --end
-            for i=1, #agent.dlc do
+            for i = 1, #agent.dlc do
+                sm0_log("agent.dlc: "..tostring(agent.dlc[i]).." == "..tostring(cm:is_dlc_flag_enabled(agent.dlc[i], confederator:name())))
                 if not cm:is_dlc_flag_enabled(agent.dlc[i], confederator:name()) then
                     return
                 end
-            end    
+            end 
             CampaignUI.TriggerCampaignScriptEvent(confederator:command_queue_index(), "RD|"..tostring(character:command_queue_index())..":"..subtype..";"..tostring(confederated:name()))
         end
     end    
 end
 
-local confed_restricted_subcultures = {
-    -- by default
-    "wh2_dlc09_sc_tmb_tomb_kings",
-    "wh2_main_rogue",
-    "wh2_main_rogue_chaos",
-    "wh_main_sc_chs_chaos",
-    "wh_main_sc_grn_savage_orcs",
-    "wh_main_sc_teb_teb",
-    "wh2_dlc11_sc_cst_vampire_coast"
-    --ovn
-    --"wh_main_sc_emp_araby"
-    --"wh_main_sc_nor_fimir"
-} 
+---@param confederator FACTION_SCRIPT_INTERFACE
+---@param char CHARACTER_SCRIPT_INTERFACE
+---@param agents table
+local function lord_events(confederator, char, agents)
+    if confederator and confederator:is_human() then
+        for _, agent in ipairs(agents) do
+            local subtype = agent.subtype
+            if char and subtype == char:character_subtype_key() then
+                for i = 1, #agent.dlc do
+                    sm0_log("agent.dlc: "..tostring(agent.dlc[i]).." == "..tostring(cm:is_dlc_flag_enabled(agent.dlc[i], confederator:name())))
+                    if cm:is_dlc_flag_enabled(agent.dlc[i], confederator:name()) then
+                        if char then 
+                            local subtype = char:character_subtype_key()
+                            local picture = faction_event_picture[confederator:name()]
+                            if not is_number(picture) then 
+                                picture = subculture_event_picture[confederator:subculture()] 
+                            end
+                            local char_type = "legendary_lord"
+                            if cm:char_is_agent(char) then char_type = "legendary_hero" end
+                            --sm0_log("Faction event picture | Number: "..tostring(picture))
+                            --sm0_log("Faction event Title 1: "..common.get_localised_string("event_feed_strings_text_title_event_" .. char_type .. "_available"))
+                            --sm0_log("Faction event Title 2: "..common.get_localised_string("event_feed_strings_text_title_event_"..subtype.."_LL_unlocked"))
+                            --sm0_log("Faction event Description: "..common.get_localised_string("event_feed_strings_text_description_event_"..subtype.."_LL_unlocked"))                   
+                            if picture and common.get_localised_string("event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked") 
+                            and common.get_localised_string("event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked") and char_type then
+                                cm:show_message_event(
+                                    confederator:name(),
+                                    "event_feed_strings_text_title_event_" .. char_type .. "_available",
+                                    "event_feed_strings_text_title_event_" .. subtype .. "_LL_unlocked",
+                                    "", --"event_feed_strings_text_description_event_" .. subtype .. "_LL_unlocked",
+                                    true,
+                                    picture
+                                )
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
 ---@param faction FACTION_SCRIPT_INTERFACE
 local function apply_diplomacy(faction)
@@ -1704,10 +1954,14 @@ local function apply_diplomacy(faction)
             option.both_directions = false
             for i, subculture_confed in ipairs(confed_restricted_subcultures) do
                 if subculture == subculture_confed then
-                    option.target = "subculture:" .. subculture
-                    option.offer = false
-                    option.accept = false
-                    option.both_directions = false
+                    --option.target = "subculture:" .. subculture
+                    --option.offer = false
+                    --option.accept = false
+                    --option.both_directions = false
+                    option.target = nil
+                    option.offer = nil
+                    option.accept = nil
+                    option.both_directions = nil
                 end
             end	
             --if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then
@@ -1716,7 +1970,7 @@ local function apply_diplomacy(faction)
             --    option.accept = true
             --    option.both_directions = false            
             --end
-            if faction:pooled_resource_manager():resource("emp_loyalty") == true then
+            if faction:pooled_resource_manager():resource("emp_loyalty"):is_null_interface() == false then
                 option.offer = false
                 option.accept = false
                 option.both_directions = false
@@ -1744,25 +1998,15 @@ local function apply_diplomacy(faction)
                         cm:force_diplomacy("faction:wh_main_vmp_rival_sylvanian_vamps", "faction:wh_main_vmp_schwartzhafen", "form confederation", false, false, true, false)
                     end
                     if subculture == "wh_main_sc_brt_bretonnia" and faction:is_human() and faction:name()  ~= "wh2_dlc14_brt_chevaliers_de_lyonesse" then
-                        local bret_confederation_tech = {
-                            {tech = "wh_dlc07_tech_brt_heraldry_artois", faction = "wh_main_brt_artois"},
-                            {tech = "wh_dlc07_tech_brt_heraldry_bastonne", faction = "wh_main_brt_bastonne"},
-                            {tech = "wh_dlc07_tech_brt_heraldry_bordeleaux", faction = "wh_main_brt_bordeleaux"},
-                            {tech = "wh_dlc07_tech_brt_heraldry_bretonnia", faction = "wh_main_brt_bretonnia"},
-                            {tech = "wh_dlc07_tech_brt_heraldry_carcassonne", faction = "wh_main_brt_carcassonne"},
-                            {tech = "wh_dlc07_tech_brt_heraldry_lyonesse", faction = "wh_main_brt_lyonesse"},
-                            {tech = "wh_dlc07_tech_brt_heraldry_parravon", faction = "wh_main_brt_parravon"},
-                            {tech = "wh3_main_tech_brt_heraldry_aquitaine", faction = "wh3_main_brt_aquitaine"}
-                        } 
-
                         for i = 1, #bret_confederation_tech do
                             local has_tech = faction:has_technology(bret_confederation_tech[i].tech)
                             cm:force_diplomacy("faction:"..faction:name(), "faction:"..bret_confederation_tech[i].faction, "form confederation", has_tech, has_tech, true, false)
                         end
                     end
-                    if faction:is_human() and faction:pooled_resource_manager():resource("emp_loyalty") == true then
+                    if faction:is_human() and faction:pooled_resource_manager():resource("emp_loyalty"):is_null_interface() == false then
                         cm:force_diplomacy("faction:"..faction:name() , "faction:wh2_dlc13_emp_the_huntmarshals_expedition", "form confederation", true, true, false, false)
                         cm:force_diplomacy("faction:"..faction:name() , "faction:wh2_main_emp_sudenburg", "form confederation", true, true, false, false)
+                        cm:force_diplomacy("faction:"..faction:name() , "faction:wh3_main_emp_cult_of_sigmar", "form confederation", true, true, false, false)
                     end
                     ---hack fix to stop this re-enabling confederation when it needs to stay disabled
                     ---please let's make this more robust!
@@ -1798,6 +2042,7 @@ end
 ---@param confederator FACTION_SCRIPT_INTERFACE
 ---@param confederated FACTION_SCRIPT_INTERFACE
 local function confed_revived(confederator, confederated)
+    cm:set_saved_value("confed_revived_"..confederated:name(), true)
     local start_region --confederator:region_list():item_at(0)
     local x, y
     --if start_region then sm0_log("spawn_missing_lords 1: "..confederator:name().." | Region: "..start_region:name()) end
@@ -1857,16 +2102,11 @@ local function confed_revived(confederator, confederated)
                 --equip_quest_anc(confederated)
                 local faction_leader_cqi = confederated:faction_leader():command_queue_index()
                 local char_list = confederated:character_list()
-                --for n = 0, char_list:num_items() - 1 do 
-                --    local char = char_list:item_at(n)
-                --    local command_queue_index = char:command_queue_index()
-                --    if command_queue_index ~= cqi and not char:is_faction_leader() then 
-                --        cm:kill_character(command_queue_index, true) 
-                --    end
-                --end
+                local hit_list = {}
                 for i = 0, char_list:num_items() - 1 do 
                     local char = char_list:item_at(i)
                     local command_queue_index = char:command_queue_index()
+                    --remove names of power traits
                     --local char_lookup = cm:char_lookup_str(char)
                     --if cm:char_is_agent(char) or cm:char_is_general(char) then 
                     --    cm:force_reset_skills(char_lookup) 
@@ -1878,23 +2118,23 @@ local function confed_revived(confederator, confederated)
                     --end
                     --if not char:has_military_force() and (cm:char_is_general(char) or cm:char_is_agent(char)) then cm:kill_character(command_queue_index, true) end --kill colonels
                     if confederator:is_human() then 
-                        lord_event(confederator, confederated, char, wh_agents)
-                        --if vfs.exists("script/campaign/main_warhammer/mod/mixu_le_bruckner.lua") then lord_event(confederator, confederated, char, mixu1_agents) end
-                        --if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then lord_event(confederator, confederated, char, mixu2_agents) end
-                        --if vfs.exists("script/campaign/mod/eltharion_yvresse_add.lua") then lord_event(confederator, confederated, char, xoudad_agents) end
-                        --if vfs.exists("script/campaign/main_warhammer/mod/cataph_kraka_drak.lua") then lord_event(confederator, confederated, char, kraka_agents) end
-                        --if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then lord_event(confederator, confederated, char, teb_agents) end
-                        --if vfs.exists("script/export_helpers_enforest.lua") then lord_event(confederator, confederated, char, parte_agents) end
-                        --if vfs.exists("script/campaign/main_warhammer/mod/spcha_live_launch.lua") then lord_event(confederator, confederated, char, speshul_agents) end
-                        --if vfs.exists("script/export_helpers_why_grudge.lua") then lord_event(confederator, confederated, char, wsf_agents) end
-                        --if vfs.exists("script/export_helpers_ordo_draconis_why.lua") then lord_event(confederator, confederated, char, ordo_agents) end
-                        --if vfs.exists("script/export_helpers_why_strigoi_camp.lua") then lord_event(confederator, confederated, char, strigoi_agents) end
-                        --if vfs.exists("script/campaign/mod/@zf_master_engineer_setup_vandy") then lord_event(confederator, confederated, char, zf_agents) end 
-                        --if vfs.exists("script/campaign/mod/cataph_aislinn") then lord_event(confederator, confederated, char, seahelm_agents) end
-                        --if vfs.exists("script/campaign/mod/mixu_shadewraith") then lord_event(confederator, confederated, char, mixu_vangheist) end
-                        --if vfs.exists("script/campaign/mod/ovn_rogue.lua") then lord_event(confederator, confederated, char, second_start_agents) end
-                        --if vfs.exists("script/campaign/mod/sr_chaos.lua") then lord_event(confederator, confederated, char, lost_factions_agents) end
-                        --sm0_log("Faction: "..confederated:name().." | ".."Character | Forename: "..common.get_localised_string(char:get_forename()).." | Surname: "..common.get_localised_string(char:get_surname()))
+                        --lord_events_mp(confederator, confederated, char, wh_agents)
+                        --if vfs.exists("script/campaign/wh3_main_combi/mod/mixu_spawn_characters_ie.lua.lua") then lord_events_mp(confederator, confederated, char, mixu_agents) end
+                        --if vfs.exists("script/campaign/mod/mixu_darkhand.lua") then lord_events_mp(confederator, confederated, char, mixu2_agents) end
+                        --if vfs.exists("script/campaign/mod/eltharion_yvresse_add.lua") then lord_events_mp(confederator, confederated, char, xoudad_agents) end
+                        --if vfs.exists("script/campaign/main_warhammer/mod/cataph_kraka_drak.lua") then lord_events_mp(confederator, confederated, char, kraka_agents) end
+                        --if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") then lord_events_mp(confederator, confederated, char, teb_agents) end
+                        --if vfs.exists("script/export_helpers_enforest.lua") then lord_events_mp(confederator, confederated, char, parte_agents) end
+                        --if vfs.exists("script/campaign/main_warhammer/mod/spcha_live_launch.lua") then lord_events_mp(confederator, confederated, char, speshul_agents) end
+                        --if vfs.exists("script/export_helpers_why_grudge.lua") then lord_events_mp(confederator, confederated, char, wsf_agents) end
+                        --if vfs.exists("script/export_helpers_ordo_draconis_why.lua") then lord_events_mp(confederator, confederated, char, ordo_agents) end
+                        --if vfs.exists("script/export_helpers_why_strigoi_camp.lua") then lord_events_mp(confederator, confederated, char, strigoi_agents) end
+                        --if vfs.exists("script/campaign/mod/@zf_master_engineer_setup_vandy") then lord_events_mp(confederator, confederated, char, zf_agents) end 
+                        --if vfs.exists("script/campaign/mod/cataph_aislinn") then lord_events_mp(confederator, confederated, char, seahelm_agents) end
+                        --if vfs.exists("script/campaign/mod/mixu_shadewraith") then lord_events_mp(confederator, confederated, char, mixu_vangheist) end
+                        --if vfs.exists("script/campaign/mod/ovn_rogue.lua") then lord_events_mp(confederator, confederated, char, second_start_agents) end
+                        --if vfs.exists("script/campaign/mod/sr_chaos.lua") then lord_events_mp(confederator, confederated, char, lost_factions_agents) end
+                        sm0_log("Faction: "..confederated:name().." | ".."Character cqi:"..command_queue_index.." | Forename: "..common.get_localised_string(char:get_forename()).." | Surname: "..common.get_localised_string(char:get_surname()))
                     end
                     --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and not cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
                     --    --cm:callback(function() --wh2_pro08_gotrek_felix inspired wait for spawn
@@ -1908,46 +2148,74 @@ local function confed_revived(confederator, confederated)
                     --if is_surtha_ek(char) then
                     --    cm:force_add_ancillary(char, "wh_dlc10_anc_mount_nor_surtha_ek_marauder_chariot", true, true)
                     --end
-                    if command_queue_index ~= cqi and not char:is_faction_leader() then 
-                        cm:kill_character(command_queue_index, true) 
+                    table.insert(hit_list, command_queue_index)
+                    if command_queue_index ~= cqi and (mortals_value == "disable" or (not char:is_faction_leader() and mortals_value == "faction_leader")) then 
+                        --cm:kill_character(command_queue_index, true) 
                     end
                 end
-                --if confederated:name() == "wh2_main_hef_eataine" and not cm:get_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked") then
-                --    local char_found = false
-                --    local faction_list = cm:model():world():faction_list()
-                --    for i = 0, faction_list:num_items() - 1 do
-                --        local current_faction = faction_list:item_at(i)
-                --        local char_list = current_faction:character_list()
-                --        for j = 0, char_list:num_items() - 1 do
-                --            local current_char = char_list:item_at(j)
-                --            if current_char:character_subtype_key() == "wh2_main_hef_prince_alastar" then
-                --                char_found = true
-                --            end
-                --        end      
-                --    end
-                --    if not char_found then  
-                --        sm0_log("spawn_missing_lords: ".."wh2_main_hef_prince_alastar".." spawned!")         
-                --        cm:spawn_character_to_pool(confederator:name(), "names_name_2147360555", "names_name_2147360560", "", "", 18, true, "general", "wh2_main_hef_prince_alastar", true, "")
-                --        cm:set_saved_value("v_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked", true)
-                --        ancillary_on_rankup(alastar_quests, "wh2_main_hef_prince_alastar")
-                --        if confederator:is_human() then
-                --            --cm:show_message_event(
-                --            --    confederator:name(),
-                --            --    "event_feed_strings_text_title_event_legendary_lord_available",
-                --            --    "event_feed_strings_text_title_event_wh2_main_hef_prince_alastar_LL_unlocked",
-                --            --    "event_feed_strings_text_description_event_wh2_main_hef_prince_alastar_LL_unlocked",
-                --            --    true,
-                --            --    faction_event_picture[confederator:name()]
-                --            --)
-                --        end
-                ---- NEEDS start pos id for immortal empires
-                --        --if cm:model():campaign_name("main_warhammer") then
-                --        --    cm:lock_starting_general_recruitment("1065845653", "wh2_main_hef_eataine")
-                --        --else
-                --        --    cm:lock_starting_general_recruitment("2140785181", "wh2_main_hef_eataine")
-                --        --end
-                --    end
-                --end
+                if confederated:name() == "wh2_main_hef_eataine" and not cm:get_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked") then
+                    local char_found = false
+                    local faction_list = cm:model():world():faction_list()
+                    for i = 0, faction_list:num_items() - 1 do
+                        local current_faction = faction_list:item_at(i)
+                        local char_list = current_faction:character_list()
+                        for j = 0, char_list:num_items() - 1 do
+                            local current_char = char_list:item_at(j)
+                            if current_char:character_subtype_key() == "wh2_main_hef_prince_alastar" then
+                                char_found = true
+                            end
+                        end      
+                    end
+                    if not char_found then  
+                        sm0_log("spawn_missing_lords: ".."wh2_main_hef_prince_alastar".." spawned!")         
+                        cm:spawn_character_to_pool(confederator:name(), "names_name_2147360555", "names_name_2147360560", "", "", 18, true, "general", "wh2_main_hef_prince_alastar", true, "")
+                        cm:set_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked", true)
+                        if confederator:is_human() then
+                            cm:show_message_event(
+                                confederator:name(),
+                                "event_feed_strings_text_title_event_legendary_lord_available",
+                                "event_feed_strings_text_title_event_wh2_main_hef_prince_alastar_LL_unlocked",
+                                "",--"event_feed_strings_text_description_event_wh2_main_hef_prince_alastar_LL_unlocked",
+                                true,
+                                faction_event_picture[confederator:name()]
+                            )
+                        end
+                        core:add_listener(
+                            "sm0_confed_revived_CharacterCreated",
+                            "CharacterCreated",
+                            function(context)
+                                return context:character():character_subtype_key() == "wh2_main_hef_prince_alastar" and cm:get_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked")
+                            end,
+                            function(context)
+                                local cqi = context:character():command_queue_index()
+                                local char_lookup = cm:char_lookup_str(cqi)
+                                cm:disable_event_feed_events(true, "", "", "character_ready_for_duty")
+                                core:add_listener(
+                                    "sm0_confed_revived_CharacterConvalescedOrKilled",
+                                    "CharacterConvalescedOrKilled",
+                                    function(context)
+                                        return cqi == context:character():command_queue_index()
+                                    end,
+                                    function(context)
+                                        local cqi = context:character():command_queue_index()
+                                        local char_lookup = cm:char_lookup_str(cqi)
+                                        --sm0_log("sm0_confed_revived_CharacterConvalescedOrKilled | "..char_lookup)
+                                        cm:stop_character_convalescing(cqi)
+                                        cm:set_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_doppelganger_deleted", true)
+                                        cm:callback(function() cm:disable_event_feed_events(false, "", "", "character_ready_for_duty") end, 10)
+                                    end,
+                                    false
+                                )
+                                cm:callback(function() 
+                                    cm:set_character_immortality(char_lookup, false)
+                                    cm:kill_character(cqi, false)
+                                    cm:force_add_ancillary(context:character(), "wh2_main_anc_armour_lions_pelt", true, false)                
+                                end, 0.01) 
+                            end,
+                            false
+                        )
+                    end
+                end
                 cm:set_saved_value("rd_confed", true)
                 core:add_listener(
                     "sm0_confed_revived_FactionJoinsConfederation",
@@ -1957,21 +2225,40 @@ local function confed_revived(confederator, confederated)
                     end,
                     function(context)
                         sm0_log("Faction: "..confederator:name().." :confederated: "..confederated:name().." | CQI: "..cqi)
+                        if not confederator:is_human() then
+                            cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
+                        end
                         cm:callback(function() 
                             if confed_penalty(confederator) ~= "" then cm:remove_effect_bundle(confed_penalty(confederator), confederator:name()) end 
                         end, 0.5)
                         -- some faction leaders need a immortality reset after confederation
                         --immortality_backup(context:confederation())
                         -- execute useless mod compatibility
-                        if cm:get_saved_value("sm0_immortal_cqi"..cqi) then cm:set_character_immortality(cm:char_lookup_str(cqi), true) end
-                        if cm:get_saved_value("sm0_immortal_cqi"..faction_leader_cqi) then cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), true) end
+                        --if cm:get_saved_value("sm0_immortal_cqi"..cqi) then cm:set_character_immortality(cm:char_lookup_str(cqi), true) end
+                        --if cm:get_saved_value("sm0_immortal_cqi"..faction_leader_cqi) then cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), true) end
                         -- kill command doesn't work reliably...
                         cm:kill_character(cqi, true) 
                         if cqi and cm:get_character_by_cqi(cqi) then cm:kill_character(cqi, true) end
                         cm:callback(function() 
-                            cm:kill_character(faction_leader_cqi, true)  
+                            --if mortals_value == "disable" then 
+                            --    cm:kill_character(faction_leader_cqi, true)  
+                            --end
                             cm:set_saved_value("rd_confed", false)
                         end, 0.5)  
+
+                        for i = 1, #hit_list do
+                            local current_cqi = hit_list[i]
+                            local char = cm:get_character_by_cqi(current_cqi)
+                            lord_events(confederator, char, wh_agents)
+                            if vfs.exists("script/campaign/wh3_main_combi/mod/mixu_spawn_characters_ie.lua.lua") then lord_events(confederator, char, mixu_agents) end
+                            if mortals_value == "disable" or (current_cqi ~= faction_leader_cqi and mortals_value == "faction_leader") then 
+                                cm:kill_character(current_cqi, true) 
+                            else
+                                --unstuck heroes
+                                --if hero then get faction's home settlement or military force 0, find a valid spawn point nearby and teleport hero to that place
+                            end
+                        end
+
                         --cm:kill_character_and_commanded_unit(cm:char_lookup_str(cqi), true)    
                         --cm:kill_character_and_commanded_unit(cm:char_lookup_str(faction_leader_cqi), true)  
                         apply_diplomacy(confederator)
@@ -1982,34 +2269,49 @@ local function confed_revived(confederator, confederated)
                         --        cm:set_character_immortality(cm:char_lookup_str(char:command_queue_index()), false) 
                         --        cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), false)
                         --    end 
-                        --end           
+                        --end
+                        if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" and nakai_vassal_value == "do_nothing" then   
+                            start_confederation_listeners() --global function / wh_campaign_setup.lua
+                        end       
+                        cm:set_saved_value("confed_revived_"..confederated:name(), false)    
                     end,
                     false
                 )
                 --if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", true) end
                 if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then                    
                     local faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
-                    
-                    if faction:is_null_interface() == false then
-                        cm:disable_event_feed_events(true, "wh_event_category_conquest", "", "")
-                        cm:disable_event_feed_events(true, "wh_event_category_diplomacy", "", "")
-                        
-                        cm:kill_all_armies_for_faction(faction)
-                        local region_list = faction:region_list()                       
-                        for j = 0, region_list:num_items() - 1 do
-                            local region = region_list:item_at(j):name()
-                            cm:set_region_abandoned(region)
-                        end
-                        
-                        cm:callback(function() 
+                    if nakai_vassal_value == "do_nothing" then
+                        core:remove_listener("confederation_listener")
+                        core:remove_listener("confederation_expired")
+                    elseif nakai_vassal_value == "confederate" then
+                        --confederation_listener handles that
+                    elseif nakai_vassal_value == "abandon" then
+                        if faction:is_null_interface() == false then
+                            cm:disable_event_feed_events(true, "wh_event_category_conquest", "", "")
+                            cm:disable_event_feed_events(true, "wh_event_category_diplomacy", "", "")
+                            
+                            cm:kill_all_armies_for_faction(faction)
+                            local region_list = faction:region_list()                       
+                            for j = 0, region_list:num_items() - 1 do
+                                local region = region_list:item_at(j):name()
+                                cm:set_region_abandoned(region)
+                            end
+                            
+                            cm:callback(function() 
                                 cm:disable_event_feed_events(false, "wh_event_category_conquest", "", "");
                                 cm:disable_event_feed_events(false, "wh_event_category_diplomacy", "", "");
                             end, 0.5)
+                        end
+                    else
+                        sm0_log("confed_revived: wh2_dlc13_lzd_spirits_of_the_jungle | something went wrong")
                     end
+                end
+                if not confederator:is_human() then
+                    cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
                 end
                 --cm:callback(function() 
                     cm:force_confederation(confederator:name(), confederated:name()) 
-                --end, 0.5)   
+                --end, 0.01) --give the message_events some time   
             --]]
             end,
             false
@@ -2019,6 +2321,7 @@ local function confed_revived(confederator, confederated)
     end
 end
 
+
 ---@param faction FACTION_SCRIPT_INTERFACE
 local function faked_death(faction)
     return not faction:is_dead() and not faction:military_force_list():item_at(0) and not faction:region_list():item_at(0)
@@ -2026,14 +2329,14 @@ end
 
 ---@param confederator FACTION_SCRIPT_INTERFACE
 ---@param confederated FACTION_SCRIPT_INTERFACE
-local function rd_dilemma(confederator, confederated)
+---@param player_confederation_count number
+local function rd_dilemma(confederator, confederated, player_confederation_count)
     local subculture = confederator:subculture()
-    local sc_string_start = string.find(subculture, "sc_")
     core:add_listener(
         "rd_trigger_dilemma"..confederated:name(),
         "DilemmaChoiceMadeEvent",
         function(context)
-            return context:dilemma():starts_with("sm0_rd_")
+            return context:dilemma():starts_with("sm0_rd_"..subculture.."_"..player_confederation_count) 
         end,
         function(context)
             local choice = context:choice()
@@ -2098,111 +2401,27 @@ local function rd_dilemma(confederator, confederated)
         cm:launch_custom_dilemma_from_builder (dbldr, faction)
     end
     ---------------------------------------------------
-    if is_number(sc_string_start) then
-        local sc_string = string.sub(subculture, sc_string_start, sc_string_start + 5) -- e.g.: "sc_emp"
-        sm0_log("trigger_dilemma_with_targets:".."sm0_rd_"..sc_string.." | confederator:cqi = "..confederator:command_queue_index().." | confederated:cqi = "..confederated:command_queue_index())
-        --cm:trigger_dilemma_with_targets(confederator:command_queue_index(), "sm0_rd_"..sc_string, confederated:command_queue_index(), 0, 0, 0, 0, 0, nil, false)
-        please_trigger_dilemma_with_targets(confederator, "sm0_rd_"..sc_string, confederated)
-        --confed_revived(confederator, confederated)
-    elseif string.find(subculture, "_rogue_") then
-        sm0_log("trigger_dilemma_with_targets:".."sm0_rd_rogue")
-        --cm:trigger_dilemma_with_targets(confederator:command_queue_index(), "sm0_rd_rogue", confederated:command_queue_index(), 0, 0, 0, 0, 0, nil, false)
-        please_trigger_dilemma_with_targets(confederator, "sm0_rd_rogue", confederated)
+    if not confederator:is_dead() then 
+        sm0_log("trigger_dilemma_with_targets:".."sm0_rd_"..subculture.."_"..player_confederation_count.." | confederator:cqi = "..confederator:command_queue_index().." | confederated:cqi = "..confederated:command_queue_index())
+        --cm:trigger_dilemma_with_targets(confederator:command_queue_index(), "sm0_rd_"..subculture.."_"..player_confederation_count, confederated:command_queue_index(), 0, 0, 0, 0, 0, nil, false)
+        please_trigger_dilemma_with_targets(confederator, "sm0_rd_"..subculture.."_"..player_confederation_count, confederated)
         --confed_revived(confederator, confederated)
     else  
-        sm0_log("ERROR: Subculture string resolving failed! ["..subculture.."]")
-        confed_revived(confederator, confederated)   
+        sm0_log("ERROR: Can't confederate dead factions! [confederator: "..confederator:name().." | confederated: "..confederated:name().."]")
         core:remove_listener("rd_trigger_dilemma"..confederated:name())                                 
     end
 end
 
-local subculture_exempted = {
-    "wh_main_sc_chs_chaos",
-    "wh_dlc03_sc_bst_beastmen",
-    --rogue
-    "wh2_main_rogue",
-    "wh2_main_rogue_chaos",
-    --prologue
-    "wh3_main_pro_sc_kho_khorne",
-    "wh3_main_pro_sc_ksl_kislev",
-    "wh3_main_pro_sc_tze_tzeentch",
-    --mods
-    "wh_main_sc_nor_warp",
-    "wh_main_sc_nor_troll",
-    "wh_main_sc_nor_albion",
-    "wh_main_sc_lzd_amazon",
-    "wh_main_sc_nor_fimir"
-}
-
-local faction_exempted = {
-    "wh2_dlc13_lzd_defenders_of_the_great_plan", --nakai vassal
-    "wh2_dlc13_lzd_avengers", --wulfhart hostility mechanic
-    "wh2_dlc10_def_blood_voyage", --queen & crone mechanic
-	"wh2_main_chs_chaos_incursion_def", --cai_diplomacy_excluded_factions table
-	"wh2_main_chs_chaos_incursion_hef", --cai_diplomacy_excluded_factions table
-	"wh2_main_chs_chaos_incursion_lzd", --cai_diplomacy_excluded_factions table
-    "wh2_main_chs_chaos_incursion_skv",
-	"wh2_main_nor_hung_incursion_def", --cai_diplomacy_excluded_factions table
-	"wh2_main_nor_hung_incursion_hef", --cai_diplomacy_excluded_factions table
-	"wh2_main_nor_hung_incursion_lzd", --cai_diplomacy_excluded_factions table
-	"wh2_main_nor_hung_incursion_skv", --cai_diplomacy_excluded_factions table
-	"wh2_main_skv_unknown_clan_def", --cai_diplomacy_excluded_factions table
-	"wh2_main_skv_unknown_clan_hef", --cai_diplomacy_excluded_factions table
-	"wh2_main_skv_unknown_clan_lzd", --cai_diplomacy_excluded_factions table
-	"wh2_main_skv_unknown_clan_skv", --cai_diplomacy_excluded_factions table
-    "wh3_main_kho_brazen_throne", --chaos realm
-    "wh3_main_nur_bubonic_swarm", --chaos realm
-    "wh3_main_sla_rapturous_excess", --chaos realm
-    "wh3_main_tze_all_seeing_eye", --chaos realm
-    "wh3_main_rogue_shadow_legion", --chaos realm
-    "wh3_main_rogue_the_bloody_harvest", --chaos realm
-    "wh3_main_rogue_the_fluxion_host", --chaos realm
-    "wh3_main_rogue_the_pleasure_tide", --chaos realm
-    "wh3_main_rogue_the_putrid_swarm", --chaos realm
-    "_prologue",
-    "_waaagh",
-    "_brayherd",
-    "wh_main_emp_empire_separatists", --Empire Secessionists
-    "wh3_main_cth_dissenter_lords_of_jinshen", --zhao ming "rebels"
-    "wh3_main_cth_rebel_lords_of_nan_yang", --miao ying "rebels"
-    "wh_main_chs_chaos_separatists", --brt quest battle
-    "wh2_dlc09_skv_clan_rictus_separatists", --loyalty mechanic
-    "wh2_dlc11_cst_noctilus_separatists", --loyalty mechanic
-    "wh2_dlc11_cst_pirates_of_sartosa_separatists", --loyalty mechanic
-    "wh2_dlc11_cst_the_drowned_separatists", --loyalty mechanic
-    "wh2_dlc11_cst_vampire_coast_separatists", --loyalty mechanic
-    "wh2_dlc11_def_the_blessed_dread_separatists", --loyalty mechanic
-    "wh2_main_def_cult_of_pleasure_separatists", --loyalty mechanic
-    "wh2_main_def_hag_graef_separatists", --loyalty mechanic
-    "wh2_main_def_har_ganeth_separatists", --loyalty mechanic
-    "wh2_main_def_naggarond_separatists", --loyalty mechanic
-    "wh2_main_skv_clan_eshin_separatists", --loyalty mechanic
-    "wh2_main_skv_clan_mors_separatists", --loyalty mechanic
-    "wh2_main_skv_clan_moulder_separatists", --loyalty mechanic
-    "wh2_main_skv_clan_pestilens_separatists", --loyalty mechanic
-    "wh2_main_skv_clan_skryre_separatists", --loyalty mechanic
-    "wh2_twa03_def_rakarth_separatists", --loyalty mechanic
-    "wh_main_nor_norsca_separatists", --not used, I believe
-    "wh_main_nor_norsca_separatists_sorcerer_lord", --not used, I believe
-    "wh2_dlc11_brt_bretonnia_dil", --cst mission
-    "wh2_dlc11_def_dark_elves_dil", --cst mission
-    "wh2_dlc11_emp_empire_dil", --cst mission
-    "wh2_dlc11_nor_norsca_dil", --cst mission
-    "wh2_dlc11_cst_vampire_coast_rebels", --wulfhart mission
-    "wh3_main_cth_rebel_lords_of_nan_yang", --miao ying starting opponent
-    "wh3_dlc21_vmp_jiangshi_rebels", --nakai victory objective
-    "wh3_dlc21_cst_dead_flag_fleet", --nakai victory objective
-    "_invasion", --empire and world root invasion armies
-    "_shanty",  --roving pirate and treasure map armies
-    "wh_dlc08_chs_chaos_challenger_tzeentch", --norscan gods mechanic
-    "wh_dlc08_chs_chaos_challenger_slaanesh", --norscan gods mechanic
-    "wh_dlc08_chs_chaos_challenger_nurgle", --norscan gods mechanic
-    "wh_dlc08_chs_chaos_challenger_khorne", --norscan gods mechanic
-    --"wh3_main_cth_cathay_mp", --?
-    --"wh2_dlc16_wef_waystone_faction_3", --?
-    --"wh2_dlc16_wef_waystone_faction_2", --?
-    --"wh2_dlc16_wef_waystone_faction_1", --?
-}
+---@param faction FACTION_SCRIPT_INTERFACE
+---@return boolean
+local function is_faction_seccessionist(faction)
+    for i = 1, #faction_seccessionists do
+        if faction:name():find(faction_seccessionists[i]) then
+            return true
+        end
+    end
+    return false
+end
 
 ---@param faction FACTION_SCRIPT_INTERFACE
 ---@return boolean
@@ -2241,20 +2460,42 @@ end
 local function get_prefered_faction_list(faction_list, preferance_type, faction)
     --sm0_log("get_prefered_faction_list | preferance_type: "..tostring(preferance_type).." | faction: "..tostring(faction:name()))
     local prefered_factions = {}
-    local factions_of_same_subculture = {}
+    local factions = {}
     local human_factions = cm:get_human_factions()
-
-    if not is_table(faction_list) and not is_factionlist(faction_list) then --and next(faction_list) == nil
-        faction_list = faction:factions_of_same_subculture()
+    
+    if not is_table(faction_list) and not is_factionlist(faction_list) then
+        if chs_restriction_value == "ca_restrictions" and cross_race_value == "disable"then
+            faction_list = faction:factions_of_same_subculture()
+        else
+            faction_list = cm:model():world():faction_list()
+        end
     end
+
     if is_factionlist(faction_list) then
         --sm0_log("is_factionlist(faction_list)")
         local argwylon = cm:get_faction("wh_dlc05_wef_argwylon")
         for i = 0, faction_list:num_items() - 1 do
             local faction_current = faction_list:item_at(i)
-            if faction_current:subculture() == faction:subculture() and not faction_current:is_dead() and not is_faction_exempted(faction_current) 
+            if faction_current and not faction_current:is_dead() and not is_faction_exempted(faction_current) and not cm:get_saved_value("confed_revived_"..faction_current:name())
             and not is_human_and_rejected_faction(faction_current, faction) and ((faction_current:is_human() and (scope_value == "player" or scope_value == "player_ai")) 
-            or (not faction_current:is_human() and (scope_value == "ai" or scope_value == "player_ai"))) 
+            or (not faction_current:is_human() and (scope_value == "ai" or scope_value == "player_ai")))
+            and ((faction_current:subculture() == faction:subculture() and not (chs_restriction_value == "loreful_restrictions" and table.contains(subculture_chaos, faction_current:subculture())))
+            --cross_race
+            or (faction_current:subculture() ~= faction:subculture() 
+            and not ((chs_restriction_value == "loreful_restrictions" or chs_restriction_value == "ca_restrictions") and table.contains(subculture_chaos, faction_current:subculture()))
+            and (cross_race_value == "player_ai" or (cross_race_value == "player_only" and faction_current:is_human())))
+            --chs
+            or (chs_restriction_value == "no_restrictions" and table.contains(subculture_chaos, faction_current:subculture()) and table.contains(subculture_chaos, faction:subculture()))
+            or (chs_restriction_value == "loreful_restrictions" and table.contains(subculture_chaos, faction_current:subculture()) 
+            and (loreful_restrictions[faction:name()] 
+            and ((table.contains(loreful_restrictions[faction:name()].faction, faction_current:name()) or table.contains(loreful_restrictions[faction:name()].subculture, faction_current:subculture())))
+            or (loreful_restrictions[faction:subculture()] 
+            and (table.contains(loreful_restrictions[faction:subculture()].faction, faction_current:name()) or table.contains(loreful_restrictions[faction:subculture()].subculture, faction_current:subculture())))))
+            --playable factions only option
+            and (not playable_faction_only_value or (playable_faction_only_value and (faction_current:can_be_human() or table.contains(playable_factions, faction_current:name())))))
+            --chs
+            and (faction:subculture() ~= "wh_main_sc_chs_chaos" or (chs_restriction_value ~= "ca_restrictions" and faction:subculture() == "wh_main_sc_chs_chaos") 
+            or (chs_restriction_value == "ca_restrictions" and (faction_current:name() == "wh_main_chs_chaos" or faction_current:name() == "wh3_main_chs_shadow_legion")))
             --tmb
             and (faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" or (not tmb_restriction_value and faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings") 
             or (tmb_restriction_value and faction_current:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" 
@@ -2268,20 +2509,41 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
             or (faction_current:name() == "wh2_dlc16_wef_drycha" and faction:name() == "wh_dlc05_wef_argwylon") 
             or (faction_current:name() == "wh2_dlc16_wef_drycha" and (not argwylon or argwylon:is_dead()))
             or (faction_current:name() ~= "wh2_dlc16_wef_drycha" and faction:name() ~= "wh2_dlc16_wef_drycha")))) then 
-                table.insert(factions_of_same_subculture, faction_current:name())
+                table.insert(factions, faction_current:name())
             end
-            cm:shuffle_table(factions_of_same_subculture)
         end
+        cm:shuffle_table(factions)
     elseif is_table(faction_list) then
         --sm0_log("is_table(faction_list)")
-        factions_of_same_subculture = faction_list
+        factions = faction_list
     end
-    
-    if preferance_type == "met" then
+
+    if preferance_type == "race" then
+        -- preferance: race
+        if is_table(factions) then
+            for i = 1, #factions do
+                local faction_current = cm:get_faction(factions[i])
+                if faction_current:subculture() == faction:subculture() then
+                    table.insert(prefered_factions, faction_current:name())
+                    --sm0_log("race | faction: "..tostring(faction_current:name()).." | met: "..tostring("true"))
+                end
+            end
+            for i = 1, #factions do
+                local faction_current = cm:get_faction(factions[i])
+                if not table.contains(prefered_factions, faction_current:name()) then
+                    table.insert(prefered_factions, faction_current:name())
+                    --sm0_log("race | faction: "..tostring(faction_current:name()).." | met: "..tostring("false"))
+                end
+            end
+        else
+            sm0_log("preferance: race | something went wrong")
+            return 
+        end    
+    elseif preferance_type == "met" then
         -- preferance: met
-        if is_table(factions_of_same_subculture) then
-            for i = 1, #factions_of_same_subculture do
-                local faction_current = cm:get_faction(factions_of_same_subculture[i])
+        if is_table(factions) then
+            for i = 1, #factions do
+                local faction_current = cm:get_faction(factions[i])
                 local factions_met_list = faction_current:factions_met()
                 for j = 0, factions_met_list:num_items() - 1 do
                     local faction_met = factions_met_list:item_at(j)
@@ -2291,8 +2553,8 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                     end
                 end
             end
-            for i = 1, #factions_of_same_subculture do
-                local faction_current = cm:get_faction(factions_of_same_subculture[i])
+            for i = 1, #factions do
+                local faction_current = cm:get_faction(factions[i])
                 if not table.contains(prefered_factions, faction_current:name()) then
                     table.insert(prefered_factions, faction_current:name())
                     --sm0_log("has_met | faction: "..tostring(faction_current:name()).." | met: "..tostring("false"))
@@ -2305,11 +2567,11 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
     elseif preferance_type == "relation" then
         -- preferance: relation
         local faction_standings = {}
-        if is_table(factions_of_same_subculture) then
-            for i = 1, #factions_of_same_subculture do
-                local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
+        if is_table(factions) then
+            for i = 1, #factions do
+                local subculture_faction = cm:get_faction(factions[i])
                 local standing = faction:diplomatic_standing_with(subculture_faction:name())
-                --sm0_log("relation | factions_of_same_subculture: "..tostring(factions_of_same_subculture[i]).." | faction: "..tostring(faction:name()).." | standing: "..tostring(standing))
+                --sm0_log("relation | factions: "..tostring(factions[i]).." | faction: "..tostring(faction:name()).." | standing: "..tostring(standing))
                 table.insert(faction_standings, {standing = standing - 0.001 * i, name = subculture_faction:name()})
             end
             -- messes up the previous table order if more than one key has an equal relation number
@@ -2325,17 +2587,18 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     elseif preferance_type == "major" then
         -- preferance: major
-        if is_table(factions_of_same_subculture) then
-            for i = 1, #factions_of_same_subculture do
-                if table.contains(playable_factions, factions_of_same_subculture[i]) then
-                    table.insert(prefered_factions, factions_of_same_subculture[i])
-                    --sm0_log("is_major | faction: "..tostring(factions_of_same_subculture[i]).." | major: "..tostring("true"))
+        if is_table(factions) then
+            for i = 1, #factions do
+                local faction_current = cm:get_faction(factions[i])
+                if faction_current and faction_current:can_be_human() or table.contains(playable_factions, factions[i]) then
+                    table.insert(prefered_factions, factions[i])
+                    --sm0_log("is_major | faction: "..tostring(factions[i]).." | major: "..tostring("true"))
                 end
             end
-            for i = 1, #factions_of_same_subculture do
-                if not table.contains(prefered_factions, factions_of_same_subculture[i]) then
-                    table.insert(prefered_factions, factions_of_same_subculture[i])
-                    --sm0_log("is_major | faction: "..tostring(factions_of_same_subculture[i]).." | major: "..tostring("false"))
+            for i = 1, #factions do
+                if not table.contains(prefered_factions, factions[i]) then
+                    table.insert(prefered_factions, factions[i])
+                    --sm0_log("is_major | faction: "..tostring(factions[i]).." | major: "..tostring("false"))
                 end
             end
         else
@@ -2344,17 +2607,18 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     elseif preferance_type == "minor" then
         -- preferance: minor
-        if is_table(factions_of_same_subculture) then
-            for i = 1, #factions_of_same_subculture do
-                if not table.contains(playable_factions, factions_of_same_subculture[i]) then
-                    table.insert(prefered_factions, factions_of_same_subculture[i])
-                    --sm0_log("is_minor | faction: "..tostring(factions_of_same_subculture[i]).." | minor: "..tostring("true"))
+        if is_table(factions) then
+            for i = 1, #factions do
+                local faction_current = cm:get_faction(factions[i])
+                if faction_current and not faction_current:can_be_human() or not table.contains(playable_factions, factions[i]) then
+                    table.insert(prefered_factions, factions[i])
+                    --sm0_log("is_minor | faction: "..tostring(factions[i]).." | minor: "..tostring("true"))
                 end
             end
-            for i = 1, #factions_of_same_subculture do
-                if not table.contains(prefered_factions, factions_of_same_subculture[i]) then
-                    table.insert(prefered_factions, factions_of_same_subculture[i])
-                    --sm0_log("is_minor | faction: "..tostring(factions_of_same_subculture[i]).." | minor: "..tostring("false"))
+            for i = 1, #factions do
+                if not table.contains(prefered_factions, factions[i]) then
+                    table.insert(prefered_factions, factions[i])
+                    --sm0_log("is_minor | faction: "..tostring(factions[i]).." | minor: "..tostring("false"))
                 end
             end
         else
@@ -2363,17 +2627,17 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     elseif preferance_type == "player" then --and (scope_value == "player" or scope_value == "player_ai") then
         -- preferance: player
-        if is_table(factions_of_same_subculture) then
-            for i = 1, #factions_of_same_subculture do
-                --sm0_log("player | factions_of_same_subculture: "..tostring(factions_of_same_subculture[i]))
-                local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
-                if subculture_faction:is_human() then
+        if is_table(factions) then
+            for i = 1, #factions do
+                --sm0_log("player | factions: "..tostring(factions[i]))
+                local subculture_faction = cm:get_faction(factions[i])
+                if subculture_faction and subculture_faction:is_human() then
                     table.insert(prefered_factions, subculture_faction:name())
                     --sm0_log("is_human | faction: "..tostring(subculture_faction:name()).." | human: "..tostring("true"))
                 end
             end
-            for i = 1, #factions_of_same_subculture do
-                local faction_current = cm:get_faction(factions_of_same_subculture[i])
+            for i = 1, #factions do
+                local faction_current = cm:get_faction(factions[i])
                 if not table.contains(prefered_factions, faction_current:name()) then
                     table.insert(prefered_factions, faction_current:name())
                     --sm0_log("is_human | faction: "..tostring(faction_current:name()).." | human: "..tostring("false"))
@@ -2385,18 +2649,18 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     elseif preferance_type == "ai" then --and (scope_value == "ai" or scope_value == "player_ai") then
         -- preferance: ai
-        if is_table(factions_of_same_subculture) then
-            for i = 1, #factions_of_same_subculture do
-                local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
+        if is_table(factions) then
+            for i = 1, #factions do
+                local subculture_faction = cm:get_faction(factions[i])
                 if not subculture_faction:is_human() then
                     table.insert(prefered_factions, subculture_faction:name())
                     --sm0_log("is_ai | faction: "..tostring(subculture_faction:name()).." | ai: "..tostring("true"))
                 end
             end
-            for i = 1, #factions_of_same_subculture do
-                if not table.contains(prefered_factions, factions_of_same_subculture[i]) then
-                    table.insert(prefered_factions, factions_of_same_subculture[i])
-                    --sm0_log("is_ai | faction: "..tostring(factions_of_same_subculture[i]).." | ai: "..tostring("false"))
+            for i = 1, #factions do
+                if not table.contains(prefered_factions, factions[i]) then
+                    table.insert(prefered_factions, factions[i])
+                    --sm0_log("is_ai | faction: "..tostring(factions[i]).." | ai: "..tostring("false"))
                 end
             end
         else
@@ -2405,19 +2669,19 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     elseif preferance_type == "alternate" then
         -- preferance: player alternate (only applies to mp same subculture)
-        if is_table(factions_of_same_subculture) then
+        if is_table(factions) then
             if cm:is_multiplayer() and (cm:get_saved_value("faction_P2") or cm:get_saved_value("faction_P1")) then
                 local player1_current_pos
                 local player2_current_pos
-                for i = 1, #factions_of_same_subculture do
-                    local subculture_faction = cm:get_faction(factions_of_same_subculture[i])
+                for i = 1, #factions do
+                    local subculture_faction = cm:get_faction(factions[i])
                     if subculture_faction:name() == human_factions[1] then
                         player1_current_pos = i
                     elseif subculture_faction:name() == human_factions[2] then
                         player2_current_pos = i
                     end
                 end
-                prefered_factions = factions_of_same_subculture
+                prefered_factions = factions
                 if is_number(player1_current_pos) and is_number(player2_current_pos) then
                     if ((player1_current_pos < player2_current_pos) and cm:get_saved_value("faction_P1")) 
                     or ((player2_current_pos < player1_current_pos) and cm:get_saved_value("faction_P2")) then
@@ -2425,7 +2689,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
                     end
                 end
             else
-                prefered_factions = factions_of_same_subculture
+                prefered_factions = factions
             end
         else
             sm0_log("preferance: alternate | something went wrong")
@@ -2433,17 +2697,17 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         end
     elseif preferance_type == "random" then
         -- preferance: random
-        if is_table(factions_of_same_subculture) then
-            cm:shuffle_table(factions_of_same_subculture)
-            prefered_factions = factions_of_same_subculture
+        if is_table(factions) then
+            cm:shuffle_table(factions)
+            prefered_factions = factions
         else
             sm0_log("preferance: random | something went wrong")
             return
         end 
     else
         -- preferance: nil
-        if is_table(factions_of_same_subculture) then
-            prefered_factions = factions_of_same_subculture
+        if is_table(factions) then
+            prefered_factions = factions
         else
             sm0_log("preferance: nil | something went wrong")
             return
@@ -2586,23 +2850,27 @@ local function init_recruit_defeated_listeners(enable_value)
                 cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
                 cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
 
-                local confederation_limit = 10 
-                local player_confederation_limit = 99 --1 
+                local confederation_limit = dilemmas_per_turn_value 
+                local player_confederation_limit = dilemmas_per_turn_player_value
                 local confederation_count = 1 
                 local player_confederation_count = 1 
                 local subcultures_accepting_refugees = {}
+                local confederation_subculture_limit = dilemmas_per_turn_per_sc_value
                 local faction_list = cm:model():world():faction_list() --context:faction():factions_of_same_subculture() --cm:model():world():faction_list()
                 for i = 0, faction_list:num_items() - 1 do
-                    local current_faction = faction_list:item_at(i)            
+                    local current_faction = faction_list:item_at(i)
+                    -- kill colonels and kill_character-remnants            
                     --if current_faction:is_dead() then sm0_log("DEAD Faction: "..current_faction:name()) end
-                    if faked_death(current_faction) then -- kill colonels and kill_character remnants
+                    if faked_death(current_faction) then
                         local char_list = current_faction:character_list()
                         for i = 0, char_list:num_items() - 1 do
                             local current_char = char_list:item_at(i)
                             cm:kill_character(current_char:command_queue_index(), true)
                         end
                     end
-                    if confederation_count <= confederation_limit 
+                    if confederation_count <= confederation_limit and current_faction:is_dead() 
+                    -- mct beta
+                    and (not playable_faction_only_value or (playable_faction_only_value and (current_faction:can_be_human() or table.contains(playable_factions, current_faction:name()))))
                     -- mct restrictions
                     and ((current_faction:subculture() ~= "wh2_dlc09_sc_tmb_tomb_kings" --and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs"
                     and current_faction:subculture() ~= "wh2_dlc11_sc_cst_vampire_coast")
@@ -2612,12 +2880,13 @@ local function init_recruit_defeated_listeners(enable_value)
                     or (tmb_restriction_value and current_faction:subculture() == "wh2_dlc09_sc_tmb_tomb_kings" and current_faction:name() ~= "wh2_dlc09_tmb_khemri" 
                     --and current_faction:name() ~= "wh2_dlc09_tmb_followers_of_nagash" and current_faction:name() ~= "wh2_dlc09_tmb_the_sentinels"
                     ))) 
-                    -- others
-                    and current_faction:is_dead() and not cm:get_saved_value("sought_refuge_"..current_faction:name()) and not cm:get_saved_value("delayed_spawn_"..current_faction:name()) 
+                    -- dilemma conditions
+                    and not cm:get_saved_value("sought_refuge_"..current_faction:name()) and not cm:get_saved_value("delayed_spawn_"..current_faction:name()) 
                     and (not cm:get_saved_value("rd_choice_3_"..current_faction:name()) or cm:model():turn_number() >= cm:get_saved_value("rd_choice_3_"..current_faction:name())) 
                     and not cm:get_saved_value("rd_choice_2_"..current_faction:name()) then 
                         -- faction exceptions
-                        if not is_faction_exempted(current_faction) then --and not current_faction:subculture() == "wh_dlc08_sc_nor_norsca"
+                        if (not is_faction_exempted(current_faction) and not include_seccessionists_value)
+                        or (include_seccessionists_value and (not is_faction_exempted(current_faction) or is_faction_seccessionist(current_faction))) then --and not current_faction:subculture() == "wh_dlc08_sc_nor_norsca"
                             local prefered_factions = nil 
                             if preferance6_value and preferance6_value ~= "disabled" then
                                 prefered_factions = get_prefered_faction_list(prefered_factions, preferance6_value, current_faction)
@@ -2638,10 +2907,10 @@ local function init_recruit_defeated_listeners(enable_value)
                                 prefered_factions = get_prefered_faction_list(prefered_factions, preferance1_value, current_faction)
                             end
                             --old
-                            --if preferance1_value == "disabled" and preferance2_value == "disabled" and preferance3_value == "disabled" 
-                            --and preferance4_value == "disabled" and preferance5_value == "disabled" and preferance6_value == "disabled" then
-                            --    prefered_factions = get_prefered_faction_list(nil, nil, current_faction) -- returns factions_of_same_subculture as vector<string>
-                            --end
+                            if preferance1_value == "disabled" and preferance2_value == "disabled" and preferance3_value == "disabled" 
+                            and preferance4_value == "disabled" and preferance5_value == "disabled" and preferance6_value == "disabled" then
+                                prefered_factions = get_prefered_faction_list(prefered_factions, "random", current_faction) -- returns factions_of_same_subculture as vector<string>
+                            end
                             local prefered_faction = nil
                             local prefered_faction_key = prefered_factions[1]
                             --old
@@ -2653,23 +2922,23 @@ local function init_recruit_defeated_listeners(enable_value)
                             if prefered_faction_key then
                                 prefered_faction = cm:get_faction(prefered_faction_key)
                             end
-                            --sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
+                            sm0_log("recruit_defeated_FactionTurnStart | prefered_faction = "..tostring(prefered_faction_key).." | dead_faction = "..tostring(current_faction:name()))
                             --Limit confederations and thus force spawns to one per subculture
-                            if prefered_faction and not table.contains(subcultures_accepting_refugees, prefered_faction:subculture()) then
+                            if prefered_faction and ((prefered_faction:is_human() and player_confederation_limit > 1) or not table.contains(subcultures_accepting_refugees, prefered_faction:subculture())) then
                                 if prefered_faction:is_human() then
                                 --if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
                                 --and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
                                     if confed_penalty(prefered_faction) == "" and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai" or scope_value == "player") 
-                                    and context:faction():name() == prefered_faction:name() then
+                                    and cm:is_factions_turn_by_key(prefered_faction:name()) then
                                         if are_lords_missing(current_faction) then
                                             sm0_log("["..player_confederation_count.."] Player 1 intends to spawn missing lords for: "..current_faction:name())
-                                            spawn_missing_lords(prefered_faction, current_faction)
+                                            --spawn_missing_lords(prefered_faction, current_faction)
                                             --making sure there are no further confederations happening during the spawn_missing_lords loop
                                             player_confederation_count = player_confederation_count + player_confederation_limit
                                             confederation_count = confederation_count + confederation_limit                                  
                                         else
                                             sm0_log("["..player_confederation_count.."] Player 1 intends to confederate: "..current_faction:name())
-                                            rd_dilemma(prefered_faction, current_faction)
+                                            rd_dilemma(prefered_faction, current_faction, player_confederation_count)
                                             --if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
                                             --    cm:set_saved_value("faction_P1", true)
                                             --    cm:set_saved_value("faction_P2", false)
@@ -2677,6 +2946,9 @@ local function init_recruit_defeated_listeners(enable_value)
                                             table.insert(subcultures_accepting_refugees, prefered_faction:subculture())
                                             player_confederation_count = player_confederation_count + 1
                                             confederation_count = confederation_count + 1
+                                            for i, faction in ipairs(prefered_factions) do
+                                                sm0_log("player_confed | "..tostring("after get_prefered_faction_list").." | prefered_factions["..i.."]: "..tostring(faction))
+                                            end
                                         end
                                     end
                                 --elseif prefered_faction and cm:is_multiplayer() and not faction_P2:is_dead() and current_faction:subculture() == faction_P2:subculture() 
@@ -2691,7 +2963,7 @@ local function init_recruit_defeated_listeners(enable_value)
                                 --            confederation_count = confederation_count + confederation_limit
                                 --        else
                                 --            sm0_log("["..player_confederation_count.."] Player 2 intends to confederate: "..current_faction:name())
-                                --            rd_dilemma(faction_P2, current_faction)
+                                --            rd_dilemma(faction_P2, current_faction, player_confederation_count)
                                 --            if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
                                 --                cm:set_saved_value("faction_P2", true)
                                 --                cm:set_saved_value("faction_P1", false)                                
@@ -2704,10 +2976,10 @@ local function init_recruit_defeated_listeners(enable_value)
                                         if prefered_faction
                                         and prefered_faction:subculture() ~= "wh_dlc03_sc_bst_beastmen" and current_faction:subculture() ~= "wh_main_sc_grn_savage_orcs" then -- disabled for beastmen/savage orcs because they are able to respawn anyways
                                             if not faked_death(prefered_faction) then
-                                                if ai_delay_value == 0 or cm:model():turn_number() > ai_delay_value then --if ai_delay == 0 or cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) == 0 then
+                                                if ai_delay_value == 1 or cm:model():turn_number() >= ai_delay_value then --if ai_delay == 0 or cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) == 0 then
                                                     if are_lords_missing(current_faction) then
                                                         sm0_log("["..confederation_count.."] AI: "..current_faction:name().." intends to spawn missing lords!")
-                                                        spawn_missing_lords(prefered_faction, current_faction)
+                                                        --spawn_missing_lords(prefered_faction, current_faction)
                                                         --making sure there are no further confederations happening during the spawn_missing_lords loop
                                                         player_confederation_count = player_confederation_count + player_confederation_limit
                                                         confederation_count = confederation_count + confederation_limit
@@ -2716,6 +2988,9 @@ local function init_recruit_defeated_listeners(enable_value)
                                                         confed_revived(prefered_faction, current_faction)
                                                         confederation_count = confederation_count + 1
                                                         table.insert(subcultures_accepting_refugees, prefered_faction:subculture())
+                                                        for i, faction in ipairs(prefered_factions) do
+                                                            sm0_log("ai_confed | "..tostring("after get_prefered_faction_list").." | prefered_factions["..i.."]: "..tostring(faction))
+                                                        end                                                
                                                     end
                                                 --else
                                                 --    if not cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) then --if not cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) then 
@@ -2823,6 +3098,7 @@ local function init_recruit_defeated_listeners(enable_value)
                 local confederator
                 local confederated_faction = cm:get_faction(confederated)
                 local human_factions = cm:get_human_factions()
+                --sm0_log("Faction event recruit_defeated_UITrigger | subtype: "..tostring(subtype))
                 for i = 1, #human_factions do
                     local human_faction = cm:get_faction(human_factions[i])
                     if human_faction:command_queue_index() == faction_cqi then
@@ -2989,53 +3265,107 @@ local function init_recruit_defeated_listeners(enable_value)
         );
         --]]
     end
+
+    if cm:get_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked") and not cm:get_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_doppelganger_deleted") then
+        core:add_listener(
+            "sm0_confed_revived_CharacterCreated",
+            "CharacterCreated",
+            function(context)
+                return context:character():character_subtype_key() == "wh2_main_hef_prince_alastar" and cm:get_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked")
+            end,
+            function(context)
+                local cqi = context:character():command_queue_index()
+                local char_lookup = cm:char_lookup_str(cqi)
+                cm:disable_event_feed_events(true, "", "", "character_ready_for_duty")
+                core:add_listener(
+                    "sm0_confed_revived_CharacterConvalescedOrKilled",
+                    "CharacterConvalescedOrKilled",
+                    function(context)
+                        return cqi == context:character():command_queue_index()
+                    end,
+                    function(context)
+                        local cqi = context:character():command_queue_index()
+                        local char_lookup = cm:char_lookup_str(cqi)
+                        --sm0_log("sm0_confed_revived_CharacterConvalescedOrKilled | "..char_lookup)
+                        cm:stop_character_convalescing(cqi)
+                        cm:set_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_doppelganger_deleted", true)
+                        cm:callback(function() cm:disable_event_feed_events(false, "", "", "character_ready_for_duty") end, 10)
+                    end,
+                    false
+                )
+                cm:callback(function() 
+                    cm:set_character_immortality(char_lookup, false)
+                    cm:kill_character(cqi, false)
+                    cm:force_add_ancillary(context:character(), "wh2_main_anc_armour_lions_pelt", true, false)                 
+                end, 0.01) 
+            end,
+            false
+        )
+    end
 end
 
---[[
+local function update_recruit_defeated_mct_settings(mct)
+    local recruit_defeated_mod = mct:get_mod_by_key("recruit_defeated")
+    local settings_table = recruit_defeated_mod:get_settings() 
+    enable_value = settings_table.a_enable
+    scope_value = settings_table.c_scope
+    ai_delay_value = settings_table.d_ai_delay
+    preferance1_value = settings_table.a_preferance1
+    preferance2_value = settings_table.b_preferance2
+    preferance3_value = settings_table.c_preferance3
+    preferance4_value = settings_table.d_preferance4
+    preferance5_value = settings_table.e_preferance5
+    preferance6_value = settings_table.f_preferance6
+    tmb_restriction_value = settings_table.a_tmb_restriction
+    cst_restriction_value = settings_table.b_cst_restriction
+    wef_restriction_value = settings_table.d_wef_restriction
+    savage_restriction_value = settings_table.c_savage_restriction
+    chs_restriction_value = settings_table.chs_restriction
+
+    playable_faction_only_value = settings_table.playable_faction_only
+    include_seccessionists_value = settings_table.include_seccessionists
+    dilemmas_per_turn_value = settings_table.dilemmas_per_turn
+    --dilemmas_per_turn_per_sc_value = settings_table.dilemmas_per_turn_per_sc
+    cross_race_value = settings_table.cross_race
+    dilemmas_per_turn_player_value = settings_table.dilemmas_per_turn_player
+    mortals_value = settings_table.mortals
+    nakai_vassal_value = settings_table.nakai_vassal
+
+    --local a_enable = recruit_defeated_mod:get_option_by_key("a_enable")
+    --enable_value = a_enable:get_finalized_setting()
+    --local c_scope = recruit_defeated_mod:get_option_by_key("c_scope")
+    --scope_value = c_scope:get_finalized_setting()
+    --local d_ai_delay = recruit_defeated_mod:get_option_by_key("d_ai_delay")
+    --ai_delay_value = d_ai_delay:get_finalized_setting()
+    --local a_preferance1 = recruit_defeated_mod:get_option_by_key("a_preferance1")
+    --preferance1_value = a_preferance1:get_finalized_setting()
+    --local b_preferance2 = recruit_defeated_mod:get_option_by_key("b_preferance2")
+    --preferance2_value = b_preferance2:get_finalized_setting()
+    --local c_preferance3 = recruit_defeated_mod:get_option_by_key("c_preferance3")
+    --preferance3_value = c_preferance3:get_finalized_setting()
+    --local d_preferance4 = recruit_defeated_mod:get_option_by_key("d_preferance4")
+    --preferance4_value = d_preferance4:get_finalized_setting()
+    --local e_preferance5 = recruit_defeated_mod:get_option_by_key("e_preferance5")
+    --preferance5_value = e_preferance5:get_finalized_setting()
+    --local f_preferance6 = recruit_defeated_mod:get_option_by_key("f_preferance6")
+    --preferance6_value = f_preferance6:get_finalized_setting()
+    --local a_tmb_restriction = recruit_defeated_mod:get_option_by_key("a_tmb_restriction")
+    --tmb_restriction_value = a_tmb_restriction:get_finalized_setting()
+    --local b_cst_restriction = recruit_defeated_mod:get_option_by_key("b_cst_restriction")
+    --cst_restriction_value = b_cst_restriction:get_finalized_setting()
+    --local d_wef_restriction = recruit_defeated_mod:get_option_by_key("d_wef_restriction")
+    --wef_restriction_value = d_wef_restriction:get_finalized_setting()
+    --local c_savage_restriction = recruit_defeated_mod:get_option_by_key("c_savage_restriction")
+    --savage_restriction_value = c_savage_restriction:get_finalized_setting()
+end
+
 core:add_listener(
     "recruit_defeated_MctInitialized",
     "MctInitialized",
     true,
     function(context)
-        local mct = get_mct()
-        local recruit_defeated_mod = mct:get_mod_by_key("recruit_defeated")
-        --local settings_table = recruit_defeated_mod:get_settings() 
-        --enable_value = settings_table.a_enable
-        --scope_value = settings_table.c_scope
-        --ai_delay_value = settings_table.d_ai_delay
-        --preferance1_value = settings_table.a_preferance1
-        --preferance2_value = settings_table.b_preferance2
-        --preferance3_value = settings_table.c_preferance3
-
-        local a_enable = recruit_defeated_mod:get_option_by_key("a_enable")
-        enable_value = a_enable:get_finalized_setting()
-        local c_scope = recruit_defeated_mod:get_option_by_key("c_scope")
-        scope_value = c_scope:get_finalized_setting()
-        local d_ai_delay = recruit_defeated_mod:get_option_by_key("d_ai_delay")
-        ai_delay_value = d_ai_delay:get_finalized_setting()
-        local a_preferance1 = recruit_defeated_mod:get_option_by_key("a_preferance1")
-        preferance1_value = a_preferance1:get_finalized_setting()
-        local b_preferance2 = recruit_defeated_mod:get_option_by_key("b_preferance2")
-        preferance2_value = b_preferance2:get_finalized_setting()
-        local c_preferance3 = recruit_defeated_mod:get_option_by_key("c_preferance3")
-        preferance3_value = c_preferance3:get_finalized_setting()
-        local d_preferance4 = recruit_defeated_mod:get_option_by_key("d_preferance4")
-        preferance4_value = d_preferance4:get_finalized_setting()
-        local e_preferance5 = recruit_defeated_mod:get_option_by_key("e_preferance5")
-        preferance5_value = e_preferance5:get_finalized_setting()
-        local f_preferance6 = recruit_defeated_mod:get_option_by_key("f_preferance6")
-        preferance6_value = f_preferance6:get_finalized_setting()
-        local a_tmb_restriction = recruit_defeated_mod:get_option_by_key("a_tmb_restriction")
-        tmb_restriction_value = a_tmb_restriction:get_finalized_setting()
-        local b_cst_restriction = recruit_defeated_mod:get_option_by_key("b_cst_restriction")
-        cst_restriction_value = b_cst_restriction:get_finalized_setting()
-        local d_wef_restriction = recruit_defeated_mod:get_option_by_key("d_wef_restriction")
-        wef_restriction_value = d_wef_restriction:get_finalized_setting()
-
-        --local c_savage_restriction = recruit_defeated_mod:get_option_by_key("c_savage_restriction")
-        --savage_restriction_value = c_savage_restriction:get_finalized_setting()
-
-        --sm0_log("recruit_defeated_MctInitialized/savage_restriction_value = "..tostring(savage_restriction_value))
+        local mct = context:mct()
+        update_recruit_defeated_mct_settings(mct)
     end,
     true
 )
@@ -3045,23 +3375,9 @@ core:add_listener(
     "MctFinalized",
     true,
     function(context)
-        local mct = get_mct()
-        local recruit_defeated_mod = mct:get_mod_by_key("recruit_defeated")
-        local settings_table = recruit_defeated_mod:get_settings() 
-        enable_value = settings_table.a_enable
-        scope_value = settings_table.c_scope
-        ai_delay_value = settings_table.d_ai_delay
-        preferance1_value = settings_table.a_preferance1
-        preferance2_value = settings_table.b_preferance2
-        preferance3_value = settings_table.c_preferance3
-        preferance4_value = settings_table.d_preferance4
-        preferance5_value = settings_table.e_preferance5
-        preferance6_value = settings_table.f_preferance6
-        tmb_restriction_value = settings_table.a_tmb_restriction
-        cst_restriction_value = settings_table.b_cst_restriction
-        wef_restriction_value = settings_table.d_wef_restriction
-        --savage_restriction_value = settings_table.c_savage_restriction
-        
+        local mct = context:mct()
+        update_recruit_defeated_mct_settings(mct)
+        init_recruit_defeated_listeners(enable_value)
         sm0_log("recruit_defeated_MctInitialized/enable_value = "..tostring(enable_value))
         sm0_log("recruit_defeated_MctInitialized/scope_value = "..tostring(scope_value))
         sm0_log("recruit_defeated_MctInitialized/ai_delay_value = "..tostring(ai_delay_value))
@@ -3074,18 +3390,28 @@ core:add_listener(
         sm0_log("recruit_defeated_MctInitialized/tmb_restriction_value = "..tostring(tmb_restriction_value))
         sm0_log("recruit_defeated_MctInitialized/cst_restriction_value = "..tostring(cst_restriction_value))
         sm0_log("recruit_defeated_MctInitialized/wef_restriction_value = "..tostring(wef_restriction_value))
-
-        init_recruit_defeated_listeners(enable_value)
+        sm0_log("recruit_defeated_MctInitialized/savage_restriction_value = "..tostring(savage_restriction_value))
+        sm0_log("recruit_defeated_MctInitialized/chs_restriction_value = "..tostring(chs_restriction_value))
+        sm0_log("recruit_defeated_MctInitialized/playable_faction_only_value = "..tostring(playable_faction_only_value))
+        sm0_log("recruit_defeated_MctInitialized/include_seccessionists_value = "..tostring(include_seccessionists_value))
+        sm0_log("recruit_defeated_MctInitialized/dilemmas_per_turn_value = "..tostring(dilemmas_per_turn_value))
+        sm0_log("recruit_defeated_MctInitialized/dilemmas_per_turn_per_sc_value = "..tostring(dilemmas_per_turn_per_sc_value))
+        sm0_log("recruit_defeated_MctInitialized/cross_race_value = "..tostring(cross_race_value))
+        sm0_log("recruit_defeated_MctInitialized/dilemmas_per_turn_player_value = "..tostring(dilemmas_per_turn_player_value))
+        sm0_log("recruit_defeated_MctInitialized/mortals_value = "..tostring(mortals_value))
+        sm0_log("recruit_defeated_MctInitialized/nakai_vassal_value = "..tostring(nakai_vassal_value))
     end,
     true
 )
---]]
 
 function sm0_recruit_defeated()
     RDDEBUG()
-    local mct = false--= core:get_static_object("mod_configuration_tool")
+    local mct 
+    if get_mct then
+        mct = get_mct()
+    end
 
-    local version_number = "3.0" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0"
+    local version_number = "3.2" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1"
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()
@@ -3140,25 +3466,55 @@ function sm0_recruit_defeated()
                 --end
             end
             --]]
+            sm0_log("recruit_defeated_MctInitialized/enable_value = "..tostring(enable_value))
+            sm0_log("recruit_defeated_MctInitialized/scope_value = "..tostring(scope_value))
+            sm0_log("recruit_defeated_MctInitialized/ai_delay_value = "..tostring(ai_delay_value))
+            sm0_log("recruit_defeated_MctInitialized/preferance1_value = "..tostring(preferance1_value))
+            sm0_log("recruit_defeated_MctInitialized/preferance2_value = "..tostring(preferance2_value))
+            sm0_log("recruit_defeated_MctInitialized/preferance3_value = "..tostring(preferance3_value))
+            sm0_log("recruit_defeated_MctInitialized/preferance4_value = "..tostring(preferance4_value))
+            sm0_log("recruit_defeated_MctInitialized/preferance5_value = "..tostring(preferance5_value))
+            sm0_log("recruit_defeated_MctInitialized/preferance6_value = "..tostring(preferance6_value))
+            sm0_log("recruit_defeated_MctInitialized/tmb_restriction_value = "..tostring(tmb_restriction_value))
+            sm0_log("recruit_defeated_MctInitialized/cst_restriction_value = "..tostring(cst_restriction_value))
+            sm0_log("recruit_defeated_MctInitialized/wef_restriction_value = "..tostring(wef_restriction_value))
+            sm0_log("recruit_defeated_MctInitialized/savage_restriction_value = "..tostring(savage_restriction_value))
+            sm0_log("recruit_defeated_MctInitialized/chs_restriction_value = "..tostring(chs_restriction_value))
+            sm0_log("recruit_defeated_MctInitialized/playable_faction_only_value = "..tostring(playable_faction_only_value))
+            sm0_log("recruit_defeated_MctInitialized/include_seccessionists_value = "..tostring(include_seccessionists_value))
+            sm0_log("recruit_defeated_MctInitialized/dilemmas_per_turn_value = "..tostring(dilemmas_per_turn_value))
+            sm0_log("recruit_defeated_MctInitialized/dilemmas_per_turn_per_sc_value = "..tostring(dilemmas_per_turn_per_sc_value))
+            sm0_log("recruit_defeated_MctInitialized/cross_race_value = "..tostring(cross_race_value))
+            sm0_log("recruit_defeated_MctInitialized/dilemmas_per_turn_player_value = "..tostring(dilemmas_per_turn_player_value))
+            sm0_log("recruit_defeated_MctInitialized/mortals_value = "..tostring(mortals_value))
+            sm0_log("recruit_defeated_MctInitialized/nakai_vassal_value = "..tostring(nakai_vassal_value))
         else
             for i = 1, #confed_restricted_subcultures do
                 cm:force_diplomacy("subculture:"..confed_restricted_subcultures[i], "subculture:"..confed_restricted_subcultures[i], "form confederation", false, false, false, false)
             end
             
-            enable_value = true
-            tmb_restriction_value = false
-            cst_restriction_value = false
-            wef_restriction_value = false
-            savage_restriction_value = false
-            chaos_restriction_value = false
-            scope_value = "player_ai" --"player_ai"
-            ai_delay_value = 50 --50
-            preferance1_value = "player" --"player"
-            preferance2_value = "met" --"met"
-            preferance3_value = "relation" --"relation"
-            preferance4_value = "major" --"major"
-            preferance5_value = "disabled" --"disabled"
-            preferance6_value = "disabled" --"disabled"
+            --enable_value = true
+            --tmb_restriction_value = false
+            --cst_restriction_value = false
+            --wef_restriction_value = false
+            --savage_restriction_value = false
+            --chs_restriction_value = "no_restrictions"
+            --scope_value = "player_ai" --"player_ai"
+            --ai_delay_value = 50 --50
+            --preferance1_value = "race" --"player"
+            --preferance2_value = "player" --"met"
+            --preferance3_value = "met" --"relation"
+            --preferance4_value = "relation" --"major"
+            --preferance5_value = "major" --"disabled"
+            --preferance6_value = "disabled" --"disabled"
+            --playable_faction_only_value = false
+            --include_seccessionists_value = false
+            --dilemmas_per_turn_value = 10
+            --dilemmas_per_turn_per_sc_value = 1
+            --cross_race_value = "disable"
+            --dilemmas_per_turn_player_value = 1
+            --mortals_value = "disable"
+            --nakai_vassal_value = "do_nothing"
             --sm0_log("sm0_recruit_defeated | enable_value = "..tostring(enable_value)..
             --" | scope_value = "..tostring(scope_value).." | ai_delay_value = "..tostring(ai_delay_value)..
             --" | preferance1_value = "..tostring(preferance1_value).." | preferance2_value = "..tostring(preferance2_value).." | preferance3_value = "..tostring(preferance3_value))
