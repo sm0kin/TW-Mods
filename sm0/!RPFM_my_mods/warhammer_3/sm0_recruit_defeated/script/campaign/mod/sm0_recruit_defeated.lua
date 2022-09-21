@@ -2141,17 +2141,6 @@ local function confed_revived(confederator, confederated)
             --"revive_faction_force",
             --true,
             function(cqi)
-                if confederated:name() == "wh2_dlc13_emp_the_huntmarshals_expedition" then
-                    local wulfharts_agents = {
-                        {agent_subtype = "wh2_dlc13_emp_hunter_doctor_hertwig_van_hal", turn = 1},
-                        {agent_subtype = "wh2_dlc13_emp_hunter_jorek_grimm", turn = 10},
-                        {agent_subtype = "wh2_dlc13_emp_hunter_kalara_of_wydrioth", turn = 20},
-                        {agent_subtype = "wh2_dlc13_emp_hunter_rodrik_l_anguille", turn = 30},
-                    }
-                    for i = 1, #wulfharts_agents do
-                        cm:spawn_unique_agent_at_region(confederated:command_queue_index(), wulfharts_agents[i].agent_subtype, start_region:cqi(), false)
-                    end
-                end
                 --sm0_log("Faction revived: "..confederated:name().." | Region: "..start_region:name().." | CQI: "..cqi)                
                 --equip_quest_anc(confederated)
                 local faction_leader_cqi = confederated:faction_leader():command_queue_index()
@@ -2734,7 +2723,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         if is_table(factions) then
             for i = 1, #factions do
                 local faction_current = cm:get_faction(factions[i])
-                if faction_current and faction_current:can_be_human() or table.contains(playable_factions, factions[i]) then
+                if faction_current and (faction_current:can_be_human() or table.contains(playable_factions, factions[i])) then
                     table.insert(prefered_factions, factions[i])
                     --sm0_log("is_major | faction: "..tostring(factions[i]).." | major: "..tostring("true"))
                 end
@@ -2754,7 +2743,7 @@ local function get_prefered_faction_list(faction_list, preferance_type, faction)
         if is_table(factions) then
             for i = 1, #factions do
                 local faction_current = cm:get_faction(factions[i])
-                if faction_current and not faction_current:can_be_human() or not table.contains(playable_factions, factions[i]) then
+                if faction_current and (not faction_current:can_be_human() or not table.contains(playable_factions, factions[i])) then
                     table.insert(prefered_factions, factions[i])
                     --sm0_log("is_minor | faction: "..tostring(factions[i]).." | minor: "..tostring("true"))
                 end
