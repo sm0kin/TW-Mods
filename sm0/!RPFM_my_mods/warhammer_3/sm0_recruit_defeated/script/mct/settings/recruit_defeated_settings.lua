@@ -191,6 +191,15 @@ cst_restriction:set_default_value(false)
 cst_restriction:set_text(loc_prefix.."b_cst_restriction_txt", true)
 cst_restriction:set_tooltip_text(loc_prefix.."b_cst_restriction_tt", true)
 
+--local cst_restriction = recruit_defeated:add_new_option("b_cst_restriction", "dropdown")
+--cst_restriction:set_text(loc_prefix.."b_cst_restriction_txt", true)
+--cst_restriction:set_tooltip_text(loc_prefix.."b_cst_restriction_tt", true)
+--cst_restriction:add_dropdown_values({
+--    {key = "disable", text = "Disable", tt = "Disables Refugee dilemmas for Vampire Coast factions.", default = false},
+--    {key = "cst", text = "Vampire Coast only", tt = "Enables Refugee dilemmas for Vampire Coast factions.", default = true},
+--    {key = "vmp", text = "Vampire Coast & Counts", tt = "Enables Refugee dilemmas for Vampire Coast factions and allows for Cross-race Refugees from Vampire Counts for Vampire Coast factions and vice versa.", default = false},
+--})
+
 local wef_restriction = recruit_defeated:add_new_option("d_wef_restriction", "checkbox")
 wef_restriction:set_default_value(false)
 wef_restriction:set_text(loc_prefix.."d_wef_restriction_txt", true)
@@ -260,14 +269,21 @@ cross_race:add_dropdown_values({
     {key = "player_ai", text = "Player & AI", tt = "Player & AI Cross-Race mode.", default = false},
 })
 
-local mortals = recruit_defeated:add_new_option("mortals", "dropdown")
-mortals:set_text(loc_prefix.."mortals_txt", true)
-mortals:set_tooltip_text(loc_prefix.."mortals_tt", true)
-mortals:add_dropdown_values({
-    {key = "disable", text = "Disable", tt = "Only immortal/legendary Lords/Heroes are transfered.", default = true},
-    {key = "faction_leader", text = "Faction Leader", tt = "Faction leaders are also transfered.", default = false},
+local refugee_types = recruit_defeated:add_new_option("refugee_types", "dropdown")
+refugee_types:set_text(loc_prefix.."refugee_types_txt", true)
+refugee_types:set_tooltip_text(loc_prefix.."refugee_types_tt", true)
+refugee_types:add_dropdown_values({
+    {key = "immortal", text = "Immortal Only", tt = "Only immortal (legendary and rank 20+) Lords/Heroes are transfered.", default = true},
+--    {key = "legendary", text = "Legendary Only", tt = "Only legendary Lords/Heroes are transfered.", default = false},
+    {key = "faction_leader", text = "Immortal + Faction Leader", tt = "All immortal (legendary and rank 20+) Lords/Heroes and the Faction leaders are transfered.", default = false},
     {key = "all", text = "All Lords & Heroes", tt = "All Lords/Heroes are being transfered, not only immortal/legendary ones.", default = false},
 })
+
+--local wound = recruit_defeated:add_new_option("wound", "checkbox")
+--wound:set_default_value(false)
+--wound:set_text(loc_prefix.."wound_txt", true)
+--wound:set_tooltip_text(loc_prefix.."wound_tt", true)
+
 
 local nakai_vassal = recruit_defeated:add_new_option("nakai_vassal", "dropdown")
 nakai_vassal:set_text(loc_prefix.."nakai_vassal_txt", true)

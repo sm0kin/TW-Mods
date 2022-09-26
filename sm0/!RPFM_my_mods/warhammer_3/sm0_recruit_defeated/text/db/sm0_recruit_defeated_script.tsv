@@ -46,7 +46,7 @@ mct_recruit_defeated_chs_restriction_txt	Chaos Restrictions	true
 mct_recruit_defeated_chs_restriction_tt	Restrictions for Warriors of Chaos, Mono-god, Daemon and Norscan factions.	true
 mct_recruit_defeated_cross_race_txt	Cross-Race (Experimental)	true
 mct_recruit_defeated_cross_race_tt	Cross-Race Refugee Dilemmas. 	true
-mct_recruit_defeated_mortals_txt	Mortal Refugees	true
-mct_recruit_defeated_mortals_tt	Are Lords and Heroes, other than immortal/legendary ones, allowed to seek refuge after their faction's demise?	true
+mct_recruit_defeated_refugee_types_txt	Refugees types	true
+mct_recruit_defeated_refugee_types_tt	Are Lords and Heroes, other than immortal/legendary ones, allowed to seek refuge after their faction's demise?	true
 mct_recruit_defeated_nakai_vassal_txt	Nakai vassal settlements	true
 mct_recruit_defeated_nakai_vassal_tt	What should be done about Nakai's vassal faction after Nakai joins another faction?	true
