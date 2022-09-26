@@ -1822,7 +1822,7 @@ local function spawn_missing_lords(confederator, confederated)
                     for i = 0, char_list:num_items() - 1 do
                         local char = char_list:item_at(i)
                         --if char then sm0_log("DEAD FACTION char: "..char:character_subtype_key()) end
-                        if char:is_agent() or char:is_general() then
+                        if cm:char_is_agent(char) or cm:char_is_general(char) then
                             cm:kill_character(char:command_queue_index(), true)
                             --cm:kill_character_and_commanded_unit(cm:char_lookup_str(char:command_queue_index()), true)
                             --if (is_surtha_ek(char) or subtype_immortality[char:character_subtype_key()]) and cm:get_saved_value("sm0_immortal_cqi"..char:command_queue_index()) then
@@ -2295,7 +2295,7 @@ local function confed_revived(confederator, confederated)
                     --if is_surtha_ek(char) then
                     --    cm:force_add_ancillary(char, "wh_dlc10_anc_mount_nor_surtha_ek_marauder_chariot", true, true)
                     --end
-                    if char:is_agent() or char:is_general() then
+                    if cm:char_is_agent(char) or cm:char_is_general(char) then
                         table.insert(hit_list, command_queue_index)
                         if command_queue_index ~= cqi and (refugee_types_value == "immortal" or (not char:is_faction_leader() and refugee_types_value == "faction_leader")) then 
                             --cm:kill_character(command_queue_index, true) 
