@@ -2321,16 +2321,20 @@ local function confed_revived(confederator, confederated)
                         cm:set_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked", true)
                         ancillary_on_rankup(alastar_quests, "wh2_main_hef_prince_alastar")
                         if confederator:is_human() then
+                            local picture = faction_event_picture[confederator:name()]
+                            if not is_number(picture) then 
+                                picture = subculture_event_picture[confederator:subculture()] 
+                            end
                             cm:show_message_event(
                                 confederator:name(),
                                 "event_feed_strings_text_title_event_legendary_lord_available",
                                 "event_feed_strings_text_title_event_wh2_main_hef_prince_alastar_LL_unlocked",
                                 "",--"event_feed_strings_text_description_event_wh2_main_hef_prince_alastar_LL_unlocked",
                                 true,
-                                faction_event_picture[confederator:name()]
+                                picture
                             )
                         end
-                        cm:lock_starting_general_recruitment("638763060", "wh2_main_hef_eataine")
+                        cm:lock_starting_character_recruitment("638763060", "wh2_main_hef_eataine")
                     end
                 end
                 core:remove_listener("confederation_listener")
@@ -2401,7 +2405,9 @@ local function confed_revived(confederator, confederated)
                                             end
                                         end 
                                         if is_valid_spawn_coordinate(x, y) then
-                                            cm:teleport_to(cm:char_lookup_str(char:cqi()), x, y)    
+                                            cm:teleport_to(cm:char_lookup_str(char:cqi()), x, y)   
+                                        else
+                                            sm0_log("ERROR: Could not find valid coordinates! (x = "..tostring(x)..", y = "..tostring(y))
                                         end
                                     end
                                 end
@@ -2419,7 +2425,10 @@ local function confed_revived(confederator, confederated)
                         --        cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), false)
                         --    end 
                         --end
-                        cm:set_saved_value("rd_choice_0_"..confederated:name(), false)    
+                        cm:set_saved_value("rd_choice_0_"..confederated:name(), false)   
+                        cm:callback(function()  
+                            start_confederation_listeners() --global function / wh_campaign_setup.lua
+                        end, 3)
                     end,
                     false
                 )
@@ -2464,7 +2473,6 @@ local function confed_revived(confederator, confederated)
                 --cm:callback(function() 
                     cm:force_confederation(confederator:name(), confederated:name()) 
                 --end, 0.01) --give the message_events some time   
-            --]]
             end,
             false
         )
@@ -2523,7 +2531,7 @@ local function rd_dilemma(confederator, confederated, player_confederation_count
                     cm:disable_saving_game(false) 
                     cm:autosave_at_next_opportunity()
                 end
-                start_confederation_listeners() --global function / wh_campaign_setup.lua             
+                start_confederation_listeners() --global function / wh_campaign_setup.lua
             end, 3)  
         end,
         false
@@ -2995,31 +3003,33 @@ local function init_recruit_defeated_listeners(enable_value)
             true
         )
 
-        if not cm:get_saved_value("delayed_spawn_listener") then
-            core:add_listener(
-                "delayed_spawn_listener",
-                "PanelOpenedCampaign", 
-                function(context) 
-                    return context.string == "popup_pre_battle" and cm:model():turn_number() == 1
-                end,
-                function(context)
-                    local faction_list = cm:model():world():faction_list()
-                    for i = 0, faction_list:num_items() - 1 do
-                        local current_faction = faction_list:item_at(i)
-                        if current_faction:is_dead() then -- delayed spawn?
-                            -- faction exceptions
-                            if not is_faction_exempted(current_faction) then
-                                cm:set_saved_value("delayed_spawn_"..current_faction:name(), true)
-                                sm0_log("Faction will spawn delayed: "..current_faction:name())
+        if not cm:get_saved_value("delayed_spawn_listener") and cm:model():turn_number() == 1 then
+            if not cm:is_multiplayer() then
+                core:add_listener(
+                    "delayed_spawn_listener",
+                    "PanelOpenedCampaign", 
+                    function(context) 
+                        return context.string == "popup_pre_battle" and cm:model():turn_number() == 1
+                    end,
+                    function(context)
+                        local faction_list = cm:model():world():faction_list()
+                        for i = 0, faction_list:num_items() - 1 do
+                            local current_faction = faction_list:item_at(i)
+                            if current_faction:is_dead() then -- delayed spawn?
+                                -- faction exceptions
+                                if not is_faction_exempted(current_faction) then
+                                    cm:set_saved_value("delayed_spawn_"..current_faction:name(), true)
+                                    sm0_log("Faction will spawn delayed: "..current_faction:name())
+                                end
                             end
                         end
-                    end
-                    cm:set_saved_value("delayed_spawn_listener", true)
-                    core:remove_listener("backup_delayed_spawn_listener")
-                    --core:remove_listener("delayed_spawn_listener")
-                end,
-                false
-            )
+                        cm:set_saved_value("delayed_spawn_listener", true)
+                        core:remove_listener("backup_delayed_spawn_listener")
+                        --core:remove_listener("delayed_spawn_listener")
+                    end,
+                    false
+                )
+            end
             core:add_listener(
                 "backup_delayed_spawn_listener",
                 "FactionAboutToEndTurn",
@@ -3051,7 +3061,14 @@ local function init_recruit_defeated_listeners(enable_value)
             "FactionTurnStart",
             function(context)
                 --should fire only once per player(team)-turn even if "simultaneous turns" is enabled
-                return cm:model():turn_number() >= 2 and context:faction():is_human() and context:faction():name() == cm:whose_turn_is_it():item_at(0):name()
+                local human_factions = cm:get_human_factions()
+                if context:faction():is_human() then
+                    sm0_log("FactionTurnStart | context:faction() = "..context:faction():name().." | cm:whose_turn_is_it():num_items() = "..tostring(cm:whose_turn_is_it():num_items()))
+                end
+                cm:whose_turn_is_it():num_items() -- more than 1 if simultaneous turns enabled
+                return cm:model():turn_number() >= 2 and context:faction():is_human() and (not cm:is_multiplayer() --singleplayer
+                or cm:whose_turn_is_it():num_items() == 1 -- multiplayer, simultaneous turns disabled, execute every player turn
+                or context:faction():name() == human_factions[1]) -- multiplayer, simultaneous turns enabled, execute at host turn
             end,
             function(context)
                 if cm:model():difficulty_level() == -3 then cm:disable_saving_game(true) end
@@ -3134,7 +3151,7 @@ local function init_recruit_defeated_listeners(enable_value)
                                 --if prefered_faction and not faction_P1:is_dead() and current_faction:subculture() == faction_P1:subculture() 
                                 --and cm:get_saved_value("rd_choice_1_"..current_faction:name()) ~= faction_P1:name() and prefered_faction:name() == faction_P1:name() then
                                     if not confed_penalty(prefered_faction) and player_confederation_count <= player_confederation_limit and (scope_value == "player_ai" or scope_value == "player") 
-                                    and cm:is_factions_turn_by_key(prefered_faction:name()) 
+                                    and cm:is_factions_turn_by_key(prefered_faction:name()) and not prefered_faction:is_idle_human()
                                     then
                                         if are_lords_missing(current_faction) then
                                             sm0_log("["..player_confederation_count.."] Player 1 intends to spawn missing lords for: "..current_faction:name())
@@ -3227,29 +3244,28 @@ local function init_recruit_defeated_listeners(enable_value)
             true
         )
 
-        core:add_listener(
-            "recruit_defeated_DilemmaChoiceMadeEvent",
-            "DilemmaChoiceMadeEvent",
-            function(context)
-                return not context:dilemma():starts_with("wh2_dlc08_confederate_") and not context:dilemma():starts_with("wh_dlc07_brt_confederation_")
-            end,
-            function(context)
-                cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
-                cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
-                cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
-                --cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")   
-                cm:disable_event_feed_events(true, "", "", "diplomacy_faction_destroyed")  
-
-                cm:callback(function() 
-                    cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing")                
-                    cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "") 
-                    cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")    
-                    --cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered")   
-                    cm:disable_event_feed_events(false, "", "", "diplomacy_faction_destroyed")                     
-                end, 3)
-            end,
-            true
-        )
+        --core:add_listener(
+        --    "recruit_defeated_DilemmaChoiceMadeEvent",
+        --    "DilemmaChoiceMadeEvent",
+        --    function(context)
+        --        return not context:dilemma():starts_with("wh2_dlc08_confederate_") and not context:dilemma():starts_with("wh_dlc07_brt_confederation_")
+        --    end,
+        --    function(context)
+        --        cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
+        --        cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
+        --        cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
+        --        --cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")   
+        --        cm:disable_event_feed_events(true, "", "", "diplomacy_faction_destroyed")  
+        --        cm:callback(function() 
+        --            cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing")                
+        --            cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "") 
+        --            cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")    
+        --            --cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered")   
+        --            cm:disable_event_feed_events(false, "", "", "diplomacy_faction_destroyed")                     
+        --        end, 3)
+        --    end,
+        --    true
+        --)
 
         core:add_listener(
             "recruit_defeated_FactionJoinsConfederation",
