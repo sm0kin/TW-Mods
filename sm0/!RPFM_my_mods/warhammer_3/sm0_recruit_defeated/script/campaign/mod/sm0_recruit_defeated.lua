@@ -2337,8 +2337,6 @@ local function confed_revived(confederator, confederated)
                         cm:lock_starting_character_recruitment("638763060", "wh2_main_hef_eataine")
                     end
                 end
-                core:remove_listener("confederation_listener")
-                core:remove_listener("confederation_expired")
                 core:add_listener(
                     "sm0_confed_revived_FactionJoinsConfederation",
                     "FactionJoinsConfederation",
@@ -2347,9 +2345,6 @@ local function confed_revived(confederator, confederated)
                     end,
                     function(context)
                         sm0_log("Faction: "..confederator:name().." :confederated: "..confederated:name().." | CQI: "..cqi)
-                        if not confederator:is_human() then
-                            cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
-                        end
                         cm:callback(function() 
                             if confed_penalty(confederator) then cm:remove_effect_bundle(confed_penalty(confederator), confederator:name()) end 
                         end, 0.5)
@@ -2426,9 +2421,6 @@ local function confed_revived(confederator, confederated)
                         --    end 
                         --end
                         cm:set_saved_value("rd_choice_0_"..confederated:name(), false)   
-                        cm:callback(function()  
-                            start_confederation_listeners() --global function / wh_campaign_setup.lua
-                        end, 3)
                     end,
                     false
                 )
@@ -2436,8 +2428,8 @@ local function confed_revived(confederator, confederated)
                 if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then                    
                     local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
                     if nakai_vassal_value == "do_nothing" then
-                        core:remove_listener("confederation_listener")
-                        core:remove_listener("confederation_expired")
+                        --core:remove_listener("confederation_listener")
+                        --core:remove_listener("confederation_expired")
                     elseif nakai_vassal_value == "confederate" and defender_faction and not defender_faction:is_dead() then
                         cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
                         cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
@@ -2468,7 +2460,7 @@ local function confed_revived(confederator, confederated)
                     end
                 end
                 if not confederator:is_human() then
-                    cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
+                    --cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
                 end
                 --cm:callback(function() 
                     cm:force_confederation(confederator:name(), confederated:name()) 
@@ -2500,10 +2492,10 @@ local function rd_dilemma(confederator, confederated, player_confederation_count
 
     local subculture = confederator:subculture()
     core:add_listener(
-        "rd_trigger_dilemma"..confederated:name(),
+        "rd_trigger_dilemma"..confederated:name()..player_confederation_count,
         "DilemmaChoiceMadeEvent",
         function(context)
-            return context:dilemma():starts_with("sm0_rd_"..subculture.."_"..player_confederation_count) 
+            return context:dilemma() == "sm0_rd_"..subculture.."_"..player_confederation_count
         end,
         function(context)
             local choice = context:choice()
@@ -2521,18 +2513,12 @@ local function rd_dilemma(confederator, confederated, player_confederation_count
                 sm0_log("Delay your decision: "..confederated:name())
                 cm:set_saved_value("rd_choice_3_"..confederated:name(), cm:model():turn_number() + 25)
             end
-            cm:callback(function() 
-                cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing")                
-                cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "")   
-                cm:disable_event_feed_events(false, "", "", "diplomacy_faction_destroyed")
-                cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
-                cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered")
-                if cm:model():difficulty_level() == -3 then 
-                    cm:disable_saving_game(false) 
-                    cm:autosave_at_next_opportunity()
-                end
-                start_confederation_listeners() --global function / wh_campaign_setup.lua
-            end, 3)  
+            --cm:callback(function() 
+            --    if cm:model():difficulty_level() == -3 then 
+            --        cm:disable_saving_game(false) 
+            --        cm:autosave_at_next_opportunity()
+            --    end
+            --end, 3)  
         end,
         false
     )
@@ -2577,7 +2563,7 @@ local function rd_dilemma(confederator, confederated, player_confederation_count
         --confed_revived(confederator, confederated)
     else  
         sm0_log("ERROR: Can't confederate dead factions! [confederator: "..confederator:name().." | confederated: "..confederated:name().."]")
-        core:remove_listener("rd_trigger_dilemma"..confederated:name())                                 
+        core:remove_listener("rd_trigger_dilemma"..confederated:name()..player_confederation_count)                                 
     end
 end
 
@@ -3060,29 +3046,20 @@ local function init_recruit_defeated_listeners(enable_value)
             "recruit_defeated_FactionTurnStart",
             "FactionTurnStart",
             function(context)
-                --should fire only once per player(team)-turn even if "simultaneous turns" is enabled
                 local human_factions = cm:get_human_factions()
-                if context:faction():is_human() then
-                    sm0_log("FactionTurnStart | context:faction() = "..context:faction():name().." | cm:whose_turn_is_it():num_items() = "..tostring(cm:whose_turn_is_it():num_items()))
-                end
-                cm:whose_turn_is_it():num_items() -- more than 1 if simultaneous turns enabled
                 return cm:model():turn_number() >= 2 and context:faction():is_human() and (not cm:is_multiplayer() --singleplayer
                 or cm:whose_turn_is_it():num_items() == 1 -- multiplayer, simultaneous turns disabled, execute every player turn
                 or context:faction():name() == human_factions[1]) -- multiplayer, simultaneous turns enabled, execute at host turn
             end,
             function(context)
-                if cm:model():difficulty_level() == -3 then cm:disable_saving_game(true) end
-                cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
-                cm:disable_event_feed_events(true, "", "", "diplomacy_faction_destroyed")
-                cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
-                cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
-                cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
-
+                --if cm:model():difficulty_level() == -3 then cm:disable_saving_game(true) end
                 local confederation_limit = dilemmas_per_turn_value 
                 local player_confederation_limit = dilemmas_per_turn_player_value
                 local confederation_count = 1 
                 local player_confederation_count = 1 
                 local subcultures_accepting_refugees = {}
+                local dilemmas = {}
+                local ai_confeds = {}
                 local confederation_subculture_limit = dilemmas_per_turn_per_sc_value
                 if cm:is_multiplayer() then 
                     player_confederation_limit = 1
@@ -3161,7 +3138,8 @@ local function init_recruit_defeated_listeners(enable_value)
                                             confederation_count = confederation_count + confederation_limit                                  
                                         else
                                             sm0_log("["..player_confederation_count.."] Player 1 intends to confederate: "..current_faction:name())
-                                            rd_dilemma(prefered_faction, current_faction, player_confederation_count)
+                                            table.insert(dilemmas, {prefered_faction, current_faction, player_confederation_count})
+                                            --rd_dilemma(prefered_faction, current_faction, player_confederation_count)
                                             --if cm:is_multiplayer() and faction_P1:subculture() == faction_P2:subculture() then
                                             --    cm:set_saved_value("faction_P1", true)
                                             --    cm:set_saved_value("faction_P2", false)
@@ -3207,12 +3185,13 @@ local function init_recruit_defeated_listeners(enable_value)
                                                     confederation_count = confederation_count + confederation_limit
                                                 else
                                                     sm0_log("["..confederation_count.."] AI: "..prefered_faction:name().." intends to confederate: "..current_faction:name())
-                                                    confed_revived(prefered_faction, current_faction)
+                                                    table.insert(ai_confeds, {prefered_faction, current_faction})
+                                                    --confed_revived(prefered_faction, current_faction)
                                                     confederation_count = confederation_count + 1
                                                     table.insert(subcultures_accepting_refugees, prefered_faction:subculture())
-                                                    for i, faction in ipairs(prefered_factions) do
-                                                        sm0_log("ai_confed | "..tostring("after get_prefered_faction_list").." | prefered_factions["..i.."]: "..tostring(faction))
-                                                    end                                                
+                                                    --for i, faction in ipairs(prefered_factions) do
+                                                    --    sm0_log("ai_confed | "..tostring("after get_prefered_faction_list").." | prefered_factions["..i.."]: "..tostring(faction))
+                                                    --end                                                
                                                 end
                                             --else
                                             --    if not cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) then --if not cm:get_saved_value("sm0_rd_delay_"..current_faction:name()) then 
@@ -3229,43 +3208,87 @@ local function init_recruit_defeated_listeners(enable_value)
                         end
                     end
                 end
-                cm:callback(function() 
-                    cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing")                
-                    cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "")   
-                    cm:disable_event_feed_events(false, "", "", "diplomacy_faction_destroyed")
-                    cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
-                    cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered")  
-                    if cm:model():difficulty_level() == -3 then 
-                        cm:disable_saving_game(false) 
-                        cm:autosave_at_next_opportunity()
-                    end           
-                end, 3, "recruit_defeated_FactionTurnStart_callback")
+                if #ai_confeds >= 1 or #dilemmas >= 1 then
+                    cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
+                    cm:disable_event_feed_events(true, "", "", "diplomacy_faction_destroyed")
+                    cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")
+                    cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
+                    cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")      
+                    core:remove_listener("confederation_listener")
+                    core:remove_listener("confederation_expired")   
+                    sm0_log("#ai_confeds >= 1 or #dilemmas >= 1 | disable_event_feed_events")          
+                end
+                if #dilemmas >= 1 then
+                    local confederator = dilemmas[1][1]
+                    local confederated = dilemmas[1][2]
+                    local player_confederation_count = dilemmas[1][3]
+                    sm0_log("#dilemmas >= 1 | "..confederator:name().." | "..confederated:name().." | "..player_confederation_count)
+                    local subculture = confederator:subculture()
+                    core:add_listener(
+                        "rd_disable_event_feed_events_DilemmaChoiceMadeEvent",
+                        "DilemmaChoiceMadeEvent",
+                        function(context)
+                            return context:dilemma() == "sm0_rd_"..subculture.."_"..player_confederation_count
+                        end,
+                        function(context)
+                            cm:callback(function() 
+                                cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing")                
+                                cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "")   
+                                cm:disable_event_feed_events(false, "", "", "diplomacy_faction_destroyed")
+                                cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
+                                cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered")  
+                                start_confederation_listeners() --global function / wh_campaign_setup.lua
+                                sm0_log("DilemmaChoiceMadeEvent | enable_event_feed_events |"..confederator:name().." | "..player_confederation_count)
+                            end, 1, "rd_disable_event_feed_events_callback")
+                        end,
+                        false
+                    )
+                elseif #dilemmas < 1 and #ai_confeds >= 1 then
+                    local confederator = ai_confeds[#ai_confeds][1]
+                    local confederated = ai_confeds[#ai_confeds][2]
+                    sm0_log("#dilemmas >= 1 | "..confederator:name().." | "..confederator:name())
+                    core:add_listener(
+                        "rd_disable_event_feed_events_FactionJoinsConfederation",
+                        "FactionJoinsConfederation",
+                        function(context)
+                            return context:confederation():name() == confederator:name() and context:faction():name() == confederated:name()
+                        end,
+                        function(context)
+                            cm:callback(function() 
+                                cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing")                
+                                cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "")   
+                                cm:disable_event_feed_events(false, "", "", "diplomacy_faction_destroyed")
+                                cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
+                                cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered")
+                                start_confederation_listeners() --global function / wh_campaign_setup.lua  
+                                sm0_log("FactionJoinsConfederation | enable_event_feed_events | "..confederator:name().." | "..confederator:name())
+                            end, 1, "rd_disable_event_feed_events_callback")
+                        end,
+                        false
+                    )
+                end
+
+                for i = 1, #ai_confeds do
+                    local confederator = ai_confeds[i][1]
+                    local confederated = ai_confeds[i][2]
+                    confed_revived(confederator, confederated)
+                end
+                for i = 1, #dilemmas do
+                    local confederator = dilemmas[i][1]
+                    local confederated = dilemmas[i][2]
+                    local player_confederation_count = dilemmas[i][3]
+                    sm0_log("rd_dilemma | "..confederator:name().." | "..confederated:name().." | "..player_confederation_count)
+                    rd_dilemma(confederator, confederated, player_confederation_count)                
+                end
+                --cm:callback(function() 
+                --    if cm:model():difficulty_level() == -3 then 
+                --        cm:disable_saving_game(false) 
+                --        cm:autosave_at_next_opportunity()
+                --    end           
+                --end, 3, "recruit_defeated_FactionTurnStart_callback")
             end,
             true
         )
-
-        --core:add_listener(
-        --    "recruit_defeated_DilemmaChoiceMadeEvent",
-        --    "DilemmaChoiceMadeEvent",
-        --    function(context)
-        --        return not context:dilemma():starts_with("wh2_dlc08_confederate_") and not context:dilemma():starts_with("wh_dlc07_brt_confederation_")
-        --    end,
-        --    function(context)
-        --        cm:disable_event_feed_events(true, "", "", "faction_joins_confederation")
-        --        cm:disable_event_feed_events(true, "", "", "diplomacy_trespassing")
-        --        cm:disable_event_feed_events(true, "", "wh_event_subcategory_character_deaths", "")
-        --        --cm:disable_event_feed_events(true, "", "", "diplomacy_faction_encountered")   
-        --        cm:disable_event_feed_events(true, "", "", "diplomacy_faction_destroyed")  
-        --        cm:callback(function() 
-        --            cm:disable_event_feed_events(false, "", "", "diplomacy_trespassing")                
-        --            cm:disable_event_feed_events(false, "", "wh_event_subcategory_character_deaths", "") 
-        --            cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")    
-        --            --cm:disable_event_feed_events(false, "", "", "diplomacy_faction_encountered")   
-        --            cm:disable_event_feed_events(false, "", "", "diplomacy_faction_destroyed")                     
-        --        end, 3)
-        --    end,
-        --    true
-        --)
 
         core:add_listener(
             "recruit_defeated_FactionJoinsConfederation",
