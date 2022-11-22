@@ -6,7 +6,6 @@
 -- NEEDS TESTING
 -- was trigger_dilemma_with_targets fixed?
 -- multiplayer support (up to 8 players, different subcultures, head-to-head, coop, simultaneous turns)
--- does quests/item-allocation work for cross race lords?
 
 --mct variables
 local enable_value = true 
@@ -516,18 +515,18 @@ local alastar_quests = {
 
 local chs_subtype_anc = {
     ["wh3_main_ksl_katarin"] = {
-        {"reward", "wh3_main_anc_weapon_frost_fang", nil, 7},
+        {"mission", "wh3_main_anc_weapon_frost_fang", "wh3_main_ie_qb_ksl_katarin_frost_fang", 7},
         {"mission", "wh3_main_anc_armour_the_crystal_cloak", "wh3_main_qb_ksl_katarin_crystal_cloak", 10, nil, "wh3_main_camp_quest_katarin_the_crystal_cloak_001", 245, 291}
     },
     ["wh3_main_ksl_kostaltyn"] = {
         {"mission", "wh3_main_anc_weapon_the_burning_brazier", "wh3_main_qb_ksl_kostaltyn_burning_brazier", 10, nil, "wh3_main_camp_quest_kostaltyn_burning_brazier_001", 153, 162}
     },
     ["wh3_main_ksl_boris"] = {
-        {"reward", "wh3_main_anc_weapon_shard_blade", nil, 7},
-        {"reward", "wh3_main_anc_armour_armour_of_ursun", nil, 10}
+        {"mission", "wh3_main_anc_weapon_shard_blade", "wh3_main_ie_qb_ksl_boris_shard_blade", 7},
+        {"mission", "wh3_main_anc_armour_armour_of_ursun", "wh3_main_ie_qb_ksl_boris_armour_of_ursun", 10}
     },
     ["wh3_main_ogr_greasus_goldtooth"] = {
-        {"reward", "wh3_main_anc_weapon_sceptre_of_titans", nil, 7},
+        {"mission", "wh3_main_anc_weapon_sceptre_of_titans", "wh3_main_ie_qb_ogr_greasus_sceptre_of_titans", 7},
         {"mission", "wh3_main_anc_talisman_overtyrants_crown", "wh3_main_qb_ogr_greasus_overtyrants_crown", 10, nil, "wh3_main_camp_quest_greasus_overtyrants_crown_001", 591, 240}
     },
     ["wh3_main_ogr_skrag_the_slaughterer"] = {
@@ -635,7 +634,7 @@ local im_subtype_anc = {
         {"mission", "wh_main_anc_weapon_slaggas_slashas", "wh3_main_ie_qb_grn_azhag_the_slaughterer_slaggas_slashas", 17, nil, nil, 416, 253},
     },
     ["wh_main_grn_grimgor_ironhide"] = {			
-        {"mission", "wh_main_anc_armour_blood", "wh3_main_ie_qb_grn_grimgor_ironhide_blood_forged_armour", 12, nil, nil, 542, 593},
+        {"mission", "wh_main_anc_armour_blood-forged_armour", "wh3_main_ie_qb_grn_grimgor_ironhide_blood_forged_armour", 12, nil, nil, 542, 593},
         {"mission", "wh_main_anc_weapon_gitsnik", "wh3_main_ie_qb_grn_grimgor_ironhide_gitsnik", 7, nil, "war.camp.advice.quests.001", 450, 420},
     },
 

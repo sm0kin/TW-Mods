@@ -21,6 +21,7 @@ scope:add_dropdown_values({
     {key = "player", text = "Player only", tt = "", default = false},
     {key = "ai", text = "AI only", tt = "", default = false},
 })
+scope:set_default_value("player_ai")
 --scope:add_dropdown_value("player_ai", "Player & AI", "")
 --scope:add_dropdown_value("player", "Player only", "")
 --scope:add_dropdown_value("ai", "AI only", "")
@@ -48,6 +49,7 @@ preferance1:add_dropdown_values({
     --{key = "alternate", text = "Dilemma alternates (MP only)", tt = "Dilemma alternates between Players of the same subculture (applies to MP only).", default = false},
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = true},
 })
+preferance1:set_default_value("race")
 --preferance1:add_dropdown_value("disable", "Disable", "Preference Level-1 disabled.")
 --preferance1:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.", true)
 --preferance1:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -71,6 +73,8 @@ preferance2:add_dropdown_values({
     --{key = "alternate", text = "Dilemma alternates (MP only)", tt = "Dilemma alternates between Players of the same subculture (applies to MP only).", default = false},
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
+preferance2:set_default_value("player")
+
 --preferance2:add_dropdown_value("disable", "Disable", "Preference Level-2 disabled.")
 --preferance2:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance2:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -94,6 +98,8 @@ preferance3:add_dropdown_values({
     --{key = "alternate", text = "Dilemma alternates (MP only)", tt = "Dilemma alternates between Players of the same subculture (applies to MP only).", default = false},
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
+preferance3:set_default_value("met")
+
 --preferance3:add_dropdown_value("disable", "Disable", "Preference Level-3 disabled.")
 --preferance3:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance3:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -117,6 +123,8 @@ preferance4:add_dropdown_values({
     --{key = "alternate", text = "Dilemma alternates (MP only)", tt = "Dilemma alternates between Players of the same subculture (applies to MP only).", default = false},
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
+preferance4:set_default_value("relation")
+
 --preferance4:add_dropdown_value("disable", "Disable", "Preference Level-4 disabled.")
 --preferance4:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance4:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -140,6 +148,8 @@ preferance5:add_dropdown_values({
     --{key = "alternate", text = "Dilemma alternates (MP only)", tt = "Dilemma alternates between Players of the same subculture (applies to MP only).", default = false},
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
+preferance5:set_default_value("major")
+
 --preferance5:add_dropdown_value("disable", "Disable", "Preference Level-5 disabled.")
 --preferance5:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance5:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -163,6 +173,8 @@ preferance6:add_dropdown_values({
     --{key = "alternate", text = "Dilemma alternates (MP only)", tt = "Dilemma alternates between Players of the same subculture (applies to MP only).", default = false},
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
+preferance6:set_default_value("disable")
+
 --preferance6:add_dropdown_value("disable", "Disable", "Preference Level-6 disabled.", true)
 --preferance6:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance6:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
