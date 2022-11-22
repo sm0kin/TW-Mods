@@ -74,7 +74,6 @@ preferance2:add_dropdown_values({
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
 preferance2:set_default_value("player")
-
 --preferance2:add_dropdown_value("disable", "Disable", "Preference Level-2 disabled.")
 --preferance2:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance2:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -99,7 +98,6 @@ preferance3:add_dropdown_values({
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
 preferance3:set_default_value("met")
-
 --preferance3:add_dropdown_value("disable", "Disable", "Preference Level-3 disabled.")
 --preferance3:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance3:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -124,7 +122,6 @@ preferance4:add_dropdown_values({
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
 preferance4:set_default_value("relation")
-
 --preferance4:add_dropdown_value("disable", "Disable", "Preference Level-4 disabled.")
 --preferance4:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance4:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -149,7 +146,6 @@ preferance5:add_dropdown_values({
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
 preferance5:set_default_value("major")
-
 --preferance5:add_dropdown_value("disable", "Disable", "Preference Level-5 disabled.")
 --preferance5:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance5:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -174,7 +170,6 @@ preferance6:add_dropdown_values({
     {key = "race", text = "same Race", tt = "Factions of the same race will be prefered over factions of a different race.", default = false},
 })
 preferance6:set_default_value("disable")
-
 --preferance6:add_dropdown_value("disable", "Disable", "Preference Level-6 disabled.", true)
 --preferance6:add_dropdown_value("player", "Player", "Factions led by a Player will be prefered over AI factions.")
 --preferance6:add_dropdown_value("ai", "AI", "Factions led by the AI will be prefered over player-led factions.")
@@ -271,6 +266,7 @@ chs_restriction:add_dropdown_values({
     {key = "ca_restrictions", text = "CA's Restrictions", tt = "Only Archaon and Be'lakor can accept refugees and solely from other factions of the \"Warriors of Chaos\" race.", default = false},
     --{key = "disabled", text = "Disabled", tt = "", default = false},
 })
+chs_restriction:set_default_value("no_restrictions")
 
 local cross_race = recruit_defeated:add_new_option("cross_race", "dropdown")
 cross_race:set_text(loc_prefix.."cross_race_txt", true)
@@ -280,6 +276,7 @@ cross_race:add_dropdown_values({
     {key = "player_only", text = "Player only", tt = "Player only Cross-Race mode.", default = false},
     {key = "player_ai", text = "Player & AI", tt = "Player & AI Cross-Race mode.", default = false},
 })
+cross_race:set_default_value("disable")
 
 local refugee_types = recruit_defeated:add_new_option("refugee_types", "dropdown")
 refugee_types:set_text(loc_prefix.."refugee_types_txt", true)
@@ -290,6 +287,7 @@ refugee_types:add_dropdown_values({
     {key = "faction_leader", text = "Immortal + Faction Leader", tt = "All immortal (legendary and rank 20+) Lords/Heroes and the Faction leaders are transfered.", default = false},
     {key = "all", text = "All Lords & Heroes", tt = "All Lords/Heroes are being transfered, not only immortal/legendary ones.", default = false},
 })
+refugee_types:set_default_value("immortal")
 
 --local wound = recruit_defeated:add_new_option("wound", "checkbox")
 --wound:set_default_value(false)
@@ -305,6 +303,7 @@ nakai_vassal:add_dropdown_values({
     {key = "confederate", text = "Transfer", tt = "Transfer the vassal's settlements to the faction nakai joined.", default = false},
     {key = "abandon", text = "Abandon", tt = "Abandon all settlements they occupied.", default = false},
 })
+nakai_vassal:set_default_value("do_nothing")
 
 --local legendary_confed = recruit_defeated:add_new_option("legendary_confed", "dropdown")
 --legendary_confed:set_text(loc_prefix.."legendary_confed_txt", true)
