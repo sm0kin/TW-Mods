@@ -1,5 +1,5 @@
 key	text	tooltip
-#Loc PackedFile;1;text/db/sm0_recruit_defeated_ll_cataph.loc		
+#Loc;1;text/db/sm0_recruit_defeated_ll_cataph.loc		
 event_feed_strings_text_title_event_kraka_cromson_LL_unlocked	Thorgard Cromson	true
 event_feed_strings_text_description_event_kraka_cromson_LL_unlocked		true
 event_feed_strings_text_title_event_teb_borgio_the_besieger_LL_unlocked	Borgio the Besieger	true

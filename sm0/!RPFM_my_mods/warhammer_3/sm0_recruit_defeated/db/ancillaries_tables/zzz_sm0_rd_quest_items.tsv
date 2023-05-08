@@ -341,3 +341,36 @@ wh2_dlc09_anc_follower_tmb_herald_of_zandri	wh2_dlc09_anc_tmb_herald	.	true	fals
 wh2_dlc09_anc_talisman_amulet_of_pha_stah	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
 wh2_dlc09_anc_weapon_crook_and_flail_of_radiance	wh_main_anc_weapon	.	true	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh2_dlc10_anc_enchanted_item_burning_phoenix_pinion	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_arcane_item_blood_shard	wh_main_anc_arcane_item	.	false	false	false	1	0	9999			false	false	false	arcane_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_arcane_item_daemonspite_crucible	wh_main_anc_arcane_item	.	false	false	false	1	0	9999			false	false	false	arcane_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_armour_chd_armour_of_gazrakh	wh_main_anc_armour	.	false	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_armour_lesser_relic_of_skavor	wh_main_anc_armour	.	true	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_armour_major_relic_of_grungni	wh_main_anc_armour	.	true	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_bones_of_the_maw	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_crown_of_skulls	wh_main_anc_arcane_item	.	true	false	false	1	0	9999			false	false	false	arcane_item	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_eternal_servant	wh2_dlc11_anc_follower_zombie	.	true	false	false	1	0	9999			false	false	false	general	1	1	50	75	true			200	0	follower	false	false	false	all
+wh3_dlc23_anc_convoy_everchanging_shield	wh_main_anc_armour	.	true	false	false	1	0	9999			false	false	false	armour	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_everlasting_glacier	wh_main_anc_arcane_item	.	true	false	false	1	0	9999			false	false	false	arcane_item	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_mirror_blade	wh_main_anc_weapon	.	true	false	false	1	0	9999			false	false	false	weapon	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_obedient_mutant	wh3_main_anc_nurgle_mutant	.	true	false	false	1	0	9999			false	false	false	general	1	1	50	75	true			200	0	follower	false	false	false	all
+wh3_dlc23_anc_convoy_orc_shaman	wh_main_anc_greenskins_orc_shaman	.	true	false	false	1	0	9999			false	false	false	general	1	1	50	75	true			200	0	follower	false	false	false	all
+wh3_dlc23_anc_convoy_powerful_berserker	wh_dlc08_anc_follower_norscan_berserker	.	true	false	false	1	0	9999			false	false	false	general	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_radiating_spike	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_ring_of_thorns	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_convoy_spiked_whip	wh_main_anc_weapon	.	true	false	false	1	0	9999			false	false	false	weapon	1	1	50	75	true			200	0		false	false	false	all
+wh3_dlc23_anc_enchanted_item_chd_banner_of_slavery	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_enchanted_item_chd_chaos_runeshield	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_enchanted_item_lesser_relic_of_morgrim	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_enchanted_item_major_relic_of_valaya	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_follower_neu_gabriella	wh3_dlc23_anc_follower_neu_gabriella	.	false	false	false	1	0	9999			false	false	false	general	1	1	50	75	true			200	0	follower	false	false	true	all
+wh3_dlc23_anc_talisman_hellshard_amulet	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_talisman_lesser_relic_of_thungni	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_talisman_major_relic_of_grimnir	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_talisman_stone_mantle	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_weapon_black_hammer_of_hashut	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_weapon_chd_dagger_of_malice	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_weapon_chd_the_obsidian_axe	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_weapon_item_silver_dagger	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_weapon_lesser_relic_of_gazul	wh_main_anc_weapon	.	true	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_weapon_lesser_relic_of_smednir	wh_main_anc_weapon	.	true	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc23_anc_weapon_the_graven_sceptre	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all

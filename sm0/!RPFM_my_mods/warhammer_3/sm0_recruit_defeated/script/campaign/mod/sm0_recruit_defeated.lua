@@ -126,6 +126,7 @@ local subculture_event_picture = {
     ["wh_main_sc_grn_savage_orcs"] = 593,
     ["wh_dlc08_sc_nor_norsca"] = 800,
     ["wh_main_sc_teb_teb"] = 591,
+    ["mixer_teb_southern_realms"] = 591,
     ["wh_main_sc_vmp_vampire_counts"] = 594,
     ["wh2_dlc09_sc_tmb_tomb_kings"] = 606,
     ["wh2_dlc11_sc_cst_vampire_coast"] = 785,
@@ -141,6 +142,7 @@ local subculture_event_picture = {
     ["wh3_main_sc_ogr_ogre_kingdoms"] = 16,
     ["wh3_main_sc_sla_slaanesh"] = 13,
     ["wh3_main_sc_tze_tzeentch"] = 14,
+    ["wh3_dlc23_sc_chd_chaos_dwarfs"] = 50,
 } 
 
 local wh_agents = {
@@ -255,6 +257,11 @@ local wh_agents = {
     {["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh2_dlc17_vmp_kevon_lloydstein", ["dlc"] = {"TW_WH2_BASE_GAME"}},
     --{["faction"] = "", ["subtype"] = "wh2_pro08_neu_gotrek", ["dlc"] = {"TW_WH2_BASE_GAME"}},
     --{["faction"] = "", ["subtype"] = "wh2_pro08_neu_felix", ["dlc"] = {"TW_WH2_BASE_GAME"}},
+    {["faction"] = "wh3_dlc23_chd_zhatan", ["subtype"] = "wh3_dlc23_chd_zhatan", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
+    {["faction"] = "wh3_dlc23_chd_legion_of_azgorh", ["subtype"] = "wh3_dlc23_chd_drazhoath", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
+    {["faction"] = "wh3_dlc23_chd_astragoth", ["subtype"] = "wh3_dlc23_chd_astragoth", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc23_neu_ulrika", ["dlc"] = {"TW_WH3_ULRIKA_FREE"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc23_chd_gorduz_backstabber", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
 } 
 
 --MIXU--
@@ -316,19 +323,19 @@ local xoudad_agents = {
 
 --CATAPH TEB--
 local teb_agents = {
-    {["faction"] = "wh_main_teb_tilea", ["subtype"] = "teb_borgio_the_besiege"},
-    {["faction"] = "wh_main_teb_tilea", ["subtype"] = "teb_tilea"},
-    {["faction"] = "wh_main_teb_tobaro", ["subtype"] = "teb_lucrezzia_belladonna"},
-    {["faction"] = "wh_main_teb_border_princes", ["subtype"] = "teb_gashnag"},
-    {["faction"] = "wh_main_teb_border_princes", ["subtype"] = "teb_border_princes"},
-    {["faction"] = "wh_main_teb_estalia", ["subtype"] = "teb_estalia"},
-    {["faction"] = "wh2_main_emp_new_world_colonies", ["subtype"] = "teb_new_world_colonies"},
-    {["faction"] = "wh2_main_emp_new_world_colonies", ["subtype"] = "teb_colombo"},
+    {["faction"] = "mixer_teb_tilea", ["subtype"] = "teb_borgio_the_besieger"},
+    {["faction"] = "mixer_teb_catrazza", ["subtype"] = "teb_catrazza"},
+    {["faction"] = "mixer_teb_bilbali", ["subtype"] = "teb_lucrezzia_belladonna"},
+    {["faction"] = "mixer_teb_gashnag", ["subtype"] = "teb_gashnag"},
+    {["faction"] = "mixer_teb_border_princes", ["subtype"] = "teb_gausser"},
+    {["faction"] = "mixer_teb_estalia", ["subtype"] = "teb_lupio"},
+    {["faction"] = "mixer_teb_new_world_colonies", ["subtype"] = "teb_cadavo"},
+    {["faction"] = "mixer_teb_colombo", ["subtype"] = "teb_colombo"},
 } 
 
 --CATAPH Kraka Drak--
 local kraka_agents = {
-    {["faction"] = "wh_main_dwf_kraka_drak", ["subtype"] = "dwf_kraka_drak"},
+    {["faction"] = "wh_main_dwf_kraka_drak", ["subtype"] = "kraka_cromson"},
 } 
 
 --Project Resurrection - Parte Legendary Lords--
@@ -507,6 +514,9 @@ local playable_factions = {
     "wh3_dlc20_chs_azazel",
     "wh2_dlc17_bst_malagor",
     "wh2_dlc15_grn_bonerattlaz",
+    "wh3_dlc23_chd_zhatan",
+    "wh3_dlc23_chd_legion_of_azgorh",
+    "wh3_dlc23_chd_astragoth",
 } 
 
 local alastar_quests = {
@@ -1078,14 +1088,17 @@ local subtype_immortality = {
     --["wh_dlc03_emp_boris_todbringer"] = true,
     --["wh_dlc05_vmp_red_duke"] = true,
     --["wh2_main_hef_prince_alastar"] = true -- no longer needed (the empire undivided update made him immortal)    
-    ["wh2_dlc09_tmb_arkhan"] = true,
-    ["wh2_dlc09_tmb_khalida"] = true,
-    ["wh2_dlc09_tmb_khatep"] = true,
-    ["wh2_dlc09_tmb_settra"] = true,
-    ["wh2_dlc11_cst_aranessa"] = true,
-    ["wh2_dlc11_cst_cylostra"] = true,
-    ["wh2_dlc11_cst_harkon"] = true,
-    ["wh2_dlc11_cst_noctilus"] = true,
+    --["wh2_dlc09_tmb_arkhan"] = true,
+    --["wh2_dlc09_tmb_khalida"] = true,
+    --["wh2_dlc09_tmb_khatep"] = true,
+    --["wh2_dlc09_tmb_settra"] = true,
+    --["wh2_dlc11_cst_aranessa"] = true,
+    --["wh2_dlc11_cst_cylostra"] = true,
+    --["wh2_dlc11_cst_harkon"] = true,
+    --["wh2_dlc11_cst_noctilus"] = true,
+    ["wh3_dlc23_chd_zhatan"] = true,
+    ["wh3_dlc23_chd_drazhoath"] = true,
+    ["wh3_dlc23_chd_astragoth"] = true,
 } 
 
 local names_of_power_traits = {
@@ -1130,6 +1143,7 @@ local names_of_power_traits = {
 local subculture_chaos = {
     "wh_main_sc_chs_chaos",
     --"wh_dlc03_sc_bst_beastmen",
+    --"wh3_dlc23_sc_chd_chaos_dwarfs",
     "wh_dlc08_sc_nor_norsca",
     "wh3_main_sc_dae_daemons",
     "wh3_main_sc_kho_khorne",
@@ -1212,7 +1226,8 @@ local subculture_exempted = {
     "wh_main_sc_nor_troll",
     "wh_main_sc_nor_albion",
     "wh_main_sc_lzd_amazon",
-    "wh_main_sc_nor_fimir"
+    "wh_main_sc_nor_fimir",
+    --"wh3_dlc23_sc_chd_chaos_dwarfs",
 }
 
 local confed_restricted_subcultures = {
@@ -1297,6 +1312,8 @@ local faction_exempted = {
     --"wh2_dlc16_wef_waystone_faction_3", --?
     --"wh2_dlc16_wef_waystone_faction_2", --?
     --"wh2_dlc16_wef_waystone_faction_1", --?
+    --"wh3_dlc23_chd_conclave", --can't receive chd lls for some reason?!
+    --"wh3_dlc23_chd_minor_faction", --can't receive chd lls for some reason?!
 }
 
 local faction_seccessionists = {
@@ -1337,6 +1354,7 @@ local bundle_confederation = {
     "wh3_main_bundle_confederation_ogr",
     "wh3_main_bundle_confederation_sla",
     "wh3_main_bundle_confederation_tze",
+    "wh3_dlc23_bundle_confederation_chd",
 } 
 
 local bret_confederation_tech = {
@@ -2002,7 +2020,7 @@ local function apply_diplomacy(faction)
                 option.both_directions = nil
             end
         end	
-        --if vfs.exists("script/campaign/main_warhammer/mod/cataph_teb_lords.lua") and subculture == "wh_main_sc_teb_teb" then
+        --if vfs.exists("script/campaign/mod/cataph_teb_defeat.lua") and subculture == "mixer_teb_southern_realms " then
         --    option.target = "subculture:" .. subculture 
         --    option.offer = true
         --    option.accept = true
@@ -2348,7 +2366,7 @@ local function confed_revived(confederator, confederated)
                             if confed_penalty(confederator) then cm:remove_effect_bundle(confed_penalty(confederator), confederator:name()) end 
                         end, 0.5)
                         -- some faction leaders need a immortality reset after confederation
-                        --immortality_backup(context:confederation())
+                        immortality_backup(context:confederation())
                         -- execute useless mod compatibility
                         --if cm:get_saved_value("sm0_immortal_cqi"..cqi) then cm:set_character_immortality(cm:char_lookup_str(cqi), true) end
                         --if cm:get_saved_value("sm0_immortal_cqi"..faction_leader_cqi) then cm:set_character_immortality(cm:char_lookup_str(faction_leader_cqi), true) end
