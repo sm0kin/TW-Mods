@@ -262,6 +262,7 @@ local wh_agents = {
     {["faction"] = "wh3_dlc23_chd_astragoth", ["subtype"] = "wh3_dlc23_chd_astragoth", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc23_neu_ulrika", ["dlc"] = {"TW_WH3_ULRIKA_FREE"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc23_chd_gorduz_backstabber", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
+    {["faction"] = "", ["subtype"] = "wh3_pro11_chs_cha_harald_hammerstorm", ["dlc"] = {"TW_WH3_PRO11_HARALD_HAMMERSTORM"}},
 } 
 
 --MIXU--
@@ -1096,9 +1097,9 @@ local subtype_immortality = {
     --["wh2_dlc11_cst_cylostra"] = true,
     --["wh2_dlc11_cst_harkon"] = true,
     --["wh2_dlc11_cst_noctilus"] = true,
-    ["wh3_dlc23_chd_zhatan"] = true,
-    ["wh3_dlc23_chd_drazhoath"] = true,
-    ["wh3_dlc23_chd_astragoth"] = true,
+    --["wh3_dlc23_chd_zhatan"] = true,
+    --["wh3_dlc23_chd_drazhoath"] = true,
+    --["wh3_dlc23_chd_astragoth"] = true,
 } 
 
 local names_of_power_traits = {

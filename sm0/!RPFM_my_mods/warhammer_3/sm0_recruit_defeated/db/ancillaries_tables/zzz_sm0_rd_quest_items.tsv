@@ -187,7 +187,7 @@ wh2_dlc17_anc_banner_lzd_poison_daemonbane	wh2_dlc17_anc_banner_lzd_poison_daemo
 wh2_dlc17_anc_banner_lzd_poison_fireblood_toxin	wh2_dlc17_anc_banner_lzd_poison_fireblood_toxin	.	false	false	false	1	0	1900			false	false	false	general	1	1	30	50	true		wh2_dlc17_anc_banner_lzd_poison_fireblood_toxin	200	0	poison	false	false	false	all
 wh2_dlc17_anc_banner_lzd_poison_slow_death	wh2_dlc17_anc_banner_lzd_poison_slow_death	.	false	false	false	1	0	1900			false	false	false	general	1	1	30	50	true		wh2_dlc17_anc_banner_lzd_poison_slow_death	200	0	poison	false	false	false	all
 wh2_dlc17_anc_banner_lzd_poison_toadskin_essence	wh2_dlc17_anc_banner_lzd_poison_toadskin_essence	.	false	false	false	1	0	1900			false	false	false	general	1	1	30	50	true		wh2_dlc17_anc_banner_lzd_poison_toadskin_essence	200	0	poison	false	false	false	all
-wh2_dlc17_anc_follower_dwf_kraggi	wh_dlc17_anc_dwarfs_follower_kraggi	.	false	false	true	1	0	9999			false	false	false	general	1	1	50	75	true			1	0	follower	false	false	true	all
+wh2_dlc17_anc_follower_dwf_kraggi	wh_dlc17_anc_dwarfs_follower_kraggi	.	true	false	false	1	0	9999			false	false	false	general	1	1	50	75	true			1	0	follower	false	false	false	all
 wh2_main_anc_arcane_item_circlet_of_iron	wh_main_anc_arcane_item	.	false	false	false	1	0	9999			false	false	false	arcane_item	16	30	30	50	true			200	0		false	false	false	all
 wh2_main_anc_arcane_item_jewel_of_the_dusk	wh_main_anc_arcane_item	.	true	false	false	1	0	9999			false	false	false	arcane_item	16	30	30	50	true			199	0		false	false	false	all
 wh2_main_anc_arcane_item_moon_staff_of_lileath	wh_main_anc_arcane_item	.	false	false	false	1	0	9999			false	false	false	arcane_item	16	30	30	50	true			200	0		false	false	false	all
@@ -362,7 +362,7 @@ wh3_dlc23_anc_enchanted_item_chd_banner_of_slavery	wh_main_anc_enchanted_item	.	
 wh3_dlc23_anc_enchanted_item_chd_chaos_runeshield	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc23_anc_enchanted_item_lesser_relic_of_morgrim	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc23_anc_enchanted_item_major_relic_of_valaya	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc23_anc_follower_neu_gabriella	wh3_dlc23_anc_follower_neu_gabriella	.	false	false	false	1	0	9999			false	false	false	general	1	1	50	75	true			200	0	follower	false	false	true	all
+wh3_dlc23_anc_follower_neu_gabriella	wh3_dlc23_anc_follower_neu_gabriella	.	false	false	false	1	0	9999			false	false	false	general	1	1	50	75	true			200	0	follower	false	false	false	all
 wh3_dlc23_anc_talisman_hellshard_amulet	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc23_anc_talisman_lesser_relic_of_thungni	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc23_anc_talisman_major_relic_of_grimnir	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
@@ -374,3 +374,5 @@ wh3_dlc23_anc_weapon_item_silver_dagger	wh_main_anc_weapon	.	false	false	false	1
 wh3_dlc23_anc_weapon_lesser_relic_of_gazul	wh_main_anc_weapon	.	true	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc23_anc_weapon_lesser_relic_of_smednir	wh_main_anc_weapon	.	true	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc23_anc_weapon_the_graven_sceptre	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_pro11_anc_enchanted_item_bane_shield	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_pro11_anc_weapon_hammer_of_harry	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
