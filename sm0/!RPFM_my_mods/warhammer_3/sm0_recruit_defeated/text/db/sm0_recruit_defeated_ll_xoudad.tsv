@@ -1,6 +1,0 @@
-key	text	tooltip
-#Loc PackedFile;1;text/db/sm0_recruit_defeated_ll_xoudad.loc		
-event_feed_strings_text_title_event_wh2_main_hef_eltharion_LL_unlocked	Eltharion	true
-event_feed_strings_text_description_event_wh2_main_hef_eltharion_LL_unlocked		true
-event_feed_strings_text_title_event_wax_emp_valten_LL_unlocked	Valten	true
-event_feed_strings_text_description_event_wax_emp_valten_LL_unlocked		true

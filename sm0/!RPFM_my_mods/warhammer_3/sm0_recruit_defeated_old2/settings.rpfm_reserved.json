@@ -1,0 +1,11 @@
+{
+  "settings_text": {
+    "diagnostics_files_to_ignore": "",
+    "import_files_to_ignore": "\nsm0_recruit_defeated_old2.sublime-project\nsm0_recruit_defeated_old2.sublime-workspace\n.vscode\n.luarc.json\n.git\n.gitignore"
+  },
+  "settings_string": {},
+  "settings_bool": {
+    "disable_autosaves": false
+  },
+  "settings_number": {}
+}

@@ -10,7 +10,7 @@
 --mct variables
 local enable_value = true 
 local scope_value = "player_ai" 
-local ai_delay_value = 50
+local ai_delay_value = 50 
 local preferance1_value = "race"  
 local preferance2_value = "player"  
 local preferance3_value = "met"  
@@ -267,8 +267,6 @@ local wh_agents = {
     {["faction"] = "", ["subtype"] = "wh3_dlc24_tze_the_changeling", ["dlc"] = {"TW_WH3_SHADOWS_OF_CHANGE"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc24_cth_yuan_bo", ["dlc"] = {"TW_WH3_SHADOWS_OF_CHANGE"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc24_tze_aekold_helbrass", ["dlc"] = {"TW_WH3_AEKOLD_FREE"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc24_cth_saytang_the_watcher", ["dlc"] = {"TW_WH3_SHADOWS_OF_CHANGE"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc24_ksl_the_golden_knight", ["dlc"] = {"TW_WH3_SHADOWS_OF_CHANGE"}},
 } 
 
 --MIXU--
@@ -1321,7 +1319,6 @@ local faction_exempted = {
     --"wh2_dlc16_wef_waystone_faction_1", --?
     --"wh3_dlc23_chd_conclave", --can't receive chd lls for some reason?!
     --"wh3_dlc23_chd_minor_faction", --can't receive chd lls for some reason?!
-    --"wh3_dlc24_tze_the_deceivers",
 }
 
 local faction_seccessionists = {
@@ -2630,9 +2627,6 @@ local function is_faction_exempted(faction)
         return true
     end
     if faction:name() == "wh2_dlc11_vmp_the_barrow_legion" and vfs.exists("script/campaign/main_warhammer/mod/liche_init.lua") then --hobo
-        return true
-    end
-    if faction:name() == "wh3_dlc24_tze_the_deceivers" and not faction:is_human() and not faction:is_dead() then --deceiver stays "alive" without army and settlements causing script crashes
         return true
     end
     return false

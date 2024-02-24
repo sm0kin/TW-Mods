@@ -1,7 +1,0 @@
-key	text	tooltip
-#Loc PackedFile;1;text/db/sm0_recruit_defeated_cdir_events_campaign_payload_ui_details__.loc		
-campaign_payload_ui_details_description_rd_first	All immortal lords and heroes will join your cause.	true
-campaign_payload_ui_details_description_rd_first2	You will discover the very factions that led to their demise.	true
-campaign_payload_ui_details_description_rd_second	Chase them away and they will join a rival faction.	true
-campaign_payload_ui_details_description_rd_third	Put them out of their misery!	true
-campaign_payload_ui_details_description_rd_fourth	Delay for 25 turns.	true
