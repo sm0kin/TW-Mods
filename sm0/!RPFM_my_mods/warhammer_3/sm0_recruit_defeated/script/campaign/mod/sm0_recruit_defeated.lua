@@ -255,8 +255,8 @@ local wh_agents = {
     {["faction"] = "wh_main_dwf_karak_izor", ["subtype"] = "wh_dlc06_dwf_runesmith_ghost", ["dlc"] = {"TW_WH1_LORDS_AND_UNITS_2"}},
     {["faction"] = "wh_main_dwf_karak_izor", ["subtype"] = "wh_dlc06_dwf_master_engineer_ghost", ["dlc"] = {"TW_WH1_LORDS_AND_UNITS_2"}},
     {["faction"] = "wh_main_vmp_vampire_counts", ["subtype"] = "wh2_dlc17_vmp_kevon_lloydstein", ["dlc"] = {"TW_WH2_BASE_GAME"}},
-    --{["faction"] = "", ["subtype"] = "wh2_pro08_neu_gotrek", ["dlc"] = {"TW_WH2_BASE_GAME"}},
-    --{["faction"] = "", ["subtype"] = "wh2_pro08_neu_felix", ["dlc"] = {"TW_WH2_BASE_GAME"}},
+    {["faction"] = "", ["subtype"] = "wh2_pro08_neu_gotrek", ["dlc"] = {"TW_WH2_GOTREK_FELIX"}},
+    {["faction"] = "", ["subtype"] = "wh2_pro08_neu_felix", ["dlc"] = {"TW_WH2_GOTREK_FELIX"}},
     {["faction"] = "wh3_dlc23_chd_zhatan", ["subtype"] = "wh3_dlc23_chd_zhatan", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
     {["faction"] = "wh3_dlc23_chd_legion_of_azgorh", ["subtype"] = "wh3_dlc23_chd_drazhoath", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
     {["faction"] = "wh3_dlc23_chd_astragoth", ["subtype"] = "wh3_dlc23_chd_astragoth", ["dlc"] = {"TW_WH3_CHAOS_DWARFS"}},
@@ -269,6 +269,20 @@ local wh_agents = {
     {["faction"] = "", ["subtype"] = "wh3_dlc24_tze_aekold_helbrass", ["dlc"] = {"TW_WH3_AEKOLD_FREE"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc24_cth_saytang_the_watcher", ["dlc"] = {"TW_WH3_SHADOWS_OF_CHANGE"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc24_ksl_the_golden_knight", ["dlc"] = {"TW_WH3_SHADOWS_OF_CHANGE"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_dwf_garagrim_ironfist", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_DWF"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_dwf_lord_mikael_leadstrong", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_DWF"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_dwf_malakai_makaisson", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_DWF"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_emp_elspeth_von_draken", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_EMP"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_emp_theodore_bruckner", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_EMP"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_neu_gotrek_hero", ["dlc"] = {"TW_WH2_GOTREK_FELIX"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_bray_shaman_wild_chieftain", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_castellan_chieftain", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_epidemius", ["dlc"] = {"TW_WH3_EPIDEMIUS_FREE"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_exalted_hero_chieftain", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_fimir_balefiend_shadow_chieftain", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_kayzk_the_befouled", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_skin_wolf_werekin_chieftain", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_tamurkhan", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
 } 
 
 --MIXU--
@@ -524,6 +538,10 @@ local playable_factions = {
     "wh3_dlc23_chd_zhatan",
     "wh3_dlc23_chd_legion_of_azgorh",
     "wh3_dlc23_chd_astragoth",
+    "wh_main_emp_wissenland",
+    "wh3_dlc25_dwf_malakai",
+    "wh3_dlc25_nur_tamurkhan",
+    "wh3_dlc25_nur_epidemius", 
 } 
 
 local alastar_quests = {

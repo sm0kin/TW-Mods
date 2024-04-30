@@ -822,3 +822,55 @@ wh_pro01_anc_weapon_the_rune_axe_of_grombrindal	wh_main_anc_weapon	.	false	false
 wh_pro02_anc_enchanted_item_blood_chalice_of_bathori	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
 wh_pro02_anc_mount_vmp_isabella_barded_nightmare	wh_main_anc_mount_barded_nightmare	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh_pro02_vmp_cha_isabella_von_carstein_4		1	0		false	false	true	all
 wh_pro02_anc_mount_vmp_isabella_hellsteed	wh_main_anc_mount_hellsteed	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh_pro02_vmp_cha_isabella_von_carstein_2		1	0		false	false	true	all
+wh3_dlc25_anc_banner_arachnarok_trophy	wh3_dlc25_anc_banner_arachnarok_trophy	.	true	false	false	1	0	9999			false	false	false	general	16	30	30	50	true		wh3_dlc25_anc_banner_arachnarok_trophy	200	0	banner	false	false	false	all
+wh3_dlc25_anc_banner_dragon_hide_cloaks	wh3_dlc25_anc_banner_dragon_hide_cloaks	.	true	false	false	1	0	9999			false	false	false	general	16	30	30	50	true		wh3_dlc25_anc_banner_dragon_hide_cloaks	200	0	banner	false	false	false	all
+wh3_dlc25_anc_banner_rune_of_the_furnace	wh3_dlc25_anc_banner_rune_of_the_furnace	.	true	false	false	1	0	9999			false	false	false	general	16	30	30	50	true		wh3_dlc25_anc_banner_rune_of_the_furnace	200	0	banner_rune	false	false	false	all
+wh3_dlc25_anc_enchanted_item_heart_of_malevolence	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_enchanted_item_the_eyes_of_grungni	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_rune_personal_rune_of_thungni	wh3_dlc25_anc_rune_rune_of_thungni	.	true	false	false	1	0	9999			false	false	false	arcane_item	16	30	30	50	true			200	0	character_rune	false	false	false	all
+wh3_dlc25_anc_talisman_crimson_gemstone	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_axes_of_kadrin	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_glaive_gun	wh_main_anc_weapon	.	true	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_makaissons_persuader	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_item_necrotic_phylactery	wh_main_anc_enchanted_item	.	true	false	false	0	1700	1900			false	false	false	enchanted_item	16	30	30	50	true			75	0		true	true	true	all
+wh3_dlc25_anc_mount_nur_bubebolos	wh3_dlc25_anc_mount_nur_bubebolos	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_nur_cha_tamurkhan_bubebolos		1	0		false	true	false	all
+wh3_dlc25_anc_mount_nur_cha_bray_shaman_wild_chieftain_razorgor_chariot	wh_dlc03_anc_mount_razorgor_chariot	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_nur_cha_bray_shaman_wild_chieftain_razorgor_chariot		1	0		false	false	true	all
+wh3_dlc25_anc_mount_nur_cha_bray_shaman_wild_chieftain_tuskgor_chariot	wh2_dlc17_anc_mount_tuskgor_chariot	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_nur_cha_bray_shaman_wild_chieftain_tuskgor_chariot		1	0		false	false	false	all
+wh3_dlc25_anc_mount_nur_cha_exalted_hero_chieftain_chaos_chariot	wh_main_anc_mount_chaos_chariot	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_nur_cha_exalted_hero_chieftain_chaos_chariot		1	0		false	false	true	all
+wh3_dlc25_anc_mount_nur_cha_exalted_hero_chieftain_chaos_dragon	wh_main_anc_mount_chaos_dragon	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_nur_cha_exalted_hero_chieftain_chaos_dragon		1	0		false	false	true	all
+wh3_dlc25_anc_mount_nur_cha_exalted_hero_chieftain_chaos_steed	wh_main_anc_mount_chaos_steed	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_nur_cha_exalted_hero_chieftain_chaos_steed		1	0		false	false	true	all
+wh3_dlc25_anc_talisman_cursed_yhetee_jawbone	wh3_dlc25_anc_chieftain_castellan	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_icon_of_decay	wh3_dlc25_anc_chieftain_kazyk	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_reeking_talisman	wh3_dlc25_anc_chieftain_bray_shaman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_sigil_of_madness	wh3_dlc25_anc_chieftain_fimir_balefiend	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_unkind_taint	wh3_dlc25_anc_chieftain_werekin	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_virulent_boon	wh3_dlc25_anc_chieftain_exalted_hero	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_the_black_cleaver	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_the_father_of_blades	wh_main_anc_weapon	.	true	false	false	0	1700	1900			false	false	false	weapon	16	30	30	50	true			75	0		true	true	true	all
+wh3_dlc25_anc_arcane_item_the_grey_wand	wh_main_anc_arcane_item	.	false	false	false	1	0	9999			false	false	false	arcane_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_armour_armour_of_tarnus	wh_main_anc_armour	.	true	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			30	0		false	true	true	all
+wh3_dlc25_anc_armour_cloak_of_anraheir	wh_main_anc_armour	.	false	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_armour_prototype_coat	wh_main_anc_armour	.	false	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_armour_robes_of_the_supreme_patriarch	wh_main_anc_armour	.	false	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_banner_emp_doomfire_ring	wh3_dlc25_anc_banner_emp_doomfire_ring	.	false	false	false	1	0	1900			false	false	false	general	1	1	30	50	true		wh3_dlc25_anc_banner_emp_doomfire_ring	200	0	banner	false	false	false	all
+wh3_dlc25_anc_banner_emp_everwood_root	wh3_dlc25_anc_banner_emp_everwood_root	.	false	false	false	1	0	1900			false	false	false	general	1	1	30	50	true		wh3_dlc25_anc_banner_emp_everwood_root	200	0	banner	false	false	false	all
+wh3_dlc25_anc_banner_emp_frostfire_gem	wh3_dlc25_anc_banner_emp_frostfire_gem	.	false	false	false	1	0	1900			false	false	false	general	1	1	30	50	true		wh3_dlc25_anc_banner_emp_frostfire_gem	200	0	banner	false	false	false	all
+wh3_dlc25_anc_enchanted_item_amulet_of_refraction	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_enchanted_item_ominous_powder	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_enchanted_item_stormlance	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_enchanted_item_the_gold_standard	wh_main_anc_enchanted_item	.	true	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			30	0		false	true	true	all
+wh3_dlc25_anc_mount_emp_bruckner_reaper	wh3_dlc25_anc_mount_reaper	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_emp_cha_theodore_bruckner_demigryph_reaper		1	0		false	true	true	all
+wh3_dlc25_anc_mount_emp_elspeth_carmine_dragon	wh3_dlc25_anc_mount_carmine_dragon	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_emp_cha_elspeth_von_draken_carmine_dragon		1	0		false	true	true	all
+wh3_dlc25_anc_mount_emp_gold_wizard_barded_warhorse	wh_main_anc_mount_barded_warhorse	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_emp_cha_wizard_metal_warhorse		1	0		false	false	true	all
+wh3_dlc25_anc_mount_emp_gold_wizard_imperial_pegasus	wh_main_anc_mount_imperial_pegasus	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc25_emp_cha_wizard_metal_pegasus		1	0		false	false	true	all
+wh3_dlc25_anc_talisman_astrolobe_of_tomorrows_moon	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_baleflame_amulet	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_deaths_timekeeper	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_enhanced_scope	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_talisman_hourglass_of_the_shyish_sands	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_experimental_explosive	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_liarsbane	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_oaken_sickle_of_ghyran	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_the_pale_scythe	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_torched_staff_of_wrath	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc25_anc_weapon_transmuted_blade	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
