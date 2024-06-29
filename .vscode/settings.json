@@ -4,6 +4,14 @@
         "C:/Users/Tom/AppData/Roaming/FrodoWazEre/rpfm/config/tw_autogen/output/wh3/campaign/",
         "C:/Users/Tom/AppData/Roaming/FrodoWazEre/rpfm/config/tw_autogen/output/wh3/frontend/",
         "C:/Users/Tom/AppData/Roaming/FrodoWazEre/rpfm/config/tw_autogen/output/wh3/battle/"
+    ],
+    "Lua.workspace.ignoreDir": [
+        ".vscode",
+        "/Hearts of Iron IV/**",
+        "/content/**",
+        "/obsolete version/**",
+        "/script_example/**",
+        "/script_example_wh2/**"
     ]
 }
 
