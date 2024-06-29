@@ -283,6 +283,7 @@ local wh_agents = {
     {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_kayzk_the_befouled", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_skin_wolf_werekin_chieftain", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_tamurkhan", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
+    {["faction"] = "", ["subtype"] = "wh3_pro12_kho_cha_karanak", ["dlc"] = {"TW_WH3_PRO12_KARANAK"}},
 } 
 
 --MIXU--
@@ -448,7 +449,7 @@ local locked_ai_generals = {
     --{["id"] = "2140784136",	["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_dlc04_emp_volkmar", ["dlc"] = "TW_WH_LORDS_AND_UNITS_1"},                                  -- Volkmar the Grim
 } 
 
--- "major" factions
+-- "major" factions  -- faction:can_be_human() backup
 local playable_factions = { 
     "wh2_main_hef_eataine",
     "wh2_main_hef_order_of_loremasters",
@@ -1276,7 +1277,7 @@ local faction_exempted = {
 	"wh2_main_chs_chaos_incursion_def", --cai_diplomacy_excluded_factions table
 	"wh2_main_chs_chaos_incursion_hef", --cai_diplomacy_excluded_factions table
 	"wh2_main_chs_chaos_incursion_lzd", --cai_diplomacy_excluded_factions table
-    "wh2_main_chs_chaos_incursion_skv",
+    "wh2_main_chs_chaos_incursion_skv", --cai_diplomacy_excluded_factions table
 	"wh2_main_nor_hung_incursion_def", --cai_diplomacy_excluded_factions table
 	"wh2_main_nor_hung_incursion_hef", --cai_diplomacy_excluded_factions table
 	"wh2_main_nor_hung_incursion_lzd", --cai_diplomacy_excluded_factions table
@@ -2232,7 +2233,189 @@ local function confed_revived(confederator, confederated)
         sm0_log("ERROR: confed_revived() called but supplied confederated [" .. tostring(confederated) .. "] is not a FACTION_SCRIPT_INTERFACE.")
         return
     end
-    
+
+    --pre confed character cqi list generation to compare with post confed char list to determine which legendary chars are new
+    local char_list = confederator:character_list()
+    local pre_confed_char_list = {}
+    for i = 0, char_list:num_items() - 1 do 
+        local char = char_list:item_at(i)
+        local command_queue_index = char:command_queue_index()
+        if is_character(char) then
+            sm0_log("Faction: "..confederator:name().." | ".."Character cqi: "..command_queue_index.." | ".."Subtype: "..char:character_subtype_key().." | Forename: "
+            ..common.get_localised_string(char:get_forename()).." | Surname: "..common.get_localised_string(char:get_surname()))
+            if cm:char_is_agent(char) or cm:char_is_general(char) then
+                table.insert(pre_confed_char_list, command_queue_index)        
+            end
+        end
+    end
+
+    --Alastar
+    if confederated:name() == "wh2_main_hef_eataine" and not cm:get_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked") then
+        local char_found = false
+        local faction_list = cm:model():world():faction_list()
+        for i = 0, faction_list:num_items() - 1 do
+            local current_faction = faction_list:item_at(i)
+            local char_list = current_faction:character_list()
+            for j = 0, char_list:num_items() - 1 do
+                local current_char = char_list:item_at(j)
+                if current_char:character_subtype_key() == "wh2_main_hef_prince_alastar" then
+                    char_found = true
+                end
+            end      
+        end
+        if not char_found then  
+            sm0_log("spawn_missing_lords: ".."wh2_main_hef_prince_alastar".." spawned!")         
+            cm:spawn_character_to_pool(confederator:name(), "names_name_2147360555", "names_name_2147360560", "", "", 18, true, "general", "wh2_main_hef_prince_alastar", true, "")
+            cm:set_saved_value("sm0_" .. "wh2_main_hef_prince_alastar" .. "_LL_unlocked", true)
+            ancillary_on_rankup(alastar_quests, "wh2_main_hef_prince_alastar")
+            if confederator:is_human() then
+                local picture = faction_event_picture[confederator:name()]
+                if not is_number(picture) then 
+                    picture = subculture_event_picture[confederator:subculture()] 
+                end
+                cm:show_message_event(
+                    confederator:name(),
+                    "event_feed_strings_text_title_event_legendary_lord_available",
+                    "event_feed_strings_text_title_event_wh2_main_hef_prince_alastar_LL_unlocked",
+                    "",--"event_feed_strings_text_description_event_wh2_main_hef_prince_alastar_LL_unlocked",
+                    true,
+                    picture
+                )
+            end
+            cm:lock_starting_character_recruitment("638763060", "wh2_main_hef_eataine")
+        end
+    end
+
+    core:add_listener(
+        "sm0_confed_revived_FactionJoinsConfederation",
+        "FactionJoinsConfederation",
+        function(context)
+            return context:confederation():name() == confederator:name() and context:faction():name() == confederated:name()
+        end,
+        function(context)
+            sm0_log("Faction: "..confederator:name().." :confederated: "..confederated:name())
+            cm:callback(function() 
+                if confed_penalty(confederator) then cm:remove_effect_bundle(confed_penalty(confederator), confederator:name()) end 
+            end, 0.5)
+            -- some faction leaders need a immortality reset after confederation
+            immortality_backup(context:confederation()) 
+            --pre confed character cqi list generation to compare with post confed char list to determine which legendary chars are new
+            local char_list = confederator:character_list()
+            local faction_leader_cqi = nil
+            for i = 0, char_list:num_items() - 1 do 
+                local char = char_list:item_at(i)
+                local current_cqi = char:command_queue_index()
+                if is_character(char) and (cm:char_is_agent(char) or cm:char_is_general(char)) and not table.contains(pre_confed_char_list, current_cqi) then
+                    if confederator:is_human() then
+                        lord_events(confederator, char, wh_agents)
+                        if vfs.exists("script/campaign/wh3_main_combi/mod/mixu_spawn_characters_ie.lua.lua") then lord_events(confederator, char, mixu_agents) end
+                    end
+                    if faction_leader_cqi == nil and cm:char_is_general(char) then
+                        faction_leader_cqi = current_cqi -- faction leader has the lowest cqi of all newly spawned characters
+                    end
+                    if refugee_types_value == "immortal" or (current_cqi ~= faction_leader_cqi and refugee_types_value == "faction_leader") then 
+                        if char:character_details():is_immortal() then
+                            sm0_log("IMMORTAL CHARACTER | Faction: "..confederated:name().." | ".."Character cqi:"..current_cqi .." | subtype: "
+                            ..common.get_localised_string(char:character_subtype_key()).." | Forename: "
+                            ..common.get_localised_string(char:get_forename()).." | Surname: "..common.get_localised_string(char:get_surname()))
+                        elseif char:character_details():is_unique() then
+                            sm0_log("UNIQUE CHARACTER | Faction: "..confederated:name().." | ".."Character cqi:"..current_cqi .." | subtype: "
+                            ..common.get_localised_string(char:character_subtype_key()).." | Forename: "
+                            ..common.get_localised_string(char:get_forename()).." | Surname: "..common.get_localised_string(char:get_surname()))   
+                        else
+                            sm0_log("MORTAL CHARACTER | Faction: "..confederated:name().." | ".."Character cqi:"..current_cqi .." | subtype: "
+                            ..common.get_localised_string(char:character_subtype_key()).." | Forename: "
+                            ..common.get_localised_string(char:get_forename()).." | Surname: "..common.get_localised_string(char:get_surname()))                                
+                        end
+                        cm:kill_character(current_cqi, true) 
+                    elseif refugee_types_value == "all" then
+                        --unstuck heroes (recently fixed by CA)
+                        --if cm:char_is_agent(char) then
+                        --    local agent_region = char:region()
+                        --    local x, y
+                        --    if confederator:has_home_region() then 
+                        --        agent_region = confederator:home_region()
+                        --        x, y = cm:find_valid_spawn_location_for_character_from_settlement(confederator:name(), agent_region:name(), false, true, 1)
+                        --    else
+                        --        if not confederator:military_force_list():item_at(0):general_character():is_at_sea() and confederator:military_force_list():item_at(0):general_character():has_region() then
+                        --            agent_region = confederator:military_force_list():item_at(0):general_character():region() 
+                        --            local char_lookup = cm:char_lookup_str(confederator:military_force_list():item_at(0):general_character())
+                        --            x, y = cm:find_valid_spawn_location_for_character_from_character(confederator:name(), char_lookup, true, 1)
+                        --        else
+                        --            sm0_log("ERROR: Could not find valid region!")
+                        --            return
+                        --        end
+                        --    end 
+                        --    if is_valid_spawn_coordinate(x, y) then
+                        --        cm:teleport_to(cm:char_lookup_str(char:cqi()), x, y)   
+                        --    else
+                        --        sm0_log("ERROR: Could not find valid coordinates! (x = "..tostring(x)..", y = "..tostring(y))
+                        --    end
+                        --end
+                    end
+
+                end
+            end
+            
+            cm:set_saved_value("rd_choice_0_"..confederated:name(), false)   
+        end,
+        false
+    )
+    --if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then cm:set_saved_value("sm0_rd_wh2_dlc13_lzd_spirits_of_the_jungle", true) end
+    if confederated:name() == "wh2_dlc13_lzd_spirits_of_the_jungle" then                    
+        local defender_faction = cm:model():world():faction_by_key("wh2_dlc13_lzd_defenders_of_the_great_plan")
+        if nakai_vassal_value == "do_nothing" then
+            --core:remove_listener("confederation_listener")
+            --core:remove_listener("confederation_expired")
+        elseif nakai_vassal_value == "confederate" and defender_faction and not defender_faction:is_dead() then
+            cm:disable_event_feed_events(true, "", "wh_event_subcategory_diplomacy_treaty_broken", "");
+            cm:disable_event_feed_events(true, "", "", "diplomacy_treaty_negotiated_vassal");
+
+            cm:force_confederation(confederator:name(), "wh2_dlc13_lzd_defenders_of_the_great_plan");
+
+            cm:callback(function() cm:disable_event_feed_events(false, "", "wh_event_subcategory_diplomacy_treaty_broken", "") end, 1);
+            cm:callback(function() cm:disable_event_feed_events(false, "", "", "diplomacy_treaty_negotiated_vassal") end, 1)
+        elseif nakai_vassal_value == "abandon" then
+            if defender_faction:is_null_interface() == false then
+                cm:disable_event_feed_events(true, "wh_event_category_conquest", "", "")
+                cm:disable_event_feed_events(true, "wh_event_category_diplomacy", "", "")
+                
+                cm:kill_all_armies_for_faction(defender_faction)
+                local region_list = defender_faction:region_list()                       
+                for j = 0, region_list:num_items() - 1 do
+                    local region = region_list:item_at(j):name()
+                    cm:set_region_abandoned(region)
+                end
+                
+                cm:callback(function() 
+                    cm:disable_event_feed_events(false, "wh_event_category_conquest", "", "");
+                    cm:disable_event_feed_events(false, "wh_event_category_diplomacy", "", "");
+                end, 0.5)
+            end
+        else
+            sm0_log("confed_revived: wh2_dlc13_lzd_spirits_of_the_jungle | something went wrong")
+        end
+    end
+
+    -- new revive & confed method
+    local confed_payload = cm:create_payload()
+    confed_payload:form_confederation(confederator, confederated, true)
+    cm:apply_payload(confed_payload, confederator)
+end
+
+---@param confederator FACTION_SCRIPT_INTERFACE
+---@param confederated FACTION_SCRIPT_INTERFACE
+local function confed_revived_old(confederator, confederated)
+    if not is_faction(confederator) then
+        sm0_log("ERROR: confed_revived() called but supplied confederator [" .. tostring(confederator) .. "] is not a FACTION_SCRIPT_INTERFACE.")
+        return
+    end    
+    if not is_faction(confederated) then
+        sm0_log("ERROR: confed_revived() called but supplied confederated [" .. tostring(confederated) .. "] is not a FACTION_SCRIPT_INTERFACE.")
+        return
+    end
+   
+    --old create_force revival method
     local start_region --confederator:region_list():item_at(0)
     local x, y
     --if start_region then sm0_log("spawn_missing_lords 1: "..confederator:name().." | Region: "..start_region:name()) end
@@ -2272,7 +2455,38 @@ local function confed_revived(confederator, confederated)
     --sm0_log("Trying to revive Faction:  "..confederated:name().." | Region: "..start_region:name())
     --sm0_log("confed_revived: x="..tostring(x)..", y="..tostring(y))
     if is_valid_spawn_coordinate(x, y) and start_region then 
-        cm:create_force_with_general( --create_force_with_general is used because create_force sometimes stops working 
+        --create_force_with_general is used because create_force sometimes stops working 
+        --cm:create_force(
+        --    --  string faction key,
+        --    --  string unit list,
+        --    --  string region key,
+        --    --  number x,
+        --    --  number y,
+        --    --  boolean exclude named characters,
+        --    --  [function success callback],
+        --    --  [boolean command queue]
+        --    confederated:name(),
+        --    "wh2_main_hef_inf_spearmen_0",
+        --    start_region:name(), 
+        --    x, 
+        --    y, 
+        --    true,
+        --cm:transfer_region_to_faction(confederator:home_region():name(), confederated:name()) 
+        cm:create_force_with_general(
+            --  string faction key,
+            --  string unit list,
+            --  string region key,
+            --  number x,
+            --  number y,
+            --  string agent type,
+            --  string agent subtype,
+            --  string forename,
+            --  string clan name,
+            --  string family name,
+            --  string other name,
+            --  boolean make faction leader,
+            --  [function success callback],
+            --  [boolean force diplomatic discovery]
             confederated:name(), 
             "wh2_main_hef_inf_spearmen_0", 
             start_region:name(), 
@@ -2463,6 +2677,34 @@ local function confed_revived(confederator, confederated)
                         --        cm:set_saved_value("sm0_immortal_cqi"..char:command_queue_index(), false)
                         --    end 
                         --end
+
+                        
+                        
+                        -- respawn and kill faction again, so they count as "dead" for grudges and missions in general (doesn't work)
+                        --
+                        --if is_valid_spawn_coordinate(x, y) and start_region then 
+                        --    cm:create_force_with_general( --create_force_with_general is used because create_force sometimes stops working 
+                        --        confederated:name(), 
+                        --        "wh2_main_hef_inf_spearmen_0", 
+                        --        start_region:name(), 
+                        --        x, 
+                        --        y, 
+                        --        "general", 
+                        --        "wh3_prologue_general_test", 
+                        --        "rdll_dummy", 
+                        --        "", 
+                        --        "", 
+                        --        "", 
+                        --        false, 
+                        --        --"revive_faction_force",
+                        --        --true,
+                        --        function(cqi)
+                        --            cm:kill_character(cqi, true) 
+                        --        end
+                        --    )
+                        --end
+                        --
+                        
                         cm:set_saved_value("rd_choice_0_"..confederated:name(), false)   
                     end,
                     false
@@ -2506,14 +2748,16 @@ local function confed_revived(confederator, confederated)
                     --cm:disable_event_feed_events(false, "", "", "faction_joins_confederation")
                 end
                 --cm:callback(function() 
-                    cm:force_confederation(confederator:name(), confederated:name()) 
+                    --cm:force_confederation(confederator:name(), confederated:name()) 
                 --end, 0.01) --give the message_events some time   
             end,
             false
         )
+        
     else
         sm0_log("ERROR: Could not find valid spawn position! ["..confederator:name().."]")
     end
+    --]]
 end
 
 ---@param confederator FACTION_SCRIPT_INTERFACE
@@ -3104,7 +3348,7 @@ local function init_recruit_defeated_listeners(enable_value)
 
         core:add_listener(
             "recruit_defeated_FactionTurnStart",
-            "FactionTurnStart",
+            "FactionTurnStart", -- "FactionDeath" wh3_5.0.0 addition
             function(context)
                 local human_factions = cm:get_human_factions()
                 return cm:model():turn_number() >= 2 and context:faction():is_human() and (not cm:is_multiplayer() --singleplayer
@@ -3615,7 +3859,7 @@ function sm0_recruit_defeated()
         mct = get_mct()
     end
 
-    local version_number = "3.2" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1"
+    local version_number = "5.1" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue)
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()
