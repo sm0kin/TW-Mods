@@ -1,0 +1,3 @@
+id	trigger_events	needs_tracking	refund_on_cancel	active_cooldown_can_be_increased	group	sort_order	ui_icon
+#ritual_categories_tables;3;db/ritual_categories_tables/sm0_rd							
+RD_CONFED_REVIVED	false	false	false	false		0	UI\skins\default\0_placeholder.png
