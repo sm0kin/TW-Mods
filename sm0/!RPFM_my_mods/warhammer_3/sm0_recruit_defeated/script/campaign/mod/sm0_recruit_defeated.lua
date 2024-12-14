@@ -284,6 +284,14 @@ local wh_agents = {
     {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_skin_wolf_werekin_chieftain", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc25_nur_tamurkhan", ["dlc"] = {"TW_WH3_THRONES_OF_DECAY_NUR"}},
     {["faction"] = "", ["subtype"] = "wh3_pro12_kho_cha_karanak", ["dlc"] = {"TW_WH3_PRO12_KARANAK"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc26_grn_gorbad_ironclaw", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_GRN"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc26_grn_snagla_grobpsit", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_GRN"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc26_kho_arbaal_the_undefeated", ["dlc"] = {"TW_WH3_BASE_GAME"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc26_kho_scyla_anfingrimm", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_KHO"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc26_kho_skarr_bloodwrath", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_KHO"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc26_kho_skulltaker", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_KHO"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc26_ogr_bragg_the_gutsman", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_OGR"}},
+    {["faction"] = "", ["subtype"] = "wh3_dlc26_ogr_golgfag_maneater", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_OGR"}},
 } 
 
 --MIXU--
@@ -540,9 +548,16 @@ local playable_factions = {
     "wh3_dlc23_chd_legion_of_azgorh",
     "wh3_dlc23_chd_astragoth",
     "wh_main_emp_wissenland",
+    "wh3_dlc24_tze_the_deceivers",
+    "wh3_dlc24_cth_the_celestial_court",
+    "wh3_dlc24_ksl_daughters_of_the_forest",
     "wh3_dlc25_dwf_malakai",
     "wh3_dlc25_nur_tamurkhan",
-    "wh3_dlc25_nur_epidemius", 
+    "wh3_dlc25_nur_epidemius",
+    "wh3_dlc26_grn_gorbad_ironclaw",
+    "wh3_dlc26_kho_arbaal",
+    "wh3_dlc26_kho_skulltaker",
+    "wh3_dlc26_ogr_golgfag",
 } 
 
 local alastar_quests = {
@@ -2297,6 +2312,10 @@ local function confed_revived(confederator, confederated)
             cm:callback(function() 
                 if confed_penalty(confederator) then cm:remove_effect_bundle(confed_penalty(confederator), confederator:name()) end 
             end, 0.5)
+            -- kislev -100 devotion due to war counter
+            if confederator:subculture() == "wh3_main_sc_ksl_kislev" then
+                cm:faction_add_pooled_resource(confederator:name(), "wh3_main_ksl_devotion", "declared_war_on_kislev", 100)
+            end
             -- some faction leaders need a immortality reset after confederation
             immortality_backup(context:confederation()) 
             --pre confed character cqi list generation to compare with post confed char list to determine which legendary chars are new
@@ -2788,7 +2807,8 @@ local function rd_dilemma(confederator, confederated, player_confederation_count
             local choice = context:choice()
             if choice == 0 then
                 sm0_log("Accept refugees: "..confederated:name())
-                confed_revived(confederator, confederated)  
+                confed_revived(confederator, confederated)
+                --confed_revived_old(confederator, confederated)
                 cm:set_saved_value("rd_choice_0_"..confederated:name(), confederator:name())          						
             elseif choice == 1 then	
                 sm0_log("Reject refugees: "..confederated:name())	
@@ -3576,6 +3596,7 @@ local function init_recruit_defeated_listeners(enable_value)
                     local confederator = ai_confeds[i][1]
                     local confederated = ai_confeds[i][2]
                     confed_revived(confederator, confederated)
+                    --confed_revived_old(confederator, confederated)
                 end
                 for i = 1, #dilemmas do
                     local confederator = dilemmas[i][1]
@@ -3859,7 +3880,7 @@ function sm0_recruit_defeated()
         mct = get_mct()
     end
 
-    local version_number = "5.1" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue)
+    local version_number = "6.0.1" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue)
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()

@@ -526,7 +526,7 @@ wh3_dlc24_anc_talisman_corrupted_icon	wh_main_anc_talisman	.	true	false	false	1	
 wh3_dlc24_anc_talisman_facial_scruff	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc24_anc_talisman_hellforge_flame	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc24_anc_talisman_kraken_fang	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc24_anc_talisman_magic_orb	wh_main_anc_talisman	.	false	true	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			90	-1		false	false	false	all
+wh3_dlc24_anc_talisman_magic_orb	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			90	-1		false	false	false	all
 wh3_dlc24_anc_talisman_pilfered_palanquin	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc24_anc_talisman_tree_sap	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc24_anc_talisman_undead_tome	wh_main_anc_talisman	.	true	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
@@ -874,3 +874,20 @@ wh3_dlc25_anc_weapon_oaken_sickle_of_ghyran	wh_main_anc_weapon	.	false	false	fal
 wh3_dlc25_anc_weapon_the_pale_scythe	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc25_anc_weapon_torched_staff_of_wrath	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc25_anc_weapon_transmuted_blade	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_dlc26_anc_armour_cloak_of_skulls	wh_main_anc_armour	.	false	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			200	0		false	false	false	anc_set_exclusive_khorne
+wh3_dlc26_anc_enchanted_item_bugmans_xxxxxx	wh_main_anc_enchanted_item		false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	anc_set_exclusive_ogre_kingdoms
+wh3_dlc26_anc_enchanted_item_sting_of_snagla	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	anc_set_exclusive_greenskins
+wh3_dlc26_anc_mount_grn_gorbad_ironclaw_gnarla	wh_main_anc_mount_war_boar	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_grn_cha_gorbad_ironclaw_gnarla		1	0		false	false	false	anc_set_exclusive_greenskins
+wh3_dlc26_anc_mount_grn_night_goblin_big_boss_great_cave_squig	wh_dlc06_anc_mount_grn_night_goblin_warboss_great_cave_squig	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_grn_cha_night_goblin_big_boss_squig		1	0		false	false	false	anc_set_exclusive_greenskins
+wh3_dlc26_anc_mount_grn_savage_orc_great_shaman_war_boar	wh_main_anc_mount_war_boar	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_grn_cha_savage_orc_great_shaman_boar		1	0		false	false	false	anc_set_exclusive_greenskins
+wh3_dlc26_anc_mount_grn_savage_orc_great_shaman_wyvern	wh_main_anc_mount_wyvern	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_grn_cha_savage_orc_great_shaman_wyvern		1	0		false	false	false	anc_set_exclusive_greenskins
+wh3_dlc26_anc_mount_kho_arbaal_flesh_hound	wh3_dlc26_anc_mount_kho_arbaal_flesh_hound	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_kho_cha_arbaal_flesh_hound		1	0		false	false	false	anc_set_exclusive_khorne
+wh3_dlc26_anc_mount_kho_bloodspeaker_chaos_steed	wh_main_anc_mount_chaos_steed	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_kho_cha_bloodspeaker_chaos_steed		1	0		false	false	false	anc_set_exclusive_khorne
+wh3_dlc26_anc_mount_kho_bloodspeaker_warshrine	wh_main_anc_mount_warshrine	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_kho_cha_bloodspeaker_warshrine		1	0		false	false	false	anc_set_exclusive_khorne
+wh3_dlc26_anc_mount_kho_skulltaker_blood_throne	wh3_main_anc_mount_blood_throne	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_kho_cha_skulltaker_bloodthrone		1	0		false	false	false	anc_set_exclusive_khorne
+wh3_dlc26_anc_mount_kho_skulltaker_kuhltyran	wh3_main_anc_mount_juggernaut	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc26_kho_cha_skulltaker_juggernaut		1	0		false	false	false	anc_set_exclusive_khorne
+wh3_dlc26_anc_weapon_destroyer_of_khorne	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	anc_set_exclusive_khorne
+wh3_dlc26_anc_weapon_fangspike	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	anc_set_exclusive_greenskins
+wh3_dlc26_anc_weapon_great_gutgouger	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	anc_set_exclusive_ogre_kingdoms
+wh3_dlc26_anc_weapon_morglor_the_mangler	wh_main_anc_weapon		false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	anc_set_exclusive_greenskins
+wh3_dlc26_anc_weapon_the_slayer_sword	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	anc_set_exclusive_khorne

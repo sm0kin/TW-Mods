@@ -1,0 +1,582 @@
+key	text	tooltip
+#Loc;1;text/db/sm0_recruit_defeated_dilemmas__.loc		
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc09_sc_tmb_tomb_kings_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_dlc11_sc_cst_vampire_coast_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_rogue_chaos_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_rogue_chaos_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_def_dark_elves_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_def_dark_elves_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_hef_high_elves_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_hef_high_elves_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_lzd_lizardmen_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_lzd_lizardmen_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh2_main_sc_skv_skaven_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh2_main_sc_skv_skaven_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_cth_cathay_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_cth_cathay_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_dae_daemons_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_dae_daemons_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_kho_khorne_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_kho_khorne_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ksl_kislev_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ksl_kislev_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_nur_nurgle_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_nur_nurgle_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_ogr_ogre_kingdoms_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_sla_slaanesh_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_sla_slaanesh_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_main_sc_tze_tzeentch_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_main_sc_tze_tzeentch_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc03_sc_bst_beastmen_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc03_sc_bst_beastmen_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc05_sc_wef_wood_elves_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc05_sc_wef_wood_elves_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_dlc08_sc_nor_norsca_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_dlc08_sc_nor_norsca_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_brt_bretonnia_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_brt_bretonnia_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_chs_chaos_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_chs_chaos_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_dwf_dwarfs_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_dwf_dwarfs_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_emp_empire_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_emp_empire_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_greenskins_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_greenskins_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_grn_savage_orcs_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_grn_savage_orcs_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_teb_teb_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_teb_teb_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh_main_sc_vmp_vampire_counts_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh_main_sc_vmp_vampire_counts_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_mixer_teb_southern_realms_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_mixer_teb_southern_realms_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_1	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_1	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_2	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_2	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_3	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_3	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_4	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_4	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_5	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_5	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_6	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_6	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_7	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_7	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_8	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_8	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_9	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_9	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
+dilemmas_localised_title_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_10	Refugees of War	true
+dilemmas_localised_description_sm0_rd_wh3_dlc23_sc_chd_chaos_dwarfs_10	With their own faction being defeated former military leaders of {{CcoCampaignEventDilemma:FirstTargetFactionNameWithIcon}} seek refuge in exchange for their service under your banner.	true
