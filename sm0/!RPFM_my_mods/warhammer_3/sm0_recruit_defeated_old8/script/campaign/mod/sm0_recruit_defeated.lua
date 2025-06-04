@@ -3880,7 +3880,7 @@ function sm0_recruit_defeated()
         mct = get_mct()
     end
 
-    local version_number = "6.1.x" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue)
+    local version_number = "6.0.1" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue)
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()
