@@ -8,6 +8,8 @@
 -- multiplayer support (up to 8 players, different subcultures, head-to-head, coop, simultaneous turns)
 
 --mct variables
+local debug = false
+
 local enable_value = true 
 local scope_value = "player_ai" 
 local ai_delay_value = 50
@@ -3880,7 +3882,7 @@ function sm0_recruit_defeated()
         mct = get_mct()
     end
 
-    local version_number = "6.1.x" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue)
+    local version_number = "6.2.x" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue) --wh3 update 6.2 (ancillaries rework)
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()
@@ -3899,7 +3901,7 @@ function sm0_recruit_defeated()
         --    cm:force_diplomacy("faction:wh2_main_emp_the_moot", "all", "form confederation", false, false, false, false)
         --end
 
-        if mct then
+        if mct or debug then
             --sm0_log("sm0_confed/mct/enable_value = "..tostring(enable_value))
             --sm0_log("sm0_confed/mct/restriction_value = "..tostring(restriction_value))
             --[[
