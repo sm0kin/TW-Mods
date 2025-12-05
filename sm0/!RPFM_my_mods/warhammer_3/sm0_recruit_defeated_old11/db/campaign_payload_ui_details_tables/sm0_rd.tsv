@@ -1,0 +1,7 @@
+component	icon	state	sort_order
+#campaign_payload_ui_details_tables;2;db/campaign_payload_ui_details_tables/sm0_rd			
+rd_first	ui/skins/default/icon_player.png	default	0
+rd_first2	ui/skins/default/icon_small_tactical_map.png	default	0
+rd_second	ui/skins/default/icon_ai.png	default	0
+rd_third	ui/skins/default/icon_kills.png	default	0
+rd_fourth	ui/icon_hourglass2.png	default	0

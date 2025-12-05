@@ -294,13 +294,6 @@ local wh_agents = {
     {["faction"] = "", ["subtype"] = "wh3_dlc26_kho_skulltaker", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_KHO"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc26_ogr_bragg_the_gutsman", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_OGR"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc26_ogr_golgfag_maneater", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_OGR"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_sla_masque_of_slaanesh", ["dlc"] = {"wh3_core_agents_slaanesh"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_sla_dechala", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_SLA"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_sla_styrkaar_the_sortsvinaer", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_SLA"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_hef_aislinn", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_HEF"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_hef_caradryan", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_HEF"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_nor_beorg_bearstruck", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_nor_sayl_the_faithless", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},   
 } 
 
 --MIXU--
@@ -567,10 +560,6 @@ local playable_factions = {
     "wh3_dlc26_kho_arbaal",
     "wh3_dlc26_kho_skulltaker",
     "wh3_dlc26_ogr_golgfag",
-    "wh3_dlc27_sla_the_tormentors",
-    "wh3_dlc27_nor_sayl",
-    "wh3_dlc27_hef_aislinn",
-    "wh3_dlc27_sla_masque_of_slaanesh",
 } 
 
 local alastar_quests = {
@@ -3893,7 +3882,7 @@ function sm0_recruit_defeated()
         mct = get_mct()
     end
 
-    local version_number = "6.3.x" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue) --wh3 update 6.2 (ancillaries rework)
+    local version_number = "6.2.x" --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue) --wh3 update 6.2 (ancillaries rework)
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()

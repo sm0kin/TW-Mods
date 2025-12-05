@@ -682,7 +682,7 @@ wh_main_anc_enchanted_item_cloak_of_mists_and_shadows	wh_main_anc_enchanted_item
 wh_main_anc_enchanted_item_cloak_of_molten_metal	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
 wh_main_anc_enchanted_item_the_crown_of_bretonnia	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
 wh_main_anc_enchanted_item_the_crown_of_domination	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
-wh_main_anc_enchanted_item_the_crown_of_sorcery	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh_main_anc_enchanted_item_the_crown_of_sorcery	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	-1		false	false	false	all
 wh_main_anc_enchanted_item_the_great_book_of_grudges	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
 wh_main_anc_magic_standard_da_immortulz	wh_main_anc_magic_standard_da_immortulz	.	false	false	false	1	0	9999			false	false	false	general	16	30	30	50	true		wh_main_banner_magic_standard_da_immortulz	200	0	banner	false	false	false	all
 wh_main_anc_mark_of_chaos_mark_of_khorne	wh_main_anc_mark_of_chaos_mark_of_khorne	.	true	false	false	1	0	9999			false	false	false	general	16	30	30	50	true		wh_main_banner_mark_of_chaos_mark_of_khorne	80	0	mark	false	false	true	all
@@ -870,23 +870,3 @@ wh3_dlc26_anc_weapon_fangspike	wh_main_anc_weapon	.	false	false	false	1	0	9999		
 wh3_dlc26_anc_weapon_great_gutgouger	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc26_anc_weapon_morglor_the_mangler	wh_main_anc_weapon		false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc26_anc_weapon_the_slayer_sword	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_enchanted_item_staff_of_the_masque	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_enchanted_item_elixir_of_damnation	wh_main_anc_enchanted_item	.	false	false	false	0	1700	1900			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_arcane_item_schalkains_teeth	wh_main_anc_arcane_item	.	false	false	false	1	0	9999			false	false	false	arcane_item	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_armour_perverse_plate	wh_main_anc_armour	.	false	false	false	1	0	9999			false	false	false	armour	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_enchanted_item_banner_of_depravity	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_enchanted_item_mask_of_the_merlord	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_mount_hef_aislinn_star_dragon	wh2_main_anc_mount_star_dragon	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_sea_lord_aislinn_dragon		35	0		false	false	false	all
-wh3_dlc27_anc_mount_hef_caradryan_ashtari	wh3_dlc27_anc_mount_caradryan_ashtari	.	false	true	true	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_caradryan_ashtari		1	0		false	false	false	all
-wh3_dlc27_anc_mount_hef_caradryan_chariot	wh2_main_anc_mount_ithilmar_chariot	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_caradryan_chariot		1	0		false	false	false	all
-wh3_dlc27_anc_mount_hef_caradryan_steed	wh2_main_anc_mount_barded_ithilmar_steed	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_caradryan_steed		1	0		false	false	false	all
-wh3_dlc27_anc_mount_hef_sea_lord_aislinn_skycutter	wh3_dlc27_anc_mount_skycutter	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_sea_lord_aislinn_skycutter		1	0		false	false	false	all
-wh3_dlc27_anc_mount_nor_sayl_the_faithless_chariot	wh_main_anc_mount_chaos_chariot	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_nor_cha_sayl_the_faithless_chariot		1	0		false	false	false	all
-wh3_dlc27_anc_mount_nor_sayl_the_faithless_mammoth	wh3_dlc27_anc_mount_mammoth_warshrine	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_nor_cha_sayl_the_faithless_mammoth		1	0		false	false	false	all
-wh3_dlc27_anc_mount_nor_sayl_the_faithless_warhorse	wh_main_anc_mount_warhorse	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_nor_cha_sayl_the_faithless_warhorse		1	0		false	false	false	all
-wh3_dlc27_anc_mount_sla_styrkaar_the_sortsvinaer_daemonic_steed	wh3_dlc27_anc_mount_daemonic_steed	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_sla_cha_styrkaar_the_sortsvinaer_daemonic_steed		1	0		false	false	false	all
-wh3_dlc27_anc_mount_sla_styrkaar_the_sortsvinaer_steed_of_slaanesh	wh3_main_anc_mount_steed_of_slaanesh	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_sla_cha_styrkaar_the_sortsvinaer_steed_of_slaanesh		1	0		false	false	false	all
-wh3_dlc27_anc_talisman_bear_fang_talisman	wh_main_anc_talisman	.	false	false	false	1	0	9999			false	false	false	talisman	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_weapon_caress_of_agony	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_weapon_the_phoenix_blade	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
-wh3_dlc27_anc_weapon_the_viperous_staff	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all

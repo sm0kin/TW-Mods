@@ -294,13 +294,6 @@ local wh_agents = {
     {["faction"] = "", ["subtype"] = "wh3_dlc26_kho_skulltaker", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_KHO"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc26_ogr_bragg_the_gutsman", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_OGR"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc26_ogr_golgfag_maneater", ["dlc"] = {"TW_WH3_OMENS_OF_DESTRUCTION_OGR"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_sla_masque_of_slaanesh", ["dlc"] = {"wh3_core_agents_slaanesh"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_sla_dechala", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_SLA"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_sla_styrkaar_the_sortsvinaer", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_SLA"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_hef_aislinn", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_HEF"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_hef_caradryan", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_HEF"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_nor_beorg_bearstruck", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},
-    {["faction"] = "", ["subtype"] = "wh3_dlc27_nor_sayl_the_faithless", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},   
 } 
 
 --MIXU--
@@ -567,10 +560,6 @@ local playable_factions = {
     "wh3_dlc26_kho_arbaal",
     "wh3_dlc26_kho_skulltaker",
     "wh3_dlc26_ogr_golgfag",
-    "wh3_dlc27_sla_the_tormentors",
-    "wh3_dlc27_nor_sayl",
-    "wh3_dlc27_hef_aislinn",
-    "wh3_dlc27_sla_masque_of_slaanesh",
 } 
 
 local alastar_quests = {
