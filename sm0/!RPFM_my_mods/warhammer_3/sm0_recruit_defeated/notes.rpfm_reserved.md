@@ -1,4 +1,4 @@
 {
-  "pack_notes": "Seems to work fine with wh3_2.4",
+  "pack_notes": "Seems to work fine with wh3_7.2",
   "file_notes": {}
 }

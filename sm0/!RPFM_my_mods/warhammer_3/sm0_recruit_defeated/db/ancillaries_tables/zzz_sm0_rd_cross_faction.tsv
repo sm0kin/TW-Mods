@@ -877,7 +877,7 @@ wh3_dlc27_anc_armour_perverse_plate	wh_main_anc_armour	.	false	false	false	1	0	9
 wh3_dlc27_anc_enchanted_item_banner_of_depravity	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc27_anc_enchanted_item_mask_of_the_merlord	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc27_anc_mount_hef_aislinn_star_dragon	wh2_main_anc_mount_star_dragon	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_sea_lord_aislinn_dragon		35	0		false	false	false	all
-wh3_dlc27_anc_mount_hef_caradryan_ashtari	wh3_dlc27_anc_mount_caradryan_ashtari	.	false	true	true	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_caradryan_ashtari		1	0		false	false	false	all
+wh3_dlc27_anc_mount_hef_caradryan_ashtari	wh3_dlc27_anc_mount_caradryan_ashtari	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_caradryan_ashtari		1	0		false	false	false	all
 wh3_dlc27_anc_mount_hef_caradryan_chariot	wh2_main_anc_mount_ithilmar_chariot	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_caradryan_chariot		1	0		false	false	false	all
 wh3_dlc27_anc_mount_hef_caradryan_steed	wh2_main_anc_mount_barded_ithilmar_steed	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_caradryan_steed		1	0		false	false	false	all
 wh3_dlc27_anc_mount_hef_sea_lord_aislinn_skycutter	wh3_dlc27_anc_mount_skycutter	.	false	false	false	1	0	9999			false	false	false	mount	16	30	30	50	true	wh3_dlc27_hef_cha_sea_lord_aislinn_skycutter		1	0		false	false	false	all
