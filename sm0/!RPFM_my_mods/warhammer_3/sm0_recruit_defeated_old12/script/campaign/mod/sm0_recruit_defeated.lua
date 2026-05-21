@@ -2329,16 +2329,6 @@ local function confed_revived(confederator, confederated)
             if confederator:subculture() == "wh3_main_sc_ksl_kislev" then
                 cm:faction_add_pooled_resource(confederator:name(), "wh3_main_ksl_devotion", "declared_war_on_kislev", 100)
             end
-            -- empire fealty +2 to negate "war with elector count" penalty
-            if confederator:pooled_resource_manager():resource("emp_loyalty"):is_null_interface() == false then
-                empire_modify_all_elector_loyalty("declared_war_on_elector_counts", 2)
-            end
-            -- negate chivalry penalty
-            if confederator:subculture() == "wh_main_sc_brt_bretonnia" then
-                local previous_chivalry = cm:get_saved_value("rd_choice_0_"..confederator:name().."_chivalry") 
-                local current_civalry = confederator:pooled_resource_manager():resource("brt_chivalry"):value()
-                chivalry:ModifyChivalry(confederator:name(), "declared_war_on_bretonnia", previous_chivalry - current_civalry)
-            end
             -- some faction leaders need a immortality reset after confederation
             immortality_backup(context:confederation()) 
             --pre confed character cqi list generation to compare with post confed char list to determine which legendary chars are new
@@ -2829,10 +2819,6 @@ local function rd_dilemma(confederator, confederated, player_confederation_count
         function(context)
             local choice = context:choice()
             if choice == 0 then
-                if confederator:subculture() == "wh_main_sc_brt_bretonnia" then
-                    local chivalry = confederator:pooled_resource_manager():resource("brt_chivalry"):value()
-                    cm:set_saved_value("rd_choice_0_"..confederator:name().."_chivalry", chivalry) 
-                end
                 sm0_log("Accept refugees: "..confederated:name())
                 confed_revived(confederator, confederated)
                 --confed_revived_old(confederator, confederated)
