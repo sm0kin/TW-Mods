@@ -301,6 +301,8 @@ local wh_agents = {
     {["faction"] = "", ["subtype"] = "wh3_dlc27_hef_caradryan", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_HEF"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc27_nor_beorg_bearstruck", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc27_nor_sayl_the_faithless", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},   
+    {["faction"] = "", ["subtype"] = "wh3_cp1_cth_bhashiva", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},   
+    {["faction"] = "", ["subtype"] = "wh3_cp1_cth_cha_taoyan", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},   
 } 
 
 --MIXU--
@@ -571,6 +573,7 @@ local playable_factions = {
     "wh3_dlc27_nor_sayl",
     "wh3_dlc27_hef_aislinn",
     "wh3_dlc27_sla_masque_of_slaanesh",
+    "wh3_cp1_cth_tiger_warriors",
 } 
 
 local alastar_quests = {

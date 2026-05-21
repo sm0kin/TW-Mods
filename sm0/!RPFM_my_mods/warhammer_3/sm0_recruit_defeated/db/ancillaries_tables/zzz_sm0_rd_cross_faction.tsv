@@ -890,3 +890,6 @@ wh3_dlc27_anc_talisman_bear_fang_talisman	wh_main_anc_talisman	.	false	false	fal
 wh3_dlc27_anc_weapon_caress_of_agony	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc27_anc_weapon_the_phoenix_blade	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
 wh3_dlc27_anc_weapon_the_viperous_staff	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_cp1_anc_enchanted_item_heavens_gate	wh_main_anc_enchanted_item	.	false	false	false	1	0	9999			false	false	false	enchanted_item	16	30	30	50	true			200	0		false	false	false	all
+wh3_cp1_anc_weapon_blades_of_shang_yang	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
+wh3_cp1_anc_weapon_tyrants_talon	wh_main_anc_weapon	.	false	false	false	1	0	9999			false	false	false	weapon	16	30	30	50	true			200	0		false	false	false	all
