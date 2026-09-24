@@ -1,4 +1,4 @@
 {
-  "pack_notes": "Seems to work fine with wh3_7.2",
+  "pack_notes": "Updated for wh3_8.1",
   "file_notes": {}
 }

@@ -145,11 +145,10 @@ local subculture_event_picture = {
     ["wh3_main_sc_sla_slaanesh"] = 13,
     ["wh3_main_sc_tze_tzeentch"] = 14,
     ["wh3_dlc23_sc_chd_chaos_dwarfs"] = 50,
-    ["wh3_dlc29_sc_nag_undead_legions"] = 999,
 } 
 
 local wh_agents = {
-    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "wh_dlc03_emp_boris_todbringer", ["dlc"] = {"TW_WH3_LOET_BORIS"}},  --TW_WH1_BASE_GAME  --TW_WH1_BEASTMEN
+    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "wh_dlc03_emp_boris_todbringer", ["dlc"] = {"TW_WH1_BEASTMEN"}}, 
     {["faction"] = "wh3_main_emp_cult_of_sigmar", ["subtype"] = "wh_dlc04_emp_volkmar", ["dlc"] = {"TW_WH1_LORDS_AND_UNITS_1"}},
     {["faction"] = "wh2_dlc13_emp_golden_order", ["subtype"] = "wh_main_emp_balthasar_gelt", ["dlc"] = {"TW_WH1_BASE_GAME"}},
     {["faction"] = "wh_main_emp_empire", ["subtype"] = "wh_main_emp_karl_franz", ["dlc"] = {"TW_WH1_BASE_GAME"}},
@@ -303,20 +302,7 @@ local wh_agents = {
     {["faction"] = "", ["subtype"] = "wh3_dlc27_nor_beorg_bearstruck", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},
     {["faction"] = "", ["subtype"] = "wh3_dlc27_nor_sayl_the_faithless", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},   
     {["faction"] = "", ["subtype"] = "wh3_cp1_cth_bhashiva", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},   
-    {["faction"] = "", ["subtype"] = "wh3_cp1_cth_cha_taoyan", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_chs_glottkin", ["dlc"] = {"TW_WH3_LOET_GLOTTKIN"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_chs_bloab", ["dlc"] = {"TW_WH3_LOET_GLOTTKIN"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_chs_gutrot_spume", ["dlc"] = {"TW_WH3_LOET_GLOTTKIN"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_chs_morbidex", ["dlc"] = {"TW_WH3_LOET_GLOTTKIN"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_chs_orghotts", ["dlc"] = {"TW_WH3_LOET_GLOTTKIN"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_nag_nagash", ["dlc"] = {"TW_WH3_LOET_NAGASH"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_vmp_walach_harkon", ["dlc"] = {"TW_WH3_LOET_NAGASH"}},     
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_vmp_dieter_helsnicht", ["dlc"] = {"TW_WH3_LOET_NAGASH"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_skv_thanquol", ["dlc"] = {"TW_WH3_LOET_THANQUOL"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_skv_skreech_verminking", ["dlc"] = {"TW_WH3_LOET_THANQUOL"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_vmp_neferata", ["dlc"] = {"TW_WH3_BASE_GAME"}}, 
-    {["faction"] = "", ["subtype"] = "wh3_dlc29_vmp_handmaiden_imentet", ["dlc"] = {"TW_WH3_BASE_GAME"}}, 
-    {["faction"] = "wh_main_emp_middenland", ["subtype"] = "wh3_dlc29_emp_cha_emil_valgeir", ["dlc"] = {"TW_WH3_LOET_BORIS"}},  --TW_WH1_BASE_GAME  --TW_WH1_BEASTMEN
+    {["faction"] = "", ["subtype"] = "wh3_cp1_cth_cha_taoyan", ["dlc"] = {"TW_WH3_TIDES_OF_TORMENT_NOR"}},   
 } 
 
 --MIXU--
@@ -588,11 +574,6 @@ local playable_factions = {
     "wh3_dlc27_hef_aislinn",
     "wh3_dlc27_sla_masque_of_slaanesh",
     "wh3_cp1_cth_tiger_warriors",
-    "wh3_dlc29_vmp_neferata",
-    "wh3_dlc29_nag_host_of_nagash",
-    "wh3_dlc29_chs_host_of_the_triplets",
-    "wh3_dlc29_skv_clan_scruten",
-    "wh_main_emp_middenland",
 } 
 
 local alastar_quests = {
@@ -2468,13 +2449,10 @@ local function confed_revived(confederator, confederated)
         end
     end
 
-    -- new new revive & confed method (9.0.0)
-    cm:force_awake_from_death_and_confederate(confederator:name(), confederated:name())
-
-    ---- new revive & confed method
-    --local confed_payload = cm:create_payload()
-    --confed_payload:form_confederation(confederator, confederated, true)
-    --cm:apply_payload(confed_payload, confederator)
+    -- new revive & confed method
+    local confed_payload = cm:create_payload()
+    confed_payload:form_confederation(confederator, confederated, true)
+    cm:apply_payload(confed_payload, confederator)
 end
 
 ---@param confederator FACTION_SCRIPT_INTERFACE
@@ -3936,8 +3914,8 @@ function sm0_recruit_defeated()
         mct = get_mct()
     end
 
-  local version_number = "9.0.x" 
-    --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue) --wh3 update 6.2 (ancillaries rework) --wh3 update 8.0 (attempt to negate fealty and chivalry penalties) --wh3 update 8.1 (new revive and confed function))
+    local version_number = "8.1.x" 
+    --debug: "vs.code" --H&B "1.0" --S&B "1.1" --MCM "2.0" --wh3 release "3.0" --mct support "3.1" --wh3 update 5.1.0 (create_force issue) --wh3 update 6.2 (ancillaries rework) --wh3 update 8.0 (attempt to negate fealty and chivalry penalties) --wh3 update 8.1 (no longer convert nakai force type)
     if cm:is_new_game() then 
         if not cm:get_saved_value("sm0_log_reset") then
             sm0_log_reset()
